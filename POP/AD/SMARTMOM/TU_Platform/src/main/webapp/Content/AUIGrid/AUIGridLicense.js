@@ -1,8 +1,3 @@
-/*!
- * AUIGrid 3.0.7 License
- * Product ID : AUIGrid-OM-93721-319425-200129
- * Authorized Domain(or IP) : 59.24.255.230,211.199.87.242
- * www.auisoft.net
- */
- /* eslint-disable */
-AUIGridLicense = "eyJjdCI6Im5wWWZyOFBJMTdSZ1REZmNcL2J1UVB5aE92OG91dFpVWUJnMlhIN1VlbzR4WEE0R01GQ1NOUVJ3VlVnQlE2Q1RkVkdPVHdsa0ppQ3lwTytTK2x4YW5MRG9HYk1PeERzWk85V0wzNW1sOEp6a21JZWRoVlZIWmhZOElPbThFdTErMSIsIml2IjoiYzg2ZmY4M2FmZjMxNmQ1NDYyMjU1ZDg5Mjg4YjhiMTUiLCJzIjoiNzYzMWY3YTUwZDM0NjZkOSJ9";
+version https://git-lfs.github.com/spec/v1
+oid sha256:7114e843c5dbd9cdd138138adddf53de35b2d4076fc115842de98a7ea8271c68
+size 475

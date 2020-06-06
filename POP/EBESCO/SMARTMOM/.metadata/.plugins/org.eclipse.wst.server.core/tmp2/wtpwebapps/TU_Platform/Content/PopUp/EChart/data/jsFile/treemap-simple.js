@@ -1,27 +1,3 @@
-option = {
-    series: [{
-        type: 'treemap',
-        data: [{
-            name: 'nodeA',            // First tree
-            value: 10,
-            children: [{
-                name: 'nodeAa',       // First leaf of first tree
-                value: 4
-            }, {
-                name: 'nodeAb',       // Second leaf of first tree
-                value: 6
-            }]
-        }, {
-            name: 'nodeB',            // Second tree
-            value: 20,
-            children: [{
-                name: 'nodeBa',       // Son of first tree
-                value: 20,
-                children: [{
-                    name: 'nodeBa1',  // Granson of first tree
-                    value: 20
-                }]
-            }]
-        }]
-    }]
-};
+version https://git-lfs.github.com/spec/v1
+oid sha256:6af586ee45ad09c685e1cd782b97c20425c36cd3b1421d449d55ec0cec5bf084
+size 760

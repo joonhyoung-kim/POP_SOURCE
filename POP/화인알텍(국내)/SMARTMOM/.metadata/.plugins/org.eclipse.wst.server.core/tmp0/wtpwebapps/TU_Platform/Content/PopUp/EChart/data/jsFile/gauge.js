@@ -1,24 +1,3 @@
-option = {
-    tooltip : {
-        formatter: "{a} <br/>{b} : {c}%"
-    },
-    toolbox: {
-        feature: {
-            restore: {},
-            saveAsImage: {}
-        }
-    },
-    series: [
-        {
-            name: '业务指标',
-            type: 'gauge',
-            detail: {formatter:'{value}%'},
-            data: [{value: 50, name: '完成率'}]
-        }
-    ]
-};
-
-setInterval(function () {
-    option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
-    myChart.setOption(option, true);
-},2000);
+version https://git-lfs.github.com/spec/v1
+oid sha256:75415dc704d8cb032396cdbc497b08d84f4ede2facfe436b012d75b03b1e1e41
+size 526

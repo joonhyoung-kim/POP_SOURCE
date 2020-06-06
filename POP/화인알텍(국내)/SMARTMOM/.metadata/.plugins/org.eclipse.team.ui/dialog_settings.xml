@@ -1,16 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<section name="Workbench">
-	<section name="SynchronizeViewSettings">
-		<item value="1584598486965" key="lastactiveparticipant_sec_id"/>
-		<item value="org.eclipse.team.svn.ui.synchronize.update.SynchronizeModelParticipant" key="lastactiveparticipant_id"/>
-		<item value="false" key="linkWithEditor"/>
-		<section name="org.eclipse.team.svn.ui.synchronize.update.SynchronizeModelParticipant.1584597077046">
-			<item value="org.eclipse.team.ui.activeModelProvider" key="org.eclipse.team.ui.activeModelProvider"/>
-		</section>
-		<section name="org.eclipse.team.svn.ui.synchronize.update.SynchronizeModelParticipant.1584597584287">
-		</section>
-		<section name="org.eclipse.team.svn.ui.synchronize.update.SynchronizeModelParticipant.1584598486965">
-			<item value="org.eclipse.team.ui.activeModelProvider" key="org.eclipse.team.ui.activeModelProvider"/>
-		</section>
-	</section>
-</section>
+version https://git-lfs.github.com/spec/v1
+oid sha256:b3c7cf09b4b023c33716d1485ac11103ab94c290baf69c844bf4da7bfd646602
+size 940

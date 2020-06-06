@@ -1,9 +1,3 @@
-AmCharts.translations.zh = {
-  "monthNames": [ "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月" ],
-  "shortMonthNames": [ "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月" ],
-  "dayNames": [ "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" ],
-  "shortDayNames": [ "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" ],
-  "zoomOutText": "显示所有",
-  "am": "上午",
-  "pm": "下午"
-};
+version https://git-lfs.github.com/spec/v1
+oid sha256:cbc6e9bf7f18b6a067f01de2e6bd4fb4377494c13ecd260326b5b1006da39da1
+size 573

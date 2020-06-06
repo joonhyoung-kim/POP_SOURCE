@@ -1,25 +1,3 @@
-﻿using MOM.RPT.Modules.Models;
-using TU.Core.Models;
-
-namespace TU.Core.Helpers
-{
-
-
-    /// <summary>
-    /// 열거형 자료 Parsing Helper
-    /// </summary>
-    public class EnumHelper
-    {
-
-        public static CodeItem Parse(string code)
-        {
-            return new CodeItem
-            {
-                CodeId = code,
-                CodeName = TranslationManager.Instance[code],
-            };
-        }
-
-    }
-
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:604a07a6019762f3427120f196927dfdc8243fb4917e3d8375fbc002bf98eb96
+size 457

@@ -1,23 +1,3 @@
-var MOMLC004 = {
-	init: function() {	
-		var that = this;
-		Language.init(function() {
-			
-		});
-	}, saveCallInit(index, param, callBackParam, indexInfo) {
-		if(index == 0 && indexInfo['op'] == 'resultCancelBtn1') {
-			for(var i = 0; i < param.length; i++) {
-				if(param[i].state == 'C') {
-					this.initMessage = Language.lang['MESSAGES11006'];
-					return;
-				}
-			}
-		}
-	}
-
-};
-
-$(document).ready(function(event){
-	momWidget.init(1, 'MOMLC004', MOMLC004);
-	MOMLC004.init();
-});
+version https://git-lfs.github.com/spec/v1
+oid sha256:633f2ee8f1793bc225710fe20d7303872a7a1777bb0fb0482f4fd7c8dfe8df93
+size 502

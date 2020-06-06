@@ -1,24 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
-<mapper namespace="com.thirautech.mom.quality.temperatureResult">
-	<select id="get_temperatureResult_list" resultType="camelMap" parameterType="java.util.HashMap">
-		SELECT B.RESOURCE_NAME
-		     , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS CREATE_DATE
-		     , A.TEMPERATURE
-		     , A.UPPERTEMPERATURE
-		     , A.UNDERTENPERATURE
-		     , A.RESULT
-		  FROM  MOM_POP_TEMPRATURE A,
-		        MOM_RESOURCE B
-	     WHERE A.DIVISION_CD = B.DIVISION_CD
-		   AND A.COMPANY_CD  = B.COMPANY_CD
-		   AND A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
-		   AND A.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
-		  <if test="(fromDate != null and fromDate != '') and (toDate != null and toDate !='')">
-	       AND TRUNC(A.CREATE_DATE) BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'yyyy-mm-dd') AND TO_DATE(#{toDate, jdbcType=VARCHAR}, 'yyyy-mm-dd') 
-	      </if>
-		 ORDER BY A.CREATE_DATE DESC
-	</select>
-	
-</mapper>
+version https://git-lfs.github.com/spec/v1
+oid sha256:85234fd3c403cfe5f4cec1ba8dec6e2187d38d675ca44a1b42f976e2ab144bdc
+size 1086

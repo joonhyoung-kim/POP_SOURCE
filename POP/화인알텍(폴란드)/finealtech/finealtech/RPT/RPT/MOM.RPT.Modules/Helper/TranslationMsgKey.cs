@@ -1,16 +1,3 @@
-﻿namespace MOM.RPT.Modules.Helper
-{
-    public static class TranslationMsgKey
-    {
-        /// <summary>
-        /// Please Wait...
-        /// </summary>
-        public const string WAITINDICATOR_MESSAGE = "WAITINDICATOR_MESSAGE";
-        /// <summary>
-        /// 사이트정보를 찾지 못하였습니다.  환경설정 재확인 하시기 바랍니다.
-        /// </summary>
-        public const string APPINITHELPER_ERROR_01 = "APPINITHELPER_ERROR_01";
-
-
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:182b60329ea040c0b3a9a6aa189094fdd64b2575e8103b2fb0b5027ff2fba8e5
+size 491

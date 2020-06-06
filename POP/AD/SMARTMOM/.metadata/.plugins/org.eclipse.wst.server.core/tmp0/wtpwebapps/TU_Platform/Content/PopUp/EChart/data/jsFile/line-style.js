@@ -1,29 +1,3 @@
-option = {
-    xAxis: {
-        type: 'category',
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-    },
-    yAxis: {
-        type: 'value'
-    },
-    series: [{
-        data: [120, 200, 150, 80, 70, 110, 130],
-        type: 'line',
-        symbol: 'triangle',
-        symbolSize: 20,
-        lineStyle: {
-            normal: {
-                color: 'green',
-                width: 4,
-                type: 'dashed'
-            }
-        },
-        itemStyle: {
-            normal: {
-                borderWidth: 3,
-                borderColor: 'yellow',
-                color: 'blue'
-            }
-        }
-    }]
-};
+version https://git-lfs.github.com/spec/v1
+oid sha256:3c61c125173bc5e43ba73a3b5aee6e246fa20b35ba1d732efacd1ea23e3ffa5b
+size 636

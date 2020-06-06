@@ -1,25 +1,3 @@
-package com.thirautech.mom.serviceimpl;
-
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.thirautech.mom.dao.PopDao;
-import com.thirautech.mom.service.PopService;
-import com.thirautech.mom.util.PrintUtil;
-
-@Service
-public class PopServiceImpl implements PopService {
-	@Autowired
-	private PopDao popDao;
-	
-	public List<Map<String,Object>> getMapList(String query, List<Map<String,Object>> param) {
-		return popDao.getMapList(query, param);
-	}
-	
-	public List<Map<String,Object>> upsertMapList(String query, List<Map<String,Object>> param) {
-		return popDao.upsertMap(query, param);
-	}
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:8bc7554dd8e5eeced03d4d446f967ee94c8dbb6eb32f3ca8960549c40b787630
+size 727

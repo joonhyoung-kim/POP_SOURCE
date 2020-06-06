@@ -1,12 +1,3 @@
-//2020.04.16 박연주 수불통제 페이지 XMOM 변환
-var MOMJA094_1 = {
-	init: function() {
-		var that = this;
-		Language.init(function() {
-		});
-	}
-};
-$(document).ready(function(event) {
-	momWidget.init(1, 'MOMJA094_1', MOMJA094_1);
-	MOMJA094_1.init();
-});
+version https://git-lfs.github.com/spec/v1
+oid sha256:377dab7eb555d3c8893f0d72c2ff779094a149dc12c2d779fe1e9b957f383595
+size 273

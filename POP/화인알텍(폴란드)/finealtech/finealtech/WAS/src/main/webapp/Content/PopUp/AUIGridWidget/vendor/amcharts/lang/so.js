@@ -1,1 +1,3 @@
-AmCharts.translations.so = {"monthNames":["Bisha koobaad","Bisha labaad","Bisha saddexaad","Bisha afraad","Bisha shanaad","Bisha lixaad","Bisha todobaad","Bisha sideedaad","Bisha sagaalaad","Bisha tobnaad","Bisha kow iyo tobnaad","Bisha laba iyo tobnaad"],"shortMonthNames":["Kob","Lab","Sad","Afr","Sha","Lix","Tod","Sid","Sag","Tob","Kit","Lit"],"dayNames":["Isniin","Salaaso","Arbaco","Khamiis","Jimco","Sabti","Axad"],"shortDayNames":["Isn","Sal","Arb","Kha","Jim","Sab","Axa"],"zoomOutText":"Tus dhammaan"}
+version https://git-lfs.github.com/spec/v1
+oid sha256:b453ddc0d008e5339f5a449c2faf838c8423374ac20db0e0f4db2ec70ec2dc3b
+size 511

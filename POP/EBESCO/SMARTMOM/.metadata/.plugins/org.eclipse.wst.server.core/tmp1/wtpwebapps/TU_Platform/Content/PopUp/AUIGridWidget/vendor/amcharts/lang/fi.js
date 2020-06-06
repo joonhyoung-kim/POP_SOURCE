@@ -1,1 +1,3 @@
-AmCharts.translations.fi = {"monthNames":["Tammikuu","Helmikuu","Maaliskuu","Huhtikuu","Toukokuu","Kesäkuu","Heinäkuu","Elokuu","Syyskuu","Lokakuu","Marraskuu","Joulukuu"],"shortMonthNames":["Tammi ","Helmi ","Maalis","Huhti ","Touko ","Kesä  ","Heinä ","Elo   ","Syys  ","Loka  ","Marras","Joulu "],"dayNames":["Maanantai","Tiistai","Keskiviikko","Torstai","Perjantai","Lauantai","Sunnuntai"],"shortDayNames":["Ma","Ti","Ke","To","Pe","La","Su"],"zoomOutText":"Näytä kaikki"}
+version https://git-lfs.github.com/spec/v1
+oid sha256:a52a6457d8f3f44432c4e8fc9a3ea6ea3141221a1bb197ccb5b874d19f04f695
+size 497

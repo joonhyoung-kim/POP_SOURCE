@@ -1,11 +1,3 @@
-var MOMIC003_1 = {
-	init: function() {		
-		Language.init(function() {
-		});
-	}
-};
-
-$(document).ready(function(event){
-	momWidget.init(1, 'MOMIC003_1', MOMIC003_1);
-	MOMIC003_1.init();
-});
+version https://git-lfs.github.com/spec/v1
+oid sha256:3b876823402985a21c5de400731e24cfbb7965e5d8678b032470b6646d3b213a
+size 197

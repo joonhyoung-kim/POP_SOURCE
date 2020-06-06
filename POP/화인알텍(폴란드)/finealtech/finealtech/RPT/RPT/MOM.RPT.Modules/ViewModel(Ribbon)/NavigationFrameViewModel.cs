@@ -1,35 +1,3 @@
-﻿// *********************************************************************************************************
-// **  class: RibbonViewModel.cs
-// **  description: RibbonView ViewModel
-// **  writer: 티라유텍 전진근 책임
-// **  date : 2019.02.08 1차 작성
-// *********************************************************************************************************
-// ** 
-// *********************************************************************************************************
-
-using TU.Core;
-using TU.Core.Models;
-
-namespace MOM.RPT.Modules
-{
-    public partial class NavigationFrameViewModel : TFrameViewModelBase
-    {
-
-        public NavigationFrameViewModel() : base()
-        {
-
-        }
-
-        #region override method
-
-        protected override void UIInitializeComponent()
-        {
-            ActiveMenu = new MenuItem(this);
-        }
-
-        #endregion        
-
-    }
-
-
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:ff8e2c8cf66bac6b4881546f8af8a30b609df533701ea308d66e15345971e6d2
+size 940

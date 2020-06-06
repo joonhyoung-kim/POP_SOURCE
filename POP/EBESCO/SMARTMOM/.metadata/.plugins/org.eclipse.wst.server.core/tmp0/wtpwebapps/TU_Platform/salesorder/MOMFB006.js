@@ -1,22 +1,3 @@
-var MOMFB006 = {
-	init: function() {
-		Language.init(function() {	
-		});
-	}, saveCallInit: function(index, param, initParam, indexInfo) {
-		if(indexInfo['op'] != undefined && indexInfo.op == 'uploadBtn1') {
-			if($("#fromDate").val() == '' || $("#toDate").val() == '') {
-				this.initMessage = Language.lang['MESSAGES10250'];
-			}
-			
-			param.fromDate = $("#fromDate").val();
-			param.toDate = $("#toDate").val();
-			
-			this.initParam = param;
-		}
-	}
-};
-
-$(document).ready(function(event) {
-	momWidget.init(1, 'MOMFB006', MOMFB006);
-	MOMFB006.init();
-});
+version https://git-lfs.github.com/spec/v1
+oid sha256:ad7bcb5cb8aa68ed4d4faf8bf91db2a397bee4fed32fa399f744e228d6adef2d
+size 577

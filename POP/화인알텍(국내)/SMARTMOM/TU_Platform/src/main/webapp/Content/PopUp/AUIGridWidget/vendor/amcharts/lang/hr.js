@@ -1,1 +1,3 @@
-AmCharts.translations.hr = {"monthNames":["Siječanj","Veljača","Ožujak","Travanj","Svibanj","Lipanj","Srpanj","Kolovoz","Rujan","Listopad","Studeni","Prosinac"],"shortMonthNames":["Sij","Vel","Ožu","Tra","Svi","Lip","Srp","Kol","Ruj","Lis","Stu","Pro"],"dayNames":["Ponedjeljak","Utorak","Srijeda","Četvrtak","Petak","Subota","Nedjelja"],"shortDayNames":["Pon","Uto","Sri","Čet","Pet","Sub","Ned"],"zoomOutText":"Prikaži sve"}
+version https://git-lfs.github.com/spec/v1
+oid sha256:076e4658ec0a7835c60ded25123580b4aad267bef49edd49fa61b56d39d3c9e4
+size 433

@@ -1,26 +1,3 @@
-/* Dutch locals for flatpickr */
-var Flatpickr = Flatpickr || { l10ns: {} };
-Flatpickr.l10ns.nl = {};
-
-Flatpickr.l10ns.nl.weekdays = {
-	shorthand: ['Zo', 'Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za'],
-	longhand: ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag']
-};
-
-Flatpickr.l10ns.nl.months = {
-	shorthand: ['Jan', 'Feb', 'Maa', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sept', 'Okt', 'Nov', 'Dec'],
-	longhand: ['Januari', 'Februari', 'Maart', 'April', 'Mei', 'Juni', 'Juli', 'Augustus', 'September', 'Oktober', 'November', 'December']
-};
-
-Flatpickr.l10ns.nl.firstDayOfWeek = 1;
-
-Flatpickr.l10ns.nl.ordinal = function (nth) {
-	if (nth === 1 || nth === 8 || nth >= 20) {
-		return "ste";
-	}
-
-	return "de";
-};
-if (typeof module !== "undefined") {
-	module.exports = Flatpickr.l10ns;
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:21a348b6671a8d4c17c227f8fa98476e049aa5965867c618e2fbf77d712de5a9
+size 821

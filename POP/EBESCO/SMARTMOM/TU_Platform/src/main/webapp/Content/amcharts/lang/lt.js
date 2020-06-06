@@ -1,1 +1,3 @@
-AmCharts.translations.lt = {"monthNames":["Sausio","Vasario","Kovo","Balandžio","Gegužės","Birželio","Liepos","Rugpjūčio","Rugsėjo","Spalio","Lapkričio","Gruodžio"],"shortMonthNames":["Sau","Vas","Kov","Bal","Geg","Bir","Lie","Rgp","Rgs","Spa","Lap","Grd"],"dayNames":["Sekmadienis","Pirmadienis","Antradienis","Trečiadienis","Ketvirtadienis","Penktadienis","Šeštadienis"],"shortDayNames":["Sk","Pr","An","Tr","Kt","Pn","Št"],"zoomOutText":"Rodyti viską"}
+version https://git-lfs.github.com/spec/v1
+oid sha256:d75449dafe9ff18d4e48674fda76ac57d2c4b65d1febd2467d48268c03683718
+size 469

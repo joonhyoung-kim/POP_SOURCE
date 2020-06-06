@@ -1,1 +1,3 @@
-AmCharts.translations.tr = {"monthNames":["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"],"shortMonthNames":["Oca","Şub","Mar","Nis","May","Haz","Tem","Ağu","Eyl","Eki","Kas","Ara"],"dayNames":["Pazar","Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi"],"shortDayNames":["Paz","Pzt","Sal","Çrş","Prş","Cum","Cts"],"zoomOutText":"Tümünü göster"};
+version https://git-lfs.github.com/spec/v1
+oid sha256:e72e7ba2814c6ef4cbd1c97e4969d4d450a7763d480391c00d955a96fa6f3933
+size 425

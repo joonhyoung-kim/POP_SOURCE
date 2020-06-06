@@ -1,6 +1,3 @@
-AmCharts.translations.dataLoader.fr = {
-  'Error loading the file': 'Erreur lors du chargement du fichier',
-  'Error parsing JSON file': 'Erreur lors de l\'analyse du fichier JSON',
-  'Unsupported data format': 'Le format des données n\'est pas supporté',
-  'Loading data...': 'Chargement des données...'
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:68724d0913bf501d220da4c90516f298a0d0274dfd92dedecced024a2fe4be09
+size 314

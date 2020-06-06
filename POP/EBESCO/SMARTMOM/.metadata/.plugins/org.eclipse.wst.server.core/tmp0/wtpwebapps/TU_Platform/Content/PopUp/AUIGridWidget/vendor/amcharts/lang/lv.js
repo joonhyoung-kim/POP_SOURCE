@@ -1,1 +1,3 @@
-AmCharts.translations.lv = {"monthNames":["Janvāris","Februāris","Marts","Aprīlis","Maijs","Jūnijs","Jūlijs","Augusts","Septembris","Oktobris","Novembris","Decembris"],"shortMonthNames":["Jan","Feb","Mar","Apr","Mai","Jūn","Jūl","Aug","Sep","Okt","Nov","Dec"],"dayNames":["Pirmdiena","Otrdiena","Trešdiena","Ceturtdiena","Piektdiena","Sestdiena","Svētdiena"],"shortDayNames":["P ","O ","T ","C ","Pk","S ","Sv"],"zoomOutText":"Parādīt visu"}
+version https://git-lfs.github.com/spec/v1
+oid sha256:ec2472f819c429f5903c0de80f7a57c76250b87cbc08e2c47c9ec274c3ecba79
+size 457

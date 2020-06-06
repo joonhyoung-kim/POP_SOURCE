@@ -1,13 +1,3 @@
-option = {
-    xAxis: {
-        type: 'category',
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-    },
-    yAxis: {
-        type: 'value'
-    },
-    series: [{
-        data: [820, 932, 901, 934, 1290, 1330, 1320],
-        type: 'line'
-    }]
-};
+version https://git-lfs.github.com/spec/v1
+oid sha256:eebe4313e1622747934d83cdf3d80b627a316c733cdb0a43d4b5dd9517792fdd
+size 263

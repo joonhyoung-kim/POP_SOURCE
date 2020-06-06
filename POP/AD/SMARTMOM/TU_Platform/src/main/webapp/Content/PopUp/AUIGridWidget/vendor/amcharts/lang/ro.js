@@ -1,1 +1,3 @@
-AmCharts.translations.ro = {"monthNames":["Ianuarie","Februarie","Martie","Aprilie","Mai","Iunie","Iulie","August","Septembrie","Octombrie","Noiembrie","Decembrie"],"shortMonthNames":["Ian","Feb","Mar","Apr","Mai","Iun","Iul","Aug","Sep","Oct","Nov","Dec"],"dayNames":["Luni","Marţi","Miercuri","Joi","Vineri","Sâmbătă","Duminică"],"shortDayNames":["Lu","Ma","Mi","Jo","Vi","Sb","Du"],"zoomOutText":"Arată tot"}
+version https://git-lfs.github.com/spec/v1
+oid sha256:42681f2cc6ac77c08427a66d7bef3d936d72f302d2e81b06abc217bf0c36bae3
+size 417

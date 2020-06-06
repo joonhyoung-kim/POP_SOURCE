@@ -1,1 +1,3 @@
-AmCharts.translations.mt = {"monthNames":["Jannar","Frar","Marzu","April","Mejju","Ġunju","Lulju","Awwissu","Settembru","Ottubru","Novembru","Diċembru "],"shortMonthNames":["Jan","Fra","Mar","Apr","Mej","Ġun","Lul","Aww","Set","Ott","Nov","Diċ"],"dayNames":["Il-ħadd","It-tnejn","It-tlieta","L-erbgħa","Il-ħamis","Il-ġimgħa","Is-sibt"],"shortDayNames":["Ħad","Tne","Tli","Erb","Ħam","Ġim","Sib"],"zoomOutText":"Turi kollha"};
+version https://git-lfs.github.com/spec/v1
+oid sha256:1de2e4e15d41a9e6868f5d66de5cd19cf5716ead0b9adf2fbd47f88689678691
+size 437

@@ -1,11 +1,3 @@
-var MOMIB004_1 = {
-	init: function() {		
-		Language.init(function() {
-		});
-	}
-};
-
-$(document).ready(function(event){
-	momWidget.init(1, 'MOMIB004_1',MOMIB004_1);
-	MOMIB004_1.init();
-});
+version https://git-lfs.github.com/spec/v1
+oid sha256:8ada130252788aa95f3d5715c65bfee87d8a3ba30afbf544930d1be830ac7194
+size 196

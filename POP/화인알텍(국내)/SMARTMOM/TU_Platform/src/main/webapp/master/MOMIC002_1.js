@@ -1,18 +1,3 @@
-var MOMIC002_1 = {
-	initMessage	: undefined, 
-	initParam	: {inoutFlag : 'OUT'},
-	excelParam  : {inoutFlag : 'OUT'},
-	
-	init: function() {		
-		Language.init(function() {
-		});
-	}, retrieveCallInit: function(index, param, callBackParam, indexInfo) {
-		this.initMessage = undefined;
-		this.initParam = {inoutFlag : 'OUT'};
-	}
-};
-
-$(document).ready(function(event){
-	momWidget.init(1, 'MOMIC002_1', MOMIC002_1);
-	MOMIC002_1.init();
-});
+version https://git-lfs.github.com/spec/v1
+oid sha256:a24b89603713e21b3c976cdcae699491b2bb43b7a3ed5b0776a42897b159ddb0
+size 448

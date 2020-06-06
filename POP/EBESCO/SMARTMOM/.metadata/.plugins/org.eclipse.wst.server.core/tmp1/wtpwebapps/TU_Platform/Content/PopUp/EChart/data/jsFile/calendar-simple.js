@@ -1,30 +1,3 @@
-function getVirtulData(year) {
-    year = year || '2017';
-    var date = +echarts.number.parseDate(year + '-01-01');
-    var end = +echarts.number.parseDate(year + '-12-31');
-    var dayTime = 3600 * 24 * 1000;
-    var data = [];
-    for (var time = date; time <= end; time += dayTime) {
-        data.push([
-            echarts.format.formatTime('yyyy-MM-dd', time),
-            Math.floor(Math.random() * 10000)
-        ]);
-    }
-    return data;
-}
-
-option = {
-    visualMap: {
-        show: false,
-        min: 0,
-        max: 10000
-    },
-    calendar: {
-        range: '2017'
-    },
-    series: {
-        type: 'heatmap',
-        coordinateSystem: 'calendar',
-        data: getVirtulData(2017)
-    }
-};
+version https://git-lfs.github.com/spec/v1
+oid sha256:184881210e1a79de21126fc1fed15427793665a87782c8e4981a1880f603bf25
+size 707

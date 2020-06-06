@@ -1,34 +1,3 @@
-myChart.showLoading();
-$.get('data/asset/data/energy.json', function (data) {
-    myChart.hideLoading();
-
-    myChart.setOption(option = {
-        title: {
-            text: 'Sankey Diagram'
-        },
-        tooltip: {
-            trigger: 'item',
-            triggerOn: 'mousemove'
-        },
-        series: [
-            {
-                type: 'sankey',
-                layout: 'none',
-                data: data.nodes,
-                links: data.links,
-                itemStyle: {
-                    normal: {
-                        borderWidth: 1,
-                        borderColor: '#aaa'
-                    }
-                },
-                lineStyle: {
-                    normal: {
-                        color: 'source',
-                        curveness: 0.5
-                    }
-                }
-            }
-        ]
-    });
-});
+version https://git-lfs.github.com/spec/v1
+oid sha256:95f41c3b137a72f09e8a77ad571f7566557b3d4b1112a34e425084a52fe3df83
+size 859

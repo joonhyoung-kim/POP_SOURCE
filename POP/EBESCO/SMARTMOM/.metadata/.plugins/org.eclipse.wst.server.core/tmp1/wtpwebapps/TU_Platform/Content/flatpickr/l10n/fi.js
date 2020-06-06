@@ -1,22 +1,3 @@
-/* Finnish locals for flatpickr */
-var Flatpickr = Flatpickr || { l10ns: {} };
-Flatpickr.l10ns.fi = {};
-
-Flatpickr.l10ns.fi.firstDayOfWeek = 1;
-
-Flatpickr.l10ns.fi.weekdays = {
-	shorthand: ['Su', 'Ma', 'Ti', 'Ke', 'To', 'Pe', 'La'],
-	longhand: ['Sunnuntai', 'Maanantai', 'Tiistai', 'Keskiviikko', 'Torstai', 'Perjantai', 'Lauantai']
-};
-
-Flatpickr.l10ns.fi.months = {
-	shorthand: ['Tammi', 'Helmi', 'Maalis', 'Huhti', 'Touko', 'Kesä', 'Heinä', 'Elo', 'Syys', 'Loka', 'Marras', 'Joulu'],
-	longhand: ['Tammikuu', 'Helmikuu', 'Maaliskuu', 'Huhtikuu', 'Toukokuu', 'Kesäkuu', 'Heinäkuu', 'Elokuu', 'Syyskuu', 'Lokakuu', 'Marraskuu', 'Joulukuu']
-};
-
-Flatpickr.l10ns.fi.ordinal = function () {
-	return ".";
-};
-if (typeof module !== "undefined") {
-	module.exports = Flatpickr.l10ns;
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:6cc3e37f511598e7fba9d6ab24ad21d3e12faa0ccb9d79dde8f9ea8512353499
+size 800

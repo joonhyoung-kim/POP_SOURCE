@@ -1,1 +1,3 @@
-AmCharts.translations.sk = {"monthNames":["Január","Február","Marec","Apríl","Máj","Jún","Júl","August","September","Október","November","December"],"shortMonthNames":["Jan","Feb","Mar","Apr","Máj","Jún","Júl","Aug","Sep","Okt","Nov","Dec"],"dayNames":["Nedeľa","Pondelok","Utorok","Streda","Štvrtok","Piatok","Sobota"],"shortDayNames":["Ne","Po","Ut","St","Št","Pi","So"],"zoomOutText":"Zobraziť všetky"};
+version https://git-lfs.github.com/spec/v1
+oid sha256:6ae9e0f1ffe951685d0854334080146ae2b3a44c90381efe989bb4d9164ad10a
+size 421

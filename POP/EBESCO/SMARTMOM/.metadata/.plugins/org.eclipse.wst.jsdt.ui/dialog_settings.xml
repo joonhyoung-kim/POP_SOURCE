@@ -1,12 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<section name="Workbench">
-	<section name="JavaSearchPage">
-		<item value="0" key="HISTORY_SIZE"/>
-		<item value="false" key="CASE_SENSITIVE"/>
-		<item value="15" key="INCLUDE_MASK"/>
-	</section>
-	<section name="completion_proposal_size">
-	</section>
-	<section name="JavaElementSearchActions">
-	</section>
-</section>
+version https://git-lfs.github.com/spec/v1
+oid sha256:62f6a63a923746d66593f4a4f6ed126e25ceb6ebd4d6d428032f068d077aa3dd
+size 368

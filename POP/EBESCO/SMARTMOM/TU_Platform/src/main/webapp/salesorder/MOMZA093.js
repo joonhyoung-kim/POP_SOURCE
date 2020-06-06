@@ -1,13 +1,3 @@
-var MOMZA093 = {
-	init: function() {
-		mCommon.init("grid", "W2018062814585496910008f5dk6b1v0E");
-		this.grid();
-		this.event();
-		mCommon.render("grid", "W2018062814585496910008f5dk6b1v0E");
-	}, grid: function() {
-	}, event: function() {
-	}
-};
-$(document).ready(function(event){
-	MOMZA093.init();
-});
+version https://git-lfs.github.com/spec/v1
+oid sha256:c43f3806f846b935825fc388e74f3cdbea4853b3ae240b3d063c513b570da605
+size 313

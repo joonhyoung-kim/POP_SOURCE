@@ -1,15 +1,3 @@
-var MOMIB008 = {
-	init: function() {		
-		Language.init(function() {});
-	}, createCallInit: function(index, param, callBackParam, indexInfo) {
-		console.log('index = ' + index);
-		console.log('param = ' + JSON.stringify(param));
-		console.log('callBackParam = ' + callBackParam);
-		console.log('indexInfo = ' + JSON.stringify(indexInfo));
-	}
-};
-
-$(document).ready(function(event){
-	momWidget.init(1, 'MOMIB008', MOMIB008);
-	MOMIB008.init();
-});
+version https://git-lfs.github.com/spec/v1
+oid sha256:b4ca3d24b8795a1633f4db5d033441af7b44142648aba69f0e6f24d84517efee
+size 457

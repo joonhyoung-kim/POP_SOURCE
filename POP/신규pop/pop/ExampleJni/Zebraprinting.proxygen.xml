@@ -1,6 +1,3 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<jni4net-proxygen xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://jni4net.sf.net/0.8.8.0/toolConfig.xsd">
-  <TargetDirJvm>..\..\jvm</TargetDirJvm>
-  <TargetDirClr>..\..\clr</TargetDirClr>
-  <AssemblyReference Assembly="..\..\Zebraprinting.dll" Generate="true" />
-</jni4net-proxygen>
+version https://git-lfs.github.com/spec/v1
+oid sha256:7280dcdcb01db4959e16ca71c45acd8efe4f6ce629460a1a4412fc3a4b19b272
+size 394

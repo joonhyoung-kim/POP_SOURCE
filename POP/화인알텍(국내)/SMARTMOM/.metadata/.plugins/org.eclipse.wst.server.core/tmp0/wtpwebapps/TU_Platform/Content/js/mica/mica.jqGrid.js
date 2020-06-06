@@ -1,32 +1,3 @@
-﻿micaJqGrid = {
-    addForm: function (grid, url, mtype) {
-        grid = typeof grid == "string" ? $(grid) : grid;
-        var rowId = "new";
-        grid.jqGrid("editGridRow", rowId, {
-            width: "100%", height: "100%", url: url + rowId, mtype: mtype,
-            afterComplete: function (response, postdata, formid) {
-                Mica.require('dataSet').request('all');
-            }
-        });
-    },
-    editForm: function (grid, url, mtype) {
-        grid = typeof grid == "string" ? $(grid) : grid;
-        var rowId = grid.jqGrid('getGridParam', "selrow");
-        grid.jqGrid("editGridRow", rowId, {
-            width: "100%", height: "100%", url: url + rowId, mtype: mtype,
-            afterComplete: function (response, postdata, formid) {
-                Mica.require('dataSet').request('all');
-            }
-        });
-    },
-    dellForm: function (grid, url, mtype) {
-        grid = typeof grid == "string" ? $(grid) : grid;
-        var rowId = grid.jqGrid('getGridParam', "selrow");
-        grid.jqGrid("delGridRow", rowId, {
-            width: "100%", height: "100%", url: url + rowId, mtype: mtype,
-            afterComplete: function (response, postdata, formid) {
-                Mica.require('dataSet').request('all');
-            }
-        });
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:08c335b8b71c740cfe853ac76bb737e5185b1f0aa02c62fabda2ee394aed090b
+size 1316

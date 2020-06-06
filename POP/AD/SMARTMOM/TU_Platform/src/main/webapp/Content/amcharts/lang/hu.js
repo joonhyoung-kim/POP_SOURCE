@@ -1,1 +1,3 @@
-AmCharts.translations.hu = {"monthNames":["Január","Február","Március","Április","Május","Június","Július","Augusztus","Szeptember","Október","November","December"],"shortMonthNames":["Jan","Febr","Márc","Ápr","Máj","Jún","Júl","Aug","Szept","Okt","Nov","Dec"],"dayNames":["Vasárnap","Hétfő","Kedd","Szerda","Csütörtök","Péntek","Szombat"],"shortDayNames":["V","H","K","Sze","Cs","P","Szo"],"zoomOutText":"Összes"}
+version https://git-lfs.github.com/spec/v1
+oid sha256:ed299119f4221821c282fc1cbeec1f95dbd75d96484ad56b663a6998bd8131c6
+size 435

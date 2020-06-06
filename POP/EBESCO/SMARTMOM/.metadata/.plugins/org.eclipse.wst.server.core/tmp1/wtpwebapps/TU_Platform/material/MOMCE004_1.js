@@ -1,14 +1,3 @@
-var MOMCE004_1 = {
-	menuId : "MOMCE004_1",
-	
-	init: function() {        
-		Language.init(function() {
-        });
-    }
-};
-
-$(document).ready(function(event){
-	momWidget.init(1, 'MOMCE004_1', MOMCE004_1);
-    momWidget.init(2, 'MOMCE004_1', MOMCE004_1);
-    MOMCE004_1.init();
-});
+version https://git-lfs.github.com/spec/v1
+oid sha256:b3c3350b0a9ace165003c627479aa8aaf388e11db81da3084f2ecbe0c3c9505b
+size 295

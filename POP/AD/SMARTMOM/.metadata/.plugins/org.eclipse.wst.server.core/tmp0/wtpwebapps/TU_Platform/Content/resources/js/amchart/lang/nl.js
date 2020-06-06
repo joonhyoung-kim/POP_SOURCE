@@ -1,1 +1,3 @@
-AmCharts.translations.nl = {"monthNames":["Januari","Februari","Maart","April","Mei","Juni","Juli","Augustus","September","Oktober","November","December"],"shortMonthNames":["Jan","Feb","Mrt","Apr","Mei","Jun","Jul","Aug","Sep","Okt","Nov","Dec"],"dayNames":["Zondag","Maandag","Dinsdag","Woensdag","Donderdag","Vrijdag","Zaterdag"],"shortDayNames":["Zo","Ma","Di","Wo","Do","Vr","Za"],"zoomOutText":"Alles weergeven"};
+version https://git-lfs.github.com/spec/v1
+oid sha256:c152613879941825472e8c374212546a84b7b002fb670186d2d839b1bde26cd7
+size 419

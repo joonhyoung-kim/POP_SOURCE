@@ -1,11 +1,3 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<root>
-  <Localization>
-    <Key>StatusOn</Key>
-    <Value>On</Value>
-  </Localization>
-  <Localization>
-    <Key>StatusOff</Key>
-    <Value>Off</Value>
-  </Localization>
-</root>
+version https://git-lfs.github.com/spec/v1
+oid sha256:07cd6837f126219c1f3454bf004836f5ca5103fdcb2f6c446410bdd054cb53ab
+size 221

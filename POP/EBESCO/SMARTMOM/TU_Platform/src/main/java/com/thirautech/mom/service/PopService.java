@@ -1,14 +1,3 @@
-package com.thirautech.mom.service;
-
-import java.util.List;
-import java.util.Map;
-
-public interface PopService {
-	public List<Map<String,Object>> getMapList(String query, List<Map<String,Object>> param);
-	public List<Map<String,Object>> upsertMapList(String query, List<Map<String,Object>> param);
-	public List<Map<String,Object>> getLabelObjectMapList(String query,Map<String,Object> param);
-	
-	public String getZplScriptFromLabelObjectMapList(List<Map<String,Object>> listParam) throws Exception;
-
-	
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:2b95c58070bbb39bd1402b30190a7e38e1a4c0ba3a77ce365b2cdc6c7a13497a
+size 518

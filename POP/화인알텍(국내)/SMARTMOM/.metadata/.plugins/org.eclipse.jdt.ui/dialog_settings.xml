@@ -1,12 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<section name="Workbench">
-	<section name="quick_assist_proposal_size">
-	</section>
-	<section name="BuildPathsPropertyPage">
-		<item value="3" key="pageIndex"/>
-	</section>
-	<section name="completion_proposal_size">
-	</section>
-	<section name="JavaElementSearchActions">
-	</section>
-</section>
+version https://git-lfs.github.com/spec/v1
+oid sha256:219493ccfd9ca4780fc40cf52964ad4b6aac078c772557f914e6e6aad5979b23
+size 345

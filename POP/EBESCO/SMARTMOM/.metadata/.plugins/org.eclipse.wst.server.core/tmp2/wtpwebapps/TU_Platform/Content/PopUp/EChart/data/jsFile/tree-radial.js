@@ -1,32 +1,3 @@
-myChart.showLoading();
-$.get('data/asset/data/flare.json', function (data) {
-    myChart.hideLoading();
-
-    myChart.setOption(option = {
-        tooltip: {
-            trigger: 'item',
-            triggerOn: 'mousemove'
-        },
-        series: [
-            {
-                type: 'tree',
-
-                data: [data],
-
-                top: '18%',
-                bottom: '14%',
-
-                layout: 'radial',
-
-                symbol: 'emptyCircle',
-
-                symbolSize: 7,
-
-                initialTreeDepth: 3,
-
-                animationDurationUpdate: 750
-
-            }
-        ]
-    });
-});
+version https://git-lfs.github.com/spec/v1
+oid sha256:cb9a03513b6748b144c614131c47dd51a67abb84124e021279dfebb53fae895e
+size 612

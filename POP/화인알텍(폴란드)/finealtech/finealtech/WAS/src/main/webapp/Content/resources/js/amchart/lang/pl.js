@@ -1,1 +1,3 @@
-AmCharts.translations.pl = {"monthNames":["Styczeń","Luty","Marzec","Kwiecień","Maj","Czerwiec","Lipiec","Sierpień","Wrzesień","Październik","Listopad","Grudzień"],"shortMonthNames":["Sty","Lut","Mar","Kwi","Maj","Cze","Lip","Sie","Wrz","Paź","Lis","Gru"],"dayNames":["Niedziela","Poniedziałek","Wtorek","Środa","Czwartek","Piątek","Sobota"],"shortDayNames":["Nie","Pon","Wto","Śro","Czw","Pią","Sob"],"zoomOutText":"Pokaż wszystko"};
+version https://git-lfs.github.com/spec/v1
+oid sha256:1e2603247081fa7b930e7714e52fdc68139a6a4bfc0dbf5021cb6de60d870a1d
+size 447

@@ -1,1 +1,3 @@
-AmCharts.translations.fo = {"monthNames":["Januar","Februar","Mars","Apríl","Mai","Juni","Juli","August","September","Oktober","November","Desember"],"shortMonthNames":["Jan","Feb","Mar","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Des"],"dayNames":["Mánadagur","Týsdagur","Mikudagur","Hósdagur","Fríggjadagur","Leygardagur","Sunnudagur"],"shortDayNames":["Mán","Týs","Mik","Hós","Frí","Ley","Sun"],"zoomOutText":"Show all"}
+version https://git-lfs.github.com/spec/v1
+oid sha256:5a9a5cb7c05598dd3ea12ba0b04758e3a0f8deb327ec4d96b1cf81a5628ee5a4
+size 437

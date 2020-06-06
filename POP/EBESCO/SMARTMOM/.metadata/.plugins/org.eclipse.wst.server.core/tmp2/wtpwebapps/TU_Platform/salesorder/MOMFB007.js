@@ -1,11 +1,3 @@
-var MOMFB007 = {
-	init: function() {
-		Language.init(function() {	
-		});
-	}
-};
-
-$(document).ready(function(event) {
-	momWidget.init(1, 'MOMFB007', MOMFB007);
-	MOMFB007.init();
-});
+version https://git-lfs.github.com/spec/v1
+oid sha256:547df711e23775afb84669a816d7d876354080cd8fbb562bef4519720c227d63
+size 189

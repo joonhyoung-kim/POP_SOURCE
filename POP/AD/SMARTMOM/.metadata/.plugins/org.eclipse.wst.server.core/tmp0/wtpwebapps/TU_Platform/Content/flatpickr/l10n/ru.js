@@ -1,16 +1,3 @@
-/* Russian locals for flatpickr */
-var Flatpickr = Flatpickr || { l10ns: {} };
-Flatpickr.l10ns.ru = {};
-
-Flatpickr.l10ns.ru.weekdays = {
-	shorthand: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
-	longhand: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
-};
-
-Flatpickr.l10ns.ru.months = {
-	shorthand: ['Янв', 'Фев', 'Март', 'Апр', 'Май', 'Июнь', 'Июль', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
-	longhand: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
-};
-if (typeof module !== "undefined") {
-	module.exports = Flatpickr.l10ns;
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:ae6391cfeb4dad20e682cca69ec2ae004f493c89d5e74d8197c581790f7a02a6
+size 818

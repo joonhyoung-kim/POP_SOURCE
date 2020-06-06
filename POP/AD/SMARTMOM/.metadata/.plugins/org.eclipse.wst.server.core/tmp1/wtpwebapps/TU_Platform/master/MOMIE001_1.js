@@ -1,30 +1,3 @@
-var MOMIE001_1 = {
-	initMessage	: undefined, 
-	initParam	: undefined,
-	
-	init: function() {		
-		Language.init(function() {
-			momWidget.isInitGrid(0, function() {
-				var column = [{
-					  headerText: ''
-					, children: [{
-						  dataField: 'col1'
-   						, headerText: ''
-   						, width: 0
-   						, visible: false
-			    	}] 
-				}];
-				
-				AUIGrid.addColumn(momWidget.grid[0], column, 'first');
-				var columnLayout = AUIGrid.getColumnLayout(momWidget.grid[0]);
-			});
-		});
-	}, retrieveCallInit: function(index, param, callBackParam, indexInfo) {
-		this.initParam = {'endDate' : '2018-01-01'};
-	}
-};
-
-$(document).ready(function(event){
-	momWidget.init(1, 'MOMIE001_1', MOMIE001_1);
-	MOMIE001_1.init();
-});
+version https://git-lfs.github.com/spec/v1
+oid sha256:805f4b377bb0113188ba9be2c0d5abe01ae15ea6cd00f93a98361420d29bba05
+size 747

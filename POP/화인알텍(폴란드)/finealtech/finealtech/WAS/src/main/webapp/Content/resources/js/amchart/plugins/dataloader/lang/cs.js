@@ -1,6 +1,3 @@
-AmCharts.translations.dataLoader.cs = {
-  'Error loading the file': 'Došlo k chybě při načítání souboru',
-  'Error parsing JSON file': 'Chyba při zpracování JSON souboru',
-  'Unsupported data format': 'Nepodporovaný formát souboru',
-  'Loading data...': 'Načítám data...'
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:4df439e8dbde058f64af6d2c6d00643bd134234dfc9d5b38675132a90cbb10b2
+size 293

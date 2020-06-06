@@ -1,12 +1,3 @@
-importScripts('cpexcel.js');
-importScripts('xls.js');
-importScripts('jszip.js');
-importScripts('xlsx.js');
-//importScripts('ods.js');
-postMessage({t:'ready'});
-onmessage = function(evt) {
-  var v;
-  try { v = (evt.data.t == 'xls' ? XLS : XLSX).read(evt.data.d, evt.data.b); }
-  catch(e) { postMessage({t:"e",d:e.stack}); }
-  postMessage({t:evt.data.t, d:JSON.stringify(v)});
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:11e057146bbb427325f1a9949ced9db9fe68ff22a61699ac2ebb9eefbe064c8a
+size 389

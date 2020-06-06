@@ -1,28 +1,3 @@
-var MOMLD003 = {
-	initParam 			: undefined,
-	initMessage			: undefined,
-	init: function() {	
-		var that = this;
-		Language.init(function() {
-		});
-	}/*, retrieveCallInit: function(data, param, callBackParam, indexInfo) {
-	}*/, retrieveCallBack: function(result, data, param, callBackParam, indexInfo) {
-		var that = this;
-		
-		if(indexInfo['op'] != undefined && indexInfo['op'] == 'findBtn1') {
-			AUIGrid.setGridData(momWidget.grid[0], data);
-		}
-		
-		if(indexInfo['op'] != undefined && indexInfo['op'] == 'CC1') {
-			AUIGrid.setGridData(momWidget.grid[1], data);
-		}
-		momWidget.splashHide();
-		
-	}
-};
-
-$(document).ready(function(event){
-	momWidget.init(1, 'MOMLD003', MOMLD003);
-	momWidget.init(2, 'MOMLD003', MOMLD003);
-	MOMLD003.init();
-});
+version https://git-lfs.github.com/spec/v1
+oid sha256:fb57d9ee66ca41ceb1a05b348b3fd8604013fa1a642e7247d038c67157faebf8
+size 772

@@ -1,12 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<servers>
-  <server auto-publish-setting="2" auto-publish-time="1" configuration-id="/Servers/Tomcat v8.5 Server at localhost(8100)-config" deployDir="wtpwebapps" hostname="localhost" id="Tomcat v8.5 Server at localhost(8100)" name="Tomcat v8.5 Server at localhost(8100)" runtime-id="Apache Tomcat v8.5" server-type="org.eclipse.jst.server.tomcat.85" server-type-id="org.eclipse.jst.server.tomcat.85" start-timeout="150" stop-timeout="15" testEnvironment="true" timestamp="2">
-    <list key="modules" value0="TU_Platform::org.eclipse.jst.j2ee.server:TU_Platform::jst.web::2.4"/>
-  </server>
-  <server auto-publish-setting="2" auto-publish-time="1" configuration-id="/Servers/Tomcat v8.5 Server at localhost(8200)-config" deployDir="wtpwebapps" hostname="localhost" id="Tomcat v8.5 Server at localhost(8200)" name="Tomcat v8.5 Server at localhost(8200)" runtime-id="Apache Tomcat v8.5" server-type="org.eclipse.jst.server.tomcat.85" server-type-id="org.eclipse.jst.server.tomcat.85" start-timeout="45" stop-timeout="15" testEnvironment="true" timestamp="2">
-    <list key="modules" value0="TU_Platform::org.eclipse.jst.j2ee.server:TU_Platform::jst.web::2.4"/>
-  </server>
-  <server auto-publish-setting="2" auto-publish-time="1" configuration-id="/Servers/Tomcat v8.5 Server at localhost-config" deployDir="wtpwebapps" hostname="localhost" id="Tomcat v8.5 Server at localhost" name="10003" runtime-id="Apache Tomcat v8.5" server-type="org.eclipse.jst.server.tomcat.85" server-type-id="org.eclipse.jst.server.tomcat.85" start-timeout="150" stop-timeout="15" testEnvironment="true" timestamp="5">
-    <list key="modules" value0="TU_Platform::org.eclipse.jst.j2ee.server:TU_Platform::jst.web::2.4"/>
-  </server>
-</servers>
+version https://git-lfs.github.com/spec/v1
+oid sha256:2bbff3506c6dff86dbb2242215eedb4a5b2210801b256c5cb553b269af9f41e6
+size 1786

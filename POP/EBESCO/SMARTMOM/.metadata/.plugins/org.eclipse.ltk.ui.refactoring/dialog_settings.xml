@@ -1,10 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<section name="Workbench">
-	<section name="RefactoringWizard.preview">
-		<item value="600" key="width"/>
-		<item value="400" key="height"/>
-	</section>
-	<section name="RefactoringPropertyPage">
-		<item value="true" key="org.eclipse.ltk.ui.refactoring.sortRefactorings"/>
-	</section>
-</section>
+version https://git-lfs.github.com/spec/v1
+oid sha256:1ad2bfd1da3668738b85179353659478473886e6f0314d844fe462d7fcb23f80
+size 343

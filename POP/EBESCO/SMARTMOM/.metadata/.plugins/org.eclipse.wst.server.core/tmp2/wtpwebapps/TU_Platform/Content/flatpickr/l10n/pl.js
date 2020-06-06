@@ -1,20 +1,3 @@
-/* Polish locals for flatpickr */
-var Flatpickr = Flatpickr || { l10ns: {} };
-Flatpickr.l10ns.pl = {};
-
-Flatpickr.l10ns.pl.weekdays = {
-	shorthand: ['Nd', 'Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'So'],
-	longhand: ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota']
-};
-
-Flatpickr.l10ns.pl.months = {
-	shorthand: ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'],
-	longhand: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień']
-};
-
-Flatpickr.l10ns.pl.ordinal = function () {
-	return ".";
-};
-if (typeof module !== "undefined") {
-	module.exports = Flatpickr.l10ns;
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:005bdfc3540180bd47caa166ed417e1c0cd643595729e842751b906a223c66fb
+size 727

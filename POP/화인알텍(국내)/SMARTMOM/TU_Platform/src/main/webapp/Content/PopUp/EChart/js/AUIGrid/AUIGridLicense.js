@@ -1,7 +1,3 @@
-/**
- * AUIGrid 3.0.2 License
- * License Type : Enterprise Dev License
- * Host Domain(or IP) : localhost
- * Expiration Date : 2018/12/31
- */
-var AUIGridLicense = "eyJjdCI6InFVOHRXNU44c2kxYkk1ZWZHblp5RnFFa2w5WUFMUkhPcUswRUFEeThaQVNoNytFZExKRGJweUJIQnFXQmFoUlF1akxRWTk3MlYvY2hmaEREOUt6cFV2VmVubWhkdS9ZY2krSWtxQXFtaSs0PSIsIml2IjoiZjliYTI2NjQ5NTIwOGExYzY2NDA4ODk3NTU0MmFmZjEiLCJzIjoiNTdlY2UxMjkxMzIyNzcyMSJ9";
+version https://git-lfs.github.com/spec/v1
+oid sha256:91b9c64058f31a6ddc17c039509f57a75d8c989de11bd496a46b4b4fa59c9a26
+size 410

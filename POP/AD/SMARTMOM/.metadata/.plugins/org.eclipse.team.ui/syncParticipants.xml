@@ -1,15 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<syncparticipants>
-<participant displayName="SVN (TU_Platform)" id="org.eclipse.team.svn.ui.synchronize.update.SynchronizeModelParticipant" secondary_id="1587406165505">
-<data consultChangeSets="false" root="false">
-<org.eclipse.team.ui.MODEL_PARTICIPANT_SETTINGS org.eclipse.team.ui.MODEL_PARTICIPANT_DESCRIPTION="TU_Platform" startupAction="none">
-<org.eclipse.team.ui.MODEL_PARTICIPANT_REFRESH_SCHEDULE org.eclipse.team.ui.CTX_REFRESHSCHEDULE_ENABLED="false" org.eclipse.team.ui.CTX_REFRESHSCHEDULE_INTERVAL="3600" org.eclipse.team.ui.CTX_REFRESHSCHEDULE_RUNONCE="false"/>
-<org.eclipse.team.ui.MODEL_PARTICIPANT_MAPPINGS modelProviderId="org.eclipse.core.resources.modelProvider">
-<mappings>
-<resources resourcePath="/TU_Platform" resourceType="4"/>
-</mappings>
-</org.eclipse.team.ui.MODEL_PARTICIPANT_MAPPINGS>
-</org.eclipse.team.ui.MODEL_PARTICIPANT_SETTINGS>
-</data>
-</participant>
-</syncparticipants>
+version https://git-lfs.github.com/spec/v1
+oid sha256:982b09f54fb35ca2e6673c7344f15f33b67338e0df5cf7064bcb19b536978e1c
+size 960

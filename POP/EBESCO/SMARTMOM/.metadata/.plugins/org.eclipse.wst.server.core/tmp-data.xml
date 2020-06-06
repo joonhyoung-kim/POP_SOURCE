@@ -1,6 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<temp-directories>
-  <temp-directory age="0" key="Tomcat v8.5 Server at localhost(8100)" path="tmp1" recycle="false"/>
-  <temp-directory age="0" key="Tomcat v8.5 Server at localhost(8200)" path="tmp2" recycle="false"/>
-  <temp-directory age="0" key="Tomcat v8.5 Server at localhost" path="tmp0" recycle="false"/>
-</temp-directories>
+version https://git-lfs.github.com/spec/v1
+oid sha256:efa25aba1df140f7a7027483fdcfb088bf873767126f06534792df5c0df43374
+size 394

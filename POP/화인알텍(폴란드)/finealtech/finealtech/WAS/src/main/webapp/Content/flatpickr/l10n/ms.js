@@ -1,22 +1,3 @@
-/* Malaysian locals for flatpickr */
-var Flatpickr = Flatpickr || { l10ns: {} };
-Flatpickr.l10ns.ms = {};
-
-Flatpickr.l10ns.ms.weekdays = {
-	shorthand: ['Min', 'Isn', 'Sel', 'Rab', 'Kha', 'Jum', 'Sab'],
-	longhand: ['Minggu', 'Isnin', 'Selasa', 'Rabu', 'Khamis', 'Jumaat', 'Sabtu']
-};
-
-Flatpickr.l10ns.ms.months = {
-	shorthand: ['Jan', 'Feb', 'Mac', 'Apr', 'Mei', 'Jun', 'Jul', 'Ogo', 'Sep', 'Okt', 'Nov', 'Dis'],
-	longhand: ['Januari', 'Februari', 'Mac', 'April', 'Mei', 'Jun', 'Julai', 'Ogos', 'September', 'Oktober', 'November', 'Disember']
-};
-
-Flatpickr.l10ns.ms.firstDayOfWeek = 1;
-
-Flatpickr.l10ns.ms.ordinal = function () {
-	return "";
-};
-if (typeof module !== "undefined") {
-	module.exports = Flatpickr.l10ns;
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:6c395806d674f0774f0c315abd41dc29e6005ec6478fb6f39e923fd64f195ac6
+size 738

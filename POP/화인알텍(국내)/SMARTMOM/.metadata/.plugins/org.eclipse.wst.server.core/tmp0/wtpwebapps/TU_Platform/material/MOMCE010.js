@@ -1,13 +1,3 @@
-var MOMCE010 = {
-	init: function() {
-		mCommon.init("grid", "W201806221349379281000qZwsr6X3Vn2");
-		this.grid();
-		this.event();
-		mCommon.render("grid", "W201806221349379281000qZwsr6X3Vn2");
-	}, grid: function() {
-	}, event: function() {
-	}
-};
-$(document).ready(function(event){
-	MOMCE010.init();
-});
+version https://git-lfs.github.com/spec/v1
+oid sha256:ea3827a9eb8af73fc4fd2632e8c46ace54ca6cbcbadb0246885e920810a123de
+size 313

@@ -1,1 +1,3 @@
-AmCharts.translations.id = {"monthNames":["Januari","Pebruari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"],"shortMonthNames":["Jan","Peb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"],"dayNames":["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"],"shortDayNames":["Min","Sen","Sel","Rab","Kam","Jum","Sab"],"zoomOutText":"Tampilkan semua"};
+version https://git-lfs.github.com/spec/v1
+oid sha256:cf98c05c9ba7b7627f284f05145452e4938af00a34afa6f196550c9eba9765ac
+size 409

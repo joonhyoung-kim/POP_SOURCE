@@ -1,1 +1,3 @@
-AmCharts.translations.ko = {"monthNames":["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],"shortMonthNames":["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],"dayNames":["일요일","월요일","화요일","수요일","목요일","금요일","토요일"],"shortDayNames":["일","월","화","수","목","금","토"],"zoomOutText":"모두 보기"};
+version https://git-lfs.github.com/spec/v1
+oid sha256:c71e3ab9dc3626f81428a0182ed0b487a55242b333a9b61e266df1cf6817aef6
+size 425

@@ -1,1 +1,3 @@
-AmCharts.translations.rw = {"monthNames":["Mutarama","Gashyantare","Werurwe","Mata","Gicuransi","Kamena","Nyakanga","Kanama","Nzeli","Ukwakira","Ugushyingo","Ukuboza"],"shortMonthNames":["Mut","Gas","Wer","Mat","Gic","Kam","Nya","Kan","Nze","Ukw","Ugu","Uku"],"dayNames":["Kuwa mbere","Kuwa kabiri","Kuwa gatatu","Kuwa kane","Kuwa gatanu","Kuwa gatandatu","Ku cyumweru"],"shortDayNames":["Mbe","Kab","Gtu","Kan","Gnu","Gnd","Mwe"],"zoomOutText":"Show all"}
+version https://git-lfs.github.com/spec/v1
+oid sha256:8d4a9e2d5e46643fc49eeee1ce881a3a7be843eda3fd5a8b20364275d4e2fb3c
+size 456

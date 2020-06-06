@@ -1,19 +1,3 @@
-package com.thirautech.mom.mail;
-
-import javax.mail.Authenticator;
-import javax.mail.PasswordAuthentication;
-
-public class SMTPAuthenticator extends Authenticator {
-	private String sendUser;
-	private String sendPwd;
-	
-	public SMTPAuthenticator(String sendUser, String sendPwd) {
-		this.sendUser = sendUser;
-		this.sendPwd = sendPwd;
-	}
-	
-	@Override
-	protected PasswordAuthentication getPasswordAuthentication() {
-		return new PasswordAuthentication(sendUser, sendPwd);
-	}
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:dbe2b26ec8d416819e663ac9f1deef72677afa0688c77d8b2fdaf7a1cd0ce64b
+size 493

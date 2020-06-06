@@ -1,6 +1,3 @@
-AmCharts.translations.dataLoader.lt = {
-  'Error loading the file': 'Nepavyko užkrauti failo',
-  'Error parsing JSON file': 'Skaitant JSON failą įvyko klaida',
-  'Unsupported data format': 'Nepalaikomas duomenų formatas',
-  'Loading data...': 'Kraunami duomenys...'
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:05bfcca5e66913c1e0d98b1436b9942b58260eab3544a86f215c748955eec0a5
+size 276

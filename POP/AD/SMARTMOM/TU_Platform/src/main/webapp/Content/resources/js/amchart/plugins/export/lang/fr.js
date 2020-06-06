@@ -1,31 +1,3 @@
-AmCharts.translations[ "export" ][ "fr" ] = {
-    "fallback.save.text": "CTRL + C pour copier dans le presse-papier.",
-    "fallback.save.image": "Clic-droit -> Enregistrer sous... pour sauvegarder l'image.",
-
-    "capturing.delayed.menu.label": "{{duration}}",
-    "capturing.delayed.menu.title": "Cliquez pour annuler",
-
-    "menu.label.print": "Imprimer",
-    "menu.label.undo": "Retour",
-    "menu.label.redo": "Refaire",
-    "menu.label.cancel": "Annuler",
-
-    "menu.label.save.image": "Téléchargez en ...",
-    "menu.label.save.data": "Sauvegarder en ...",
-
-    "menu.label.draw": "Annoter ...",
-    "menu.label.draw.change": "Changer le ...",
-    "menu.label.draw.add": "Ajouter ...",
-    "menu.label.draw.shapes": "Formes ...",
-    "menu.label.draw.colors": "Couleurs ...",
-    "menu.label.draw.widths": "Taille ...",
-    "menu.label.draw.opacities": "Opacité ...",
-    "menu.label.draw.text": "Texte",
-
-    "menu.label.draw.modes": "Mode ...",
-    "menu.label.draw.modes.pencil": "Crayon",
-    "menu.label.draw.modes.line": "Ligne",
-    "menu.label.draw.modes.arrow": "Flèche",
-
-    "label.saved.from": "Sauvé de la: "
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:439f56ccc782c608d30e9d41962e7752bdaf3def56a66d98fd15474cbf39bfee
+size 1136

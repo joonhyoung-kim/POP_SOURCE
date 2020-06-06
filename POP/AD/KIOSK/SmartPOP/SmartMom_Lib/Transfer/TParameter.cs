@@ -1,17 +1,3 @@
-﻿using System.Collections.ObjectModel;
-
-namespace TU.Core.Transfer
-{
-    /// <summary>
-    /// 파라메터 생성 시 사용
-    /// </summary>
-    public class TParameter : Collection<TItem>
-    {
-        public int Seq { get; set; }
-
-        public TParameter(int seq =0)
-        {
-            Seq = seq;
-        }
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:7e9c0dbcb3ffb965344532f754586a8fc9564e450665052fe78561de50020635
+size 345

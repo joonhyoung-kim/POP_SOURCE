@@ -1,16 +1,3 @@
-﻿namespace MOM.RPT
-{
-    /// <summary>
-    /// Interaction logic for SplashScreenView1.xaml
-    /// </summary>
-    public partial class SplashScreenView1 
-    {
-        public SplashScreenView1()
-        {
-            InitializeComponent();
-
-        }
-
-    }
-
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:9bcafb1986953dff742891165f41404c76b1c858abba0030add2356dddfeb904
+size 280

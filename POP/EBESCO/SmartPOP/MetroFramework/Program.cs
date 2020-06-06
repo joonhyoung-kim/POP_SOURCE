@@ -1,20 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace MetroFramework
-{
-    static class Program
-    {
-        /// <summary>
-        /// 해당 응용 프로그램의 주 진입점입니다.
-        /// </summary>
-        [STAThread]
-        static void Main()
-        {
-
-        }
-    }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:fb850b539fb9260d9a9621ca4ed6ee864cf2ebba86a7a3d2371b96f1b481cfaf
+size 394

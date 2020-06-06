@@ -1,13 +1,3 @@
-var MOMOA002 = {
-	init: function() {	
-		
-		Language.init(function() {
-		});
-		
-	}
-};
-
-$(document).ready(function(event){
-	momWidget.init(1, 'MOMOA002', MOMOA002);
-	MOMOA002.init();
-});
+version https://git-lfs.github.com/spec/v1
+oid sha256:c7056b5ba45fad58ab9e4988924f5883e9f04735f259f182e4d8dc4bd34f1577
+size 196

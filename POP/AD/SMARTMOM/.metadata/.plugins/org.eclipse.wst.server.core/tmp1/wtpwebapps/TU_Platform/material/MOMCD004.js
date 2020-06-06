@@ -1,18 +1,3 @@
-var MOMCD004 = {
-	init: function() {
-		Language.init(function() {
-			mCommon.init("grid", "W201806151115315681001qXIFFoPZh6f", Language);
-		});
-		this.grid();
-		this.event();
-		mCommon.render("grid", "W201806151115315681001qXIFFoPZh6f");
-	}, grid: function() {
-	}, event: function() {
-		$("#findBtn").click(function(event){
-			mCommon.render("grid", "W201806151115315681001qXIFFoPZh6f",  mCommon.formGetParam("#form"), function(){});
-		});
-	}
-};
-$(document).ready(function(event){
-	MOMCD004.init();
-});
+version https://git-lfs.github.com/spec/v1
+oid sha256:2274f84711dd16c63475113aac349ae20538e43c31108ddef9e47584456bdd11
+size 519

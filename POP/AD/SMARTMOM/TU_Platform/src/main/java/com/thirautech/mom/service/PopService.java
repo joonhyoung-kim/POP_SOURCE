@@ -1,9 +1,3 @@
-package com.thirautech.mom.service;
-
-import java.util.List;
-import java.util.Map;
-
-public interface PopService {
-	public List<Map<String,Object>> getMapList(String query, List<Map<String,Object>> param);
-	public List<Map<String,Object>> upsertMapList(String query, List<Map<String,Object>> param);
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:99d3148e0b768bfb74d0532997e3e5ea4bcd874891b2e7031ec5399d6d660148
+size 309

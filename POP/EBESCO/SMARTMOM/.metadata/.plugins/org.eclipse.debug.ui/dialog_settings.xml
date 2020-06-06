@@ -1,8 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<section name="Workbench">
-	<section name="org.eclipse.debug.ui.SELECT_LAUNCH_SHORTCUT_DIALOG">
-		<item value="270" key="DIALOG_WIDTH"/>
-		<item value="1|맑은 고딕|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|5|0|맑은 고딕" key="DIALOG_FONT_NAME"/>
-		<item value="436" key="DIALOG_HEIGHT"/>
-	</section>
-</section>
+version https://git-lfs.github.com/spec/v1
+oid sha256:9a612dd16bc0dcfc1b594a4d4415b5164e7f519019a8230d66689c25f46e291d
+size 366

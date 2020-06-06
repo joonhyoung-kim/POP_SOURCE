@@ -1,31 +1,3 @@
-AmCharts.translations[ "export" ][ "hu" ] = {
-	"fallback.save.text": "CTRL + C az adatok vágólapra történő másolásához.",
-	"fallback.save.image": "Jobb egérgomb -> Save picture as... a kép mentéséhez.",
-
-	"capturing.delayed.menu.label": "{{duration}}",
-	"capturing.delayed.menu.title": "Kattints a megszakításhoz",
-
-	"menu.label.print": "Nyomtatás",
-	"menu.label.undo": "Visszavon",
-	"menu.label.redo": "Mégis",
-	"menu.label.cancel": "Mégse",
-
-	"menu.label.save.image": "Kép mentése ...",
-	"menu.label.save.data": "Mentés másként ...",
-
-	"menu.label.draw": "Jegyzet ...",
-	"menu.label.draw.change": "Módosítás ...",
-	"menu.label.draw.add": "Hozzáadás ...",
-	"menu.label.draw.shapes": "Alakzat ...",
-	"menu.label.draw.colors": "Szín ...",
-	"menu.label.draw.widths": "Méret ...",
-	"menu.label.draw.opacities": "Átlátszóság ...",
-	"menu.label.draw.text": "Szöveg",
-
-	"menu.label.draw.modes": "Mód ...",
-	"menu.label.draw.modes.pencil": "Toll",
-	"menu.label.draw.modes.line": "Vonal",
-	"menu.label.draw.modes.arrow": "Nyíl",
-
-	"label.saved.from": "Mentve innen: "
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:8f74d6110d3c0dfc29c9f6f5784f94cfb8171d9effb53f875986ce8fc7266c59
+size 1127
