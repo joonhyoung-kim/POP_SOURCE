@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.plan.demand.netDemandPlanning">
+	<select id="get_netDemandPlanning_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.NET_DEMAND_ID
+		     , A.DEMAND_ID
+		     , A.SALES_ORDER_ID
+		     , A.CUSTOMER_ID     AS CUSTOMER_CD
+		     , ( SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME(A.MASTER_ID, #{companyCd, jdbcType=VARCHAR}, A.CUSTOMER_ID)  
+		         FROM   DUAL ) AS CUSTOMER_NAME
+		     , A.ITEM_ID    
+		     , ( SELECT MOM_COMMON_PKG.FN_GET_ITEM_NAME (A.MASTER_ID, #{companyCd, jdbcType=VARCHAR}, A.ITEM_ID)  
+		         FROM   DUAL ) AS ITEM_NAME
+		     , TO_CHAR(A.DUE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS DUE_DATE
+		     , A.QTY
+		     , A.DEMAND_PRIORITY
+		     , B.LINE_CODE
+		     , B.MODEL_SUFFIX
+		     , A.MASTER_ID
+		     , A.PLAN_ID    
+		FROM   TH_DPP_NET_DEMAND A
+		     , TH_MST_DEMAND B
+		WHERE  A.MASTER_ID = B.MASTER_ID
+		AND    A.PLAN_ID   = B.PLAN_ID
+		AND    A.DEMAND_ID = B.DEMAND_ID
+		AND    A.MASTER_ID = #{divisionCd, jdbcType=VARCHAR}
+	   <if test="planId != null and planId != ''">
+		AND    A.PLAN_ID   = #{planId, jdbcType=VARCHAR}
+	   </if>
+	   <if test="itemName != null and itemName != ''">
+		AND    UPPER(A.ITEM_ID||'@'||MOM_COMMON_PKG.FN_GET_ITEM_NAME(A.MASTER_ID, #{companyCd, jdbcType=VARCHAR}, A.ITEM_ID) ) LIKE '%' || TRIM(UPPER(#{itemName, jdbcType=VARCHAR})) || '%'  
+	   </if>
+	   <if test="itemId != null and itemId != ''">
+		AND    UPPER(A.ITEM_ID||'@'||MOM_COMMON_PKG.FN_GET_ITEM_NAME(A.MASTER_ID, #{companyCd, jdbcType=VARCHAR}, A.ITEM_ID) ) LIKE '%' || TRIM(UPPER(#{itemId, jdbcType=VARCHAR})) || '%'  
+	   </if>
+	   <if test="fromDate != null and fromDate != ''">
+		AND    A.DUE_DATE  BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') AND TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.9997/24
+	   </if>
+		ORDER BY A.DEMAND_PRIORITY
+	</select>
+
+</mapper>

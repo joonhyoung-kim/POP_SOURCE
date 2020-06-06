@@ -1,0 +1,399 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{27622591-9052-4B4A-9857-A4BCAED99DAF}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>SmartMOM_POP</RootNamespace>
+    <AssemblyName>SmartMOM_POP</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <PublishUrl>D:\temp\publish_pop\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>http://211.199.87.242/smartpop/</InstallUrl>
+    <ProductName>SmartPOP</ProductName>
+    <PublisherName>티라유텍</PublisherName>
+    <SuiteName>SmartMOM</SuiteName>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>publish.htm</WebPage>
+    <AutorunEnabled>true</AutorunEnabled>
+    <ApplicationRevision>44</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>2EB28588A5183B93087BC7748BD893077A3817E8</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>tuIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MetroFramework.Design, Version=1.4.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetroModernUI.1.4.0.0\lib\net\MetroFramework.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="MetroFramework.Fonts, Version=1.4.0.0, Culture=neutral, PublicKeyToken=5f91a84759bf584a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MetroModernUI.1.4.0.0\lib\net\MetroFramework.Fonts.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="frmBadProductInsert.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmBadProductInsert.Designer.cs">
+      <DependentUpon>frmBadProductInsert.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmCommonStockSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCommonStockSelect.Designer.cs">
+      <DependentUpon>frmCommonStockSelect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmCTReprint.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCTReprint.Designer.cs">
+      <DependentUpon>frmCTReprint.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmGanbanManual.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmGanbanManual.Designer.cs">
+      <DependentUpon>frmGanbanManual.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmKeyboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmKeyboard.Designer.cs">
+      <DependentUpon>frmKeyboard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMainProductInput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMainProductInput.Designer.cs">
+      <DependentUpon>frmMainProductInput.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmGanban.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmGanban.Designer.cs">
+      <DependentUpon>frmGanban.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmLogin.Designer.cs">
+      <DependentUpon>frmLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmLoginIDInsert.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmLoginIDInsert.Designer.cs">
+      <DependentUpon>frmLoginIDInsert.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmCommonSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCommonSelect.Designer.cs">
+      <DependentUpon>frmCommonSelect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMainProductComplete.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMainProductComplete.Designer.cs">
+      <DependentUpon>frmMainProductComplete.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMaterialGI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMaterialGI.Designer.cs">
+      <DependentUpon>frmMaterialGI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMaterialGR.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMaterialGR.Designer.cs">
+      <DependentUpon>frmMaterialGR.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMoveProductProcess.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMoveProductProcess.Designer.cs">
+      <DependentUpon>frmMoveProductProcess.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmNowDate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmNowDate.Designer.cs">
+      <DependentUpon>frmNowDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmProductGI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmProductGI.Designer.cs">
+      <DependentUpon>frmProductGI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmPallet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPallet.Designer.cs">
+      <DependentUpon>frmPallet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmPOSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPOSearch.Designer.cs">
+      <DependentUpon>frmPOSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmScanView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmScanView.Designer.cs">
+      <DependentUpon>frmScanView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmStockType.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmStockType.Designer.cs">
+      <DependentUpon>frmStockType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ucMoveProductItemAction.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ucMoveProductItemAction.Designer.cs">
+      <DependentUpon>ucMoveProductItemAction.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ucMoveProductItemStatus.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ucMoveProductItemStatus.Designer.cs">
+      <DependentUpon>ucMoveProductItemStatus.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="frmBadProductInsert.resx">
+      <DependentUpon>frmBadProductInsert.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCommonStockSelect.resx">
+      <DependentUpon>frmCommonStockSelect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCTReprint.resx">
+      <DependentUpon>frmCTReprint.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmGanbanManual.resx">
+      <DependentUpon>frmGanbanManual.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmKeyboard.resx">
+      <DependentUpon>frmKeyboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMainProductInput.resx">
+      <DependentUpon>frmMainProductInput.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmGanban.resx">
+      <DependentUpon>frmGanban.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmLogin.resx">
+      <DependentUpon>frmLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmLoginIDInsert.resx">
+      <DependentUpon>frmLoginIDInsert.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCommonSelect.resx">
+      <DependentUpon>frmCommonSelect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMainProductComplete.resx">
+      <DependentUpon>frmMainProductComplete.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMaterialGI.resx">
+      <DependentUpon>frmMaterialGI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMaterialGR.resx">
+      <DependentUpon>frmMaterialGR.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMoveProductProcess.resx">
+      <DependentUpon>frmMoveProductProcess.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmNowDate.resx">
+      <DependentUpon>frmNowDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmProductGI.resx">
+      <DependentUpon>frmProductGI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPallet.resx">
+      <DependentUpon>frmPallet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPOSearch.resx">
+      <DependentUpon>frmPOSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmScanView.resx">
+      <DependentUpon>frmScanView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmStockType.resx">
+      <DependentUpon>frmStockType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="ucMoveProductItemAction.resx">
+      <DependentUpon>ucMoveProductItemAction.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ucMoveProductItemStatus.resx">
+      <DependentUpon>ucMoveProductItemStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Properties\app.manifest" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MetroFramework\MetroFramework.csproj">
+      <Project>{8fe8da76-8d80-4e12-821b-504e6d870c97}</Project>
+      <Name>MetroFramework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SmartMom_Lib\SmartMom_Lib.csproj">
+      <Project>{1174e30f-c64b-426d-83fb-6ca4687ef769}</Project>
+      <Name>SmartMom_Lib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PublishFile Include="MetroFramework">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="MetroFramework.Design">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="MetroFramework.Fonts">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="Newtonsoft.Json">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="SmartMom_Lib">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="tuIcon.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

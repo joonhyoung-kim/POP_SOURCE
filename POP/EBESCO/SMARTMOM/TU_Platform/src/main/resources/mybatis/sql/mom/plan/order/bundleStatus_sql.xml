@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.plan.order.bundleStatus">
+	<select id="get_bundleStatus_list" resultType="camelMap" parameterType="java.util.HashMap">
+		<if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+			WITH TEMP1 AS (
+		</if>
+		SELECT A.MERGE_ID
+		     , A.ITEM_ID
+		     , B.ITEM_NAME
+		     , B.SPECIFICATION
+		     , TO_CHAR(A.DUE_DATE, 'yyyy-mm-dd') AS DUE_DATE
+		     , A.ORDER_QTY
+		     , (SELECT SUM(REMAIN_QTY) AS REMAIN_QTY
+		          FROM MOM_SALES_ORDER_V S
+		         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		           AND MERGE_ID = A.MERGE_ID) AS SALES_REMAIN_QTY
+		     , NVL(C.GOOD_QTY, 0) AS RESULT_QTY
+		     , A.DESCRIPTION
+		     , DECODE(C.PRODUCT_ORDER_ID, NULL, 'N', 'Y') AS RESULT_FLAG
+		     , TO_CHAR(A.UPDATE_DATE, 'yyyy-mm-dd') AS UPDATE_DATE
+		     , A.UPDATE_BY
+		     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(A.DIVISION_CD, A.COMPANY_CD, A.UPDATE_BY) FROM DUAL) AS UPDATE_BY_NAME
+		  FROM MOM_DEMAND_MERGE A
+		     , MOM_ITEM_DEFINITION B
+		     , MOM_WORK_ORDER C
+		 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND A.DIVISION_CD = B.DIVISION_CD
+		   AND A.COMPANY_CD = B.COMPANY_CD
+		   AND A.DIVISION_CD = C.DIVISION_CD(+)
+		   AND A.COMPANY_CD = C.COMPANY_CD(+)
+		   AND A.ITEM_ID = B.ITEM_ID
+		   AND A.DUE_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'yyyy-mm-dd') AND TO_DATE(#{toDate, jdbcType=VARCHAR}, 'yyyy-mm-dd')
+		   AND A.MERGE_ID = C.PRODUCT_ORDER_ID(+)
+		   <if test="bundleId != null and bundleId != ''">
+		   AND A.MERGE_ID LIKE '%' || TRIM(UPPER(#{bundleId, jdbcType=VARCHAR})) || '%'
+		   </if>
+		   <if test="itemId != null and itemId != ''">
+           AND (A.ITEM_ID LIKE '%' || TRIM(UPPER(#{itemId, jdbcType=VARCHAR})) || '%' 
+	        OR UPPER(B.ITEM_NAME) LIKE '%' || TRIM(UPPER(#{itemId, jdbcType=VARCHAR})) || '%')
+	       </if>
+	        <if test='resultQty == "N"'>
+           AND NVL(C.GOOD_QTY, 0) = 0
+           </if>
+           <if test="resultQty == 'Y_PLUS'">
+           AND NVL(C.GOOD_QTY, 0) > 0
+           </if>
+		 ORDER BY A.ITEM_ID, A.DUE_DATE, A.MERGE_ID
+		<if test="startPage != null and startPage != '' and endPage != null and endPage != ''">	
+			)	
+		    SELECT A.*		
+		    	 , B.ROW_COUNT
+		    FROM (SELECT A.*		
+		    		   , ROWNUM GRIDROW
+		          FROM TEMP1 A) A		
+		       , (SELECT COUNT(*) ROW_COUNT		
+		          FROM TEMP1) B 		
+		    WHERE GRIDROW BETWEEN #{startPage, jdbcType=INTEGER} AND #{endPage, jdbcType=INTEGER}		
+	    </if>		
+	</select>
+	
+	<select id="get_bundleStatusDetail_list" resultType="camelMap" parameterType="java.util.HashMap">
+	SELECT A.SALES_ORDER_ID
+	     , A.VENDOR_CD
+	     , A.VENDOR_NAME
+	     , A.CUSTOMER_PO_ID
+	     , A.CUSTOMER_PO_NO
+	     , A.CUSTOMER_LINE_CD
+	     , A.SALES_ITEM_ID
+	     , A.ITEM_ID
+	     , A.ITEM_NAME
+	     , TO_CHAR(A.DUE_DATE, 'YYYY-MM-DD') AS DUE_DATE
+	     , A.ORDER_QTY
+	     , NVL(A.CANCEL_QTY, 0) AS CANCEL_QTY
+	     , A.REMAIN_QTY
+	     , A.SHIP_QTY
+	     , A.ORIGIN_DUE_DATE
+	     , A.ORG_CODE
+	     , A.MERGE_ID
+	  FROM MOM_SALES_ORDER_V A
+	 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	   AND A.MERGE_ID = #{mergeId, jdbcType=VARCHAR}
+	 ORDER BY A.DUE_DATE, A.SALES_ORDER_ID
+	</select>
+	
+	<select id="get_bundleStatusPop_list" resultType="camelMap" parameterType="java.util.HashMap">
+		<if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+		WITH TEMP1 AS (
+		</if>
+		SELECT A.DIVISION_CD
+		     , A.COMPANY_CD
+		     , A.SALES_ORDER_ID
+		     , A.VENDOR_CD
+		     , A.VENDOR_NAME
+		     , A.CUSTOMER_PO_ID
+		     , A.CUSTOMER_PO_NO
+		     , A.CUSTOMER_LINE_CD
+		     , A.SALES_ITEM_ID
+		     , A.ITEM_ID
+		     , A.ITEM_NAME
+		     , TO_CHAR(A.DUE_DATE, 'YYYY-MM-DD') AS DUE_DATE
+		     , A.ORDER_QTY
+		     , A.CANCEL_QTY
+		     , A.REMAIN_QTY
+		     , A.ORIGIN_DUE_DATE
+		     , A.ORG_CODE
+		     , NVL(B.GOOD_QTY, 0) AS GOOD_QTY
+		  FROM MOM_SALES_ORDER_V A
+		     , (SELECT PRODUCT_ORDER_ID
+		             , GOOD_QTY
+		          FROM MOM_WORK_ORDER
+		         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		           AND PLAN_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'yyyy-mm-dd') AND TO_DATE(#{toDate, jdbcType=VARCHAR}, 'yyyy-mm-dd') + 23.9997/24
+		           AND WO_STATE != 'C'
+		       ) B
+		 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND A.DUE_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') AND TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.9997/24
+		   AND NVL(A.SHIP_QTY, 0) = 0
+		   AND NVL(A.REMAIN_QTY, 0) > 0
+		   AND A.MERGE_ID IS NULL
+		   AND A.MERGE_ID = B.PRODUCT_ORDER_ID(+)
+		   AND A.ITEM_ID = #{itemId, jdbcType=VARCHAR}
+		   <if test="customerId != null and customerId != ''">
+		   AND A.VENDOR_CD = #{customerId, jdbcType=VARCHAR}
+		   </if>
+		   <if test="poId != null and poId != ''">
+           AND UPPER(A.CUSTOMER_PO_ID) LIKE '%' || TRIM(UPPER(#{poId, jdbcType=VARCHAR})) || '%'
+           </if>
+           <if test="poNo != null and poNo != ''">
+           AND UPPER(A.CUSTOMER_PO_NO) LIKE '%' || TRIM(UPPER(#{poNo, jdbcType=VARCHAR})) || '%'
+           </if>
+           <if test="modelSuffix != null and modelSuffix != ''">
+           AND A.SALES_ITEM_ID LIKE LIKE '%' || TRIM(UPPER(#{modelSuffix, jdbcType=VARCHAR})) || '%'
+           </if>
+           <if test='resultQty == "N"'>
+           AND NVL(B.GOOD_QTY, 0) = 0
+           </if>
+           <if test="resultQty == 'Y_PLUS'">
+           AND NVL(B.GOOD_QTY, 0) > 0
+           </if>
+           <if test="orgCode != null and orgCode != ''">
+           AND A.ORG_CODE = #{orgCode, jdbcType=VARCHAR}
+           </if>
+		 ORDER BY A.ITEM_ID, A.DUE_DATE, A.SALES_ORDER_ID
+		<if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+		)
+	    SELECT A.*
+	         , B.ROW_COUNT
+	      FROM (SELECT A.*
+	                 , ROWNUM GRIDROW
+	              FROM TEMP1 A) A
+	         , (SELECT COUNT(*) ROW_COUNT
+	              FROM TEMP1) B 
+	     WHERE GRIDROW BETWEEN #{startPage, jdbcType=INTEGER} AND #{endPage, jdbcType=INTEGER}
+	    </if>
+	</select>
+	
+	<insert id="modify_bundleChangeDate" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+		UPDATE MOM_DEMAND_MERGE
+	       SET DUE_DATE = TO_DATE(#{dueDate, jdbcType=VARCHAR} , 'yyyy-mm-dd')
+	         , UPDATE_DATE = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+	         , UPDATE_BY = #{userId, jdbcType=VARCHAR}
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		    AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		    AND MERGE_ID = #{mergeId, jdbcType=VARCHAR}
+	   ;
+	  
+	  INSERT INTO MOM_DEMAND_MERGE_HIST (
+				  LAST_EVENT_SEQ
+				, DIVISION_CD
+				, COMPANY_CD
+				, MERGE_ID
+				, ITEM_ID
+				, DUE_DATE
+				, ORDER_QTY
+				, DESCRIPTION
+				, CREATE_DATE
+				, CREATE_BY
+				, UPDATE_DATE
+				, UPDATE_BY
+		)
+		   SELECT S_ORDER_SEQ.NEXTVAL
+				, DIVISION_CD
+				, COMPANY_CD
+				, MERGE_ID
+				, ITEM_ID
+				, DUE_DATE
+				, ORDER_QTY
+				, DESCRIPTION
+				, CREATE_DATE
+				, CREATE_BY
+				, UPDATE_DATE
+				, UPDATE_BY
+			 FROM MOM_DEMAND_MERGE
+			WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			  AND MERGE_ID = #{mergeId, jdbcType=VARCHAR}
+	  ;
+	  	
+		SELECT
+			CASE 
+				WHEN COUNT(MERGE_ID) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_DEMAND_MERGE
+		WHERE 
+			    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			AND MERGE_ID = #{mergeId, jdbcType=VARCHAR}
+		;
+	 END
+	}	
+	</insert>
+	
+	<insert id="create_bundleCancel" statementType="CALLABLE">
+	{
+		CALL SP_MOM_SALES_ORDER_PKG.P_CANCEL_DEMAND_MERGE ( 
+			 #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+           , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+           , #{companyCd, mode=IN, jdbcType=VARCHAR}
+           , #{mergeId, mode=IN, jdbcType=VARCHAR} 
+           , #{userId, mode=IN, jdbcType=VARCHAR}
+        )
+	}
+	</insert>
+	
+	<insert id="create_bundleAddDel" statementType="CALLABLE">
+	{
+		CALL SP_MOM_SALES_ORDER_PKG.P_CHANGE_DEMAND_MERGE ( 
+			 #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+           , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+           , #{companyCd, mode=IN, jdbcType=VARCHAR}
+           , #{mergeId, mode=IN, jdbcType=VARCHAR} 
+           , #{salesOrderId, mode=IN, jdbcType=VARCHAR} 
+           , #{orderQty, mode=IN, jdbcType=NUMERIC} 
+           , #{userId, mode=IN, jdbcType=VARCHAR}
+           , #{changeType, mode=IN, jdbcType=VARCHAR}
+        )
+	}
+	</insert>		
+	
+</mapper>

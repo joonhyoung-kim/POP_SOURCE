@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.eis.purchasePerformanceStatus">
+	<select id="get_purchasePerformanceStatus_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.MM
+		     , A.GROUP_SEQ
+		     , MAX(DECODE(A.SEQ, 1, A.PERCENT, 0)) AS PERCENT1
+		     , MAX(DECODE(A.SEQ, 2, A.PERCENT, 0)) AS PERCENT2
+		     , MAX(DECODE(A.SEQ, 3, A.PERCENT, 0)) AS PERCENT3
+		  FROM (SELECT DIVISION_CD
+		             , COMPANY_CD
+		             , GROUP_TYPE
+		             , ITEM_GROUP_CODE
+		             , MM
+		             , GROUP_SEQ
+		             , PERCENT
+		             , DENSE_RANK() OVER (ORDER BY SEQ) AS SEQ 
+		          FROM MOM_EIS_MATERIAL_KPI A
+		         WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		           AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		           AND A.KPI_TYPE = #{kpiType, jdbcType=VARCHAR}
+		           AND A.GROUP_TYPE = #{groupType, jdbcType=VARCHAR}
+		           AND A.WEEK = #{week, jdbcType=VARCHAR}
+		         GROUP BY DIVISION_CD, COMPANY_CD, GROUP_TYPE, ITEM_GROUP_CODE, MM, GROUP_SEQ, PERCENT, SEQ
+		      ) A
+		     , MOM_EIS_MAT_ITEM_MAPPING B
+		 WHERE A.DIVISION_CD = B.DIVISION_CD
+		   AND A.COMPANY_CD = B.COMPANY_CD
+		   AND A.GROUP_TYPE = B.ITEM_GROUP_LARGE
+		   AND A.ITEM_GROUP_CODE = B.ITEM_GROUP_CODE
+		 GROUP BY A.GROUP_SEQ, A.MM
+		 ORDER BY A.GROUP_SEQ, A.MM 
+	</select>
+	
+<!-- 	<select id="get_purchasePerformanceGroup_list" resultType="camelMap" parameterType="java.util.HashMap"> -->
+<!-- 	SELECT DISTINCT GROUP_TYPE AS GROUP_TYPE -->
+<!-- 	     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (DIVISION_CD  -->
+<!-- 	                                              , COMPANY_CD  -->
+<!-- 	                                              , 'ITEM_GROUP_LARGE'  -->
+<!-- 	                                              , GROUP_TYPE) -->
+<!-- 	          FROM DUAL) AS GROUP_NAME -->
+<!-- 	  FROM MOM_EIS_MATERIAL_KPI -->
+<!--  	 WHERE DIVISION_CD= #{divisionCd, jdbcType=VARCHAR} -->
+<!-- 	   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR} -->
+<!-- 	</select> -->
+	
+<!-- 	<select id="get_purchasePerformanceGroupCode_list" resultType="camelMap" parameterType="java.util.HashMap"> -->
+<!-- 	SELECT DISTINCT ITEM_GROUP_CODE -->
+<!-- 	  FROM MOM_EIS_MATERIAL_KPI -->
+<!-- 	 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR} -->
+<!-- 	   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR} -->
+<!-- 	   AND GROUP_SEQ = #{groupSeq, jdbcType=VARCHAR} -->
+<!-- 	</select> -->
+	
+	<select id="get_purchasePerformanceGroupLarge_list" resultType="camelMap" parameterType="java.util.HashMap">
+	SELECT CODE_ID AS GROUP_TYPE
+	     , CODE_NAME AS GROUP_NAME
+	     , NVL(ATTRIBUTE3, 'N') AS USE_YN
+	     , ATTRIBUTE4 AS SEQ
+	     , ATTRIBUTE5 AS GOAL
+	  FROM MOM_CODE
+	 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	   AND CODE_CLASS_ID = 'ITEM_GROUP_LARGE'
+	   AND USE_YN = 'Y'
+	   <if test="attribute3 != null and attribute3 != ''">
+	   AND NVL(ATTRIBUTE3, 'N') = 'Y'
+	   </if>
+	   <if test="attribute4 != null and attribute4 != ''">
+	   AND ATTRIBUTE4 = #{attribute4, jdbcType=VARCHAR}
+	   </if>
+     ORDER BY NVL(ATTRIBUTE3, 'N') DESC, ATTRIBUTE4
+	</select>
+	
+	<update id="modify_purchasePerformanceGroupLarge" parameterType="java.util.HashMap">
+	UPDATE MOM_CODE
+   	   SET ATTRIBUTE3 = #{useYn, jdbcType=VARCHAR}
+   	     , ATTRIBUTE4 = #{seq, jdbcType=VARCHAR}
+   	     , UPDATE_DATE = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}) 
+         , UPDATE_BY = #{userId, jdbcType=VARCHAR}
+     WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	   AND CODE_CLASS_ID = 'ITEM_GROUP_LARGE'
+	   AND CODE_ID = #{groupType, jdbcType=VARCHAR}
+	</update>
+	
+	<select id="get_purchasePerformanceGroupCode_list" resultType="camelMap" parameterType="java.util.HashMap">
+	SELECT ITEM_GROUP_LARGE
+	     , ITEM_GROUP_CODE
+	     , USE_YN
+	     , SEQ
+	     , DESCRIPTION
+	  FROM MOM_EIS_MAT_ITEM_MAPPING
+	 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	   AND DATA_TYPE = #{dataType, jdbcType=VARCHAR}
+	   AND ITEM_GROUP_LARGE = #{groupType, jdbcType=VARCHAR}
+	   <if test="seqS != null and seqS !=''">
+	   AND SEQ = #{seqS, jdbcType=VARCHAR} 
+	   </if>
+	   <if test="useYnS != null and useYnS !=''">
+	   AND USE_YN = #{useYnS, jdbcType=VARCHAR} 
+	   </if>
+	 ORDER BY USE_YN DESC, SEQ
+   </select>
+   
+   <insert id="create_purchasePerformanceGroupCode" parameterType="java.util.HashMap">
+   INSERT INTO MOM_EIS_MAT_ITEM_MAPPING(
+		       DIVISION_CD
+		 	 , COMPANY_CD
+		 	 , ITEM_GROUP_LARGE
+		 	 , ITEM_GROUP_CODE
+		 	 , USE_YN
+		 	 , SEQ
+		 	 , DESCRIPTION
+		 	 , CREATE_DATE
+		 	 , CREATE_BY
+		 	 , UPDATE_DATE
+		 	 , UPDATE_BY
+		 	 , DATA_TYPE
+		     )
+		     VALUES(
+		       #{divisionCd, jdbcType=VARCHAR}
+		 	 , #{companyCd, jdbcType=VARCHAR}
+		 	 , #{itemGroupLarge, jdbcType=VARCHAR}
+		 	 , #{itemGroupCode, jdbcType=VARCHAR}
+		 	 , #{useYn, jdbcType=VARCHAR}
+		 	 , #{seq, jdbcType=INTEGER}
+		 	 , #{description, jdbcType=VARCHAR}
+		 	 , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}) 
+		 	 , #{userId, jdbcType=VARCHAR}
+		 	 , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}) 
+		 	 , #{userId, jdbcType=VARCHAR}
+		 	 , #{dataType, jdbcType=VARCHAR}
+		    )
+   </insert>
+   <update id="modify_purchasePerformanceGroupCode" parameterType="java.util.HashMap">
+   UPDATE MOM_EIS_MAT_ITEM_MAPPING
+      SET USE_YN = #{useYn, jdbcType=VARCHAR}
+        , SEQ = #{seq, jdbcType=INTEGER}
+        , UPDATE_DATE = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}) 
+        , UPDATE_BY = #{userId, jdbcType=VARCHAR}
+    WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	  AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	  AND ITEM_GROUP_LARGE = #{itemGroupLarge, jdbcType=VARCHAR}
+	  AND ITEM_GROUP_CODE = #{itemGroupCode, jdbcType=VARCHAR}
+	  AND DATA_TYPE = #{dataType, jdbcType=VARCHAR}
+   </update>
+   
+   <delete id="remove_purchasePerformanceGroupCode" parameterType="java.util.HashMap">
+   DELETE 
+     FROM MOM_EIS_MAT_ITEM_MAPPING
+    WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	  AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	  AND ITEM_GROUP_LARGE = #{itemGroupLarge, jdbcType=VARCHAR}
+	  AND ITEM_GROUP_CODE = #{itemGroupCode, jdbcType=VARCHAR}
+	  AND DATA_TYPE = #{dataType, jdbcType=VARCHAR}
+   </delete>
+   
+   <select id="get_purchasePerformanceItemGroup_list" resultType="camelMap" parameterType="java.util.HashMap">
+    SELECT DISTINCT ITEM_GROUP_CODE AS CODE
+	     , ITEM_GROUP_CODE AS NAME
+	  FROM MOM_ITEM_DEFINITION
+	 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	   AND ITEM_GROUP_LARGE = #{groupType, jdbcType=VARCHAR}
+	   AND ITEM_GROUP_CODE IS NOT NULL
+	 ORDER BY ITEM_GROUP_CODE
+   </select>
+</mapper>

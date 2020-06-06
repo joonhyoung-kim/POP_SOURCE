@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html data-site='SmartMOM' data-page='dashboard-copy' data-language='' class=' w-mod-js w-mod-no-touch w-mod-video w-mod-no-ios'>
+<head>
+<meta charset='utf-8' />
+<meta name='viewport' content='width=device-width, initial-scale=1' />
+<meta name='generator' content='Mica' />
+<meta http-equiv='CACHE-CONTROL' content='NO-CACHE' />
+<meta http-equiv='X-UA-Compatible' content='IE=edge' />
+<link rel='stylesheet' type='text/css' href='site.css' />
+<link rel='stylesheet' type='text/css' href='/Content/jqwidgets/styles/jqx.base.css' />
+<link rel='stylesheet' type='text/css' href='/Content/theme/css/datetimepicker/jquery.datetimepicker.css' />
+<link rel='stylesheet' type='text/css' href='SmartMOM.css' />
+<script src='/Content/js/jquery.min-1.11.1.js'></script>
+<script src='/Content/js/jquery-ui.min.js'></script>
+<script src='/Content/js/normalize.js'></script>
+<script src='/Content/amcharts/amcharts.js'></script>
+<script src='/Content/amcharts/serial.js'></script>
+<script src='/Content/theme/js/plugins/jqGrid/jquery.jqGrid.min.js'></script>
+<script src='/Content/theme/js/plugins/jqGrid/i18n/grid.locale-en.js'></script>
+<script src='/Content/theme/js/plugins/bootstrap/bootstrap.min.js'></script>
+<script src='/Content/theme/js/plugins/select2/select2.min.js'></script>
+<script src="/Content/theme/js/plugins/datetimepicker/jquery.datetimepicker.full.js"></script>
+<script src='/Content/jqwidgets/jqxcore.js'></script>
+<script src='/Content/jqwidgets/jqxlistbox.js'></script>
+<script src='/Content/jqwidgets/jqxcombobox.js'></script>
+<script src='/Content/jqwidgets/jqxexpander.js'></script>
+<script src='/Content/jqwidgets/jqxsplitter.js'></script>
+<script src='/Content/jqwidgets/jqxbuttons.js'></script>
+<script src='/Content/jqwidgets/jqxscrollbar.js'></script>
+<script src='/Content/jqwidgets/jqxdata.js'></script>
+<script src="/Content/jqwidgets/jqxmenu.js"></script>
+<script src='/Content/jqwidgets/jqxtree.js'></script>
+<script src='/Content/jqwidgets/jqxpanel.js'></script>
+<script src="/Content/jqwidgets/jqxnotification.js"></script>
+<!-- SESSION -->
+<script type='text/javascript' src="/Content/js/session.js"></script>
+<!-- MICA -->
+<script src="/Content/js/common.js"></script>
+<script src='/Content/js/mica.js'></script>
+<script src="/Content/js/mica/export.js"></script>
+<script src="/Content/js/mica/mica.common.js"></script>
+<!-- 다국어 -->
+<script src="/Content/js/regional.js"></script>
+<script type='text/javascript' src='SmartMOM.common.js'></script>
+<script type='text/javascript' src='tabMenu.js'></script>
+<script type='text/javascript' src='dashboard-main.js'></script>
+<script src="/Content/js/app.js"></script>
+</head>
+<body class='' style='overflow: auto'>
+    <div class='section'>
+        <div data-collapse='bigmedium' data-animation='default' data-duration='400' data-contain='1' class='w-nav navbar'>
+            <div class='w-container container'>
+                <a href='dashboard-main.html' class='w-nav-brand logo'> </a>
+                <div class='logotext'>SmartMOM</div>
+                <a href='/comLogout.do' class='w-inline-block topbutton'>
+                    <div class='w-icon fa fa-power-off icon'></div>
+                </a>
+                <a href='#' id='popRunBtn' class='w-inline-block topbutton' style="width:50px">
+                    POP
+<!--                     <div class='w-icon fa fa-cogs icon'></div> -->
+                </a>
+                <nav class='w-nav-menu top-navmenu'>
+                    <ul id="topMenu" class='depth1'>
+                        <li class='depth1-menu w-clearfix'>
+                            <div class='w-dropdown menu-sam-width w-clearfix top-dropdown'>
+                                <div class='w-dropdown-toggle menu-sam-width topdrown'>
+                                    <div id="mn01">Dashboard</div>
+                                    <div class='w-icon fa fa-angle-down'></div>
+                                </div>
+                                <nav class='w-dropdown-list header-nav w-clearfix topdroplist'>
+                                    <div class='depth2 depth1'>
+                                        <div class='w-clearfix menuarea'>
+                                            <div class='w-20-list'>
+                                                <ul id='ul' class='w-list-unstyled'>
+                                                    <li class='s-depth2-wrap'>
+                                                        <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                        <div class='textblock'>Dashboard</div>
+                                                    </li>
+                                                    <li><a href='#momProductionJournal' class='w-clearfix w-inline-block s-depth2-col click_menu'>
+                                                            <div class='icon-circle'></div>
+                                                            <div class='textblock'>Production Report By Daily</div>
+                                                    </a></li>
+                                                    <li><a href='#momProductionJournalPeriod' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Production Report By Period</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#ajaxMomPresentConditionManage' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Real Time Production Report</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momDemandReport' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Demand Report</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momMaterialMarketingGraph' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Inventory Report</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momProcessFaultyReturnGraph' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Customer Defect Report</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momVendorDefectGraph' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Supplier Defect Report</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momShortageStatus' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Shortage Report</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                </ul>
+                                            </div>
+<!--                                             <div class='w-20-list'> -->
+<!--                                                 <ul id='ul' class='w-list-unstyled'> -->
+<!--                                                     <li class='s-depth2-wrap'> -->
+<!--                                                         <div class='w-icon fa fa-angle-down icon r5'></div> -->
+<!--                                                         <div class='textblock'>KPI</div> -->
+<!--                                                     </li> -->
+<!--                                                     <li><a href='#momItemUphControl' class='w-clearfix w-inline-block s-depth2-col click_menu'> -->
+<!--                                                             <div class='icon-circle'></div> -->
+<!--                                                             <div class='textblock'>품목별 UPH 관리</div> -->
+<!--                                                     </a></li> -->
+<!--                                                     <li><a href='#momLineUphControl' class='w-inline-block s-depth2-col click_menu'> -->
+<!--                                                             <div class='textblock'>라인별 UPH 관리</div> -->
+<!--                                                             <div class='icon-circle'></div> -->
+<!--                                                     </a></li> -->
+<!--                                                     <li><a href='#momItemUpphControl' class='w-inline-block s-depth2-col click_menu'> -->
+<!--                                                             <div class='textblock'>품목별 UPPH 관리</div> -->
+<!--                                                             <div class='icon-circle'></div> -->
+<!--                                                     </a></li> -->
+<!--                                                     <li><a href='#momLineUpphControl' class='w-inline-block s-depth2-col click_menu'> -->
+<!--                                                             <div class='textblock'>라인별 UPPH 관리</div> -->
+<!--                                                             <div class='icon-circle'></div> -->
+<!--                                                     </a></li> -->
+<!--                                                 </ul> -->
+<!--                                             </div> -->
+                                        </div>
+                                    </div>
+                                </nav>
+                            </div>
+                        </li>
+                        <li class='depth1-menu w-clearfix'>
+                            <div class='w-dropdown menu-sam-width w-clearfix top-dropdown'>
+                                <div class='w-dropdown-toggle menu-sam-width topdrown'>
+                                    <div>Planning</div>
+                                    <div class='w-icon fa fa-angle-down'></div>
+                                </div>
+                                <nav class='w-dropdown-list header-nav w-clearfix topdroplist'>
+                                    <div class='depth2 depth1'>
+                                        <div class='w-clearfix menuarea'>
+                                            <div class='w-20-list'>
+                                                <ul id='ul' class='w-list-unstyled'>
+                                                    <li class='s-depth2-wrap'>
+                                                        <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                        <div class='textblock'>Customer Order</div>
+                                                    </li>
+                                                    <li><a href='#momSalesOrderR' class='w-clearfix w-inline-block s-depth2-col click_menu'>
+                                                            <div class='icon-circle'></div>
+                                                            <div class='textblock'>Order Entry</div>
+                                                    </a></li>
+                                                    <li><a href='#momDemandUploadR_config' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Order Upload(Product)</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momDemandPoUploadR_config' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Order Upload(Production Plan)</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                </ul>
+                                            </div>
+                                            <div class='w-20-list'>
+                                                <ul id='ul' class='w-list-unstyled'>
+                                                    <li class='s-depth2-wrap'>
+                                                        <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                        <div class='textblock'>Demand Management</div>
+                                                    </li>
+                                                    <li><a href='#momDemandPlanningR' class='w-clearfix w-inline-block s-depth2-col click_menu'>
+                                                            <div class='icon-circle'></div>
+                                                            <div class='textblock'>Demand Plan</div>
+                                                    </a></li>
+                                                    <li><a href='#momDemandVerification' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Demand Verification</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momNetDemandPlanning' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Net Demand</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                </ul>
+                                            </div>
+                                            <div class='w-20-list'>
+                                                <ul id='ul' class='w-list-unstyled'>
+                                                    <li class='s-depth2-wrap'>
+                                                        <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                        <div class='textblock'>Production Planning</div>
+                                                    </li>
+                                                    <li><a href='#momProductionPlanningR_config' class='w-clearfix w-inline-block s-depth2-col click_menu'>
+                                                            <div class='icon-circle'></div>
+                                                            <div class='textblock'>Production Plan</div>
+                                                    </a></li>
+                                                    <li><a href='#momMaterialRequirementPlanningR2' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Material Requirement Plan</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momOutsourcingPlanningR_config' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Outsourcing Production Plan</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momResourceUsageR' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Resource Utilization Report</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momProblemReportDetailR' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Plan Problem Report</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </nav>
+                            </div>
+                        </li>
+                        <li class='depth1-menu w-clearfix'>
+                            <div class='w-dropdown menu-sam-width w-clearfix top-dropdown'>
+                                <div class='w-dropdown-toggle menu-sam-width topdrown'>
+                                    <div>Purchasing</div>
+                                    <div class='w-icon fa fa-angle-down'></div>
+                                </div>
+                                <nav class='w-dropdown-list header-nav w-clearfix topdroplist'>
+                                    <div class='depth2 depth1'>
+                                        <div class='w-clearfix menuarea'>
+                                            <div class='w-20-list'>
+                                                <ul id='ul' class='w-list-unstyled'>
+                                                    <li class='s-depth2-wrap'>
+                                                        <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                        <div class='textblock'>Purchase Order</div>
+                                                    </li>
+                                                    <li><a href='#momMaterialOrderFA' class='w-clearfix w-inline-block s-depth2-col click_menu'>
+                                                            <div class='icon-circle'></div>
+                                                            <div class='textblock'>Manual Purchase Order</div>
+                                                    </a></li>
+                                                    <li><a href='#momBalanceCondition' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>MRP Purchase Order</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momMaterialDeliveryHistCancel' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Purchase Order Cancel</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momMaterialPresentConditionDk' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Purchase Order Report</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                </ul>
+                                            </div>
+                                            <div class='w-20-list'>
+                                                <ul id='ul' class='w-list-unstyled'>
+                                                    <li class='s-depth2-wrap'>
+                                                        <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                        <div class='textblock'>Material Supply Report</div>
+                                                    </li>
+                                                    <li><a href='#momMaterialDeliveryFA' class='w-clearfix w-inline-block s-depth2-col click_menu'>
+                                                            <div class='icon-circle'></div>
+                                                            <div class='textblock'>Material Issue Entry</div>
+                                                    </a></li>
+                                                    <li><a href='#momDeliveryPresentCondition' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Material Issue Report of Supplier</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                </ul>
+                                            </div>
+                                            <div class='w-20-list'>
+                                                <ul id='ul' class='w-list-unstyled'>
+                                                    <li class='s-depth2-wrap'>
+                                                        <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                        <div class='textblock'>Material Ledger</div>
+                                                    </li>
+                                                    <li><a href='#momMaterialInFA' class='w-clearfix w-inline-block s-depth2-col click_menu'>
+                                                            <div class='icon-circle'></div>
+                                                            <div class='textblock'>Material Receipt Registration</div>
+                                                    </a></li>
+                                                    <li><a href='#momMaterialDeliveryPassIn' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Material Receipt</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momMaterialInDkHistR' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Goods Receipt List</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momMaterialRelease' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Raw Material</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momMaterialMoveCancel' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Raw Material Cancel</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                </ul>
+                                            </div>
+                                            <div class='w-20-list'>
+                                                <ul id='ul' class='w-list-unstyled'>
+                                                    <li class='s-depth2-wrap'>
+                                                        <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                        <div class='textblock'>Material</div>
+                                                    </li>
+                                                    <li><a href='#momMaterialRequest' class='w-clearfix w-inline-block s-depth2-col click_menu'>
+                                                            <div class='icon-circle'></div>
+                                                            <div class='textblock'>Material Request</div>
+                                                    </a></li>
+                                                    <li><a href='#momJobWorkOrderRelease' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>WIP Issue</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momMaterialReleaseSum' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Material Summary Request</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momSummarizedBom' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Basic Unit Of Product</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                </ul>
+                                            </div>
+                                            <div class='w-20-list'>
+                                                <ul id='ul' class='w-list-unstyled'>
+                                                    <li class='s-depth2-wrap'>
+                                                        <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                        <div class='textblock'>Stock</div>
+                                                    </li>
+                                                    <li><a href='#momWareHouseInventory' class='w-clearfix w-inline-block s-depth2-col click_menu'>
+                                                            <div class='icon-circle'></div>
+                                                            <div class='textblock'>Material Stock Report</div>
+                                                    </a></li>
+                                                    <li><a href='#momOthersInOutFinishedDk' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Update Material Stock</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momOthersInOutFinishedDkHist' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Material Stock List</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momMaterialMove' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Move Stock</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momMaterialMoveCancel' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Move Stock Cancel</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momMaterialMoveHist' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Move Stock List</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momItemInOutHist' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Stock In/Out History</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momItemInOutMonthHist' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Stock In/Out List</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </nav>
+                            </div>
+                        </li>
+                        <li class='depth1-menu w-clearfix'>
+                            <div class='w-dropdown menu-sam-width w-clearfix top-dropdown'>
+                                <div class='w-dropdown-toggle menu-sam-width topdrown'>
+                                    <div>Production</div>
+                                    <div class='w-icon fa fa-angle-down'></div>
+                                </div>
+                                <nav class='w-dropdown-list header-nav w-clearfix topdroplist'>
+                                    <div class='depth2 depth1'>
+                                        <div class='w-clearfix menuarea'>
+                                            <div class='w-20-list'>
+                                                <ul id='ul' class='w-list-unstyled'>
+                                                    <li class='s-depth2-wrap'>
+                                                        <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                        <div class='textblock'>Work Order</div>
+                                                    </li>
+                                                    <li><a href='#momJobInstructionR' class='w-clearfix w-inline-block s-depth2-col click_menu'>
+                                                            <div class='icon-circle'></div>
+                                                            <div class='textblock'>Create Work Order</div>
+                                                    </a></li>
+                                                    <li><a href='#momJobCurrentSituationR' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Work Order Status</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momJobClosedR_IS' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Work Order Result</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momJobIndicationPrintR' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Print Work Order Sheet</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momMaterialRouteMove' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>WIP Move</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momProcessStockCurrentState' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>WIP Status</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </nav>
+                            </div>
+                        </li>
+                        <li class='depth1-menu w-clearfix'>
+                            <div class='w-dropdown menu-sam-width w-clearfix top-dropdown'>
+                                <div class='w-dropdown-toggle menu-sam-width topdrown'>
+                                    <div>Quality</div>
+                                    <div class='w-icon fa fa-angle-down'></div>
+                                </div>
+                                <nav class='w-dropdown-list header-nav w-clearfix topdroplist'>
+                                    <div class='depth2 depth1'>
+                                        <div class='w-clearfix menuarea'>
+                                            <div class='w-20-list'>
+                                                <ul id='ul' class='w-list-unstyled'>
+                                                    <li><a href='#momQualityCooperation' class='w-clearfix w-inline-block s-depth2-col click_menu'>
+                                                            <div class='icon-circle'></div>
+                                                            <div class='textblock'>Inspection Report</div>
+                                                    </a></li>
+                                                    <li><a href='#momQualityCooperationHist' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Inspection Report List</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momQualityInputFA' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Incomming Quality Control</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momQualityInputHistR' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Incomming Quality Control List</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momProcessQualityCooperation' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Process Quality Control</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momProcessQualityCooperationHist' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Process Quality Control List</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momProductShippingPlanCheck' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Shipment Inspection Report</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momProductShippingPlanCheckHist' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Shipment Inspection Report List</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momMaterialDisposal' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Material Scrap</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momMaterialDisposalPresentConditionR' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Material Scrap Status</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </nav>
+                            </div>
+                        </li>
+                        <li class='depth1-menu w-clearfix'>
+                            <div class='w-dropdown menu-sam-width w-clearfix top-dropdown'>
+                                <div class='w-dropdown-toggle menu-sam-width topdrown'>
+                                    <div>Shipping</div>
+                                    <div class='w-icon fa fa-angle-down'></div>
+                                </div>
+                                <nav class='w-dropdown-list header-nav w-clearfix topdroplist'>
+                                    <div class='depth2 depth1'>
+                                        <div class='w-clearfix menuarea'>
+                                            <div class='w-20-list'>
+                                                <ul id='ul' class='w-list-unstyled'>
+                                                    <li><a href='#momProductShipping' class='w-clearfix w-inline-block s-depth2-col click_menu'>
+                                                            <div class='icon-circle'></div>
+                                                            <div class='textblock'>Shipment(Domestic)</div>
+                                                    </a></li>
+                                                    <li><a href='#momProductShippingExport' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Shipment(Export)</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momProductShippingClose' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Closing</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momProductShippingCancel' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Shipment Cancel</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momReturnRegister' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Return</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momReturnRegisterRework' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Re-Work</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momSalesOrderProductMove' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Move A Finished Goods</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momProductStockCurrentState' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Finished Goods Status</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momProductSalesOrderSpec' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Invoice</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </nav>
+                            </div>
+                        </li>
+                        <li class='depth1-menu w-clearfix'>
+                            <div class='w-dropdown menu-sam-width w-clearfix top-dropdown'>
+                                <div class='w-dropdown-toggle menu-sam-width topdrown'>
+                                    <div>Settlement</div>
+                                    <div class='w-icon fa fa-angle-down'></div>
+                                </div>
+                                <nav class='w-dropdown-list header-nav w-clearfix topdroplist'>
+                                    <div class='depth2 depth1'>
+                                        <div class='w-clearfix menuarea'>
+                                            <div class='w-20-list'>
+                                                <ul id='ul' class='w-list-unstyled'>
+                                                    <li><a href='#momMonthlyClosing' class='w-clearfix w-inline-block s-depth2-col click_menu'>
+                                                            <div class='icon-circle'></div>
+                                                            <div class='textblock'>Account Monthly Closing</div>
+                                                    </a></li>
+                                                    <li><a href='#momMonthlyClosingCancelIf' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Account Monthly Closing Cancel</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momMonthlySalesBuyClosing' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Monthly Closing</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momMonthlyMaterialPriceConfirm' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Material Valuation</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </nav>
+                            </div>
+                        </li>
+                        <li class='depth1-menu w-clearfix'>
+                            <div class='w-dropdown menu-sam-width w-clearfix top-dropdown'>
+                                <div class='w-dropdown-toggle menu-sam-width topdrown'>
+                                    <div>Master Data</div>
+                                    <div class='w-icon fa fa-angle-down'></div>
+                                </div>
+                                <nav class='w-dropdown-list header-nav w-clearfix topdroplist'>
+                                    <div class='depth2 depth1'>
+                                        <div class='w-clearfix menuarea'>
+                                            <div class='w-20-list'>
+                                                <ul id='ul' class='w-list-unstyled'>
+                                                    <li class='s-depth2-wrap'>
+                                                        <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                        <div class='textblock'>Resource Management</div>
+                                                    </li>
+                                                    <li><a href='#momFacilityR' class='w-clearfix w-inline-block s-depth2-col click_menu'>
+                                                            <div class='icon-circle'></div>
+                                                            <div class='textblock'>Factory</div>
+                                                    </a></li>
+                                                    <li><a href='#momFacilityDefined' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Equipment</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momVendorR' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Vendor</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                </ul>
+                                            </div>
+                                            <div class='w-20-list'>
+                                                <ul id='ul' class='w-list-unstyled'>
+                                                    <li class='s-depth2-wrap'>
+                                                        <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                        <div class='textblock'>Item Management</div>
+                                                    </li>
+                                                    <li><a href='#momItemInfo' class='w-clearfix w-inline-block s-depth2-col click_menu'>
+                                                            <div class='icon-circle'></div>
+                                                            <div class='textblock'>Item Master</div>
+                                                    </a></li>
+                                                    <li><a href='#momBom' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>BOM</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momBilOfResourceR' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>BOR</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momModelSuffix' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Model Suffix Mapping</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                </ul>
+                                            </div>
+                                            <div class='w-20-list'>
+                                                <ul id='ul' class='w-list-unstyled'>
+                                                    <li class='s-depth2-wrap'>
+                                                        <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                        <div class='textblock'>Price Management</div>
+                                                    </li>
+                                                    <li><a href='#momMaterialPriceR' class='w-clearfix w-inline-block s-depth2-col click_menu'>
+                                                            <div class='icon-circle'></div>
+                                                            <div class='textblock'>Material Unit Price</div>
+                                                    </a></li>
+                                                    <li><a href='#momCostPriceR' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Sales Unit Price</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momGlobalPriceR' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Exchange</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                </ul>
+                                            </div>
+                                            <div class='w-20-list'>
+                                                <ul id='ul' class='w-list-unstyled'>
+                                                    <li class='s-depth2-wrap'>
+                                                        <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                        <div class='textblock'>Document Management</div>
+                                                    </li>
+                                                    <li><a href='#momSpecification' class='w-clearfix w-inline-block s-depth2-col click_menu'>
+                                                            <div class='icon-circle'></div>
+                                                            <div class='textblock'>Specification</div>
+                                                    </a></li>
+                                                </ul>
+                                            </div>
+                                            <div class='w-20-list'>
+                                                <ul id='ul' class='w-list-unstyled'>
+                                                    <li class='s-depth2-wrap'>
+                                                        <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                        <div class='textblock'>Working Hours Management</div>
+                                                    </li>
+                                                    <li><a href='#momShiftPlanMgt' class='w-clearfix w-inline-block s-depth2-col click_menu'>
+                                                            <div class='icon-circle'></div>
+                                                            <div class='textblock'>Working Hours By Shift</div>
+                                                    </a></li>
+                                                    <li><a href='#momShiftPlanScheduleR' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Shift Schedule</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momIdleTypeR' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>No-Work Type Management</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momIdleR' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>No-Work Schedule</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </nav>
+                            </div>
+                        </li>
+                        <li class='depth1-menu w-clearfix'>
+                            <div class='w-dropdown menu-sam-width w-clearfix top-dropdown'>
+                                <div class='w-dropdown-toggle menu-sam-width topdrown'>
+                                    <div>Admin</div>
+                                    <div class='w-icon fa fa-angle-down'></div>
+                                </div>
+                                <nav class='w-dropdown-list header-nav w-clearfix topdroplist'>
+                                    <div class='depth2 depth1'>
+                                        <div class='w-clearfix menuarea'>
+                                            <div class='w-20-list'>
+                                                <ul id='ul' class='w-list-unstyled'>
+                                                    <li><a href='#momCodeAdminR' class='w-clearfix w-inline-block s-depth2-col click_menu'>
+                                                            <div class='icon-circle'></div>
+                                                            <div class='textblock'>Code Management</div>
+                                                    </a></li>
+                                                    <li><a href='#momAdminEmpR' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>User Management</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momAuthAdminR' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Authority Management</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momBoardBaseR' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Notice Board</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momAdminBoardAdminR' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Notice Board Management</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momCalendarR' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Schedule Management</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momAdminMultiLanguageR' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Multi-Language Management</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                    <li><a href='#momAdminWarehouse' class='w-inline-block s-depth2-col click_menu'>
+                                                            <div class='textblock'>Warehouse Management By Screen</div>
+                                                            <div class='icon-circle'></div>
+                                                    </a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </nav>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+                <div class='w-nav-button'>
+                    <div class='w-icon fa fa-angle-down'></div>
+                </div>
+<!--                 <a href='#' class='w-inline-block topbutton'> -->
+<!--                     <div class='w-icon fa fa-user icon'></div> -->
+<!--                 </a> -->
+                <div id='loginUserId' class='logotext time'>Super</div>
+            </div>
+        </div>
+        <div class='w-clearfix content'>
+            <div class='rightarea w100p'>
+                <a id='btnLeft' href='#' class='w-inline-block btn-arrow floatleft'>
+                    <div class='w-icon fa fa-chevron-left icon'></div>
+                </a> <a id='btnRight' href='#' class='w-inline-block btn-arrow'>
+                    <div class='w-icon fa fa-chevron-right icon'></div>
+                </a>
+                <div id='tabHeader' name='tabHeader' data-name='tabHeader' class='w-clearfix header'>
+                    <ul id='ul' class='tabclass'>
+                        <li class='listitem ui-state-disabled'><a href='#adminDashboardR' data-tab="tab" class='w-inline-block tabmenu active'>
+                                <div class='textblock'>Dashboard</div>
+                        </a></li>
+                        <li class='listitem' style="display: none;" id="dummyTab"></li>
+                    </ul>
+                </div>
+                <div class="tab-content padding-0 overflow-visible">
+                    <div class='tab-pane active' id='ID_adminDashboardR'>
+                        <div class='bluepanel'>
+                            <div class='w-clearfix dashboardheader'>
+                                <div class='w-clearfix totalpanel bg-green'>
+                                    <div class='totalr'>
+                                        <h4>재고회전율</h4>
+                                        <h1>2.74회</h1>
+                                    </div>
+                                    <div class='w-clearfix totall bg-green'>
+                                        <div class='arrow-icon'></div>
+                                        <div class='w-icon fa fa-refresh totalicon'></div>
+                                        <div class='totalltext'>-0.30%</div>
+                                    </div>
+                                </div>
+                                <div class='w-clearfix totalpanel bg-yellow'>
+                                    <div class='totalr'>
+                                        <h4>재고회전일</h4>
+                                        <h1>5.84일</h1>
+                                    </div>
+                                    <div class='w-clearfix totall bg-yellow'>
+                                        <div class='arrow-icon'></div>
+                                        <div class='totalltext'>-0.30%</div>
+                                        <div class='w-icon fa fa-history totalicon'></div>
+                                    </div>
+                                </div>
+                                <div class='w-clearfix totalpanel red'>
+                                    <div class='totalr'>
+                                        <h4>당일 미처리율</h4>
+                                        <h1>11/195</h1>
+                                    </div>
+                                    <div class='w-clearfix totall red'>
+                                        <div class='arrow-icon down'></div>
+                                        <div class='totalltext'>-7.62%</div>
+                                        <div class='w-icon fa fa-calendar-check-o totalicon'></div>
+                                    </div>
+                                </div>
+                                <div class='w-clearfix totalpanel'>
+                                    <div class='totalr'>
+                                        <h4>음수발생율</h4>
+                                        <h1>97/1900</h1>
+                                    </div>
+                                    <div class='w-clearfix totall'>
+                                        <div class='arrow-icon'></div>
+                                        <div class='totalltext'>-0.88%</div>
+                                        <div class='w-icon fa fa-line-chart totalicon'></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='w-clearfix panelbottom'>
+                                <div class='girdl'>
+                                    <div class='gridarea h350'>
+                                        <div class='panelheader'>
+                                            <div class='w-icon fa fa-bar-chart-o icon menu'></div>
+                                            <div id ="chartLabel" class='txtlabel'>설비별 Capa Shortage 현황</div>
+                                        </div>
+                                        <div class='calc35'>
+                                            <div id='chart' class='w-widget w-widget-chart w-dyn-list h100p'></div>
+                                        </div>
+                                    </div>
+                                    <div class='gridarea h350 top10'>
+                                        <div class='panelheader'>
+                                            <div class='w-icon fa fa-area-chart icon menu'></div>
+                                            <div id ="chartLabel1" class='txtlabel'>중요 자재 Shortage 현황</div>
+                                        </div>
+                                        <div class='calc35'>
+                                            <div id='chart1' class='w-widget w-widget-chart w-dyn-list h100p'></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='gridr'>
+                                    <div class='w-clearfix panelheader'>
+                                        <div class='w-icon fa fa-barcode icon menu'></div>
+                                        <div id ="lineWorkingLabel" class='txtlabel'>라인가동 현황</div>
+                                            <div  class = 'statusbar'>
+                                                <div class = 'mesbar grey'>
+                                                    <div id='lineStateWait' class = 'textblock'>대기</div> 
+                                                </div>
+                                                <div class = 'mesbar green'>
+                                                    <div id='lineStateRun' class = 'textblock'>진행</div> 
+                                                </div>
+                                                <div class = 'mesbar yellow'>
+                                                    <div id='lineStateEnd' class = 'textblock'>완료</div> 
+                                                </div> 
+                                                <div class = 'mesbar red'>
+                                                    <div id='lineStateStop' class = 'textblock'>정지</div> 
+                                                </div>
+                                                <div class = 'mesbar dark-grey'>
+                                                    <div id='lineStateNot' class = 'textblock'>비가동</div> 
+                                                </div>  
+                                            </div>
+
+                                    </div>
+                                    <div id='lineWorking' class='w-clearfix calc35 padding10'>
+                                        <div class='linebox'>
+                                            <h5>Door Line (조립)</h5>
+                                            <div class='total-text'>
+                                                <h2 class='green-text'>94%</h2>
+                                            </div>
+                                            <div class='w-clearfix topline'>
+                                                <div class='w50p rline'>
+                                                    <div class='w-icon fa fa-angle-up icon r5 green'></div>
+                                                    <div class='textblock'>1,854 EA</div>
+                                                </div>
+                                                <div class='w50p'>
+                                                    <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                    <div class='textblock'>1,742 EA</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='linebox'>
+                                            <h5>600 Ton (Link)</h5>
+                                            <div class='total-text'>
+                                                <h2 class='dark-grey-text'>0%</h2>
+                                            </div>
+                                            <div class='w-clearfix topline'>
+                                                <div class='w50p rline'>
+                                                    <div class='w-icon fa fa-angle-up icon r5 green'></div>
+                                                    <div class='textblock'>0 EA</div>
+                                                </div>
+                                                <div class='w50p'>
+                                                    <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                    <div class='textblock'>0 EA</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='linebox'>
+                                            <h5>250 Ton (TPL)</h5>
+                                            <div class='total-text'>
+                                                <h2 class='red-text'>73%</h2>
+                                            </div>
+                                            <div class='w-clearfix topline'>
+                                                <div class='w50p rline'>
+                                                    <div class='w-icon fa fa-angle-up icon r5 green'></div>
+                                                    <div class='textblock'>1,854 EA</div>
+                                                </div>
+                                                <div class='w50p'>
+                                                    <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                    <div class='textblock'>1,353 EA</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='linebox'>
+                                            <h5>Front Line (조립)</h5>
+                                            <div class='total-text'>
+                                                <h2 class='yellow-text'>100%</h2>
+                                            </div>
+                                            <div class='w-clearfix topline'>
+                                                <div class='w50p rline'>
+                                                    <div class='w-icon fa fa-angle-up icon r5 green'></div>
+                                                    <div class='textblock'>1,854 EA</div>
+                                                </div>
+                                                <div class='w50p'>
+                                                    <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                    <div class='textblock'>1,854 EA</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='linebox'>
+                                            <h5>서울 250 Ton (Pro)</h5>
+                                            <div class='total-text'>
+                                                <h2 class='green-text'>90%</h2>
+                                            </div>
+                                            <div class='w-clearfix topline'>
+                                                <div class='w50p rline'>
+                                                    <div class='w-icon fa fa-angle-up icon r5 green'></div>
+                                                    <div class='textblock'>1,854 EA</div>
+                                                </div>
+                                                <div class='w50p'>
+                                                    <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                    <div class='textblock'>1,668 EA</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='linebox'>
+                                            <h5>화일 400 Ton (Pro)</h5>
+                                            <div class='total-text'>
+                                                <h2 class='grey-text'>0%</h2>
+                                            </div>
+                                            <div class='w-clearfix topline'>
+                                                <div class='w50p rline'>
+                                                    <div class='w-icon fa fa-angle-up icon r5 green'></div>
+                                                    <div class='textblock'>1,854 EA</div>
+                                                </div>
+                                                <div class='w50p'>
+                                                    <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                    <div class='textblock'>0 EA</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='linebox'>
+                                            <h5>심팩 250 Ton (Pro)</h5>
+                                            <div class='total-text'>
+                                                <h2 class='red-text'>99%</h2>
+                                            </div>
+                                            <div class='w-clearfix topline'>
+                                                <div class='w50p rline'>
+                                                    <div class='w-icon fa fa-angle-up icon r5 green'></div>
+                                                    <div class='textblock'>1,854 EA</div>
+                                                </div>
+                                                <div class='w50p'>
+                                                    <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                    <div class='textblock'>1,835 EA</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='linebox'>
+                                            <h5>100파이 (자동화)</h5>
+                                            <div class='total-text'>
+                                                <h2 class='green-text'>54%</h2>
+                                            </div>
+                                            <div class='w-clearfix topline'>
+                                                <div class='w50p rline'>
+                                                    <div class='w-icon fa fa-angle-up icon r5 green'></div>
+                                                    <div class='textblock'>1,854 EA</div>
+                                                </div>
+                                                <div class='w50p'>
+                                                    <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                    <div class='textblock'>1,001 EA</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='linebox'>
+                                            <h5>고속 60 T</h5>
+                                            <div class='total-text'>
+                                                <h2 class='green-text'>65%</h2>
+                                            </div>
+                                            <div class='w-clearfix topline'>
+                                                <div class='w50p rline'>
+                                                    <div class='w-icon fa fa-angle-up icon r5 green'></div>
+                                                    <div class='textblock'>1,854 EA</div>
+                                                </div>
+                                                <div class='w50p'>
+                                                    <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                    <div class='textblock'>1,205 EA</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='linebox'>
+                                            <h5>Door Line (조립)</h5>
+                                            <div class='total-text'>
+                                                <h2 class='green-text'>29%</h2>
+                                            </div>
+                                            <div class='w-clearfix topline'>
+                                                <div class='w50p rline'>
+                                                    <div class='w-icon fa fa-angle-up icon r5 green'></div>
+                                                    <div class='textblock'>1,854 EA</div>
+                                                </div>
+                                                <div class='w50p'>
+                                                    <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                    <div class='textblock'>537 EA</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='linebox'>
+                                            <h5>Door Line (조립)</h5>
+                                            <div class='total-text'>
+                                                <h2 class='grey-text'>0%</h2>
+                                            </div>
+                                            <div class='w-clearfix topline'>
+                                                <div class='w50p rline'>
+                                                    <div class='w-icon fa fa-angle-up icon r5 green'></div>
+                                                    <div class='textblock'>1,854 EA</div>
+                                                </div>
+                                                <div class='w50p'>
+                                                    <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                    <div class='textblock'>0 EA</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='linebox'>
+                                            <h5>Door Line (조립)</h5>
+                                            <div class='total-text'>
+                                                <h2 class='green-text'>9%</h2>
+                                            </div>
+                                            <div class='w-clearfix topline'>
+                                                <div class='w50p rline'>
+                                                    <div class='w-icon fa fa-angle-up icon r5 green'></div>
+                                                    <div class='textblock'>1,854 EA</div>
+                                                </div>
+                                                <div class='w50p'>
+                                                    <div class='w-icon fa fa-angle-down icon r5'></div>
+                                                    <div class='textblock'>167 EA</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type='text/javascript'>
+        $(document).ready(function() {
+            Mica.require('ix').init([]);
+            Mica.require('dataSet').request('all');
+        }); // $(document).ready
+    </script>
+</body>
+</html>

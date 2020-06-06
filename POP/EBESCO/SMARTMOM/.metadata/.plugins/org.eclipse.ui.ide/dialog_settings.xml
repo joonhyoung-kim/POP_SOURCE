@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="CleanDialogSettings">
+		<item value="500" key="DIALOG_WIDTH"/>
+		<item value="false" key="TOGGLE_SELECTED"/>
+		<item value="402" key="DIALOG_HEIGHT"/>
+		<item value="710" key="DIALOG_X_ORIGIN"/>
+		<item value="252" key="DIALOG_Y_ORIGIN"/>
+	</section>
+	<section name="WORKBENCH_SETTINGS">
+		<list key="ENABLED_TRANSFERS">
+		</list>
+	</section>
+	<section name="NewWizardAction">
+	</section>
+	<section name="ChooseWorkspaceDialogSettings">
+		<item value="660" key="DIALOG_X_ORIGIN"/>
+		<item value="341" key="DIALOG_Y_ORIGIN"/>
+	</section>
+	<section name="org.eclipse.ui.dialogs.FilteredResourcesSelectionDialog">
+		<item value="false" key="FilterByLocation"/>
+		<item value="true" key="ShowStatusLine"/>
+		<item value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#x0D;&#x0A;&lt;History&gt;&#x0D;&#x0A;&lt;historyRootNode&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/dashboard/statusBoard_1.js&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/material/MOMCC003_1.html&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/workorder/MOMDA008.html&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/workorder/MOMDA008.js&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/dashboard/complete.js&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/Content/theme/js/ajax-content.js&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/Content/js/common.js&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/dashboard/complete.html&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/dashboard/MOMAA001.js&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/dashboard/statusBoard_1.html&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/resources/mybatis/sql/mom/common/common_sql.xml&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/material/MOMCC001_1.js&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/TU_MOM.css&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/Content/theme/js/plugins/select2/select2.min.js&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/java/com/thirautech/mom/util/PrintUtil.java&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/TU_MOM.common.js&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/TU_MOM.widget.js&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/admin/MOMXX000.html&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/admin/MOMXX000.js&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/resources/spring/spring-database.xml&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/master/MOMIA002_1.html&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/main.html&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/admin/MOMJA093.html&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/resources/mybatis/sql/mom/pop/popResult_sql.xml&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/Content/js/mica/mica.common.js&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/java/com/thirautech/mom/controller/LoginController.java&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/Content/css/site.css&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/resources/mybatis/sql/mom/pop/popProcess_sql.xml&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/workorder/MOMDA001.js&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/workorder/MOMDA002.js&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/dashboard/MOMAA002.js&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/master/MOMIA002_1.js&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/Servers/Tomcat v8.5 Server at localhost-config/context.xml&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;infoNode path=&quot;/TU_Platform/src/main/webapp/dashboard/MOMAA002.html&quot; type=&quot;1&quot;/&gt;&#x0D;&#x0A;&lt;/historyRootNode&gt;&#x0D;&#x0A;&lt;/History&gt;" key="History"/>
+		<item value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#x0D;&#x0A;&lt;workingSet workingSetName=&quot;&quot;/&gt;" key="WorkingSet"/>
+		<item value="false" key="ShowDerived"/>
+		<section name="DialogBoundsSettings">
+			<item value="493" key="DIALOG_WIDTH"/>
+			<item value="1|맑은 고딕|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|맑은 고딕" key="DIALOG_FONT_NAME"/>
+			<item value="523" key="DIALOG_HEIGHT"/>
+			<item value="884" key="DIALOG_X_ORIGIN"/>
+			<item value="525" key="DIALOG_Y_ORIGIN"/>
+		</section>
+	</section>
+</section>

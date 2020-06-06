@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.workOrder.workOrderCreate">
+	<select id="get_decompositionWorkOrder_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT MIS.DIVISION_CD
+			     , MIS.COMPANY_CD
+			     , MIS.ITEM_STOCK_ID
+			     , MIS.ITEM_ID
+			     , MID.ITEM_NAME
+			     , MID.SPECIFICATION
+			     , MID.UNIT
+			     , MID.ITEM_TYPE
+	             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(MID.DIVISION_CD
+	             										 , MID.COMPANY_CD
+	             										 , 'ITEM_TYPE'
+	             										 , MID.ITEM_TYPE) 
+	             	  FROM DUAL) AS ITEM_TYPE_NAME
+			     , MIS.LOCATION_CD
+			     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME(MIS.DIVISION_CD
+			     											 , MIS.COMPANY_CD
+			     											 , MIS.LOCATION_CD) 
+			     	  FROM DUAL) AS LOCATION_NAME
+			     , MIS.CURRENT_QTY
+			     , MIS.CURRENT_QTY AS WORK_QTY
+			     , TO_CHAR(MOM_COMMON_PKG.FN_GET_LOCAL_TIME(MIS.DIVISION_CD, MIS.COMPANY_CD), 'YYYY-MM-DD') AS CONFIRM_DATE
+			     , MIS.PREV_QTY
+			     , MID.USE_YN
+			     , TO_CHAR(MIS.CREATE_DATE, 'YYYY-MM-DD') AS CREATE_DATE
+	     		 , MIS.CREATE_BY
+			     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(MIS.DIVISION_CD
+			     										 , MIS.COMPANY_CD
+			     										 , MIS.CREATE_BY) 
+			     	  FROM DUAL) AS CREATE_USER_NAME
+			     , TO_CHAR(MIS.UPDATE_DATE, 'YYYY-MM-DD') AS UPDATE_DATE
+			     , MIS.UPDATE_BY
+			     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(MIS.DIVISION_CD
+			     										 , MIS.COMPANY_CD
+			     										 , MIS.UPDATE_BY) 
+			     	  FROM DUAL) AS UPDATE_USER_NAME
+			  FROM MOM_ITEM_STOCK MIS
+			     , MOM_ITEM_DEFINITION MID
+			 WHERE MIS.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			   AND MIS.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+			   AND MIS.DIVISION_CD = MID.DIVISION_CD
+			   AND MIS.COMPANY_CD = MID.COMPANY_CD
+			   AND MIS.ITEM_ID = MID.ITEM_ID
+			   AND MIS.CURRENT_QTY > 0
+			   AND NVL(MID.USE_YN, 'N') = 'Y'
+			   AND EXISTS (SELECT '*'
+			                 FROM MOM_CODE MC
+			                WHERE MC.DIVISION_CD = MID.DIVISION_CD
+			                  AND MC.COMPANY_CD = MID.COMPANY_CD
+			                  AND MC.CODE_CLASS_ID = 'ITEM_TYPE'
+			                  AND MC.ATTRIBUTE4 = 'Y'
+			                  AND NVL(MC.USE_YN, 'N') = 'Y'
+			                  AND MC.CODE_ID = MID.ITEM_TYPE)
+			   AND EXISTS (SELECT '*'
+			                 FROM MOM_RESOURCE MR
+			                WHERE MR.DIVISION_CD = MIS.DIVISION_CD
+			                  AND MR.COMPANY_CD = MIS.COMPANY_CD
+			                  AND MR.BAD_LOCATION_CD = MIS.LOCATION_CD) 
+	  <if test="searchItemId != null and searchItemId != ''">
+	    AND (MIS.ITEM_ID LIKE '%' || TRIM(UPPER(#{searchItemId, jdbcType=VARCHAR})) || '%' 
+	         OR UPPER(MID.ITEM_NAME) LIKE '%' || TRIM(UPPER(#{searchItemId, jdbcType=VARCHAR})) || '%')
+	  </if>
+	  <if test="searchLocation != null and searchLocation != ''">
+	    AND MIS.LOCATION_CD = #{searchLocation, jdbcType=VARCHAR}
+ 	  </if>
+ 	  <if test="searchItemType != null and searchItemType != ''">
+ 		AND MID.ITEM_TYPE = #{searchItemType, jdbcType=VARCHAR}
+ 	  </if>
+ 	  ORDER BY MIS.LOCATION_CD, MIS.ITEM_ID
+	</select>
+
+	<select id="get_decompositionWorkOrderDetail_list" resultType="camelMap" parameterType="java.util.HashMap">
+		WITH TEMP1 AS (
+          SELECT *
+            FROM MOM_BOM
+           WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+             AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+             AND NVL(USE_YN, 'N') = 'Y'
+             AND TO_DATE(#{confirmDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') BETWEEN START_TIME AND END_TIME
+		) SELECT MAX (A.PARENT_ITEM_ID) PARENT_ITEM_ID
+			   , A.ITEM_ID
+			   , MAX (A.ITEM_TYPE) ITEM_TYPE
+			   , MAX (A.ITEM_TYPE_NAME) ITEM_TYPE_NAME
+			   , (TO_NUMBER(#{workQty, jdbcType=VARCHAR}) * SUM (A.QTY)) AS CONFIRM_QTY
+			   , SUM (A.QTY) AS QTY
+			   , MAX (A.UNIT) UNIT
+			   , MAX (A.ITEM_DEFINITION_NAME) ITEM_DEFINITION_NAME
+			   , MAX (A.SPECIFICATION) SPECIFICATION
+			   , MAX (A.START_TIME) START_TIME
+			   , MAX (A.END_TIME) END_TIME
+			   , MAX (TO_CHAR(MOM_COMMON_PKG.FN_GET_LOCAL_TIME(A.DIVISION_CD, A.COMPANY_CD), 'YYYY-MM-DD')) AS CONFIRM_DATE
+		    FROM ( SELECT #{itemId, jdbcType=VARCHAR} AS PARENT_ITEM_ID
+	                    , A.PARENT_ITEM_ID AS REAL_PARENT_ITEM_ID
+	                    , A.CHILD_ITEM_ID AS ITEM_ID
+	                    , B.ITEM_TYPE
+	                    , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (B.DIVISION_CD
+	                                                             , B.COMPANY_CD
+	                                                             , 'ITEM_TYPE'
+	                                                             , B.ITEM_TYPE)
+	                         FROM DUAL) AS ITEM_TYPE_NAME
+	                    , MOM_COMMON_PKG.FN_SPLIT_CAL2 (SYS_CONNECT_BY_PATH (NVL (A.QTY, 1), '*')) AS QTY
+	                    , B.UNIT
+	                    , B.ITEM_NAME AS ITEM_DEFINITION_NAME
+	                    , B.SPECIFICATION
+	                    , A.USE_YN
+	                    , TO_CHAR (A.START_TIME, 'YYYY-MM-DD') AS START_TIME
+	                    , TO_CHAR (A.END_TIME, 'YYYY-MM-DD') AS END_TIME
+	                    , A.DIVISION_CD
+	                    , A.COMPANY_CD
+	                 FROM TEMP1 A
+	                    , MOM_ITEM_DEFINITION B
+	                WHERE 1 = 1
+	                  AND A.DIVISION_CD = B.DIVISION_CD
+	                  AND A.COMPANY_CD = B.COMPANY_CD
+	                  AND A.CHILD_ITEM_ID = B.ITEM_ID
+	                  AND EXISTS (SELECT '*'
+	                                FROM MOM_CODE MC
+	                               WHERE MC.DIVISION_CD = B.DIVISION_CD
+	                                 AND MC.COMPANY_CD = B.COMPANY_CD
+	                                 AND MC.CODE_CLASS_ID = 'ITEM_TYPE'
+	                                 AND MC.ATTRIBUTE7 = 'Y'
+	                                 AND NVL(MC.USE_YN, 'N') = 'Y'
+	                                 AND MC.CODE_ID = B.ITEM_TYPE)
+	                START WITH A.PARENT_ITEM_ID = #{itemId, jdbcType=VARCHAR}
+	                CONNECT BY NOCYCLE PRIOR A.CHILD_ITEM_ID = A.PARENT_ITEM_ID
+		            ) A
+			 GROUP BY A.ITEM_ID
+			 ORDER BY MAX (A.REAL_PARENT_ITEM_ID), A.ITEM_ID
+	</select>
+	
+	<insert id="create_decompositionProc" statementType="CALLABLE">
+    {
+        CALL SP_MOM_WORK_ORDER_PKG.P_CREATE_DECOMP_WO ( 
+             #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+           , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+           , #{companyCd, mode=IN, jdbcType=VARCHAR}
+           , #{itemId, mode=IN, jdbcType=VARCHAR}
+           , #{unit, mode=IN, jdbcType=VARCHAR}
+           , #{workQty, mode=IN, jdbcType=NUMERIC}
+           , TO_DATE(#{confirmDate, mode=IN, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+           , #{locationCd, mode=IN, jdbcType=VARCHAR}
+           , #{updateBy, mode=IN, jdbcType=VARCHAR}
+        )
+    }
+    </insert>
+	
+	<!--  BEGIN COMMENT 정호영이 대충 만든건데, 확인 후 변경해두 됨.., 재원 참조 -->
+	<delete id="remove_decompositionExecTmp" parameterType="java.util.HashMap">
+		DELETE 
+		FROM 
+			MOM_DECOMP_WO_TMP
+		WHERE 
+			    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			AND COMPANY_CD =  #{companyCd, jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="create_decompositionExecTmp" parameterType="java.util.HashMap">
+		INSERT INTO 
+			MOM_DECOMP_WO_TMP(
+				  DIVISION_CD
+				, COMPANY_CD
+				, P_ITEM_ID 
+				, ITEM_ID 
+				, UNIT   
+				, CONFIRM_DATE  
+				, P_CONFIRM_QTY 
+				, CONFIRM_QTY
+			)
+		VALUES(
+			  #{divisionCd, jdbcType=VARCHAR}
+			, #{companyCd, jdbcType=VARCHAR}
+			, #{pItemId, jdbcType=VARCHAR}
+			, #{itemId, jdbcType=VARCHAR}
+			, #{unit, jdbcType=VARCHAR}
+			, TO_DATE(#{confirmDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+			, #{pConfirmQty, jdbcType=NUMERIC}
+			, #{confirmQty, jdbcType=NUMERIC}
+		)
+	</insert>
+	
+	<insert id="create_decompositionExecProc" statementType="CALLABLE">
+    {
+        CALL SP_MOM_WORK_ORDER_PKG.P_CREATE_DECOMP_WO_EXEC ( 
+             #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+           , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+           , #{companyCd, mode=IN, jdbcType=VARCHAR}
+           , #{updateBy, mode=IN, jdbcType=VARCHAR}
+        )
+    }
+    </insert>    
+    <!--  END COMMENT 정호영이 대충 만든건데, 확인 후 변경해두 됨.., 재원 참조 -->
+</mapper>

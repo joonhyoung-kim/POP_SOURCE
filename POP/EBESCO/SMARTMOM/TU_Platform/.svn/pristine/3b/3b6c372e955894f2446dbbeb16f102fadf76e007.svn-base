@@ -1,0 +1,850 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.workOrder.workOrderResult">
+	<select id="get_workOrderResult_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.*
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD
+													  , A.COMPANY_CD
+													  , 'USE_FLAG'
+													  , A.DEDUCT_FLAG) 
+		          FROM DUAL) AS DEDUCT_FLAG_NAME
+		     , CASE WHEN RESULT_QTY - TOTAL_END_QTY - CANCEL_QTY <![CDATA[<]]> 0 THEN 0
+                    ELSE RESULT_QTY - TOTAL_END_QTY - CANCEL_QTY
+                END AS REMAIN_QTY
+		  FROM (
+				SELECT B.WORK_ORDER_ID
+				     , B.DESCRIPTION
+				     , B.ITEM_ID
+				     , B.PRODUCT_ORDER_ID
+				     , NVL (B.WORK_ORDER_TYPE, 'SYSTEM') AS WORK_ORDER_TYPE
+				     , B.WO_STATE
+				     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (B.DIVISION_CD
+				                                              , B.COMPANY_CD
+				                                              , 'WORK_ORDER_STATE'
+				                                              , B.WO_STATE)
+				          FROM DUAL) AS STATE_NAME
+				     , B.PRIORITY
+				     , NVL (B.PLAN_QTY, 0) AS PLAN_QTY
+				     , NVL (B.GOOD_QTY, 0) AS QTY
+				     , NVL (B.BAD_QTY, 0) AS BAD_QTY
+				     , NVL (B.CANCEL_QTY, 0) AS CANCEL_QTY
+				     , NVL (B.CONFIRM_QTY, 0) AS RESULT_QTY
+				     , DECODE ( NVL(P.DEFECT_QTY_USE_FLAG,'Y'), 'Y', NVL (GOOD_QTY, 0) + NVL (BAD_QTY, 0), NVL (GOOD_QTY, 0)) AS TOTAL_END_QTY
+<!-- 				     , NVL (CONFIRM_QTY, 0) - NVL (B.GOOD_QTY, 0) - NVL (B.CANCEL_QTY, 0) AS REMAIN_QTY -->
+				     , B.RESOURCE_CD
+				     , (SELECT MOM_COMMON_PKG.FN_GET_RESOURCE_NAME (B.DIVISION_CD
+				     											  , B.COMPANY_CD
+				     											  , B.RESOURCE_CD) 
+				     	  FROM DUAL) AS RESOURCE_NAME
+				     , C.UNIT
+				     , TO_CHAR (B.PLAN_DATE, 'YYYY-MM-DD') AS REQUEST_TIME
+				     , TO_CHAR (B.PLAN_START_TIME, 'YYYY-MM-DD')  AS PLAN_START_TIME
+				     , TO_CHAR(B.PLAN_END_TIME, 'YYYY-MM-DD')     AS PLAN_END_TIME
+				     , TO_CHAR(B.START_TIME, 'YYYY-MM-DD HH24:MI:SS') AS START_TIME
+				     , TO_CHAR (B.END_TIME, 'YYYY-MM-DD HH24:MI:SS') AS END_TIME
+				     , B.UPDATE_BY
+				     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME (B.DIVISION_CD
+				     										  , B.COMPANY_CD
+				     										  , B.UPDATE_BY) 
+				     	  FROM DUAL) AS UPDATE_USER_NAME
+				     , TO_CHAR (B.UPDATE_DATE, 'YYYY-MM-DD') AS UPDATE_DATE
+				     , C.VENDOR_CD
+				     , C.ITEM_NAME
+				     , C.SPECIFICATION
+				     , DECODE(B.ORDER_FLAG, 'IN', D.GOOD_LOCATION_CD, C.IN_LOCATION_ID) AS GOOD_LOCATION_CD
+				     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME (D.DIVISION_CD
+				     											  , D.COMPANY_CD
+				     											  , DECODE(B.ORDER_FLAG, 'IN', D.GOOD_LOCATION_CD, C.IN_LOCATION_ID)) 
+				     	  FROM DUAL) AS GOOD_LOCATION_NAME
+				     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_VALUES (B.DIVISION_CD
+				                                                , B.COMPANY_CD
+				                                                , 'MOM_CONFIG'
+				                                                , 'USEMATERIALACTION')
+				          FROM DUAL) AS CONFIG_VALUE
+				     , C.RP_ITEM_ID AS MODEL
+				     , C.ITEM_GROUP_CODE AS REAL_MODEL
+				     , DECODE(B.ORDER_FLAG, 'IN', D.BAD_LOCATION_CD, C.IN_LOCATION_ID) AS BAD_LOCATION_CD
+				     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME (D.DIVISION_CD
+				     											  , D.COMPANY_CD
+				     											  , DECODE(B.ORDER_FLAG, 'IN', D.BAD_LOCATION_CD, C.IN_LOCATION_ID)) 
+				     	  FROM DUAL) AS BAD_LOCATION_NAME
+				     , E.UPDATE_BY AS UPDATE_RHEW
+				     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME (E.DIVISION_CD
+				     										  , E.COMPANY_CD
+				     										  , E.UPDATE_BY) 
+				     	  FROM DUAL) AS UPDATE_RHEW_NAME
+				     , TO_CHAR (E.UPDATE_DATE, 'YYYY-MM-DD') AS UPDATE_DATE_RHEW
+				     , C.ITEM_GROUP_LARGE
+				     , C.ITEM_GROUP_MEDIUM
+				     , C.ITEM_GROUP_SMALL
+				     , NVL(P.DEFECT_QTY_USE_FLAG, 'Y') AS DEFECT_FLAG
+				     , NVL(P.AUTO_DEDUCTION_FLAG, 'Y') AS AUTO_DEDUCTION_FLAG
+				     , CASE WHEN (SELECT SUM(QTY) 
+			                        FROM MOM_ITEM_STOCK_INOUT MI
+			                       WHERE MI.DIVISION_CD = B.DIVISION_CD 
+			                         AND MI.COMPANY_CD = B.COMPANY_CD 
+			                         AND MI.WORK_ORDER_ID = B.WORK_ORDER_ID 
+			                         AND MI.IO_CATEGORY = 'MC001'
+			                         AND NOT EXISTS (SELECT '*' FROM MOM_ITEM_STOCK_INOUT IC 
+			                                          WHERE IC.DIVISION_CD = MI.DIVISION_CD 
+			                                            AND IC.COMPANY_CD = MI.COMPANY_CD 
+			                                            AND IC.PREV_STOCK_INOUT_ID = MI.ITEM_STOCK_INOUT_ID)) > 0 THEN 'Y'
+			                ELSE 'N'
+			            END AS DEDUCT_FLAG
+			         , CASE WHEN (SELECT SUM(QTY) 
+		                            FROM MOM_ITEM_STOCK_INOUT MI
+		                           WHERE MI.DIVISION_CD = B.DIVISION_CD 
+		                             AND MI.COMPANY_CD = B.COMPANY_CD 
+		                             AND MI.WORK_ORDER_ID = B.WORK_ORDER_ID 
+		                             AND MI.IO_CATEGORY = 'MC001'
+		                             AND MI.WORK_ORDER_RESULT_ID IS NULL
+		                             AND NOT EXISTS (SELECT '*' FROM MOM_ITEM_STOCK_INOUT IC 
+		                                              WHERE IC.DIVISION_CD = MI.DIVISION_CD 
+		                                                AND IC.COMPANY_CD = MI.COMPANY_CD 
+		                                                AND IC.PREV_STOCK_INOUT_ID = MI.ITEM_STOCK_INOUT_ID)) > 0 THEN 'Y'
+		                    ELSE 'N'
+		                END AS MANUAL_DEDUCT_FLAG
+			         , B.ORDER_FLAG
+		             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(B.DIVISION_CD
+		             										 , B.COMPANY_CD
+		             										 , 'WO_FLAG'
+		             										 , B.ORDER_FLAG) 
+		             	  FROM DUAL) AS ORDER_FLAG_NAME
+		             , B.PRODUCT_ORDER_TYPE AS WO_TYPE
+		             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(B.DIVISION_CD
+		             										 , B.COMPANY_CD
+		             										 , 'PRODUCT_ORDER_TYPE'
+		             										 , B.PRODUCT_ORDER_TYPE) 
+		             	  FROM DUAL) AS WO_TYPE_NAME
+		             , (SELECT NVL (SUM (MI.QTY), 0)
+		                  FROM MOM_ITEM_STOCK_INOUT MI
+		                 WHERE MI.DIVISION_CD = B.DIVISION_CD
+		                   AND MI.COMPANY_CD = B.COMPANY_CD
+		                   AND MI.WORK_ORDER_ID = B.WORK_ORDER_ID
+		                   AND MI.IO_TYPE = 'I'
+		                   AND MI.IO_CATEGORY = 'R005'
+		                   AND NOT EXISTS(SELECT '*'
+		                                    FROM MOM_ITEM_STOCK_INOUT MIC
+		                                   WHERE MI.DIVISION_CD = MIC.DIVISION_CD
+		                                     AND MI.COMPANY_CD = MIC.COMPANY_CD
+		                                     AND MI.IO_TYPE = 'I'
+		                                     AND MI.ITEM_STOCK_INOUT_ID = MIC.PREV_STOCK_INOUT_ID)) AS DETAIL_BAD_QTY
+		             , C.POP_CT_QTY
+		             , B.EQUIPMENT_CD
+		             , (SELECT MOM_COMMON_PKG.FN_GET_EQUIPMENT_NAME(B.DIVISION_CD
+		             											  , B.COMPANY_CD
+		             											  , B.EQUIPMENT_CD) 
+		             	  FROM DUAL) AS EQUIPMENT_NAME
+		             , NVL(B.INLINE_FLAG, 'N') AS INLINE_FLAG
+		             , B.DIVISION_CD
+		             , B.COMPANY_CD
+		             , B.ECO_NO
+				    FROM MOM_WORK_ORDER B
+				       , MOM_ITEM_DEFINITION C
+				       , MOM_RESOURCE D
+				       , (  SELECT MAX (UPDATE_BY) UPDATE_BY
+				                 , MAX (UPDATE_DATE) UPDATE_DATE
+				                 , WORK_ORDER_ID
+				                 , DIVISION_CD
+				                 , COMPANY_CD
+				              FROM MOM_WORK_ORDER_RESULT
+				             WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR} 
+				               AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR} 
+				               AND STATE = 'E'
+				             GROUP BY WORK_ORDER_ID, DIVISION_CD, COMPANY_CD
+				             ORDER BY UPDATE_DATE DESC) E
+				       , MOM_PARAMETER P
+				   WHERE B.ITEM_ID = C.ITEM_ID(+)
+				     AND B.RESOURCE_CD = D.RESOURCE_CD(+)
+				     AND B.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+				     AND B.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+				     AND B.DIVISION_CD = C.DIVISION_CD(+)
+				     AND B.COMPANY_CD = C.COMPANY_CD(+)
+				     AND B.DIVISION_CD = D.DIVISION_CD(+)
+				     AND B.COMPANY_CD = D.COMPANY_CD(+)
+				     AND B.WORK_ORDER_ID = E.WORK_ORDER_ID(+)
+				     AND B.DIVISION_CD = P.DIVISION_CD
+				     AND B.COMPANY_CD = P.COMPANY_CD
+				     AND B.PLAN_QTY > 0
+				     AND NOT EXISTS (SELECT '*'
+		                               FROM MOM_CODE
+		                              WHERE DIVISION_CD = B.DIVISION_CD
+		                                AND COMPANY_CD = B.COMPANY_CD
+		                                AND CODE_CLASS_ID = 'PRODUCT_ORDER_TYPE'
+		                                AND ATTRIBUTE2 = 'Y'
+		                                AND NVL(USE_YN, 'N') = 'Y'
+		                                AND CODE_ID = B.PRODUCT_ORDER_TYPE)
+				    <if test = "workOrderUser != '' and workOrderUser != null">
+				     AND NVL(E.UPDATE_BY,'N') = #{workOrderUser, jdbcType=VARCHAR}
+				    </if>
+				    <choose>    
+				        <when test="dateCombo == 'WORK_DATE'">
+				     AND B.START_TIME BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+				                      AND     TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.9997/24
+				        </when>
+				        <when test="dateCombo == 'SCHEDULE_START_TIME'">
+				     AND B.PLAN_START_TIME BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+				                           AND     TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.9997/24
+				        </when>
+				        <when test="dateCombo == 'MODIFY_TIME'">
+				     AND B.UPDATE_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+				                       AND     TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.9997/24
+				        </when>
+				    </choose>
+				    <if test = "searchKeyWord != '' and searchKeyWord != null">
+					    <choose>
+						    <when test="searchJobTerms == 'PRODUCT_DEFINITION_ID'">
+						    AND (B.ITEM_ID LIKE '%' || TRIM(UPPER(#{searchKeyWord, jdbcType=VARCHAR})) || '%'
+						         OR UPPER(C.ITEM_NAME) LIKE '%' || TRIM(UPPER(#{searchKeyWord, jdbcType=VARCHAR})) || '%')
+						    </when>
+						    <when test="searchJobTerms == 'WO_PO_ID'">
+						    AND (B.WORK_ORDER_ID LIKE '%' || TRIM(UPPER(#{searchKeyWord, jdbcType=VARCHAR})) || '%'
+						         OR B.PRODUCT_ORDER_ID LIKE '%' || TRIM(UPPER(#{searchKeyWord, jdbcType=VARCHAR})) || '%')
+						    </when>
+					    </choose>
+				    </if>
+				    <if test= "fromResourceName != null and fromResourceName != ''">
+				      AND B.RESOURCE_CD = #{fromResourceName, jdbcType=VARCHAR} 
+				    </if>
+				    <choose>
+					    <when test= "state != null and state != ''">
+					     AND B.WO_STATE IN (${state}) 
+					    </when>
+					    <otherwise>
+					     AND B.WO_STATE IN (SELECT CODE_ID 
+					     					  FROM MOM_CODE 
+						                     WHERE CODE_CLASS_ID = 'WORK_ORDER_STATE'
+						                       AND ATTRIBUTE3 = 'Y'
+						                       AND USE_YN = 'Y'
+						                       AND DIVISION_CD = B.DIVISION_CD
+						                       AND COMPANY_CD = B.COMPANY_CD)
+					    </otherwise>
+				    </choose>
+				    <if test= "orderType != null and orderType != ''">
+				     AND B.WORK_ORDER_TYPE = #{orderType, jdbcType=VARCHAR} 
+				    </if>
+				    <if test= "orderFlag != null and orderFlag != ''">
+				     AND B.ORDER_FLAG = #{orderFlag, jdbcType=VARCHAR} 
+				    </if>
+				    <if test = "masterWoId != null and masterWoId != ''">
+				     AND B.WORK_ORDER_ID = #{masterWoId, jdbcType=VARCHAR} 
+				    </if>
+				    <if test = "equipmentCd != null and equipmentCd != ''">
+				     AND B.EQUIPMENT_CD = #{equipmentCd, jdbcType=VARCHAR}
+				    </if>
+				) A
+		WHERE 1 = 1
+		<if test = "deductFlag != null and deductFlag != ''">
+		  AND A.DEDUCT_FLAG = #{deductFlag, jdbcType=VARCHAR}
+		</if>
+		<if test = "manualDeductFlag != null and manualDeductFlag != ''">
+		  AND A.MANUAL_DEDUCT_FLAG = #{manualDeductFlag, jdbcType=VARCHAR}
+		</if>
+        ORDER BY A.RESOURCE_CD, A.PLAN_START_TIME, A.PRIORITY, A.WORK_ORDER_ID		
+	</select>
+	
+	<select id="get_workOrderResultCreate_list" resultType="camelMap" parameterType="java.util.HashMap">
+	SELECT TO_CHAR(NVL(WOR.START_TIME, MOM_COMMON_PKG.FN_GET_LOCAL_TIME(WO.DIVISION_CD, WO.COMPANY_CD)), 'YYYY-MM-DD') START_DATE
+	     , TO_CHAR(NVL(WOR.START_TIME, MOM_COMMON_PKG.FN_GET_LOCAL_TIME(WO.DIVISION_CD, WO.COMPANY_CD)), 'HH24:MI:SS') START_TIME
+	     , TO_CHAR(NVL(WOR.END_TIME, MOM_COMMON_PKG.FN_GET_LOCAL_TIME(WO.DIVISION_CD, WO.COMPANY_CD)), 'YYYY-MM-DD') END_DATE
+	     , TO_CHAR(NVL(WOR.END_TIME, MOM_COMMON_PKG.FN_GET_LOCAL_TIME(WO.DIVISION_CD, WO.COMPANY_CD)), 'HH24:MI:SS') END_TIME
+	     , WO.ITEM_ID
+	     , MP.ITEM_NAME AS PRODUCT_NAME
+	     , MP.SPECIFICATION
+	     , DECODE(WO.WO_STATE, 'A', 'R', WO.WO_STATE) AS WO_STATE
+	     , (NVL(WOR.END_TIME, TO_DATE (TO_CHAR (MOM_COMMON_PKG.FN_GET_LOCAL_TIME(WO.DIVISION_CD, WO.COMPANY_CD), 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS'))
+	       - NVL (WOR.START_TIME, TO_DATE (TO_CHAR (MOM_COMMON_PKG.FN_GET_LOCAL_TIME(WO.DIVISION_CD, WO.COMPANY_CD), 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS')))* 24* 60  TACK_TIME
+	     , NVL(WOR.INSERT_NUMBER, NVL(MS.NORMAL_IN_PERSON_CNT + MS.NORMAL_DR_PERSON_CNT, 0)) INSERT_NUMBER
+	     , WO.CONFIRM_QTY   AS  RESULT_QTY
+	     , NVL(WO.GOOD_QTY, 0) SUM_GOOD_QTY
+	     , CASE WHEN NVL(P.DEFECT_QTY_USE_FLAG,'Y') = 'Y' THEN 
+	                 (WO.CONFIRM_QTY - (NVL(WO.GOOD_QTY, 0) + NVL(WO.BAD_QTY, 0) + NVL(WO.CANCEL_QTY, 0))) 
+	            ELSE (WO.CONFIRM_QTY - (NVL (WO.GOOD_QTY, 0) + NVL (WO.CANCEL_QTY, 0))) 
+	       END AS  GOOD_QTY
+	     , NVL(WO.BAD_QTY, 0) SUM_BAD_QTY
+	     , 0 BAD_QTY
+	     , NVL(WO.CANCEL_QTY, 0) CANCEL_QTY
+	     , CASE WHEN NVL(P.DEFECT_QTY_USE_FLAG,'Y') = 'Y' THEN (WO.CONFIRM_QTY - (NVL (WO.GOOD_QTY, 0) + NVL(WO.BAD_QTY, 0) + NVL (WO.CANCEL_QTY, 0))) 
+	            ELSE (WO.CONFIRM_QTY - (NVL (WO.GOOD_QTY, 0) + NVL (WO.CANCEL_QTY, 0))) 
+	       END AS REMAIN_QTY
+	     , NVL(WOR.SHIFT_CD, MS.SHIFT_CD) SHIFT_CD
+	     , WO.DESCRIPTION
+	     , WO.WORK_ORDER_ID
+	     , WO.RESOURCE_CD
+	     , NVL(WO.MES_GOOD_QTY, 0) AS MES_GOOD_QTY
+	     , NVL(WO.MES_BAD_QTY, 0)  AS MES_BAD_QTY
+	     , NVL(WO.CLOSE_FLAG, 'N') AS CLOSE_FLAG
+	     , NVL(P.DEFECT_QTY_USE_FLAG, 'Y') AS DEFECT_FLAG
+	     , NVL(P.WO_RESULT_OVER_FLAG, 'N') AS OVER_FLAG
+	     , WO.ECO_NO
+<!-- 	     , NVL(WO.ECO_NO, (SELECT MOM_COMMON_PKG.FN_GET_ECO_NO(WO.DIVISION_CD, WO.COMPANY_CD, WO.ITEM_ID, WO.PLAN_DATE) FROM DUAL)) AS ECO_NO -->
+	  FROM MOM_WORK_ORDER WO
+	     , (SELECT MIN(START_TIME) START_TIME
+	             , MAX(END_TIME) END_TIME
+	             , MAX(INSERT_NUMBER) INSERT_NUMBER
+	             , MAX(SHIFT_CD) SHIFT_CD
+	             , MAX(DIVISION_CD) DIVISION_CD
+	             , MAX(COMPANY_CD) COMPANY_CD
+	             , WORK_ORDER_ID
+	          FROM MOM_WORK_ORDER_RESULT A
+	         WHERE NOT EXISTS (SELECT '*' FROM MOM_WORK_ORDER_RESULT 
+                                WHERE DIVISION_CD = A.DIVISION_CD 
+                                  AND COMPANY_CD = A.COMPANY_CD 
+                                  AND PREV_WORK_ORDER_RESULT_ID = A.WORK_ORDER_RESULT_ID
+                                  AND STATE = 'C') 
+               AND STATE = 'E'
+	         GROUP BY WORK_ORDER_ID ) WOR
+	     , MOM_ITEM_DEFINITION MP
+	     , (SELECT DIVISION_CD, RESOURCE_CD, NORMAL_IN_PERSON_CNT, NORMAL_DR_PERSON_CNT, SHIFT_CD
+	          FROM MOM_SHIFT 
+	         WHERE TRUNC(MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})) BETWEEN APPLY_STATE_TIME AND APPLY_END_TIME 
+	           AND MOM_COMMON_PKG.FN_GET_LOCAL_TIME (#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}) BETWEEN TO_DATE(TO_CHAR(MOM_COMMON_PKG.FN_GET_LOCAL_TIME (#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),'yyyymmdd') || START_TIME, 'yyyymmddhh24miss') 
+                                                                                                                          AND (CASE WHEN START_TIME > END_TIME THEN TO_DATE(TO_CHAR(MOM_COMMON_PKG.FN_GET_LOCAL_TIME (#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),'yyyymmdd') + 1 || END_TIME, 'yyyymmddhh24miss')
+												                                                                                    ELSE TO_DATE(TO_CHAR(MOM_COMMON_PKG.FN_GET_LOCAL_TIME (#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),'yyyymmdd') || END_TIME, 'yyyymmddhh24miss')
+												                                                                                END)
+               AND ROWNUM = 1) MS
+	     , MOM_PARAMETER P
+	 WHERE WO.WORK_ORDER_ID = #{workOrderId, jdbcType=VARCHAR}
+	   AND WO.ITEM_ID = MP.ITEM_ID(+)
+	   AND WO.WORK_ORDER_ID = WOR.WORK_ORDER_ID(+)
+	   AND WO.DIVISION_CD = WOR.DIVISION_CD(+)
+	   AND WO.DIVISION_CD = MP.DIVISION_CD(+)
+	   AND WO.DIVISION_CD = MS.DIVISION_CD(+)
+	   AND WO.RESOURCE_CD = MS.RESOURCE_CD(+)
+	   AND WO.DIVISION_CD = P.DIVISION_CD(+)
+	   AND WO.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	   AND WO.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="get_workOrderResultCreateHist_list" resultType="camelMap" parameterType="java.util.HashMap">
+			 SELECT WOR.WORK_ORDER_RESULT_ID
+	              , WOR.WORK_ORDER_ID
+	              , WO.ITEM_ID
+	              , (SELECT MOM_COMMON_PKG.FN_GET_ITEM_NAME(WO.DIVISION_CD
+	              										  , WO.COMPANY_CD
+	              										  , WO.ITEM_ID) 
+	              	  FROM DUAL) AS PRODUCT_NAME
+	              , TO_CHAR(WOR.START_TIME, 'YYYY-MM-DD HH24:MI:SS') START_TIME
+	              , TO_CHAR(WOR.END_TIME, 'YYYY-MM-DD HH24:MI:SS') END_TIME
+	              , WOR.INSERT_NUMBER
+	              , WOR.GOOD_QTY
+	              , WOR.BAD_QTY
+	              , NVL(WOC.GOOD_QTY,0) AS CANCEL_GOOD_QTY
+                  , NVL(WOC.BAD_QTY,0) AS CANCEL_BAD_QTY
+	              , WOR.SHIFT_CD
+	              , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME ( WOR.DIVISION_CD
+	                                                        , WOR.COMPANY_CD
+	                                                        , 'SHIFT_CODE'
+	                                                        , WOR.SHIFT_CD)
+	                    FROM DUAL) AS SHIFT_CD_NAME
+	              , WOR.WORK_DAY
+	              , WOR.RESOURCE_CD
+	              , (SELECT MOM_COMMON_PKG.FN_GET_RESOURCE_NAME (WOR.DIVISION_CD
+	              											   , WOR.COMPANY_CD
+	              											   , WOR.RESOURCE_CD) 
+	              	   FROM DUAL) AS RESOURCE_NAME
+	              , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME (WOR.DIVISION_CD
+	              										   , WOR.COMPANY_CD
+	              										   , WOR.CREATE_BY) 
+	              	   FROM DUAL) AS CREATE_USER_NAME
+	              , TO_CHAR(WOR.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS')  CREATE_DATE
+	              , WOR.STATE
+	              , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME ( WOR.DIVISION_CD
+	                                                        , WOR.COMPANY_CD
+	                                                        , 'WORK_ORDER_RESULT_STATE'
+	                                                        , WOR.STATE)
+	                    FROM DUAL) AS  STATE_NAME
+	              , DECODE(WOC.WORK_ORDER_RESULT_ID, NULL, 0, 1) AS CANCEL_FLAG
+	              , WOR.EQUIPMENT_CD
+	              , (SELECT MOM_COMMON_PKG.FN_GET_EQUIPMENT_NAME(WOR.DIVISION_CD
+	              											   , WOR.COMPANY_CD
+	              											   , WOR.EQUIPMENT_CD)
+	              	   FROM DUAL) AS EQUIPMENT_NAME
+	           FROM MOM_WORK_ORDER_RESULT WOR
+	              , MOM_WORK_ORDER WO
+	              , MOM_WORK_ORDER_RESULT WOC
+	          WHERE 1 = 1 
+	            AND WOR.WORK_ORDER_ID = #{workOrderId, jdbcType=VARCHAR}
+	            AND WOR.WORK_ORDER_ID = WO.WORK_ORDER_ID
+	            AND WOR.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	            AND WOR.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	            AND WOR.DIVISION_CD = WO.DIVISION_CD
+	            AND WOR.COMPANY_CD = WO.COMPANY_CD
+	            AND WOR.PREV_WORK_ORDER_RESULT_ID IS NULL
+			    AND WOR.DIVISION_CD = WOC.DIVISION_CD(+)
+			    AND WOR.COMPANY_CD = WOC.COMPANY_CD(+)
+			    AND WOR.WORK_ORDER_RESULT_ID = WOC.PREV_WORK_ORDER_RESULT_ID(+)
+	          ORDER BY WOR.CREATE_DATE
+	</select>
+	
+	<insert id="create_workOrderResultCreate" statementType="CALLABLE">
+	{
+        CALL SP_MOM_WORK_ORDER_PKG.P_CREATE_WO_RESULT  ( 
+        	  #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+          	 ,#{p_err_msg, mode=OUT, jdbcType=VARCHAR}        
+             ,#{divisionCd, mode=IN, jdbcType=VARCHAR}
+             ,#{companyCd, mode=IN, jdbcType=VARCHAR}     
+             ,#{workOrderId, mode=IN, jdbcType=VARCHAR}      
+             ,#{startDate, mode=IN, jdbcType=VARCHAR}      
+             ,#{startTime, mode=IN, jdbcType=VARCHAR}      
+             ,#{endDate, mode=IN, jdbcType=VARCHAR}     
+             ,#{endTime, mode=IN, jdbcType=VARCHAR}      
+             ,#{woState, mode=IN, jdbcType=VARCHAR}      
+             ,#{shiftCd, mode=IN, jdbcType=VARCHAR}      
+             ,#{insertNumber, mode=IN, jdbcType=INTEGER}      
+             ,#{goodQty, mode=IN, jdbcType=NUMERIC}      
+             ,#{badQty, mode=IN, jdbcType=NUMERIC}      
+             ,#{description, mode=IN, jdbcType=VARCHAR}      
+             ,#{closeFlag, mode=IN, jdbcType=VARCHAR}      
+             ,#{userId, mode=IN, jdbcType=VARCHAR}
+             )
+    }
+    </insert>
+    
+    <insert id="create_workOrderResultCancel" statementType="CALLABLE">
+	{
+        CALL SP_MOM_WORK_ORDER_PKG.P_CREATE_WO_RESULT_CANCEL   ( 
+        	   #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+          	  ,#{p_err_msg, mode=OUT, jdbcType=VARCHAR}        
+              ,#{divisionCd, mode=IN, jdbcType=VARCHAR}
+              ,#{companyCd, mode=IN, jdbcType=VARCHAR}  
+              ,#{workOrderResultId, mode=IN, jdbcType=VARCHAR} 
+              ,#{workOrderId, mode=IN, jdbcType=VARCHAR}  
+              ,#{userId, mode=IN, jdbcType=VARCHAR}      
+              )
+    }
+    </insert>
+    
+    <insert id="create_workOrderCancel" statementType="CALLABLE">
+	{
+        CALL SP_MOM_WORK_ORDER_PKG.P_WORK_ORDER_CANCEL    ( 
+        	   #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+          	  ,#{p_err_msg, mode=OUT, jdbcType=VARCHAR}        
+              ,#{divisionCd, mode=IN, jdbcType=VARCHAR}
+              ,#{companyCd, mode=IN, jdbcType=VARCHAR}  
+              ,#{updateBy, mode=IN, jdbcType=VARCHAR} 
+              ,#{cancelQty, mode=IN, jdbcType=INTEGER} 
+              ,#{workOrderId, mode=IN, jdbcType=VARCHAR}  
+              ,#{description, mode=IN, jdbcType=VARCHAR}      
+              )
+    }
+    </insert>
+    
+    <select id="get_workOrderResultDown_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.WORK_ORDER_ID
+		     , A.ITEM_ID
+		     , A.ITEM_NAME
+		     , A.SPECIFICATION
+		     , A.REQUEST_DATE
+		     , A.CURRENT_QTY
+		     , A.REQUEST_QTY
+		     , A.ISSUE_QTY
+		     , A.CANCEL_QTY
+		     , A.GOOD_QTY
+		     , A.BAD_QTY
+		     , A.DEDUCTED_QTY    
+		     , NVL(A.REMAIN_QTY, 0) - NVL(A.DEDUCTED_QTY, 0) AS REMAIN_QTY  
+		     , A.UNIT_QTY
+		     , A.IN_LOCATION_CD
+		     , A.IN_LOCATION_NAME
+		     , A.OUT_LOCATION_CD
+		     , A.OUT_LOCATION_NAME
+		     , A.UPDATE_BY 
+		     , A.UPDATE_BY_NAME                                      
+		     , A.UPDATE_DATE 
+		     , A.REQUEST_TYPE
+		     , A.REQUEST_TYPE_NAME
+		     , A.REASON_CODE 
+		     , A.STANDARD_OUT_QTY    
+		     , A.ORIGIN_REQUEST_QTY
+		     , A.MATERIAL_REQUEST_ID
+		     , 'Y' AS ADD_FLAG
+		     , A.WO_TYPE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD
+		     										 , A.COMPANY_CD
+		     										 , 'PRODUCT_ORDER_TYPE'
+		     										 , A.WO_TYPE) 
+		     	  FROM DUAL) AS WO_TYPE_NAME
+		     , A.DEDUCT_DATE
+		     , A.MARKET_CD
+             , A.CURRENCY_CD
+             , (SELECT  MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD
+             										  , A.CURRENCY_CD
+             										  , 'MARKET_CODE'
+             										  , A.MARKET_CD)
+                  FROM    DUAL ) AS MARKET_NAME
+             , (SELECT  MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD
+             										  , A.CURRENCY_CD
+             										  , 'CURRENCY_CODE'
+             										  , A.CURRENCY_CD)
+                  FROM    DUAL ) AS CURRENCY_NAME  
+<!--              , (SELECT MOM_COMMON_PKG.FN_GET_ECO_NO( A.DIVISION_CD -->
+<!-- 		                                           , A.COMPANY_CD -->
+<!-- 		                                           , A.ITEM_ID -->
+<!-- 		                                           , A.REQUEST_DATE)  -->
+<!-- 		          FROM DUAL) AS ECO_NO -->
+		FROM   (SELECT MR.DIVISION_CD
+		             , MR.COMPANY_CD
+		             , MR.WORK_ORDER_ID
+		             , MR.ITEM_ID
+		             , MD.ITEM_NAME
+		             , MD.SPECIFICATION
+		             , TO_CHAR(MR.REQUEST_DATE, 'YYYY-MM-DD')  AS REQUEST_DATE
+		             , (SELECT MOM_COMMON_PKG.FN_GET_CURRENT_STOCK( MR.DIVISION_CD
+		                                                          , MR.COMPANY_CD
+		                                                          , MR.ITEM_ID
+		                                                          , MR.IN_LOCATION_CD)
+		                FROM   DUAL ) AS CURRENT_QTY
+		             , MR.REQUEST_QTY
+		             , NVL(MR.ISSUE_QTY, 0)  AS ISSUE_QTY
+		             , NVL(MR.CANCEL_QTY, 0) AS CANCEL_QTY
+		             , MW.GOOD_QTY
+		             , MW.BAD_QTY
+		             , (MW.GOOD_QTY + MW.BAD_QTY) * NVL(MR.UNIT_QTY, 0) AS REMAIN_QTY
+		             , (SELECT SUM(A.QTY)
+	                      FROM   MOM_ITEM_STOCK_INOUT A
+	                     WHERE  A.DIVISION_CD   = MR.DIVISION_CD
+	                       AND    A.COMPANY_CD    = MR.COMPANY_CD
+	                       AND    A.WORK_ORDER_ID = MR.WORK_ORDER_ID
+	                       AND    A.ITEM_ID       = MR.ITEM_ID
+	                       AND    A.IO_CATEGORY   = 'MC001' 
+	                       AND    NOT EXISTS ( SELECT '*'
+		                                         FROM   MOM_ITEM_STOCK_INOUT IC
+		                                        WHERE  IC.DIVISION_CD = A.DIVISION_CD
+		                                          AND    IC.COMPANY_CD  = A.COMPANY_CD
+		                                          AND    IC.WORK_ORDER_ID = A.WORK_ORDER_ID
+		                                          AND    IC.PREV_STOCK_INOUT_ID = A.ITEM_STOCK_INOUT_ID)  )  AS DEDUCTED_QTY
+		             , NVL(MR.UNIT_QTY, 0) AS UNIT_QTY
+		             , MR.IN_LOCATION_CD
+		             , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME( MR.DIVISION_CD 
+		                                                          , MR.COMPANY_CD
+		                                                          , MR.IN_LOCATION_CD )
+		                  FROM   DUAL )  AS IN_LOCATION_NAME
+		             , MR.OUT_LOCATION_CD
+		             , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME( MR.DIVISION_CD 
+		                                                          , MR.COMPANY_CD
+		                                                          , MR.OUT_LOCATION_CD )
+		                  FROM   DUAL )  AS OUT_LOCATION_NAME
+		             , MR.UPDATE_BY 
+		             , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( MR.DIVISION_CD 
+		                                                      , MR.COMPANY_CD
+		                                                      , MR.UPDATE_BY )
+		                  FROM   DUAL )   AS UPDATE_BY_NAME                                      
+		             , TO_CHAR(MR.UPDATE_DATE , 'YYYY-MM-DD')  AS UPDATE_DATE 
+		             , MR.REQUEST_TYPE
+		             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( MR.DIVISION_CD
+		                                                      , MR.COMPANY_CD
+		                                                      , 'REQUEST_TYPE'
+		                                                      , MR.REQUEST_TYPE ) 
+		                  FROM   DUAL )    AS REQUEST_TYPE_NAME
+		             , MR.REASON_CODE 
+		             , MD.STANDARD_OUT_QTY    
+		             , MR.ORIGIN_REQUEST_QTY
+		             , MR.MATERIAL_REQUEST_ID
+		             , MW.PRODUCT_ORDER_TYPE AS WO_TYPE
+		             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(MW.DIVISION_CD
+		             										 , MW.COMPANY_CD
+		             										 , 'PRODUCT_ORDER_TYPE'
+		             										 , MW.PRODUCT_ORDER_TYPE) 
+		             	  FROM DUAL) AS WO_TYPE_NAME
+		             , TO_CHAR(MW.END_TIME, 'YYYY-MM-DD') AS DEDUCT_DATE
+		             , MR.MARKET_CD
+                     , MR.CURRENCY_CD
+		      FROM   MOM_MATERIAL_REQUEST MR
+		           , MOM_ITEM_DEFINITION MD
+		           , MOM_WORK_ORDER MW
+		      WHERE  MR.DIVISION_CD = MD.DIVISION_CD 
+		      AND    MR.COMPANY_CD  = MD.COMPANY_CD
+		      AND    MR.ITEM_ID     = MD.ITEM_ID
+		      AND    MR.DIVISION_CD = MD.DIVISION_CD(+) 
+		      AND    MR.COMPANY_CD  = MD.COMPANY_CD(+)
+		      AND    MR.ITEM_ID     = MD.ITEM_ID
+		      AND    MR.DIVISION_CD = MW.DIVISION_CD(+) 
+		      AND    MR.COMPANY_CD  = MW.COMPANY_CD(+)
+		      AND    MR.WORK_ORDER_ID = MW.WORK_ORDER_ID(+)
+		      AND    MR.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		      AND    MR.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		      AND    MR.DEDUCT_FLAG = 'Y'
+		      AND 	 MR.USE_YN = 'Y'
+		      AND    MR.WORK_ORDER_ID IN (${inWorkOrderId}) 
+		      ) A
+		ORDER BY A.WORK_ORDER_ID, A.ITEM_ID 
+	</select>
+    
+    <insert id="create_itemDeductByBom" statementType="CALLABLE">
+    {
+        CALL SP_MOM_WORK_ORDER_PKG.P_ITEM_DEDUCT_BY_BOM    ( 
+               #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+              ,#{p_err_msg, mode=OUT, jdbcType=VARCHAR}        
+              ,#{divisionCd, mode=IN, jdbcType=VARCHAR}
+              ,#{companyCd, mode=IN, jdbcType=VARCHAR}  
+              ,#{workOrderId, mode=IN, jdbcType=VARCHAR}
+              ,#{itemId, mode=IN, jdbcType=VARCHAR}  
+              ,#{remainQty, mode=IN, jdbcType=NUMERIC} 
+              ,#{deductFlag, mode=IN, jdbcType=VARCHAR}      
+              ,#{updateBy, mode=IN, jdbcType=VARCHAR}
+              )
+    }
+    </insert>
+    
+    
+    <insert id="create_itemDeductTmp" parameterType="java.util.HashMap">
+        INSERT INTO MOM_ITEM_DEDUCT_TMP
+					( DIVISION_CD         
+					, COMPANY_CD          
+					, MATERIAL_REQUEST_ID 
+					, WORK_ORDER_ID       
+					, ITEM_ID             
+					, REQUEST_DATE        
+					, REQUEST_QTY         
+					, DEDUCT_QTY          
+					, IN_LOCATION_CD      
+					, OUT_LOCATION_CD     
+					, UNIT_QTY            
+					, ADD_FLAG            
+					, DESCRIPTION         
+					, CREATE_DATE         
+					, CREATE_BY
+					, DEDUCT_DATE
+					, MARKET_CD
+					, CURRENCY_CD
+			        )
+		VALUES
+		          ( #{divisionCd, jdbcType=VARCHAR}
+		          , #{companyCd, jdbcType=VARCHAR}
+		          , DECODE(#{addFlag, jdbcType=VARCHAR}, 'Y', #{materialRequestId, mode=IN, jdbcType=VARCHAR} , S_ORDER_SEQ.NEXTVAL)
+		          , #{workOrderId, jdbcType=VARCHAR}
+		          , #{itemId, jdbcType=VARCHAR}
+		          , TO_DATE(#{requestDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+		          , #{requestQty, jdbcType=NUMERIC}
+		          , #{remainQty, jdbcType=NUMERIC}
+		          , DECODE(#{addFlag, jdbcType=VARCHAR}, 'Y', #{inLocationCd, jdbcType=VARCHAR}, #{inLocationName, jdbcType=VARCHAR})
+		          , DECODE(#{addFlag, jdbcType=VARCHAR}, 'Y', #{outLocationCd, jdbcType=VARCHAR}, #{outLocationName, jdbcType=VARCHAR})
+		          , #{unitQty, jdbcType=NUMERIC}
+		          , #{addFlag, jdbcType=VARCHAR}
+		          , #{description, jdbcType=VARCHAR}
+		          , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		          , #{createBy, jdbcType=VARCHAR}
+		          , TO_DATE(#{deductDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+		          , #{marketCd, jdbcType=VARCHAR}
+		          , #{currencyCd, jdbcType=VARCHAR}
+		          )
+
+    </insert>
+    
+    <delete id="remove_itemDeductTmp" parameterType="java.util.HashMap">
+        DELETE FROM MOM_ITEM_DEDUCT_TMP
+         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+    </delete>
+	
+	<select id="get_labelDesign_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    A.METHOD_ID        
+		    , A.METHOD_DESC      
+		    , A.METHOD_FIELD
+		    , A.METHOD_FIELD_DESC
+		  FROM MOM_POP_LABELDESIGN A
+		ORDER BY A.METHOD_DESC
+	</select>
+	
+	<select id="get_label_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    A.LABEL_ID   
+		    , A.LABEL_DESC 
+		    , A.PRINT_ID   
+		    , A.LABELSTATUS
+		    , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS CREATE_DATE
+		    , A.CREATE_BY  
+		    , TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS UPDATE_DATE
+		    , A.UPDATE_BY 
+		  FROM MOM_POP_LABELLIST A 
+		 ORDER BY A.LABEL_DESC
+	</select>
+	
+	<select id="get_bcrport" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT
+		    A.MACADDRESS 
+		    , A.PCNAME     
+		    , A.IP         
+		    , A.GTPRINT    
+		    , A.CTPRINT    
+		    , A.PALLETPRINT
+		    , A.SLEEP      
+		    , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS CREATE_DATE
+		    , A.CREATE_BY  
+		    , TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS UPDATE_DATE
+		    , A.UPDATE_BY
+		  FROM MOM_POP_BCRPORT A 
+		 WHERE MACADDRESS = #{MACADDRESS, jdbcType=VARCHAR}
+	</select>
+	
+	<insert id="create_bcrport" parameterType="java.util.HashMap">
+		INSERT INTO MOM_POP_BCRPORT (
+		        MACADDRESS, 
+		        PCNAME, 
+		        IP, 
+		        GTPRINT, 
+		        CTPRINT, 
+		        PALLETPRINT, 
+		        SLEEP, 
+		        CREATE_DATE, 
+		        CREATE_BY) 
+		    VALUES ( 
+		        #{MACADDRESS,  jdbcType=VARCHAR},
+		        #{PCNAME,      jdbcType=VARCHAR},
+		        #{IP,          jdbcType=VARCHAR},
+		        #{GTPRINT,     jdbcType=VARCHAR},
+		        #{CTPRINT,     jdbcType=VARCHAR},
+		        #{PALLETPRINT, jdbcType=VARCHAR},
+		        #{SLEEP,       jdbcType=VARCHAR},
+		        SYSDATE,
+		        #{CREATE_BY,   jdbcType=VARCHAR})
+    </insert>
+	
+	<insert id="create_bcrport_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_BCR_UPSERT (
+             #{p_err_code,    mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg,     mode=OUT, jdbcType=VARCHAR}
+           , #{P_MACADDRESS,  mode=IN,  jdbcType=VARCHAR}
+           , #{P_PCNAME,      mode=IN,  jdbcType=VARCHAR}
+           , #{P_IP,          mode=IN,  jdbcType=VARCHAR}
+           , #{P_GTPRINT,     mode=IN,  jdbcType=VARCHAR}
+           , #{P_CTPRINT,     mode=IN,  jdbcType=VARCHAR}
+           , #{P_PALLETPRINT, mode=IN,  jdbcType=VARCHAR}
+           , #{P_SLEEP,       mode=IN,  jdbcType=VARCHAR}
+           , #{P_FLAG,        mode=IN,  jdbcType=VARCHAR}
+           , #{P_CREATE_BY,   mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<delete id="remove_materialRequest" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{ CALL
+		  DECLARE
+		  BEGIN
+		#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+		
+	   INSERT INTO MOM_MATERIAL_REQUEST_HIST (
+			LAST_EVENT_SEQ,
+			DIVISION_CD,
+			COMPANY_CD,
+			MATERIAL_REQUEST_ID,
+			WORK_ORDER_ID,
+			ITEM_ID,
+			REQUEST_DATE,
+			REQUEST_QTY,
+			ISSUE_QTY,
+			CANCEL_QTY,
+			REQUEST_STATE,
+			IN_LOCATION_CD,
+			OUT_LOCATION_CD,
+			REQUEST_TYPE,
+			ISSUE_DATE,
+			UNIT_QTY,
+			ORIGIN_REQUEST_QTY,
+			REQUEST_GROUP_ID,
+			USE_YN,
+			DESCRIPTION,
+			REASON_CODE,
+			CREATE_DATE,
+			CREATE_BY,
+			UPDATE_DATE,
+			UPDATE_BY,
+			TID
+		)
+		SELECT S_ORDER_SEQ.NEXTVAL,
+			DIVISION_CD,
+			COMPANY_CD,
+			MATERIAL_REQUEST_ID,
+			WORK_ORDER_ID,
+			ITEM_ID,
+			REQUEST_DATE,
+			REQUEST_QTY,
+			ISSUE_QTY,
+			CANCEL_QTY,
+			'R',
+			IN_LOCATION_CD,
+			OUT_LOCATION_CD,
+			REQUEST_TYPE,
+			ISSUE_DATE,
+			UNIT_QTY,
+			ORIGIN_REQUEST_QTY,
+			REQUEST_GROUP_ID,
+			USE_YN,
+			#{MESSAGES30068, jdbcType=VARCHAR} || ' - ' || #{MESSAGES30012, jdbcType=VARCHAR},
+			REASON_CODE,
+			MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			#{userId, jdbcType=VARCHAR},
+			MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			#{userId, jdbcType=VARCHAR},
+			TID
+		FROM	MOM_MATERIAL_REQUEST
+		WHERE   DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	    AND 	COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+	    AND 	MATERIAL_REQUEST_ID = #{materialRequestId, jdbcType=VARCHAR}
+        ;
+		
+		DELETE FROM MOM_MATERIAL_REQUEST
+         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+           AND MATERIAL_REQUEST_ID = #{materialRequestId, jdbcType=VARCHAR}
+           ;
+		
+		
+		SELECT
+			CASE 
+				WHEN COUNT(ITEM_ID) = 0 THEN 'S'
+				ELSE 'E' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_MATERIAL_REQUEST
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		AND MATERIAL_REQUEST_ID = #{materialRequestId, jdbcType=VARCHAR}
+		;
+	END
+	}
+	</delete>
+	
+	<update id="modify_workOrderResultState" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{ CALL
+		  DECLARE
+		  BEGIN
+				#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+				
+		  UPDATE MOM_WORK_ORDER
+		     SET WO_STATE = 'R'
+		       , UPDATE_BY = #{userId, jdbcType=VARCHAR}
+		       , UPDATE_DATE = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		   WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		     AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		     AND WORK_ORDER_ID = #{workOrderId, jdbcType=VARCHAR}
+		   ;
+		     
+		  INSERT INTO MOM_WORK_ORDER_HIST
+		  SELECT S_ORDER_SEQ.NEXTVAL
+		       , A.* 
+		    FROM MOM_WORK_ORDER A
+		   WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		     AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		     AND A.WORK_ORDER_ID = #{workOrderId, jdbcType=VARCHAR}
+		   ;
+		     
+		  SELECT
+		    CASE WHEN COUNT(ITEM_ID) > 0 THEN 'S'
+		    	 ELSE 'E'
+		    END
+		    INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		    FROM MOM_WORK_ORDER
+		   WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		     AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		     AND WORK_ORDER_ID = #{workOrderId, jdbcType=VARCHAR}
+		     AND WO_STATE = 'R'
+		   ;
+		  END
+		}
+	</update>
+</mapper>

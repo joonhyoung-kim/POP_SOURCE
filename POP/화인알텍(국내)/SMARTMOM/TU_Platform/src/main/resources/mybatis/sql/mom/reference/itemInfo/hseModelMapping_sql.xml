@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.reference.itemInfo.hseModelMapping">
+	<select id="get_hseModelMapping_list" resultType="camelMap" parameterType="java.util.HashMap">
+		<if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+		WITH TEMP1 AS (	
+	    </if>
+			SELECT A.DIVISION_CD
+				 , A.COMPANY_CD
+				 , A.CATEGORY
+				 , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'HSE_MODEL_CATEGORY', A.CATEGORY) FROM DUAL) AS CATEGORY_NAME_DISP
+				 , A.ITEM_ID
+				 , A.ITEM_ID AS ITEM_ID_DISP
+				 , A.MODEL_SUFFIX
+				 , A.MODEL_SUFFIX AS MODEL_SUFFIX_DISP
+				 , A.HSE_ITEM_ID
+				 , A.HSE_ITEM_ID AS HSE_ITEM_ID_DISP
+				 , A.DESCRIPTION
+				 , A.DESCRIPTION AS DESCRIPTION_DISP
+				 , A.USE_YN
+				 , A.USE_YN AS USE_YN_DISP
+				 , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'USE_FLAG', A.USE_YN) FROM DUAL) AS USE_YN_NAME
+				 , A.LGE_ITEM_ID
+				 , A.CREATE_DATE
+				 , A.CREATE_BY
+				 , A.UPDATE_DATE
+				 , A.UPDATE_BY
+			  FROM MOM_HSE_MODEL_MAPPING A
+			 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+			  <if test="searchCategory != '' and searchCategory != null">
+			   AND A.CATEGORY = #{searchCategory, jdbcType=VARCHAR}
+			  </if>
+			  <if test="searchItemId != '' and searchItemId != null">
+			   AND A.ITEM_ID LIKE '%' || TRIM(UPPER(#{searchItemId, jdbcType=VARCHAR})) || '%'
+			  </if>
+			  <if test="searchModelSuffix != '' and searchModelSuffix != null">
+			   AND A.MODEL_SUFFIX LIKE '%' || TRIM(UPPER(#{searchModelSuffix, jdbcType=VARCHAR})) || '%'
+			  </if>
+			  <if test="searchHseItemId != '' and searchHseItemId != null">
+			   AND A.HSE_ITEM_ID LIKE '%' || TRIM(UPPER(#{searchHseItemId, jdbcType=VARCHAR})) || '%'
+			  </if>
+			 <if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+			  )
+		      SELECT A.*
+		           , B.ROW_COUNT
+		        FROM (SELECT A.*
+		                   , ROWNUM GRIDROW
+		                FROM TEMP1 A) A
+		           , (SELECT COUNT(*) ROW_COUNT
+		                FROM TEMP1) B 
+		       WHERE GRIDROW BETWEEN #{startPage, jdbcType=INTEGER} AND #{endPage, jdbcType=INTEGER}
+	         </if>
+	</select>
+
+	<insert id="create_hseModelMapping" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+		DECLARE
+		BEGIN
+			#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+			
+		INSERT INTO MOM_HSE_MODEL_MAPPING (
+			DIVISION_CD,
+		    COMPANY_CD,
+	 	    CATEGORY,
+		    ITEM_ID,
+	 	    MODEL_SUFFIX,
+		    HSE_ITEM_ID,
+		    DESCRIPTION,
+		    USE_YN,
+		    LGE_ITEM_ID,
+		    CREATE_DATE,
+		    CREATE_BY,
+		    UPDATE_DATE,
+		    UPDATE_BY
+		)
+		VALUES(
+			#{divisionCd, jdbcType=VARCHAR},
+			#{companyCd, jdbcType=VARCHAR},
+			UPPER(TRIM(#{category, jdbcType=VARCHAR})),
+			UPPER(TRIM(#{itemId, jdbcType=VARCHAR})),
+			UPPER(TRIM(#{modelSuffix, jdbcType=VARCHAR})),
+			UPPER(TRIM(#{hseItemId, jdbcType=VARCHAR})),
+			#{description, jdbcType=VARCHAR},
+			NVL(TRIM(UPPER(#{useYn, jdbcType=VARCHAR})), 'Y'),
+			#{lgeItemId, jdbcType=VARCHAR},
+			MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			#{userId, jdbcType=VARCHAR},
+			MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			#{userId, jdbcType=VARCHAR}
+		);
+		
+		INSERT INTO MOM_HSE_MODEL_MAPPING_HIST (
+			LAST_EVENT_SEQ,
+		    DIVISION_CD,
+		    COMPANY_CD,
+	 	    CATEGORY,
+		    ITEM_ID,
+	 	    MODEL_SUFFIX,
+		    HSE_ITEM_ID,
+		    DESCRIPTION,
+		    USE_YN,
+		    LGE_ITEM_ID,
+		    CREATE_DATE,
+		    CREATE_BY,
+		    UPDATE_DATE,
+		    UPDATE_BY
+		)
+		SELECT S_ORDER_SEQ.NEXTVAL,
+			   DIVISION_CD,
+		  	   COMPANY_CD,
+	 	  	   CATEGORY,
+		  	   ITEM_ID,
+	 	  	   MODEL_SUFFIX,
+		  	   HSE_ITEM_ID,
+		  	   DESCRIPTION,
+		  	   USE_YN,
+		  	   LGE_ITEM_ID,
+		  	   CREATE_DATE,
+		  	   CREATE_BY,
+		  	   UPDATE_DATE,
+		  	   UPDATE_BY
+		FROM   MOM_HSE_MODEL_MAPPING
+		WHERE  DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND    COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		AND    CATEGORY = UPPER(TRIM(#{category, jdbcType=VARCHAR}))
+		AND    ITEM_ID = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		;
+		
+		SELECT
+			CASE 
+				WHEN COUNT(ITEM_ID) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_HSE_MODEL_MAPPING
+		WHERE  DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND    COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		AND    CATEGORY = UPPER(TRIM(#{category, jdbcType=VARCHAR}))
+		AND    ITEM_ID = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		;
+		
+		END
+		}
+	</insert>
+
+	<update id="modify_hseModelMapping" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+		DECLARE
+		BEGIN
+			#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+			
+		UPDATE MOM_HSE_MODEL_MAPPING
+		   SET MODEL_SUFFIX = TRIM(UPPER(#{modelSuffix, jdbcType=VARCHAR})),
+			   HSE_ITEM_ID = TRIM(UPPER(#{hseItemId, jdbcType=VARCHAR})),
+			   DESCRIPTION = #{description, jdbcType=VARCHAR},
+			   USE_YN = NVL(TRIM(UPPER(#{useYn, jdbcType=VARCHAR})), 'Y'),
+			   LGE_ITEM_ID = #{lgeItemId, jdbcType=VARCHAR},
+			   UPDATE_DATE = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			   UPDATE_BY = #{updateBy, jdbcType=VARCHAR}
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND CATEGORY = UPPER(TRIM(#{category, jdbcType=VARCHAR}))
+		   AND ITEM_ID = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+			
+		;
+		INSERT INTO MOM_HSE_MODEL_MAPPING_HIST (
+					LAST_EVENT_SEQ,
+				    DIVISION_CD,
+				    COMPANY_CD,
+			 	    CATEGORY,
+				    ITEM_ID,
+			 	    MODEL_SUFFIX,
+				    HSE_ITEM_ID,
+				    DESCRIPTION,
+				    USE_YN,
+				    LGE_ITEM_ID,
+				    CREATE_DATE,
+				    CREATE_BY,
+				    UPDATE_DATE,
+				    UPDATE_BY
+				  )
+			 SELECT S_ORDER_SEQ.NEXTVAL,
+				    DIVISION_CD,
+				    COMPANY_CD,
+			 	    CATEGORY,
+				    ITEM_ID,
+			 	    MODEL_SUFFIX,
+				    HSE_ITEM_ID,
+				    DESCRIPTION,
+				    USE_YN,
+				    LGE_ITEM_ID,
+				    CREATE_DATE,
+				    CREATE_BY,
+				    UPDATE_DATE,
+				    UPDATE_BY
+			   FROM MOM_HSE_MODEL_MAPPING
+			  WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			    AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+			    AND CATEGORY = UPPER(TRIM(#{category, jdbcType=VARCHAR}))
+			    AND ITEM_ID = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		;
+	
+ 		SELECT
+			CASE 
+				WHEN COUNT(ITEM_ID) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_HSE_MODEL_MAPPING
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	      AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	      AND CATEGORY = UPPER(TRIM(#{category, jdbcType=VARCHAR}))
+	      AND ITEM_ID = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		;
+	END
+	}
+	</update>
+	
+</mapper>

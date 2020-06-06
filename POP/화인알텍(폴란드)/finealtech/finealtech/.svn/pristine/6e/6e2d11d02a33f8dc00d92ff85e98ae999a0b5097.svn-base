@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.plan.plan.orderCompare">
+	<select id="get_orderCompare_list" resultType="camelMap" parameterType="java.util.HashMap">
+	   SELECT A.SO_EXISTS_FLAG
+		     , A.WORK_ORDER
+		     , A.PO_NO
+		     , A.MODEL_SUFFIX
+		     , A.PART_NO
+		     , A.ORDER_STATE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'SALES_ORDER_STATE', A.ORDER_STATE)
+		        FROM DUAL ) AS ORDER_TYPE_NAME
+		     , A.ORDER_QTY
+		     , A.SHIP_QTY
+		     , A.CANCEL_QTY
+		     , A.REMAIN_QTY
+		     , A.CUSTOMER_CANCEL_QTY
+		     , TO_CHAR(A.DUE_DATE, 'YYYY-MM-DD') AS DUE_DATE
+		     , A.SALES_ORDER_ID
+		     , A.EXEC_TYPE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'EXEC_TYPE', A.EXEC_TYPE)
+       			FROM DUAL ) AS EXEC_TYPE_NAME
+		     , A.DIVISION_CD
+		     , A.COMPANY_CD
+		     , TO_CHAR(A.WORK_DATE, 'YYYY-MM-DD') AS WORK_DATE 
+		FROM   (SELECT 'Y'                AS SO_EXISTS_FLAG
+		             , MS.CUSTOMER_PO_ID  AS WORK_ORDER
+		             , MS.CUSTOMER_PO_NO  AS PO_NO
+		             , MS.SALES_ITEM_ID   AS MODEL_SUFFIX
+		             , MS.ITEM_ID         AS PART_NO
+		             , MS.ORDER_STATE
+		             , MS.ORDER_QTY
+		             , NVL(MS.SHIP_QTY, 0) AS SHIP_QTY
+		             , MS.CANCEL_QTY
+		             , MS.ORDER_QTY - NVL(MS.SHIP_QTY,0) - NVL(MS.CANCEL_QTY,0)  AS REMAIN_QTY
+		             , MT.ORDER_QTY     AS CUSTOMER_CANCEL_QTY
+		             , MS.DUE_DATE
+		             , MS.SALES_ORDER_ID
+		             , CASE WHEN NVL(MS.SHIP_QTY, 0) > 0 THEN 'N' 
+		               ELSE 
+		                   CASE WHEN MS.ORDER_QTY - NVL(MS.CANCEL_QTY,0) = 0 THEN 'MC'
+		                   ELSE 'Y' 
+		                   END    
+		               END   AS  EXEC_TYPE 
+		            ,  MS.DIVISION_CD
+		            ,  MS.COMPANY_CD   
+		            ,  MT.WORK_DATE 
+		        FROM   MOM_SALES_ORDER MS
+		             , MOM_ORDER_CANCEL_TMP MT
+		        WHERE  MS.DIVISION_CD = MT.DIVISION_CD
+		        AND    MS.COMPANY_CD  = MT.COMPANY_CD
+		        AND    MS.ITEM_ID     = MT.PART_NO
+		        AND    MS.CUSTOMER_PO_ID  = SUBSTR(MT.WORK_ORDER,1,8)  
+		        AND    MS.CUSTOMER_PO_NO = MT.ORDER_NO
+		        UNION ALL
+		        SELECT 'N'                         AS SO_EXISTS_FLAG
+		             , SUBSTR(MT.WORK_ORDER,1,8)   AS WORK_ORDER
+		             , MT.ORDER_NO     AS PO_NO
+		             , ''              AS  MODEL_SUFFIX
+		             , MT.PART_NO
+		             , ''              AS ORDER_STATE
+		             , MT.ORDER_QTY    AS ORDER_QTY
+		             , 0               AS SHIP_QTY
+		             , 0               AS CANCEL_QTY
+		             , 0               AS REMAIN_QTY
+		             , MT.ORDER_QTY    AS CUSTOMER_CANCEL_QTY
+		             , MT.NEED_BY_DATE AS DUE_DATE
+		             , ''              AS SALES_ORDER_ID
+		             , 'ME'            AS  EXEC_TYPE   
+		             , MT.DIVISION_CD
+		             , MT.COMPANY_CD
+		             , MT.WORK_DATE
+		        FROM   MOM_ORDER_CANCEL_TMP MT
+		        WHERE  MT.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		        AND    MT.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		        AND    NOT EXISTS ( SELECT '*'
+		                            FROM   MOM_SALES_ORDER S
+		                            WHERE  S.DIVISION_CD    = MT.DIVISION_CD
+		                            AND    S.COMPANY_CD     = MT.COMPANY_CD
+		                            AND    S.CUSTOMER_PO_ID = SUBSTR(MT.WORK_ORDER,1,8)  
+		                            AND    S.ITEM_ID        = MT.PART_NO
+		                            AND    S.CUSTOMER_PO_NO = MT.ORDER_NO )) A
+		WHERE 1 = 1 
+	  <if test = "createDate != null and createDate != ''">
+       AND WORK_DATE BETWEEN TO_DATE(#{createDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') AND TO_DATE(#{createDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.999 / 24
+       </if>
+      <if test = "itemName != null and itemName != ''">
+      AND UPPER(A.PART_NO) LIKE '%' || UPPER(#{itemName, jdbcType=VARCHAR}) || '%'
+      </if>
+      <if test = "modelSuffix != null and modelSuffix != ''">
+      AND UPPER(A.MODEL_SUFFIX) LIKE '%' || UPPER(#{modelSuffix, jdbcType=VARCHAR}) || '%'
+      </if>
+      <if test = "customerPoId != null and customerPoId != ''">
+      AND UPPER(A.WORK_ORDER) LIKE '%' || UPPER(#{customerPoId, jdbcType=VARCHAR}) || '%'
+      </if>
+      <if test = "orderState != null and orderState != ''">
+      AND A.ORDER_STATE = #{orderState, jdbcType=VARCHAR}
+      </if>
+      <if test = "execType != null and execType != ''">
+      AND A.EXEC_TYPE = #{execType, jdbcType=VARCHAR}
+      </if>
+		ORDER BY A.WORK_ORDER                            
+		       , A.PART_NO
+		       , DECODE(SO_EXISTS_FLAG, 'Y', 1, 'N', 2)
+		       , A.PO_NO
+	</select>
+	
+	<insert id="create_orderCompare" statementType="CALLABLE" parameterType="java.util.HashMap">
+	INSERT INTO MOM_ORDER_CANCEL_TMP (
+		DIVISION_CD,
+		COMPANY_CD,
+		WORK_DATE,
+		NO,
+		PART_NO,
+		ORDER_TYPE,
+		ORDER_NO,
+		NEED_BY_DATE,
+		TIME,
+		MKT,
+		ITEM_TYPE,
+		ORDER_QTY,
+		REMAINED_QTY,
+		DEPARTURE_QTY,
+		RECEIVING_QTY,
+		CANCELED_FLAG,
+		SUBINVENTORY,
+		LINE_CODE,
+		WORK_ORDER,
+		ITEM_DESC,
+		ITEM_SPEC,
+		ARRIVAL_SUPPLIER_CODE,
+		ARRIVAL_SUPPLIER_NAME,
+		COMMENTS,
+		UOM,
+		CURR,
+		UNIT_PRICE,
+		PACKING_UNIT,
+		REQUIRED_QTY,
+		QPA,
+		ISSUE_QTY,
+		ASSEMBLY_PART_NO,
+		DELIVERY_TYPE,
+		REQUESTOR_NAME,
+		REQUEST_DEPT_CODE,
+		MIX_INFO,
+		ORDER_DATE,
+		CANCEL_REPLY,
+		HSMS,
+		ECO_NO,
+		CREATOR,
+		CREATE_TIME,
+		MODIFIER,
+		MODIFY_TIME,
+		LAST_EVENT_TIME
+	) VALUES (
+		#{divisionCd, jdbcType=VARCHAR},
+		#{companyCd, jdbcType=VARCHAR},
+		MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		${value},
+ 		#{createBy, jdbcType=VARCHAR},
+		MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+		#{createBy, jdbcType=VARCHAR},
+		MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+		MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+	)
+	</insert>
+<!-- 	<update id="modify_orderCompare" statementType="CALLABLE" parameterType="java.util.HashMap"> -->
+<!-- 	UPDATE MOM_ORDER_CANCEL_TMP -->
+<!-- 		SET  	 NO = #{no, jdbcType=INTEGER} -->
+<!--                , ORDER_TYPE = #{orderType, jdbcType=VARCHAR} -->
+<!--                , ORDER_NO = #{orderNo, jdbcType=VARCHAR} -->
+<!--                , NEED_BY_DATE = #{needByDate, jdbcType=VARCHAR} -->
+<!--                , TIME = #{time#, jdbcType=VARCHAR} -->
+<!--                , MKT = #{mkt, jdbcType=VARCHAR} -->
+<!--                , ITEM_TYPE = #{itemType, jdbcType=VARCHAR} -->
+<!--                , ORDER_QTY = #{orderQty, jdbcType=INTEGER} -->
+<!--                , REMAINED_QTY = #{remainedQty, jdbcType=INTEGER} -->
+<!--                , DEPARTURE_QTY = #{departureQty, jdbcType=INTEGER} -->
+<!--                , RECEIVING_QTY = #{receivingQty, jdbcType=INTEGER} -->
+<!--                , CANCELED_FLAG = #{canceledFlag, jdbcType=VARCHAR} -->
+<!--                , SUBINVENTORY = #{subinventory, jdbcType=VARCHAR} -->
+<!--                , LINE_CODE = #{lineCode, jdbcType=VARCHAR} -->
+<!--                , ITEM_DESC = #{itemDesc, jdbcType=VARCHAR} -->
+<!--                , ITEM_SPEC = #{itemSpec, jdbcType=VARCHAR} -->
+<!--                , ARRIVAL_SUPPLIER_CODE = #{arrivalSupplierCode, jdbcType=VARCHAR} -->
+<!--                , ARRIVAL_SUPPLIER_NAME= #{arrivalSupplierName, jdbcType=VARCHAR} -->
+<!--                , COMMENTS = #{comments, jdbcType=VARCHAR} -->
+<!--                , UOM = #{uom, jdbcType=VARCHAR} -->
+<!--                , CURR = #{curr, jdbcType=VARCHAR} -->
+<!--                , UNIT_PRICE = #{unitPrice, jdbcType=INTEGER} -->
+<!--                , PACKING_UNIT = #{packingUnit, jdbcType=VARCHAR} -->
+<!--                , REQUIRED_QTY = #{requiredQty, jdbcType=INTEGER} -->
+<!--                , QPA = #{qpa, jdbcType=VARCHAR} -->
+<!--                , ISSUE_QTY = #{issueQty, jdbcType=INTEGER} -->
+<!--                , ASSEMBLY_PART_NO = #{assemblyPartNo, jdbcType=VARCHAR} -->
+<!--                , DELIVERY_TYPE = #{deliveryType, jdbcType=VARCHAR} -->
+<!--                , REQUESTOR_NAME = #{requestorName, jdbcType=VARCHAR} -->
+<!--                , REQUEST_DEPT_CODE = #{requestDeptCode, jdbcType=VARCHAR} -->
+<!--                , MIX_INFO = #{mixInfo, jdbcType=VARCHAR} -->
+<!--                , ORDER_DATE = #{orderDate, jdbcType=VARCHAR} -->
+<!--                , CANCEL_REPLY = #{cancelReply, jdbcType=VARCHAR} -->
+<!--                , HSMS = #{hsms, jdbcType=VARCHAR} -->
+<!--                , ECO_NO = #{ecoNo, jdbcType=VARCHAR} -->
+<!--                , MODIFIER = #{createBy, jdbcType=VARCHAR} -->
+<!--                , MODIFY_TIME = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}) -->
+<!--                , LAST_EVENT_TIME = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}) -->
+<!-- 		WHERE  DIVISION_CD 			  =  #{divisionCd, jdbcType=VARCHAR} -->
+<!-- 		AND    COMPANY_CD      		  =  #{companyCd, jdbcType=VARCHAR} -->
+<!-- 		AND    PART_NO				  =  UPPER(#{partNo, jdbcType=VARCHAR}) -->
+<!-- 		AND    WORK_ORDER 			  =  UPPER(#{workOrder,jdbcType=VARCHAR}) -->
+<!-- 	</update> -->
+   
+   <delete id="remove_orderCompare" statementType="CALLABLE" parameterType="java.util.HashMap">
+   		DELETE
+		FROM MOM_ORDER_CANCEL_TMP
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+   </delete>
+   
+   <insert id="create_orderCompareProc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_SALES_ORDER_PKG.P_ORDER_CANCEL_COMPARE (
+        	#{p_err_code, mode=OUT, jdbcType=VARCHAR}
+           ,#{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+           ,#{divisionCd, mode=IN, jdbcType=VARCHAR}
+           ,#{companyCd, mode=IN, jdbcType=VARCHAR}
+           ,#{salesOrderId, mode=IN, jdbcType=VARCHAR}
+           ,#{customerCancelQty, mode=IN, jdbcType=NUMERIC}
+           ,#{txnType, mode=IN, jdbcType=VARCHAR}
+           ,#{userId, mode=IN, jdbcType=VARCHAR}
+        )
+    }
+    </insert>
+</mapper>

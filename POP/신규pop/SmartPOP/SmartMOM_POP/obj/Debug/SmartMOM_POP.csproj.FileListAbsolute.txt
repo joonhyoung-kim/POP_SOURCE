@@ -1,0 +1,510 @@
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\bin\Debug\SmartMOM_POP.exe.config
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\bin\Debug\SmartMOM_POP.exe.manifest
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\bin\Debug\SmartMOM_POP.application
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\bin\Debug\SmartMOM_POP.exe
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\bin\Debug\SmartMOM_POP.pdb
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\bin\Debug\MetroFramework.dll
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\bin\Debug\SmartMom_Lib.dll
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\bin\Debug\Newtonsoft.Json.dll
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\bin\Debug\MetroFramework.pdb
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\bin\Debug\MetroFramework.dll.config
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\bin\Debug\SmartMom_Lib.pdb
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.csprojAssemblyReference.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmBadProductInsert.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCommonStockSelect.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCTReprint.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanbanSplit.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanbanManual.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmKeyboard.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductInput.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanban.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmLogin.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmLoginIDInsert.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCommonSelect.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductComplete.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseCancel.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseSearch.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmWoResultCancel.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseProcess.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMoveBinProcess.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGI.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGR.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMatGIWOList.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMoveProductProcess.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmNowDate.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmProductGI.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmPallet.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmPOSearch.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmScanView.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmStockType.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.Properties.Resources.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemAction.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemActionNew.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemStatus.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.GenerateResource.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.CoreCompileInputs.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.TrustInfo.xml
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.exe.manifest
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.application
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.CopyComplete
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.exe
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMOM_POP\obj\Debug\SmartMOM_POP.pdb
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csprojAssemblyReference.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmBadProductInsert.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCommonStockSelect.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCTReprint.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanbanSplit.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanbanManual.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmKeyboard.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductInput.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanban.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmLogin.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmLoginIDInsert.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCommonSelect.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductComplete.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseCancel.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseSearch.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmWoResultCancel.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseProcess.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMoveBinProcess.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGI.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGR.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMatGIWOList.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMoveProductProcess.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmNowDate.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmProductGI.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmPallet.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmPOSearch.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmScanView.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmStockType.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.Properties.Resources.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemAction.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemActionNew.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemStatus.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.GenerateResource.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.CoreCompileInputs.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.TrustInfo.xml
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.exe.manifest
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.application
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.CopyComplete
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.exe
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.pdb
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csprojAssemblyReference.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmBadProductInsert.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCommonStockSelect.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCTReprint.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanbanSplit.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanbanManual.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmKeyboard.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductInput.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanban.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmLogin.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmLoginIDInsert.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCommonSelect.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductComplete.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmDeparture.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseCancel.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseSearch.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmWoResultCancel.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseProcess.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGI.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGR.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMatGIWOList.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMoveProductProcess.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmNowDate.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmProductGI.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmPallet.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmPOSearch.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmScanView.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmStockType.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.Properties.Resources.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemAction.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemActionNew.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemStatus.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.GenerateResource.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.CoreCompileInputs.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.TrustInfo.xml
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.exe.manifest
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.application
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.CopyComplete
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.exe
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.pdb
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.csprojAssemblyReference.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmBadProductInsert.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCommonStockSelect.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCTReprint.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanbanSplit.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanbanManual.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmKeyboard.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductInput.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanban.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmLogin.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmLoginIDInsert.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCommonSelect.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductComplete.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmDeparture.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseCancel.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseSearch.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmWoResultCancel.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseProcess.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGI.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGR.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMatGIWOList.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMoveProductProcess.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmNowDate.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmProductGI.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmPallet.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmPOSearch.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmScanView.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmStockType.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.Properties.Resources.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemAction.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemActionNew.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemStatus.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.GenerateResource.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.CoreCompileInputs.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.TrustInfo.xml
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.exe.manifest
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.application
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.CopyComplete
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.exe
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\SmartMOM_POP\obj\Debug\SmartMOM_POP.pdb
+C:\SMARTMOM\MOM.RPT\SmartMOM_POP.exe.config
+C:\SMARTMOM\MOM.RPT\SmartMOM_POP.exe.manifest
+C:\SMARTMOM\MOM.RPT\SmartMOM_POP.application
+C:\SMARTMOM\MOM.RPT\SmartMOM_POP.exe
+C:\SMARTMOM\MOM.RPT\SmartMOM_POP.pdb
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csprojAssemblyReference.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmBadProductInsert.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCommonStockSelect.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCTReprint.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanbanSplit.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanbanManual.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmKeyboard.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductInput.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanban.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmLogin.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmLoginIDInsert.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCommonSelect.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductComplete.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmDeparture.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseCancel.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseSearch.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmWOStatus.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmWoResultCancel.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseProcess.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGI.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGR.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMatGIWOList.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMoveProductProcess.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmNowDate.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmProductGI.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmPallet.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmPOSearch.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmScanView.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmStockType.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.Properties.Resources.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemAction.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemActionNew.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemStatus.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.GenerateResource.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.CoreCompileInputs.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.TrustInfo.xml
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.exe.manifest
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.application
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.CopyComplete
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.exe
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\SmartMOM_POP\obj\Debug\SmartMOM_POP.pdb
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csprojAssemblyReference.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmBadProductInsert.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCommonStockSelect.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCTReprint.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanbanSplit.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanbanManual.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmKeyboard.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductInput.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanban.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmLogin.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmLoginIDInsert.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCommonSelect.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductComplete.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmDeparture.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseCancel.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseSearch.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmWOStatus.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmWoResultCancel.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseProcess.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGI.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGR.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMatGIWOList.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMoveProductProcess.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmNowDate.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmProductGI.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmPallet.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmPOSearch.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmScanView.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmStockType.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.Properties.Resources.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemAction.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemActionNew.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemStatus.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.GenerateResource.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.CoreCompileInputs.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.TrustInfo.xml
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.exe.manifest
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.application
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.CopyComplete
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.exe
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.pdb
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csprojAssemblyReference.cache
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmBadProductInsert.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCommonStockSelect.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCTReprint.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanbanSplit.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanbanManual.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmKeyboard.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductInput.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanban.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmLogin.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmLoginIDInsert.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCommonSelect.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductComplete.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmDeparture.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseCancel.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseSearch.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmWOStatus.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmWoResultCancel.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseProcess.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGI.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGR.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMatGIWOList.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMoveProductProcess.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmNowDate.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmProductGI.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmPallet.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmPOSearch.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmScanView.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmStockType.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.Properties.Resources.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemAction.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemActionNew.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemStatus.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.GenerateResource.cache
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.CoreCompileInputs.cache
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.exe
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.pdb
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.TrustInfo.xml
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.exe.manifest
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.application
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.CopyComplete
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csprojAssemblyReference.cache
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmBadProductInsert.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCommonStockSelect.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCTReprint.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanbanSplit.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanbanManual.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanban.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmLogin.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmLoginIDInsert.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCommonSelect.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductCompleteEBESCO.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductCompleteAD.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmDeparture.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseCancel.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseSearch.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmWOStatus.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmWoResultCancel.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseProcess.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGI.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGR.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMatGIWOList.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMoveProductProcess.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmNowDate.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmProductGI.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmPallet.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmPOSearch.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmScanView.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmStockType.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.Properties.Resources.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemAction.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemActionNew.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemStatus.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.GenerateResource.cache
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.CoreCompileInputs.cache
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.exe
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.pdb
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.TrustInfo.xml
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.exe.manifest
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.application
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.CopyComplete
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmScale.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csprojResolveAssemblyReference.cache
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmBadProductInsert.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCommonStockSelect.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCTReprint.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanbanSplit.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanbanManual.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanban.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmLogin.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmLoginIDInsert.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCommonSelect.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductCompleteEBESCO.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductCompleteAD.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmDeparture.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseCancel.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseSearch.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmScale.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmWOStatus.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmWoResultCancel.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseProcess.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGI.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGR.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMatGIWOList.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMoveProductProcess.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmNowDate.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmProductGI.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmPallet.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmPOSearch.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmScanView.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmStockType.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.Properties.Resources.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemAction.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemActionNew.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemStatus.resources
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.GenerateResource.Cache
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.CoreCompileInputs.cache
+D:\SMARTMOM\MOM.RPT\SmartMOM_POP.exe.config
+D:\SMARTMOM\MOM.RPT\SmartMOM_POP.exe
+D:\SMARTMOM\MOM.RPT\SmartMOM_POP.pdb
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.TrustInfo.xml
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.exe.manifest
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.application
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.exe
+D:\WindowsProjects\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.pdb
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csprojAssemblyReference.cache
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmBadProductInsert.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCommonStockSelect.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCTReprint.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanbanSplit.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanbanManual.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanban.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmLogin.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmLoginIDInsert.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCommonSelect.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductCompleteEBESCO.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductCompleteAD.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmDeparture.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseCancel.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseSearch.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmScale.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmWOStatus.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmWoResultCancel.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseProcess.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGI.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGR.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMatGIWOList.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMoveProductProcess.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmNowDate.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmProductGI.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmPallet.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmPOSearch.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmScanView.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmStockType.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.Properties.Resources.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemAction.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemActionNew.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemStatus.resources
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.GenerateResource.cache
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.exe
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.pdb
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.CopyComplete
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmKeyboard.resources
+D:\SMARTMOM\MOM.RPT\SmartMOM_POP.exe.manifest
+D:\SMARTMOM\MOM.RPT\SmartMOM_POP.application
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.TrustInfo.xml
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.exe.manifest
+D:\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.application
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csprojAssemblyReference.cache
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmBadProductInsert.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCommonStockSelect.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCTReprint.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanbanSplit.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanbanManual.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanban.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmKeyboard.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmLogin.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmLoginIDInsert.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCommonSelect.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductCompleteEBESCO.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductCompleteAD.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmDeparture.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseCancel.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseSearch.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmScale.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmWOStatus.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmWoResultCancel.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseProcess.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGI.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGR.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMatGIWOList.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMoveProductProcess.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmNowDate.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmProductGI.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmPallet.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmPOSearch.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmScanView.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmStockType.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.Properties.Resources.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemAction.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemActionNew.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemStatus.resources
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.GenerateResource.cache
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.exe
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.pdb
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.TrustInfo.xml
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.exe.manifest
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.application
+C:\Users\USER\Desktop\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.CopyComplete
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csprojAssemblyReference.cache
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmBadProductInsert.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCommonStockSelect.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCTReprint.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanbanSplit.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanbanManual.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmGanban.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmKeyboard.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmLogin.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmLoginIDInsert.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmCommonSelect.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductCompleteEBESCO.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductCompleteAD.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmDeparture.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseCancel.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseSearch.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmScale.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmWOStatus.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmWoResultCancel.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialUseProcess.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGI.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGR.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMatGIWOList.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMoveProductProcess.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmNowDate.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmProductGI.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmPallet.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmPOSearch.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmScanView.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmStockType.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.Properties.Resources.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemAction.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemActionNew.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.ucMoveProductItemStatus.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.GenerateResource.cache
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.TrustInfo.xml
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.exe.manifest
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.application
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.csproj.CopyComplete
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.exe
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.pdb
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMaterialGiSearch.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\SmartMOM_POP\obj\Debug\SmartMOM_POP.frmMainProductComplete.resources

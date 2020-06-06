@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.eis.salesRevenueStatus">
+	<select id="get_salesRevenuePart1_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT MM
+			 , MAX(DECODE(SEQ, 1, AMT, 0)) AS AMT1
+		     , MAX(DECODE(SEQ, 2, AMT, 0)) AS AMT2
+		     , MAX(DECODE(SEQ, 3, AMT, 0)) AS AMT3
+		  FROM MOM_EIS_SALES_TREND_PART_1
+		 WHERE DIVISION_CD= #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND WEEK = #{week, jdbcType=VARCHAR}
+		 GROUP BY MM
+		 ORDER BY MM 
+	</select>
+	
+	<select id="get_salesRevenuePart1Desc_list" resultType="camelMap" parameterType="java.util.HashMap">
+	SELECT DISTINCT DESCRIPTION
+	     , SEQ
+	  FROM MOM_EIS_SALES_TREND_PART_1
+	 WHERE DIVISION_CD= #{divisionCd, jdbcType=VARCHAR}
+	   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	   AND WEEK = #{week, jdbcType=VARCHAR}
+	 ORDER BY SEQ
+	</select>
+	
+	<select id="get_salesRevenueQuarter_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT YYYYMM
+		     , SEQ
+		     , DESCRIPTION
+		     , MAX(DECODE(QUARTER, '1', AMT, '0')) AS "1Q"
+		     , MAX(DECODE(QUARTER, '2', AMT, '0')) AS "2Q"
+		     , MAX(DECODE(QUARTER, '3', AMT, '0')) AS "3Q"
+		     , MAX(DECODE(QUARTER, '4', AMT, '0')) AS "4Q"
+		     , SUM(AMT) AS TOTAL
+		  FROM MOM_EIS_SALES_TREND_QUARTER
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND WEEK = #{week, jdbcType=VARCHAR}
+		 GROUP BY YYYYMM, SEQ, DESCRIPTION
+		 ORDER BY YYYYMM, SEQ
+	</select>
+	
+	<select id="get_salesRevenuePlan_list" resultType="camelMap" parameterType="java.util.HashMap">
+	SELECT DESCRIPTION
+	     , AMT
+	  FROM MOM_EIS_SALES_TREND_PLAN
+	 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	   AND WEEK = #{week, jdbcType=VARCHAR} 
+	 ORDER BY DESCRIPTION
+    </select>
+    
+    <select id="get_salesRevenuePart2_list" resultType="camelMap" parameterType="java.util.HashMap">
+    SELECT TREND_TYPE
+	     , SEQ
+	     , MODEL
+	     , MODEL_SEQ
+	     , CURR_FROM_AMT
+	     , CURR_TO_AMT
+	     , CURR_GAP_AMT
+	     , NEXT_FROM_AMT
+	     , NEXT_TO_AMT
+	     , NEXT_GAP_AMT
+	  FROM MOM_EIS_SALES_TREND_PART_2
+	 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	   AND WEEK = #{week, jdbcType=VARCHAR}
+	 ORDER BY SEQ, MODEL_SEQ
+    </select>
+    
+    <select id="get_salesRevenuePart3_list" resultType="camelMap" parameterType="java.util.HashMap">
+    SELECT WEEK
+	     , MAX(DECODE(SEQ, 1, AMT, 0)) AS AMT1
+	     , MAX(DECODE(SEQ, 2, AMT, 0)) AS AMT2
+	  FROM MOM_EIS_SALES_TREND_PART_3
+	 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	   AND SO_WEEK = #{week, jdbcType=VARCHAR}
+	 GROUP BY WEEK
+	 ORDER BY LENGTH(WEEK), WEEK
+	</select>
+    <select id="get_salesRevenuePo_list" resultType="camelMap" parameterType="java.util.HashMap">
+      SELECT TREND_TYPE
+		    , SEQ
+		    , PLAN
+		    , PERCENT
+		    , RESULT
+		    , PRODGRESS
+		    , GAP
+		 FROM MOM_EIS_SALES_TREND_PO
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	      AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	      AND WEEK = #{week, jdbcType=VARCHAR}
+		ORDER BY SEQ
+    </select>
+    
+   <select id="get_salesRevenuePart3Desc_list" resultType="camelMap" parameterType="java.util.HashMap">  
+	SELECT DISTINCT TREND_TYPE
+	     , SEQ
+	  FROM MOM_EIS_SALES_TREND_PART_3
+	 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	   AND SO_WEEK = #{week, jdbcType=VARCHAR}
+	 ORDER BY SEQ
+	 </select>
+	 
+</mapper>

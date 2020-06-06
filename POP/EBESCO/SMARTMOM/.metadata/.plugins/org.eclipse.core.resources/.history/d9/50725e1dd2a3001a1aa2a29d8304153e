@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.pop.popProcess">
+    	<!-- 실적등록버튼 누를시 SN채번 (sn, ct, pallet lotId 채번을 위한) -->
+	<insert id="create_snmake" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_SNMAKE (
+             #{p_err_code,        mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg,         mode=OUT, jdbcType=VARCHAR}
+           , #{p_runCount,        mode=OUT, jdbcType=VARCHAR}
+           , #{P_FLAG,            mode=IN,  jdbcType=VARCHAR}
+           , #{P_ITEM_ID,         mode=IN,  jdbcType=VARCHAR}
+           , #{P_SCODE,           mode=IN,  jdbcType=VARCHAR}
+           , #{P_CCODE,           mode=IN,  jdbcType=VARCHAR}
+           , #{P_WORK_ORDER_ID,   mode=IN,  jdbcType=VARCHAR}
+           , #{P_CREATE_BY,       mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+     </insert>
+
+		<!-- 채번 후  SN 가져오기 -->
+	<select id="get_lotId_list" resultType="camelMap" parameterType="java.util.HashMap">
+	SELECT 
+	SERIALNUMBER				 <!--  시리얼넘버      -->
+    FROM (SELECT*
+          FROM MOM_POP_SNMAKE 
+         WHERE CREATE_BY= #{CREATE_BY,jdbcType=VARCHAR}
+           AND WORK_ORDER_ID= #{WORK_ORDER_ID,jdbcType=VARCHAR}
+         ORDER BY CREATE_DATE DESC
+         )
+     WHERE ROWNUM <![CDATA[ <= ]]> 1
+	</select>
+
+		<!-- 작업실적번호 가져오기 -->
+	<select id="get_woResult_list" resultType="camelMap" parameterType="java.util.HashMap">
+	select work_order_result_id  <!--  작업실적번호      -->
+    from (select *
+          from mom_work_order_result a
+          where a.division_cd = #{divisionCd,jdbcType=VARCHAR}
+           and a.work_order_id = #{workorderId,jdbcType=VARCHAR}
+           and a.state = 'E'
+           and not exists (select '*'
+                  from mom_work_order_result
+                    where division_cd = a.division_cd
+                 	  and company_cd = a.company_cd
+      	           	  and prev_work_order_result_id = a.work_order_result_id
+                 	  and work_order_id = a.work_order_id)
+       			  order by update_date desc)
+	 			where rownum=1
+	 </select>
+	 
+		<!-- 실적등록 프로시저 insert-->
+		<!-- 작업지시 상테라면 가동중으로 변경-->
+	<insert id="create_popworesult" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_POP_CREATE_WO_RESULT (
+              #{p_err_code,      mode=OUT, jdbcType=VARCHAR}
+			, #{p_err_msg,       mode=OUT, jdbcType=VARCHAR}
+			, #{p_serialnumber,  mode=IN,  jdbcType=VARCHAR}
+			, #{p_division_cd,   mode=IN,  jdbcType=VARCHAR}
+			, #{p_company_cd,    mode=IN,  jdbcType=VARCHAR}
+			, #{p_work_order_id, mode=IN,  jdbcType=VARCHAR}
+			, #{p_wo_state,      mode=IN,  jdbcType=VARCHAR}
+			, #{p_shift_cd, mode=IN,  jdbcType=VARCHAR}
+			, #{p_work_person,   mode=IN,  jdbcType=VARCHAR}		
+			, #{p_good_qty,      mode=IN,  jdbcType=NUMERIC}
+			, #{p_bad_qty,       mode=IN,  jdbcType=NUMERIC}
+			, #{p_description,   mode=IN,  jdbcType=VARCHAR}
+			, #{p_close_flag,    mode=IN,  jdbcType=VARCHAR}
+			, #{p_badcode,       mode=IN,  jdbcType=VARCHAR}
+			, #{p_destination,     mode=IN,  jdbcType=VARCHAR}
+			, #{p_update_by,     mode=IN,  jdbcType=VARCHAR}
+			, #{p_short_sn,      mode=IN,  jdbcType=VARCHAR}
+			, #{p_long_sn,    mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+    	</insert>
+  	<!-- 실적취소 프로시저 insert -->
+	 <insert id="create_workOrderResultCancel" statementType="CALLABLE">
+	{
+        CALL SP_MOM_WORK_ORDER_PKG.P_CREATE_WO_RESULT_CANCEL   ( 
+        	   #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+          	  ,#{p_err_msg, mode=OUT, jdbcType=VARCHAR}        
+              ,#{divisionCd, mode=IN, jdbcType=VARCHAR}
+              ,#{companyCd, mode=IN, jdbcType=VARCHAR}  
+              ,#{workOrderResultId, mode=IN, jdbcType=VARCHAR} 
+              ,#{workOrderId, mode=IN, jdbcType=VARCHAR}  
+              ,#{userId, mode=IN, jdbcType=VARCHAR}      
+              )
+    }
+    </insert>
+    
+<!-- 설비 상태 변경
+	 1. 가동중 -> 중지	
+     2. 중지 -> 가동중
+ -->
+	<update id="modify_holdState" statementType="CALLABLE" parameterType="java.util.HashMap">
+	UPDATE MOM_WORK_ORDER
+	<if test="woState != null and woState != ''">
+	<choose>
+	        <when test='woState.equals("R")'>     <!--  가동중일때      -->
+	        	 SET WO_STATE= 'H'
+	        	, PREV_STATE='R'
+	        	 
+    	    </when>
+    	    <when test='woState.equals("H")'>     <!--  중단일때      -->
+    	    	 SET WO_STATE= 'R'
+    	    	 , PREV_STATE='H'
+    	    </when>
+    	    </choose>          
+	</if>
+	WHERE
+    		DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		 AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+	<if test="workOrderId != null and workOrderId != ''">
+		AND WORK_ORDER_ID = #{workOrderId, jdbcType=VARCHAR}
+	</if>
+	</update>
+
+	<!-- 작업지시 마감처리 프로시저  -->
+	<insert id="create_closeWorkorderProc" statementType="CALLABLE">
+        CALL SP_MOM_POP.P_WORK_ORDER_CLOSE (
+             #{p_err_code,        mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg,       mode=OUT, jdbcType=VARCHAR}
+           , #{divisionCd,   mode=IN,  jdbcType=VARCHAR}
+           , #{companyCd,    mode=IN,  jdbcType=VARCHAR}
+           , #{workOrderId, mode=IN,  jdbcType=VARCHAR}
+           , #{userId,       mode=IN,  jdbcType=VARCHAR}
+        )
+         </insert>	
+	<!-- 작업지시조회                                                                                                                                     
+	  조건절에 작업지시상태(A:작업지시 R:작업진행 H:작업중단 T:작업마감)는 이벤트 발생 페이지에 따라
+	  실적화면에서는 A & H & R & T 조회
+	  작업지시 조회화면에서는  A & H  조회  
+	-->                                   
+	<select id="get_wosearch_list" resultType="camelMap" parameterType="java.util.HashMap">
+	SELECT  A.RESOURCE_CD                                                <!-- 설비코드 -->
+            , A.RESOURCE_CD 
+                || '(' 
+                || TUPLATFORM_MASTER.MOM_COMMON_PKG.fn_get_resource_name(A.DIVISION_CD, A.COMPANY_CD, A.RESOURCE_CD) 
+                || ')' AS RESOURCE_CD_NAME                               <!-- 설비명            -->
+		    , A.WORK_ORDER_ID                                            <!-- 작업지시번호   -->
+            , A.PRIORITY                                                 <!-- 우선순위         -->
+		    , A.ITEM_ID                                                  <!-- 품목ID     -->
+		    , MOM_COMMON_PKG.fn_get_item_name(#{divisionCd, jdbcType=VARCHAR},
+		                                      #{companyCd, jdbcType=VARCHAR}, 
+		                                      A.ITEM_ID) AS ITEM_NAME    <!--  품목명           -->		    
+		    , TO_CHAR(A.PLAN_DATE, 'YYYY-MM-DD') AS PLAN_DATE            <!-- 계획수립일자    -->
+		    , TO_CHAR(A.PLAN_END_TIME, 'YYYY-MM-DD') AS PLAN_END_DATE    <!-- 계획완료일자    -->                
+		    , TO_CHAR(A.START_TIME, 'YY-MM-DD HH24:MI') AS START_TIME    <!-- 실 시작시간      -->              
+		    , TO_CHAR(A.END_TIME, 'YY-MM-DD HH24:MI') AS END_TIME        <!-- 실 종료시간      -->
+		    , A.CONFIRM_QTY                                              <!-- 계획수량          -->
+		    , NVL (A.CONFIRM_QTY, 0) - NVL (A.GOOD_QTY, 0) - NVL (A.CANCEL_QTY, '0') AS REMAIN_QTY  <!-- 남은수량 -->
+		    , NVL (A.GOOD_QTY, '0') AS QTY                               <!-- 현재수량         -->
+		    , NVL (A.BAD_QTY, '0') AS BAD_QTY                            <!-- 불량수량          -->
+		    , NVL (A.CANCEL_QTY, '0') AS CANCEL_QTY                      <!-- 취소수량          -->
+		    , A.WO_STATE                                                 <!-- 작업지시상태코드 -->
+		    , MOM_COMMON_PKG.fn_get_code_name(#{divisionCd, jdbcType=VARCHAR},
+		                                      #{companyCd, jdbcType=VARCHAR},
+		                                      'WORK_ORDER_STATE',
+		                                      A.WO_STATE,
+		                                      '') AS WO_STATE_NAME       <!--  작업지시상태명 -->
+		    , NVL(B.POP_MAKE_LOT_QTY, A.CONFIRM_QTY) AS POP_MAKE_LOT_QTY <!-- POP에서 입력되는 입력LOT SIZE -->
+		    , NVL(B.POP_CT_QTY, A.CONFIRM_QTY) AS POP_CT_QTY             <!-- POP에서 입력되는 장입수량(박스 구성 수량) -->
+		    , B.UNIT                                                     <!-- 관리단위 또는 제품 생산 수량에 대한 단위 => MES의 UNITID 대체 -->
+		FROM MOM_WORK_ORDER A,         <!-- 작업지시 -->
+		     MOM_ITEM_DEFINITION B     <!-- 품목정보 -->
+		WHERE 1=1
+		AND   A.DIVISION_CD		   = #{divisionCd, jdbcType=VARCHAR}
+		AND   A.COMPANY_CD		   = #{companyCd, jdbcType=VARCHAR}
+		AND   A.DIVISION_CD        = B.DIVISION_CD
+		AND   A.COMPANY_CD         = B.COMPANY_CD
+	    AND   A.ITEM_ID            = B.ITEM_ID
+	    AND   A.RESOURCE_CD        = #{resourceCd,jdbcType=VARCHAR}
+	      <if test="pageId != null and pageId != ''">
+        	<choose>
+	        <when test='pageId.equals("complete")'>
+	        	AND   A.WO_STATE           IN ('A', 'H','R','T')         <!--  작업지시상태  A:작업지시 R:작업진행 H:작업중단 T:작업마감 -->
+    	    </when>
+    	    <when test='pageId.equals("MOMAA001")'>
+    	    	AND   A.WO_STATE           IN ('A', 'H')  
+    	    </when>
+    	    </choose>
+        </if>
+	    AND   A.WO_STATE           IN ('A', 'H','R')                     <!--  작업지시상태  A:작업지시 R:작업진행 H:작업중단  -->
+	<if test="woId != null and woId != ''">
+		AND   A.WORK_ORDER_ID      = #{woId, jdbcType=VARCHAR}
+	</if>       
+	</select>
+		<select id="get_label_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    A.LABEL_ID   
+		    , A.LABEL_DESC 
+		    , A.PRINT_ID   
+		    , A.LABELSTATUS
+		    , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS CREATE_DATE
+		    , A.CREATE_BY  
+		    , TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS UPDATE_DATE
+		    , A.UPDATE_BY 
+		  FROM MOM_POP_LABELLIST A 
+		 ORDER BY A.LABEL_DESC
+	</select>
+		<select id="get_labelObject_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    A.LABEL_ID 
+		    , A.PRINT_ID
+		    , A.LABEL_SEQ 
+		    , A.METHOD_ID 
+		    , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( #{divisionCd, jdbcType=VARCHAR}
+	                                                 , #{companyCd, jdbcType=VARCHAR}  
+	                                                 , 'LABEL_METHOD'
+	                                                 , #{labelId, jdbcType=VARCHAR})
+		        FROM DUAL) AS METHOD_NAME   
+		    , TO_CHAR(A.X_POSITION_MM)        AS X_POSITION_MM
+		    , TO_CHAR(A.Y_POSITION_MM)        AS  Y_POSITION_MM
+		    , TO_CHAR(A.X_POSITION_PIX)       AS  X_POSITION_PIX
+		    , TO_CHAR(A.Y_POSITION_PIX)       AS  Y_POSITION_PIX
+		    , TO_CHAR(A.LINE_THICKNESS)       AS  LINE_THICKNESS
+		    , TO_CHAR(A.WIDTH_AREA_MM)        AS  WIDTH_AREA_MM
+		    , TO_CHAR(A.HEIGHT_AREA_MM)       AS HEIGHT_AREA_MM  
+		    , TO_CHAR(A.WIDTH_AREA_PIX)       AS  WIDTH_AREA_PIX
+		    , TO_CHAR(A.HEIGHT_AREA_PIX)      AS  HEIGHT_AREA_PIX
+		    , TO_CHAR(A.BARCODE_MODULE_WIDTH) AS  BARCODE_MODULE_WIDTH
+		    , TO_CHAR(A.BARCODE_RATIO)        AS  BARCODE_RATIO
+		    , A.LANDSCAPE 
+		    , TO_CHAR(A.BARCODE_HEIGHT_MM)    AS BARCODE_HEIGHT_MM
+		    , TO_CHAR(A.BARCODE_HEIGHT_PIX)   AS BARCODE_HEIGHT_PIX
+		    , A.BARCODE_TEXT_UNDER_YN
+		    , A.BARCODE_2D_SIZE
+		    , A.LABEL_VALUE
+		    , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS CREATE_DATE
+		    , A.CREATE_BY
+		    , TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS UPDATE_DATE 
+		    , A.UPDATE_BY
+		FROM MOM_POP_LABELOBJECT A
+		WHERE A.LABEL_ID = #{labelId, jdbcType=VARCHAR}
+		AND   A.PRINT_ID = #{printId, jdbcType=VARCHAR}
+		ORDER BY A.LABEL_SEQ
+	</select>
+</mapper>

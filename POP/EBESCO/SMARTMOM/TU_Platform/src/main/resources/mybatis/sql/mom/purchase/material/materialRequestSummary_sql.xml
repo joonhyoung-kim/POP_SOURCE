@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.purchase.material.materialRequestSummary">
+	<select id="get_materialRequestSummary_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.* FROM
+	     (SELECT A.WORK_ORDER_ID
+	           , A.ITEM_ID
+	           , A.ITEM_NAME
+	           , A.SPECIFICATION
+	           , A.REQUEST_STATE
+	           , A.STATE_NAME
+	           , A.REQUEST_TYPE
+	           , A.REQUEST_TYPE_NAME
+	           , A.REASON_CODE
+	           , A.REQUEST_DATE
+	           , A.OUT_LOCATION_CD
+	           , A.OUT_LOCATION_NAME
+	           , A.OUT_FACILITY_TYPE
+	           , A.IN_LOCATION_CD
+	           , A.IN_LOCATION_NAME
+	           , A.PLAN_QTY
+	           , A.UNIT_QTY
+	           , A.REQUEST_QTY
+	           , A.ISSUE_QTY
+	           , A.CANCEL_QTY
+	           , A.OUT_CURRENT_QTY
+	           , A.REMAIN_QTY
+	           , A.MOM
+	           , A.CURRENT_QTY
+	           , CASE
+	                 WHEN REMAIN_QTY <![CDATA[<=]]> 0 THEN 0
+	                 ELSE
+	                     CASE
+	                         WHEN A.CURRENT_QTY > ROUND(DECODE(A.MOM, NULL, A.REMAIN_QTY, CEIL(A.REMAIN_QTY/A.MOM) * A.MOM ), 3)
+	                           THEN ROUND(DECODE(A.MOM, NULL, A.REMAIN_QTY, CEIL(A.REMAIN_QTY/A.MOM) * A.MOM ), 3)
+	                         ELSE A.CURRENT_QTY
+	                     END
+	             END     AS RELEASE_QTY
+	           , A.REQUEST_FLAG
+	           , A.ITEM_CATEGORY
+	           , A.MAKER
+	           , A.RESOURCE_CD
+	           , A.RESOURCE_NAME
+	           , A.ITEM_TYPE_NAME
+	           , A.RELEASE_DATE
+	           , A.VENDOR_FLAG
+	           , A.UNIT_PRICE
+	           , ROUND(DECODE(A.MOM, NULL, A.REMAIN_QTY, CEIL(A.REMAIN_QTY / A.MOM) * A.MOM), 3) AS DISCHARGE_QTY
+	      FROM   (SELECT MAX(A.WORK_ORDER_ID)           AS WORK_ORDER_ID
+	                   , A.ITEM_ID
+	                   , MAX(A.ITEM_NAME)    AS ITEM_NAME
+	                   , MAX(A.SPECIFICATION)           AS SPECIFICATION
+	                   , MAX(A.REQUEST_STATE)           AS REQUEST_STATE
+	                   , MAX(A.STATE_NAME)              AS STATE_NAME
+	                   , MAX(A.MOM)                     AS MOM
+	                   , MAX(A.REQUEST_TYPE)            AS REQUEST_TYPE
+	                   , MAX(A.REQUEST_TYPE_NAME)       AS REQUEST_TYPE_NAME
+	                   , MAX(A.REASON_CODE)             AS REASON_CODE
+	                   , MAX(A.REQUEST_DATE)            AS REQUEST_DATE
+	                   , MAX(A.CURRENT_QTY)             AS CURRENT_QTY
+	                   , MAX(A.OUT_CURRENT_QTY)         AS OUT_CURRENT_QTY
+	                   , A.OUT_LOCATION_CD              AS OUT_LOCATION_CD
+	                   , MAX(A.OUT_LOCATION_NAME)       AS OUT_LOCATION_NAME
+	                   , MAX(A.OUT_FACILITY_TYPE)       AS OUT_FACILITY_TYPE
+	                   , A.IN_LOCATION_CD
+	                   , MAX(A.IN_LOCATION_NAME )       AS IN_LOCATION_NAME
+	                   , SUM(A.REQUEST_QTY)             AS REQUEST_QTY
+	                   , SUM(A.ISSUE_QTY)               AS ISSUE_QTY
+	                   , SUM(A.CANCEL_QTY)              AS CANCEL_QTY
+	                   , SUM(NVL(A.REQUEST_QTY, 0)) - SUM(NVL(A.ISSUE_QTY, 0)) - SUM(NVL(A.CANCEL_QTY, 0)) - MAX(A.OUT_CURRENT_QTY) AS REMAIN_QTY
+	                   , MAX(A.REQUEST_FLAG)            AS REQUEST_FLAG
+	                   , MAX(A.ITEM_CATEGORY)           AS ITEM_CATEGORY
+	                   , MAX(A.MAKER)                   AS MAKER
+	                   , MAX(A.RESOURCE_CD)             AS RESOURCE_CD
+	                   , MAX(A.RESOURCE_NAME)           AS RESOURCE_NAME
+	                   , MAX(A.ITEM_TYPE_NAME)          AS ITEM_TYPE_NAME
+	                   , MAX(A.RELEASE_DATE)            AS RELEASE_DATE
+	                   , MAX(A.VENDOR_FLAG)             AS VENDOR_FLAG
+	                   , MAX(A.UNIT_PRICE)              AS UNIT_PRICE
+	                   , SUM(A.PLAN_QTY)                AS PLAN_QTY
+	                   , MAX(A.UNIT_QTY)                AS UNIT_QTY
+	              FROM   (SELECT A.WORK_ORDER_ID
+	                           , A.ITEM_ID
+	                           , D.ITEM_NAME
+	                           , D.SPECIFICATION
+	                           , A.REQUEST_STATE
+	                           , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD, A.COMPANY_CD, 'MATERIAL_REQUEST_STATE', A.REQUEST_STATE ) FROM DUAL ) AS STATE_NAME
+	                           , D.STANDARD_OUT_QTY AS MOM
+	                           , A.REQUEST_TYPE
+	                           , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD, A.COMPANY_CD, 'REQUEST_TYPE', A.REQUEST_TYPE ) FROM DUAL ) AS REQUEST_TYPE_NAME
+	                           , A.REASON_CODE
+	                           , A.REQUEST_DATE
+	                           , NVL((SELECT MOM_COMMON_PKG.FN_GET_CURRENT_STOCK (A.DIVISION_CD, A.COMPANY_CD, A.ITEM_ID, A.IN_LOCATION_CD) FROM DUAL),0) AS CURRENT_QTY
+	                           , NVL((SELECT MOM_COMMON_PKG.FN_GET_CURRENT_STOCK (A.DIVISION_CD, A.COMPANY_CD, A.ITEM_ID, A.OUT_LOCATION_CD) FROM DUAL),0) AS OUT_CURRENT_QTY
+	                           , A.OUT_LOCATION_CD
+	                           , I.FACILITY_NAME       AS OUT_LOCATION_NAME
+	                           , I.FACILITY_TYPE       AS OUT_FACILITY_TYPE
+	                           , A.IN_LOCATION_CD
+	                           , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME (A.DIVISION_CD, A.COMPANY_CD, A.IN_LOCATION_CD) FROM DUAL)       AS IN_LOCATION_NAME
+	                           , NVL(A.REQUEST_QTY, 0) AS REQUEST_QTY
+	                           , NVL(A.ISSUE_QTY, 0)   AS ISSUE_QTY
+	                           , NVL(A.CANCEL_QTY, 0)  AS CANCEL_QTY
+	                           , DECODE(A.REQUEST_STATE, 'R', 'Y', 'N') AS REQUEST_FLAG
+	                           , D.ITEM_CATEGORY
+	                           , D.ATTRIBUTE1              AS MAKER
+	                           , O.RESOURCE_CD
+	                           , (SELECT MOM_COMMON_PKG.FN_GET_RESOURCE_NAME (O.DIVISION_CD, O.COMPANY_CD, O.RESOURCE_CD) FROM DUAL) AS RESOURCE_NAME
+	                           , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD, A.COMPANY_CD, 'ITEM_TYPE', D.ITEM_TYPE ) FROM DUAL ) AS ITEM_TYPE_NAME
+	                           , A.REQUEST_DATE        AS RELEASE_DATE
+	                           , '' AS VENDOR_FLAG
+	                           , (SELECT MOM_COMMON_PKG.FN_GET_SALES_PRICE( A.DIVISION_CD
+	                                                                      , A.COMPANY_CD
+	                                                                      , A.OUT_LOCATION_CD
+	                                                                      , A.ITEM_ID
+	                                                                      , '2'
+	                                                                      , MOM_COMMON_PKG.FN_GET_CODE_VALUES(A.DIVISION_CD, A.COMPANY_CD, 'SITE_SETUP', 'CURRENCY')
+	                                                                      , TRUNC(MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})) ) 
+	                                FROM DUAL) AS UNIT_PRICE
+	                           , O.CONFIRM_QTY AS PLAN_QTY
+	                           , A.UNIT_QTY
+	                      FROM   MOM_MATERIAL_REQUEST A
+	                           , MOM_ITEM_DEFINITION  D
+	                           , MOM_FACILITY I
+	                           , MOM_WORK_ORDER O
+	                      WHERE  1 = 1
+	                      AND    A.DIVISION_CD      = D.DIVISION_CD(+)
+	                      AND    A.COMPANY_CD       = D.COMPANY_CD(+)
+	                      AND    A.ITEM_ID          = D.ITEM_ID(+)
+	                      AND    A.DIVISION_CD      = I.DIVISION_CD
+	                      AND    A.COMPANY_CD       = I.COMPANY_CD
+	                      AND    A.OUT_LOCATION_CD  = I.FACILITY_CD
+	                      AND    A.DIVISION_CD      = O.DIVISION_CD
+	                      AND    A.COMPANY_CD       = O.COMPANY_CD
+	                      AND    A.WORK_ORDER_ID    = O.WORK_ORDER_ID
+	                      AND    A.DIVISION_CD      = #{divisionCd, jdbcType=VARCHAR}
+	                      AND    A.COMPANY_CD       = #{companyCd, jdbcType=VARCHAR}
+	                      AND    A.REQUEST_STATE    = 'W'
+	                      AND    TRUNC(A.REQUEST_DATE) BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
+	                                                   AND (TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') )
+	                      <if test="type != null and type != ''">
+						   AND D.ITEM_TYPE = #{type, jdbcType=VARCHAR}
+						  </if>
+	                      ) A
+	              WHERE 1 = 1
+	              GROUP BY A.ITEM_ID
+	                     , A.OUT_LOCATION_CD
+	                     , A.IN_LOCATION_CD
+	              ) A 
+	     ) A
+	 WHERE 1=1
+	  <if test="outLocation != null and outLocation != ''">
+	   AND A.OUT_LOCATION_CD = #{outLocation, jdbcType=VARCHAR}
+	  </if>
+	  <if test="inLocation != null and inLocation != ''">
+	   AND A.IN_LOCATION_CD = #{inLocation, jdbcType=VARCHAR}
+	  </if>
+	  <if test="itemName != null and itemName != ''">
+	   AND (A.ITEM_ID LIKE UPPER('%' || #{itemName, jdbcType=VARCHAR} || '%')
+	   OR UPPER(A.ITEM_NAME) LIKE UPPER('%' || #{itemName, jdbcType=VARCHAR} || '%')
+	   OR UPPER(A.SPECIFICATION) LIKE UPPER('%' || #{itemName, jdbcType=VARCHAR} || '%'))
+	  </if>
+	  <if test='stockQty == "N"'>
+	   AND A.CURRENT_QTY > 0
+	  </if>
+	  <if test="resourceName != null and resourceName != ''">
+	   AND A.RESOURCE_CD = #{resourceName, jdbcType=VARCHAR}
+	  </if>
+	  <if test="releaseQty == 'DISCHARGE_UP'">
+	   AND A.RELEASE_QTY > 0
+	  </if>
+	  <if test="releaseQty == 'DISCHARGE_DOWN'">
+	   AND A.RELEASE_QTY <![CDATA[<=]]> 0
+	  </if>
+	 ORDER BY A.REQUEST_DATE, A.ITEM_ID, A.RESOURCE_CD
+	</select>
+	
+	<select id="get_materialRequestSummaryDetail_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT AA.*
+		     , CASE WHEN REMAIN_CURRENT_QTY > 0 THEN AA.REMAIN_QTY
+		         ELSE
+		           CASE
+		               WHEN LAG (REMAIN_CURRENT_QTY) OVER (ORDER BY RNM) > 0
+		               THEN DECODE(LAG(AA.ITEM_ID)OVER(ORDER BY RNM), AA.ITEM_ID, LAG (REMAIN_CURRENT_QTY) OVER (ORDER BY RNM), 0)
+		           ELSE DECODE(LAG(AA.ITEM_ID)OVER(ORDER BY RNM), AA.ITEM_ID, 0, AA.CURRENT_QTY)
+		         END
+		       END RELEASE_QTY
+		  FROM (SELECT A.*
+		             , ROWNUM RNM
+		             , SUM (A.REMAIN_QTY) OVER (PARTITION BY A.ITEM_ID ORDER BY ROWNUM) AS SUM_ITME_QTY
+		             , NVL(A.CURRENT_QTY, 0) - (SUM (A.REMAIN_QTY) OVER (PARTITION BY A.ITEM_ID ORDER BY ROWNUM)) AS REMAIN_CURRENT_QTY
+		          FROM (SELECT A.WORK_ORDER_ID
+		                     , A.ITEM_ID
+		                     , D.ITEM_NAME
+		                     , D.SPECIFICATION
+		                     , A.REQUEST_STATE
+		                     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD, A.COMPANY_CD, 'MATERIAL_REQUEST_STATE', A.REQUEST_STATE ) FROM DUAL ) AS STATE_NAME
+		                     , NVL(D.MOM, 0) MOM
+		                     , A.REQUEST_TYPE
+		                     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD, A.COMPANY_CD, 'REQUEST_TYPE', A.REQUEST_TYPE ) FROM DUAL ) AS REQUEST_TYPE_NAME
+		                     , A.REASON_CODE
+		                     , A.REQUEST_DATE
+		                     , NVL((SELECT MOM_COMMON_PKG.FN_GET_CURRENT_STOCK (A.DIVISION_CD, A.COMPANY_CD, A.ITEM_ID, A.IN_LOCATION_CD) FROM DUAL), 0) AS CURRENT_QTY
+		                     , A.OUT_LOCATION_CD
+		                     , I.FACILITY_NAME OUT_LOCATION_NAME
+		                     , I.FACILITY_TYPE OUT_FACILITY_TYPE
+		                     , A.IN_LOCATION_CD
+		                     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME (A.DIVISION_CD, A.COMPANY_CD, A.IN_LOCATION_CD) FROM DUAL) AS IN_LOCATION_NAME
+		                     , NVL(A.REQUEST_QTY, 0) REQUEST_QTY
+		                     , NVL(A.ISSUE_QTY, 0) ISSUE_QTY
+		                     , NVL(A.CANCEL_QTY, 0) CANCEL_QTY
+		                     , NVL(A.REQUEST_QTY, 0) - NVL(A.ISSUE_QTY, 0) - NVL(A.CANCEL_QTY, 0) REMAIN_QTY
+		                     , A.DESCRIPTION
+		                     , DECODE(A.REQUEST_STATE, 'R', 'Y', 'N') REQUEST_FLAG
+		                     , D.ITEM_CATEGORY
+		                     , D.ATTRIBUTE1 AS MAKER
+		                     , DECODE(SUBSTR(A.WORK_ORDER_ID, 0, 2), 'OS', I.FACILITY_NAME, G.RESOURCE_NAME) RESOURCE_NAME
+		                     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( D.DIVISION_CD, D.COMPANY_CD, 'ITEM_TYPE', D.ITEM_TYPE ) FROM DUAL ) AS ITEM_TYPE_NAME
+		                     , DECODE (I.FACILITY_TYPE, 'FAC500', 'V', 'F') AS VENDOR_FLAG
+		                     , (SELECT MOM_COMMON_PKG.FN_GET_SALES_PRICE( A.DIVISION_CD
+		                                                                , A.COMPANY_CD
+		                                                                , A.OUT_LOCATION_CD
+		                                                                , A.ITEM_ID
+		                                                                , '2'
+		                                                                , MOM_COMMON_PKG.FN_GET_CODE_VALUES(A.DIVISION_CD, A.COMPANY_CD, 'SITE_SETUP', 'CURRENCY')
+		                                                                , TRUNC(MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})) ) 
+		                          FROM DUAL) AS UNIT_PRICE
+		                     , DECODE(SUBSTR(A.WORK_ORDER_ID, 0, 2), 'OS', A.REQUEST_DATE
+		                     , TO_CHAR(G.PLAN_START_TIME  - 1, 'YYYY-MM-DD')) RELEASE_DATE
+		                  FROM MOM_MATERIAL_REQUEST A
+		                     , MOM_ITEM_DEFINITION D
+		                     , (SELECT A.DIVISION_CD
+		                             , A.COMPANY_CD
+		                             , A.RESOURCE_CD
+		                             , A.WORK_ORDER_ID
+		                             , B.RESOURCE_NAME
+		                             , A.PLAN_START_TIME
+		                          FROM MOM_WORK_ORDER A
+		                             , MOM_RESOURCE B
+		                         WHERE A.DIVISION_CD = B.DIVISION_CD(+)
+		                           AND A.COMPANY_CD = B.COMPANY_CD(+)
+		                           AND A.RESOURCE_CD = B.RESOURCE_CD(+) ) G
+		                     , MOM_FACILITY I
+		                 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		                   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		                   AND A.DIVISION_CD = D.DIVISION_CD(+)
+		                   AND A.COMPANY_CD = D.COMPANY_CD(+)
+		                   AND A.DIVISION_CD = G.DIVISION_CD(+)
+		                   AND A.COMPANY_CD = G.COMPANY_CD(+)
+		                   AND A.DIVISION_CD = I.DIVISION_CD(+)
+		                   AND A.COMPANY_CD = I.COMPANY_CD(+)
+		                   AND A.ITEM_ID = D.ITEM_ID(+)
+		                   AND A.WORK_ORDER_ID = G.WORK_ORDER_ID(+)
+		                   AND A.OUT_LOCATION_CD= I.FACILITY_CD(+)
+		                   AND A.ITEM_ID = #{itemId, jdbcType=VARCHAR}
+		                   AND A.OUT_LOCATION_CD = #{outLocationId, jdbcType=VARCHAR}
+		                   AND TRUNC(A.REQUEST_DATE) BETWEEN TO_DATE(#{inFromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') AND TO_DATE(#{inToDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+		                 ORDER BY A.ITEM_ID, G.RESOURCE_CD, A.REQUEST_DATE ) A
+		             WHERE A.REMAIN_QTY > 0
+		              <if test='stockQty == "N"'>
+		               AND A.CURRENT_QTY > 0
+		              </if>
+		               ) AA
+	</select>
+</mapper>

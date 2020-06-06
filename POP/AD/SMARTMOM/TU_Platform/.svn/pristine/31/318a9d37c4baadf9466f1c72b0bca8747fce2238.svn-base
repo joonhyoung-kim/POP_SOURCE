@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<head>
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <meta name='generator' content='Mica' />
+    <meta http-equiv='CACHE-CONTROL' content='NO-CACHE' />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+    <link rel='stylesheet' type='text/css' href='/TU_Platform/Content/css/site.css' />
+    <link rel='stylesheet' type='text/css' href='/TU_Platform/Content/jqwidgets/styles/jqx.base.css' />
+    <link rel='stylesheet' type='text/css' href='/TU_Platform/Content/theme/css/datetimepicker/jquery.datetimepicker.css' />
+    <link rel="stylesheet" type="text/css" href="./../TU_MOM.css"/>
+
+    <script src='/TU_Platform/Content/js/jquery.min-1.11.1.js'></script>
+    <script src='/TU_Platform/Content/js/jquery-ui.min.js'></script>
+    <script src='/TU_Platform/Content/js/normalize.js'></script>
+    <script src='/TU_Platform/Content/amcharts/amcharts.js'></script>
+    <script src='/TU_Platform/Content/amcharts/serial.js'></script>
+    <script src='/TU_Platform/Content/theme/js/plugins/jqGrid/jquery.jqGrid.min.js'></script>
+    <script src='/TU_Platform/Content/theme/js/plugins/jqGrid/i18n/grid.locale-en.js'></script>
+    <script src='/TU_Platform/Content/theme/js/plugins/bootstrap/bootstrap.min.js'></script>
+    <script src='/TU_Platform/Content/theme/js/plugins/select2/select2.min.js'></script>
+    <script src="/TU_Platform/Content/theme/js/plugins/datetimepicker/jquery.datetimepicker.full.js"></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxcore.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxlistbox.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxcombobox.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxexpander.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxsplitter.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxbuttons.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxscrollbar.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxdata.js'></script>
+    <script src="/TU_Platform/Content/jqwidgets/jqxmenu.js"></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxtree.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxpanel.js'></script>
+    <script src="/TU_Platform/Content/jqwidgets/jqxnotification.js"></script>
+    
+    <!-- auiGrid -->
+	<link href="/TU_Platform/Content/AUIGrid/AUIGrid_style.css" rel="stylesheet" type="text/css">
+	<script src="/TU_Platform/Content/AUIGrid/AUIGridLicense.js"></script>
+	<script src="/TU_Platform/Content/AUIGrid/AUIGrid.js"></script>
+   	<link href="/TU_Platform/Content/css/auigridEditor.css" rel="stylesheet">
+	<!--  auiGrid Excel Export -->
+	<script src="/TU_Platform/Content/AUIGrid/FileSaver.min.js"></script>
+	<!-- echart -->
+	<script src="/TU_Platform/Content/PopUp/EChart/js/echarts/echarts.min.js"></script>
+	
+	<!-- new Common -->
+	<script src="/TU_Platform/Content/resources/js/common.js" type="text/javascript" ></script> 
+	
+   	<!-- new Common -->
+	<script src="/TU_Platform/Content/resources/js/common.js" type="text/javascript" ></script> 
+	
+    <!-- �떎援��뼱 -->
+     <script src="/TU_Platform/Content/js/regional.js"></script>
+       <script type="text/javascript" src="/TU_Platform/TU_MOM.lang.js"></script>
+       <script type="text/javascript" src="/TU_Platform/TU_MOM.widget.js"></script>
+       <script type="text/javascript" src="/TU_Platform/TU_MOM.common.js"></script>
+</head>
+<body style="overflow:auto;">
+	<div class="tabcontentarea">
+		<div class="searcharea h03 tablet-h4">
+			<div class="w-form formwrapper">
+				<form name="form" id="form" class="form-inline" data-name="Form">
+					<div class="w-clearfix">
+						<div class="w-clearfix listitem col-3">
+							<div class="labelbox w110">
+								<div class="circle"></div>
+								<div multi-lang="" style="display:none;" class="textblock">MESSAGES10952</div>
+							</div>
+							<input maxlength="256" id="fromDate" input-type="datepicker" type="text" data-format="Y-m-d" class="w-input fieldbox w110" date-format="date"></input>
+							<div multi-lang="" class="textblock">~</div>
+							<input maxlength="256" id="toDate" input-type="datepicker" type="text" data-format="Y-m-d" class="w-input fieldbox w110" date-format="date"></input>
+						</div>
+						<div class="w-clearfix listitem col-3">
+							<div class="labelbox w110">
+								<div class="circle"></div>
+								<div multi-lang="" style="display:none;" class="textblock">MESSAGES10535</div>
+							</div>
+							<select id="fromLocation" class="w-select fieldbox w210"></select>
+						</div>
+						<div class="w-clearfix listitem col-3">
+							<div class="labelbox w110">
+								<div class="circle"></div>
+								<div multi-lang="" style="display:none;" class="textblock">MESSAGES10953</div>
+							</div>
+							<select id="toLocation" class="w-select fieldbox w210"></select>
+						</div>
+						<div class="w-clearfix listitem col-3">
+							<div class="labelbox w110">
+								<div class="circle"></div>
+								<div multi-lang="" style="display:none;" class="textblock">MESSAGES10532</div>
+							</div>
+							<input maxlength="256" id="requestNumber" input-type="text" type="text" class="w-input fieldbox w235" date-format="date"></input>
+						</div>
+						<div class="w-clearfix listitem col-3">
+							<div class="labelbox w110">
+								<div class="circle"></div>
+								<div multi-lang="" style="display:none;" class="textblock">MESSAGES11577</div>
+							</div>
+							<input maxlength="256" id="itemName" input-type="text" type="text" class="w-input fieldbox w210" date-format="date"></input>
+						</div>
+						<div class="w-clearfix listitem col-3">
+							<div class="labelbox w110">
+								<div class="circle"></div>
+								<div multi-lang="" style="display:none;" class="textblock">MESSAGES10234</div>
+							</div>
+							<input maxlength="256" id="specification" input-type="text" type="text" class="w-input fieldbox w210" date-format="date"></input>
+						</div>
+						<div class="w-clearfix listitem col-3">
+							<div class="labelbox w110">
+								<div class="circle"></div>
+								<div multi-lang="" style="display:none;" class="textblock">MESSAGES11585</div>
+							</div>
+							<select id="itemType" class="w-select fieldbox w235"></select>
+						</div>
+						<div class="w-clearfix listitem col-3">
+							<div class="labelbox w110">
+								<div class="circle"></div>
+								<div multi-lang="" style="display:none;" class="textblock">MESSAGES11476</div>
+							</div>
+							<select id="cancelFlag" class="w-select fieldbox w210"></select>
+						</div>
+						<div class="w-clearfix listitem col-3">
+							<div class="labelbox w110"></div>
+							<a href="#" class="w-inline-block closebutton">
+								<div tmpTabId="six" class="w-icon fa fa-angle-up icon"></div>
+							</a>
+							<a btnSearch="btnSearch" widgetId="W201804171937587591000dvUxX5NEG7n" name="findBtn" id="findBtn1" href="#" targetGrid="auigrid" class="w-inline-block searchbutton" data-name="findBtn">
+								<div tmpTabId="four" class="w-icon fa fa-search icon"></div>
+								<div multi-lang="" style="display:none;" class="textblock">MESSAGES11233</div>
+							</a>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div id="openSearchPop" class="opensearch">
+			<a id="openBtn" href="#" class="w-inline-block openbutton">
+				<div tmpTabId="six" class="w-icon fa fa-angle-up icon"></div>
+			</a>
+		</div>
+		<div class="h03-h tablet-h4">
+			<div class="card h100p">
+				<div class="w-clearfix cardheard">
+					<div tmpTabId="four" class="w-icon fa fa-reorder icon r5"></div>
+					<div multi-lang="" style="display:none;" class="textblock">MESSAGES12119</div>
+					<a id="excelDownBtn1" href="#" class="w-inline-block btntool floatr">
+						<div tmpTabId="two" class="w-icon fa fa-file-excel-o icon"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10863</div>
+					</a>
+					<a id="requestCancelBtn1" href="#" class="w-inline-block btntool floatr">
+						<div tmpTabId="five" class="w-icon fa fa-file-text-o icon"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES12189</div>
+					</a>
+<!-- 					<a id="saveBtn1" href="#" class="w-inline-block btntool floatr"> -->
+<!-- 						<div tmpTabId="five" class="w-icon fa fa-file-text-o icon"></div> -->
+<!-- 						<div multi-lang="" style="display:none;" class="textblock">MESSAGES11192</div> -->
+<!-- 					</a> -->
+<!-- 					<div class="w-clearfix combo-area"> -->
+<!-- 						<div multi-lang="" style="display:none;" class="textblock floatl">MESSAGES10953</div> -->
+<!-- 						<select id="toLocationCd" class="w-select fieldbox small"></select> -->
+<!-- 					</div> -->
+				</div>
+				<div class="cardcontent">
+					<div id="grid1" class="w-widget w-dyn-list w-unbound grid w-widget-auigrid"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+	<script type="text/javascript" src="./MOMDA016.js"></script>
+</html>

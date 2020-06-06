@@ -1,0 +1,931 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.reference.resource.facility"> 
+	<select id="get_facility_group_category_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT FACILITY_CD
+		     , FACILITY_CD || '(' || FACILITY_NAME || '/' || (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( DIVISION_CD
+                                                                              , COMPANY_CD  
+                                                                              , 'FACILITY_TYPE'
+                                                                              , FACILITY_TYPE)
+                                          FROM DUAL) || ')' AS FACILITY_NAME
+		     , FACILITY_SEQ
+		  FROM MOM_FACILITY
+		 WHERE FACILITY_CLASS_CD = #{facilityClassCd,jdbcType=VARCHAR}
+		   AND NVL (USE_YN, 'Y') = 'Y'
+		   AND FACILITY_TYPE IN ('FAC200', 'FAC300', 'FAC400', 'FAC500', #{facilityType,jdbcType=VARCHAR})
+		   AND DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		 ORDER BY FACILITY_TYPE, FACILITY_NAME
+	</select>
+	
+	<select id="get_facility_group_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT RESOURCE_GROUP_CD    AS RESOURCE_GROUP_CD
+             , RESOURCE_GROUP_NAME
+             , NVL(USE_YN, 'Y') AS USE_YN
+             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( DIVISION_CD
+		                                              , COMPANY_CD  
+		                                              , 'USE_FLAG'
+		                                              , USE_YN)
+		          FROM DUAL) AS USE_YN_NAME 
+             , UPDATE_BY
+             , TO_CHAR(UPDATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS UPDATE_DATE
+             , DESCRIPTION
+	      FROM MOM_RESOURCE_GROUP
+	     WHERE DIVISION_CD = #{divisionCd,jdbcType=VARCHAR}
+	       AND COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}
+	     ORDER BY RESOURCE_GROUP_CD
+	</select>
+	
+	<select id="get_facility_group" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT *
+		  FROM MOM_RESOURCE_GROUP
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND RESOURCE_GROUP_CD = #{resourceGroupCd, jdbcType=VARCHAR}
+	</select>
+	
+	<insert id="create_facility_group" parameterType="java.util.HashMap">
+		INSERT INTO MOM_RESOURCE_GROUP(
+			DIVISION_CD,
+			COMPANY_CD,
+			RESOURCE_GROUP_CD,
+			RESOURCE_GROUP_NAME,
+			USE_YN,
+			DESCRIPTION,
+			CREATE_DATE,
+			CREATE_BY,
+			UPDATE_DATE,
+			UPDATE_BY
+		)
+		VALUES
+		  ( #{divisionCd, jdbcType=VARCHAR}
+		  , #{companyCd, jdbcType=VARCHAR}
+		  , UPPER(TRIM(#{resourceGroupCd, jdbcType=VARCHAR}))
+		  , #{resourceGroupName, jdbcType=VARCHAR}
+		  , #{useYn, jdbcType=VARCHAR}
+		  , #{description, jdbcType=VARCHAR}
+		  , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		  , #{createBy,jdbcType=VARCHAR}
+		  , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		  , #{userId,jdbcType=VARCHAR}
+		  )
+	</insert>	
+	
+	<update id="modify_facility_group" parameterType="java.util.HashMap">
+		UPDATE MOM_RESOURCE_GROUP
+		   SET RESOURCE_GROUP_NAME  = #{resourceGroupName,jdbcType=VARCHAR}
+		     , USE_YN			   = #{useYn,jdbcType=VARCHAR}
+		  	 , DESCRIPTION          = #{description,jdbcType=VARCHAR}
+		  	 , UPDATE_DATE          = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		  	 , UPDATE_BY            = #{updateBy,jdbcType=VARCHAR}
+		 WHERE DIVISION_CD       = #{divisionCd,jdbcType=VARCHAR}
+		   AND COMPANY_CD        = #{companyCd,jdbcType=VARCHAR}
+		   AND RESOURCE_GROUP_CD = UPPER(TRIM(#{resourceGroupCd,jdbcType=VARCHAR}))
+	</update>
+	
+	<update id="modify_facilityResourceUpdate" parameterType="java.util.HashMap">
+		UPDATE MOM_RESOURCE
+		SET    USE_YN = #{useYn,jdbcType=VARCHAR}
+		WHERE  DIVISION_CD = #{divisionCd,jdbcType=VARCHAR}
+		AND    COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}
+		AND    RESOURCE_GROUP_CD = UPPER(TRIM(#{resourceGroupCd,jdbcType=VARCHAR}))
+	</update>
+	
+	<delete id="remove_facility_group" parameterType="java.util.HashMap">
+		DELETE 
+		  FROM MOM_RESOURCE_GROUP
+		 WHERE DIVISION_CD = #{divisionCd,jdbcType=VARCHAR}
+	      AND COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}
+	      AND RESOURCE_GROUP_CD = UPPER(#{resourceGroupCd,jdbcType=VARCHAR})
+	</delete>
+	
+	<select id="get_facility_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.DIVISION_CD
+			 , A.COMPANY_CD
+		     , A.RESOURCE_CD
+		     , A.RESOURCE_NAME
+		     , A.RESOURCE_GROUP_CD
+		     , B.RESOURCE_GROUP_NAME
+		     , A.SERIAL_NO
+		     , A.RESOURCE_TYPE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD  
+		                                              , 'EQUIPMENT_TYPE'
+		                                              , A.RESOURCE_TYPE)
+		          FROM DUAL) AS RESOURCE_TYPE_NAME 
+		     , A.RUN_COUNT
+		     , A.RECIPE_ID
+		     , A.PLC_STATE
+		     , A.STATE
+		     , A.VENDOR_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME( A.DIVISION_CD
+		                                                , A.COMPANY_CD  
+		                                                , A.VENDOR_CD)
+		          FROM DUAL) AS VENDOR_NAME 
+		     , A.MODEL_NUMBER
+		     , A.SERIAL_NO
+		     , A.EC_SERVER_NAME
+		     , A.CONTROL_MODE
+		     , A.CONTROL_MODE_TIME
+		     , A.OPERATION_MODE
+		     , A.ALARM_ID
+		     , A.CAPABILITY
+		     , A.CAPABILITY_UNIT
+		     , A.MAX_CAPACITY
+		     , A.MIN_CAPACITY
+		     , A.TACT_TIME
+		     , A.TACT_TIME_UNIT
+		     , A.LOCATION_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME( A.DIVISION_CD
+		                                                  , A.COMPANY_CD  
+		                                                  , A.LOCATION_CD)
+		         FROM DUAL) AS LOCATION_NAME 
+		     , A.PROCESS_STATE 
+		     , A.WORK_PERSON_CNT 
+		     , A.SPECIFICATION
+		     , A.CYCLE_TIME
+		     , A.DAY_TIME
+		     , A.NIGHT_TIME
+		     , A.OPERATION_RATE
+		     , TO_CHAR(A.REAL_OPERATION_TIME, 'YYYY-MM-DD') AS REAL_OPERATION_TIME
+		     , A.PRODUCTION_AMOUNT
+		     , TO_CHAR(A.PRODUCTION_YEAR, 'YYYY-MM-DD') AS PRODUCTION_YEAR
+		     , TO_CHAR(A.INSTALLATION_DATE, 'YYYY-MM-DD') AS INSTALLATION_DATE
+		     , A.PRODUCTION_PLACE
+		     , A.USE_PLACE
+		     , TO_CHAR(A.INSPECTION_DATE, 'YYYY-MM-DD') AS INSPECTION_DATE
+		     , A.INSPECTION_TYPE
+		     , A.INSPECTION_INTERVAL
+		     , A.MEASURE_TYPE
+		     , A.MEASURE_USER_INIT  
+		     , A.LINE_INIT
+		     , A.UNUSUAL_DATA        
+		     , A.GOOD_LOCATION_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME( A.DIVISION_CD
+		                                                  , A.COMPANY_CD  
+		                                                  , A.GOOD_LOCATION_CD)
+		          FROM DUAL) AS GOOD_LOCATION_NAME
+		     , A.BAD_LOCATION_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME( A.DIVISION_CD
+		                                                  , A.COMPANY_CD  
+		                                                  , A.BAD_LOCATION_CD)
+		         FROM DUAL) AS BAD_LOCATION_NAME             
+		     , A.MES_UINT_FLAG
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD  
+		                                              , 'USE_FLAG'
+		                                              , A.MES_UINT_FLAG)
+		         FROM DUAL)         AS MES_UINT_FLAG_NM
+		     , A.MES_LINE_CD
+		     , A.OUTSOURCING_FLAG
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD  
+		                                              , 'USE_FLAG'
+		                                              , A.OUTSOURCING_FLAG)
+		          FROM DUAL)         AS OUTSOURCING_FLAG_NM          
+		     , A.USE_YN
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD  
+		                                              , 'USE_FLAG'
+		                                              , A.USE_YN)
+		          FROM DUAL) AS USE_YN_NAME 
+		     , A.DESCRIPTION
+		     , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS CREATE_DATE
+		     , A.CREATE_BY
+		     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD  
+		                                              , A.CREATE_BY)
+		          FROM DUAL) AS CREATE_USER_NAME          
+		     , TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS UPDATE_DATE          
+		     , A.UPDATE_BY
+		     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD  
+		                                              , A.UPDATE_BY)
+		          FROM DUAL) AS UPDATE_USER_NAME 
+		FROM  MOM_RESOURCE A
+		   	, MOM_RESOURCE_GROUP B
+		WHERE   A.DIVISION_CD       = B.DIVISION_CD
+			AND A.COMPANY_CD        = B.COMPANY_CD
+			AND A.RESOURCE_GROUP_CD = B.RESOURCE_GROUP_CD
+			AND A.RESOURCE_GROUP_CD = #{resourceGroupCd,jdbcType=VARCHAR}
+			AND A.DIVISION_CD       = #{divisionCd,jdbcType=VARCHAR}
+			AND A.COMPANY_CD        = #{companyCd,jdbcType=VARCHAR}
+	    ORDER BY A.RESOURCE_GROUP_CD, A.RESOURCE_CD
+	</select>
+	
+	<select id="get_facility" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT *
+		  FROM MOM_RESOURCE
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCD, jdbcType=VARCHAR}
+		   AND RESOURCE_CD = #{resourceCd, jdbcType=VARCHAR}
+	</select>
+	
+	<insert id="create_facility" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+			#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+			
+			INSERT INTO MOM_RESOURCE (  
+				  DIVISION_CD
+				, COMPANY_CD
+				, RESOURCE_CD
+				, RESOURCE_NAME
+				, RESOURCE_GROUP_CD
+				, RESOURCE_TYPE
+				, RUN_COUNT
+				, RECIPE_ID
+				, PLC_STATE
+				, STATE
+				, PREV_STATE
+				, STATE_TIME
+				, PREV_STATE_TIME
+				, VENDOR_CD
+				, MODEL_NUMBER
+				, SERIAL_NO
+				, EC_SERVER_NAME
+				, CONTROL_MODE
+				, PREV_CONTROL_MODE
+				, CONTROL_MODE_TIME
+				, PREV_CONTROL_MODE_TIME
+				, OPERATION_MODE
+				, ALARM_ID
+				, CAPABILITY
+				, CAPABILITY_UNIT
+				, MAX_CAPACITY
+				, MIN_CAPACITY
+				, TACT_TIME
+				, TACT_TIME_UNIT
+				, LOCATION_CD
+				, PROCESS_STATE
+				, PREV_PROCESS_STATE
+				, WORK_PERSON_CNT
+				, SPECIFICATION
+				, CYCLE_TIME
+				, DAY_TIME
+				, NIGHT_TIME
+				, OPERATION_RATE
+				, REAL_OPERATION_TIME
+				, RESOURCE_FREIGHT_RATE
+				, PRODUCTION_AMOUNT
+				, PRODUCTION_YEAR
+				, INSTALLATION_DATE
+				, PRODUCTION_PLACE
+				, USE_PLACE
+				, INSPECTION_DATE
+				, INSPECTION_TYPE
+				, INSPECTION_INTERVAL
+				, MEASURE_USER_INIT
+				, LINE_INIT
+				, MEASURE_TYPE
+				, UNUSUAL_DATA
+				, GOOD_LOCATION_CD
+				, BAD_LOCATION_CD
+				, MES_UINT_FLAG
+				, MES_LINE_CD
+				, OUTSOURCING_FLAG
+				, USE_YN
+				, DESCRIPTION
+				, CREATE_DATE
+				, CREATE_BY
+				, UPDATE_DATE
+				, UPDATE_BY
+			)    
+			VALUES (  
+				  #{divisionCd,jdbcType=VARCHAR} 
+				, #{companyCd,jdbcType=VARCHAR} 
+				, UPPER(TRIM(#{resourceCd,jdbcType=VARCHAR})) 
+				, #{resourceName,jdbcType=VARCHAR}
+				, UPPER(TRIM(#{resourceGroupCd,jdbcType=VARCHAR}))
+				, #{resourceType,jdbcType=VARCHAR}
+				, #{runCount,jdbcType=INTEGER}
+				, #{recipeId,jdbcType=VARCHAR}
+			    , #{plcState,jdbcType=VARCHAR}
+			    , #{state,jdbcType=VARCHAR}
+			    , #{prevState,jdbcType=VARCHAR}
+			    , #{stateTime,jdbcType=VARCHAR}
+			    , #{prevStateTime,jdbcType=VARCHAR}
+			    , UPPER(TRIM(#{vendorCd,jdbcType=VARCHAR}))
+			    , #{modelNumber,jdbcType=VARCHAR}
+			    , #{serialNo,jdbcType=VARCHAR}
+			    , #{ecServerName,jdbcType=VARCHAR}
+			    , #{controlMode,jdbcType=VARCHAR}
+			    , #{prevControlMode,jdbcType=VARCHAR}
+			    , #{controlModeTime,jdbcType=VARCHAR}
+			    , #{prevControlModeTime,jdbcType=VARCHAR}
+			    , #{operationMode,jdbcType=VARCHAR}
+			    , #{alarmId,jdbcType=VARCHAR}
+			    , #{capability,jdbcType=INTEGER}
+			    , #{capabilityUnit,jdbcType=VARCHAR}
+			    , #{maxCapacity,jdbcType=INTEGER}
+			    , #{minCapacity,jdbcType=INTEGER}
+			    , #{tactTime,jdbcType=INTEGER}
+			    , #{tactTimeUnit,jdbcType=VARCHAR}
+			    , UPPER(TRIM(#{locationCd,jdbcType=VARCHAR}))
+			    , #{processState,jdbcType=VARCHAR}
+			    , #{prevProcessState,jdbcType=VARCHAR}
+			    , #{workPersonCnt,jdbcType=INTEGER}
+			    , #{specification,jdbcType=VARCHAR}
+			    , #{cycleTime,jdbcType=INTEGER}
+			    , #{dayTime,jdbcType=VARCHAR}
+			    , #{nightTime,jdbcType=VARCHAR}
+			    , #{operationRate,jdbcType=INTEGER}
+			    , #{realOperationTime,jdbcType=VARCHAR}
+			    , #{resourceFreightRate,jdbcType=INTEGER}
+			    , #{productionAmount,jdbcType=INTEGER}
+			    , #{productionYear,jdbcType=VARCHAR}
+			    , #{installationDate,jdbcType=VARCHAR}
+			    , #{productionPlace,jdbcType=VARCHAR}
+			    , #{usePlace,jdbcType=VARCHAR}
+			    , #{inspectionDate,jdbcType=VARCHAR}
+			    , #{inspectionType,jdbcType=VARCHAR}
+			    , #{inspectionInterval,jdbcType=VARCHAR}
+			    , #{measureUserInit,jdbcType=VARCHAR}
+			    , #{lineInit,jdbcType=VARCHAR}
+			    , #{measureType,jdbcType=VARCHAR}
+			    , #{unusualData,jdbcType=VARCHAR}
+			    , UPPER(TRIM(#{goodLocationCd,jdbcType=VARCHAR}))
+			    , UPPER(TRIM(#{badLocationCd,jdbcType=VARCHAR}))
+			    , #{mesUintFlag,jdbcType=VARCHAR}
+			    , UPPER(TRIM(#{mesLineCd,jdbcType=VARCHAR}))
+			    , #{outsourcingFlag,jdbcType=VARCHAR}
+			    , #{useYn,jdbcType=VARCHAR}
+			    , #{description,jdbcType=VARCHAR}
+			    , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			    , #{updateBy,jdbcType=VARCHAR}
+			    , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			    , #{updateBy,jdbcType=VARCHAR}
+			)
+		   ;
+	   
+		   INSERT INTO MOM_RESOURCE_HIST (
+		   		LAST_EVENT_SEQ,
+				DIVISION_CD,
+				COMPANY_CD,
+				RESOURCE_CD,
+				RESOURCE_NAME,
+				RESOURCE_GROUP_CD,
+				RESOURCE_TYPE,
+				RUN_COUNT,
+				RECIPE_ID,
+				PLC_STATE,
+				STATE,
+				PREV_STATE,
+				STATE_TIME,
+				PREV_STATE_TIME,
+				VENDOR_CD,
+				MODEL_NUMBER,
+				SERIAL_NO,
+				EC_SERVER_NAME,
+				CONTROL_MODE,
+				PREV_CONTROL_MODE,
+				CONTROL_MODE_TIME,
+				PREV_CONTROL_MODE_TIME,
+				OPERATION_MODE,
+				ALARM_ID,
+				CAPABILITY,
+				CAPABILITY_UNIT,
+				MAX_CAPACITY,
+				MIN_CAPACITY,
+				TACT_TIME,
+				TACT_TIME_UNIT,
+				LOCATION_CD,
+				PROCESS_STATE,
+				PREV_PROCESS_STATE,
+				WORK_PERSON_CNT,
+				SPECIFICATION,
+				CYCLE_TIME,
+				DAY_TIME,
+				NIGHT_TIME,
+				OPERATION_RATE,
+				REAL_OPERATION_TIME,
+				RESOURCE_FREIGHT_RATE,
+				PRODUCTION_AMOUNT,
+				PRODUCTION_YEAR,
+				INSTALLATION_DATE,
+				PRODUCTION_PLACE,
+				USE_PLACE,
+				INSPECTION_DATE,
+				INSPECTION_TYPE,
+				INSPECTION_INTERVAL,
+				MEASURE_USER_INIT,
+				LINE_INIT,
+				MEASURE_TYPE,
+				UNUSUAL_DATA,
+				GOOD_LOCATION_CD,
+				BAD_LOCATION_CD,
+				MES_UINT_FLAG,
+				MES_LINE_CD,
+				OUTSOURCING_FLAG,
+				USE_YN,
+				DESCRIPTION,
+				CREATE_DATE,
+				CREATE_BY,
+				UPDATE_DATE,
+				UPDATE_BY,
+				TID
+		   )
+		   SELECT S_ORDER_SEQ.NEXTVAL,
+		   		  DIVISION_CD,
+				  COMPANY_CD,
+				  RESOURCE_CD,
+				  RESOURCE_NAME,
+				  RESOURCE_GROUP_CD,
+				  RESOURCE_TYPE,
+				  RUN_COUNT,
+				  RECIPE_ID,
+				  PLC_STATE,
+				  STATE,
+				  PREV_STATE,
+				  STATE_TIME,
+				  PREV_STATE_TIME,
+				  VENDOR_CD,
+				  MODEL_NUMBER,
+				  SERIAL_NO,
+				  EC_SERVER_NAME,
+				  CONTROL_MODE,
+				  PREV_CONTROL_MODE,
+				  CONTROL_MODE_TIME,
+				  PREV_CONTROL_MODE_TIME,
+				  OPERATION_MODE,
+				  ALARM_ID,
+				  CAPABILITY,
+				  CAPABILITY_UNIT,
+				  MAX_CAPACITY,
+				  MIN_CAPACITY,
+				  TACT_TIME,
+				  TACT_TIME_UNIT,
+				  LOCATION_CD,
+				  PROCESS_STATE,
+				  PREV_PROCESS_STATE,
+				  WORK_PERSON_CNT,
+				  SPECIFICATION,
+				  CYCLE_TIME,
+				  DAY_TIME,
+				  NIGHT_TIME,
+				  OPERATION_RATE,
+				  REAL_OPERATION_TIME,
+				  RESOURCE_FREIGHT_RATE,
+				  PRODUCTION_AMOUNT,
+				  PRODUCTION_YEAR,
+				  INSTALLATION_DATE,
+				  PRODUCTION_PLACE,
+				  USE_PLACE,
+				  INSPECTION_DATE,
+				  INSPECTION_TYPE,
+				  INSPECTION_INTERVAL,
+				  MEASURE_USER_INIT,
+				  LINE_INIT,
+				  MEASURE_TYPE,
+				  UNUSUAL_DATA,
+				  GOOD_LOCATION_CD,
+				  BAD_LOCATION_CD,
+				  MES_UINT_FLAG,
+				  MES_LINE_CD,
+				  OUTSOURCING_FLAG,
+				  USE_YN,
+				  DESCRIPTION,
+				  CREATE_DATE,
+				  CREATE_BY,
+				  UPDATE_DATE,
+				  UPDATE_BY,
+				  TID
+			 FROM MOM_RESOURCE
+			WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			  AND RESOURCE_GROUP_CD = UPPER(TRIM(#{resourceGroupCd, jdbcType=VARCHAR}))
+			  AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+			;
+       
+       SELECT
+			CASE 
+				WHEN COUNT(RESOURCE_CD) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_RESOURCE
+		WHERE 
+			    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			AND RESOURCE_GROUP_CD = UPPER(TRIM(#{resourceGroupCd, jdbcType=VARCHAR}))
+			AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+		;
+       
+	 END
+	} 
+	</insert>
+	
+	<update id="modify_facility" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  		#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+		UPDATE MOM_RESOURCE
+		SET    RESOURCE_NAME          = #{resourceName,jdbcType=VARCHAR}
+		     , RESOURCE_TYPE          = #{resourceType,jdbcType=VARCHAR}
+		     , RUN_COUNT              = #{runCount,jdbcType=INTEGER}
+		     , RECIPE_ID              = #{recipeId,jdbcType=VARCHAR}
+		     , PLC_STATE              = #{plcState,jdbcType=VARCHAR}
+		     , STATE                  = #{state,jdbcType=VARCHAR}
+		     , PREV_STATE             = #{prevState,jdbcType=VARCHAR}
+		     , STATE_TIME             = #{stateTime,jdbcType=VARCHAR}
+		     , PREV_STATE_TIME        = #{prevStateTime,jdbcType=VARCHAR}
+		     , VENDOR_CD              = UPPER(TRIM(#{vendorCd,jdbcType=VARCHAR}))
+		     , MODEL_NUMBER           = #{modelNumber,jdbcType=VARCHAR} 
+		     , SERIAL_NO              = #{serialNo,jdbcType=VARCHAR}
+		     , EC_SERVER_NAME         = #{ecServerName,jdbcType=VARCHAR}
+		     , CONTROL_MODE           = #{controlMode,jdbcType=VARCHAR}
+		     , PREV_CONTROL_MODE      = #{prevControlMode,jdbcType=VARCHAR}
+		     , CONTROL_MODE_TIME      = #{controlModeTime,jdbcType=VARCHAR}
+		     , PREV_CONTROL_MODE_TIME = #{controlModeTime,jdbcType=VARCHAR}
+		     , OPERATION_MODE         = #{operationMode,jdbcType=VARCHAR}
+		     , ALARM_ID               = #{alarmId,jdbcType=VARCHAR}
+		     , CAPABILITY             = #{capacity,jdbcType=INTEGER}
+		     , CAPABILITY_UNIT        = #{capacityUnit,jdbcType=VARCHAR}
+		     , MAX_CAPACITY           = #{maxCapacity,jdbcType=INTEGER}
+		     , MIN_CAPACITY           = #{minCapacity,jdbcType=INTEGER}
+		     , TACT_TIME              = #{tactTime,jdbcType=INTEGER}
+		     , TACT_TIME_UNIT         = #{tactTimeUnit,jdbcType=VARCHAR}
+		     , LOCATION_CD            = UPPER(TRIM(#{locationCd,jdbcType=VARCHAR}))
+		     , PROCESS_STATE          = #{processState,jdbcType=VARCHAR}
+		     , PREV_PROCESS_STATE     = #{prevProcessState,jdbcType=VARCHAR}
+		     , WORK_PERSON_CNT        = #{workPersonCnt,jdbcType=INTEGER}
+		     , SPECIFICATION          = #{specification,jdbcType=VARCHAR}
+		     , CYCLE_TIME             = #{cycleTime,jdbcType=INTEGER}
+		     , DAY_TIME               = #{dayTime,jdbcType=VARCHAR}
+		     , NIGHT_TIME             = #{nightTime,jdbcType=VARCHAR}
+		     , OPERATION_RATE         = #{operationRate,jdbcType=INTEGER}
+		     , REAL_OPERATION_TIME    = #{realOperationTime,jdbcType=VARCHAR}
+		     , RESOURCE_FREIGHT_RATE  = #{resourceFreightRate,jdbcType=INTEGER}
+		     , PRODUCTION_AMOUNT      = #{productionAmount,jdbcType=INTEGER}
+		     , PRODUCTION_YEAR        = #{productionYear,jdbcType=VARCHAR}
+		     , INSTALLATION_DATE      = #{installationDate,jdbcType=VARCHAR}
+		     , PRODUCTION_PLACE       = #{productionPlace,jdbcType=VARCHAR}
+		     , USE_PLACE              = #{usePlace,jdbcType=VARCHAR}
+		     , INSPECTION_DATE        = #{inspectionDate,jdbcType=VARCHAR}
+		     , INSPECTION_TYPE        = #{inspectionType,jdbcType=VARCHAR}
+		     , INSPECTION_INTERVAL    = #{inspectionInterval,jdbcType=VARCHAR}
+		     , MEASURE_USER_INIT      = #{measureUserInit,jdbcType=VARCHAR}
+		     , LINE_INIT              = #{lineInit,jdbcType=VARCHAR}
+		     , MEASURE_TYPE           = #{measureType,jdbcType=VARCHAR}
+		     , UNUSUAL_DATA           = #{unusualData,jdbcType=VARCHAR}
+		     , DESCRIPTION			  = #{description,jdbcType=VARCHAR}
+		     , GOOD_LOCATION_CD       = UPPER(TRIM(#{goodLocationCd,jdbcType=VARCHAR}))
+		     , BAD_LOCATION_CD        = UPPER(TRIM(#{badLocationCd,jdbcType=VARCHAR}))
+		     , MES_UINT_FLAG          = #{mesUintFlag,jdbcType=VARCHAR}
+		     , MES_LINE_CD            = UPPER(TRIM(#{mesLineCd,jdbcType=VARCHAR}))
+		     , OUTSOURCING_FLAG       = #{outsourcingFlag,jdbcType=VARCHAR}
+		     , USE_YN                 = #{useYn,jdbcType=VARCHAR} 
+		     , UPDATE_DATE            = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		     , UPDATE_BY              = #{updateBy,jdbcType=VARCHAR}
+		WHERE  DIVISION_CD = #{divisionCd,jdbcType=VARCHAR}
+		AND    COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}
+		AND    RESOURCE_CD = UPPER(TRIM(#{resourceCd,jdbcType=VARCHAR}))
+		;
+		
+		INSERT INTO MOM_RESOURCE_HIST (
+	   		LAST_EVENT_SEQ,
+			DIVISION_CD,
+			COMPANY_CD,
+			RESOURCE_CD,
+			RESOURCE_NAME,
+			RESOURCE_GROUP_CD,
+			RESOURCE_TYPE,
+			RUN_COUNT,
+			RECIPE_ID,
+			PLC_STATE,
+			STATE,
+			PREV_STATE,
+			STATE_TIME,
+			PREV_STATE_TIME,
+			VENDOR_CD,
+			MODEL_NUMBER,
+			SERIAL_NO,
+			EC_SERVER_NAME,
+			CONTROL_MODE,
+			PREV_CONTROL_MODE,
+			CONTROL_MODE_TIME,
+			PREV_CONTROL_MODE_TIME,
+			OPERATION_MODE,
+			ALARM_ID,
+			CAPABILITY,
+			CAPABILITY_UNIT,
+			MAX_CAPACITY,
+			MIN_CAPACITY,
+			TACT_TIME,
+			TACT_TIME_UNIT,
+			LOCATION_CD,
+			PROCESS_STATE,
+			PREV_PROCESS_STATE,
+			WORK_PERSON_CNT,
+			SPECIFICATION,
+			CYCLE_TIME,
+			DAY_TIME,
+			NIGHT_TIME,
+			OPERATION_RATE,
+			REAL_OPERATION_TIME,
+			RESOURCE_FREIGHT_RATE,
+			PRODUCTION_AMOUNT,
+			PRODUCTION_YEAR,
+			INSTALLATION_DATE,
+			PRODUCTION_PLACE,
+			USE_PLACE,
+			INSPECTION_DATE,
+			INSPECTION_TYPE,
+			INSPECTION_INTERVAL,
+			MEASURE_USER_INIT,
+			LINE_INIT,
+			MEASURE_TYPE,
+			UNUSUAL_DATA,
+			GOOD_LOCATION_CD,
+			BAD_LOCATION_CD,
+			MES_UINT_FLAG,
+			MES_LINE_CD,
+			OUTSOURCING_FLAG,
+			USE_YN,
+			DESCRIPTION,
+			CREATE_DATE,
+			CREATE_BY,
+			UPDATE_DATE,
+			UPDATE_BY,
+			TID
+	   )
+	   SELECT S_ORDER_SEQ.NEXTVAL,
+	   		  DIVISION_CD,
+			  COMPANY_CD,
+			  RESOURCE_CD,
+			  RESOURCE_NAME,
+			  RESOURCE_GROUP_CD,
+			  RESOURCE_TYPE,
+			  RUN_COUNT,
+			  RECIPE_ID,
+			  PLC_STATE,
+			  STATE,
+			  PREV_STATE,
+			  STATE_TIME,
+			  PREV_STATE_TIME,
+			  VENDOR_CD,
+			  MODEL_NUMBER,
+			  SERIAL_NO,
+			  EC_SERVER_NAME,
+			  CONTROL_MODE,
+			  PREV_CONTROL_MODE,
+			  CONTROL_MODE_TIME,
+			  PREV_CONTROL_MODE_TIME,
+			  OPERATION_MODE,
+			  ALARM_ID,
+			  CAPABILITY,
+			  CAPABILITY_UNIT,
+			  MAX_CAPACITY,
+			  MIN_CAPACITY,
+			  TACT_TIME,
+			  TACT_TIME_UNIT,
+			  LOCATION_CD,
+			  PROCESS_STATE,
+			  PREV_PROCESS_STATE,
+			  WORK_PERSON_CNT,
+			  SPECIFICATION,
+			  CYCLE_TIME,
+			  DAY_TIME,
+			  NIGHT_TIME,
+			  OPERATION_RATE,
+			  REAL_OPERATION_TIME,
+			  RESOURCE_FREIGHT_RATE,
+			  PRODUCTION_AMOUNT,
+			  PRODUCTION_YEAR,
+			  INSTALLATION_DATE,
+			  PRODUCTION_PLACE,
+			  USE_PLACE,
+			  INSPECTION_DATE,
+			  INSPECTION_TYPE,
+			  INSPECTION_INTERVAL,
+			  MEASURE_USER_INIT,
+			  LINE_INIT,
+			  MEASURE_TYPE,
+			  UNUSUAL_DATA,
+			  GOOD_LOCATION_CD,
+			  BAD_LOCATION_CD,
+			  MES_UINT_FLAG,
+			  MES_LINE_CD,
+			  OUTSOURCING_FLAG,
+			  USE_YN,
+			  DESCRIPTION,
+			  MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			  UPDATE_BY,
+			  UPDATE_DATE,
+			  UPDATE_BY,
+			  TID
+		 FROM MOM_RESOURCE
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		  AND RESOURCE_GROUP_CD = UPPER(TRIM(#{resourceGroupCd, jdbcType=VARCHAR}))
+		  AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+		;
+		
+		SELECT
+			CASE 
+				WHEN COUNT(RESOURCE_CD) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_RESOURCE
+		WHERE 
+			    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			AND RESOURCE_GROUP_CD = UPPER(TRIM(#{resourceGroupCd, jdbcType=VARCHAR}))
+			AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+		;
+	 END
+	}
+	</update>
+	
+	<delete id="remove_facility" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	   #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  		
+	  UPDATE MOM_RESOURCE
+	     SET DESCRIPTION = 'Delete Data'
+	       , UPDATE_DATE = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+	  	   , UPDATE_BY = #{userId, jdbcType=VARCHAR}
+	   WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	     AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	     AND RESOURCE_GROUP_CD = UPPER(#{resourceGroupCd,jdbcType=VARCHAR})
+	     AND RESOURCE_CD = UPPER(#{resourceCd, jdbcType=VARCHAR})
+	     ;
+	     
+	  INSERT INTO MOM_RESOURCE_HIST (
+	   		LAST_EVENT_SEQ,
+			DIVISION_CD,
+			COMPANY_CD,
+			RESOURCE_CD,
+			RESOURCE_NAME,
+			RESOURCE_GROUP_CD,
+			RESOURCE_TYPE,
+			RUN_COUNT,
+			RECIPE_ID,
+			PLC_STATE,
+			STATE,
+			PREV_STATE,
+			STATE_TIME,
+			PREV_STATE_TIME,
+			VENDOR_CD,
+			MODEL_NUMBER,
+			SERIAL_NO,
+			EC_SERVER_NAME,
+			CONTROL_MODE,
+			PREV_CONTROL_MODE,
+			CONTROL_MODE_TIME,
+			PREV_CONTROL_MODE_TIME,
+			OPERATION_MODE,
+			ALARM_ID,
+			CAPABILITY,
+			CAPABILITY_UNIT,
+			MAX_CAPACITY,
+			MIN_CAPACITY,
+			TACT_TIME,
+			TACT_TIME_UNIT,
+			LOCATION_CD,
+			PROCESS_STATE,
+			PREV_PROCESS_STATE,
+			WORK_PERSON_CNT,
+			SPECIFICATION,
+			CYCLE_TIME,
+			DAY_TIME,
+			NIGHT_TIME,
+			OPERATION_RATE,
+			REAL_OPERATION_TIME,
+			RESOURCE_FREIGHT_RATE,
+			PRODUCTION_AMOUNT,
+			PRODUCTION_YEAR,
+			INSTALLATION_DATE,
+			PRODUCTION_PLACE,
+			USE_PLACE,
+			INSPECTION_DATE,
+			INSPECTION_TYPE,
+			INSPECTION_INTERVAL,
+			MEASURE_USER_INIT,
+			LINE_INIT,
+			MEASURE_TYPE,
+			UNUSUAL_DATA,
+			GOOD_LOCATION_CD,
+			BAD_LOCATION_CD,
+			MES_UINT_FLAG,
+			MES_LINE_CD,
+			OUTSOURCING_FLAG,
+			USE_YN,
+			DESCRIPTION,
+			CREATE_DATE,
+			CREATE_BY,
+			UPDATE_DATE,
+			UPDATE_BY,
+			TID
+	   )
+	   SELECT S_ORDER_SEQ.NEXTVAL,
+	   		  DIVISION_CD,
+			  COMPANY_CD,
+			  RESOURCE_CD,
+			  RESOURCE_NAME,
+			  RESOURCE_GROUP_CD,
+			  RESOURCE_TYPE,
+			  RUN_COUNT,
+			  RECIPE_ID,
+			  PLC_STATE,
+			  STATE,
+			  PREV_STATE,
+			  STATE_TIME,
+			  PREV_STATE_TIME,
+			  VENDOR_CD,
+			  MODEL_NUMBER,
+			  SERIAL_NO,
+			  EC_SERVER_NAME,
+			  CONTROL_MODE,
+			  PREV_CONTROL_MODE,
+			  CONTROL_MODE_TIME,
+			  PREV_CONTROL_MODE_TIME,
+			  OPERATION_MODE,
+			  ALARM_ID,
+			  CAPABILITY,
+			  CAPABILITY_UNIT,
+			  MAX_CAPACITY,
+			  MIN_CAPACITY,
+			  TACT_TIME,
+			  TACT_TIME_UNIT,
+			  LOCATION_CD,
+			  PROCESS_STATE,
+			  PREV_PROCESS_STATE,
+			  WORK_PERSON_CNT,
+			  SPECIFICATION,
+			  CYCLE_TIME,
+			  DAY_TIME,
+			  NIGHT_TIME,
+			  OPERATION_RATE,
+			  REAL_OPERATION_TIME,
+			  RESOURCE_FREIGHT_RATE,
+			  PRODUCTION_AMOUNT,
+			  PRODUCTION_YEAR,
+			  INSTALLATION_DATE,
+			  PRODUCTION_PLACE,
+			  USE_PLACE,
+			  INSPECTION_DATE,
+			  INSPECTION_TYPE,
+			  INSPECTION_INTERVAL,
+			  MEASURE_USER_INIT,
+			  LINE_INIT,
+			  MEASURE_TYPE,
+			  UNUSUAL_DATA,
+			  GOOD_LOCATION_CD,
+			  BAD_LOCATION_CD,
+			  MES_UINT_FLAG,
+			  MES_LINE_CD,
+			  OUTSOURCING_FLAG,
+			  USE_YN,
+			  DESCRIPTION,
+			  CREATE_DATE,
+			  CREATE_BY,
+			  UPDATE_DATE,
+			  UPDATE_BY,
+			  TID
+		 FROM MOM_RESOURCE
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		  AND RESOURCE_GROUP_CD = UPPER(#{resourceGroupCd,jdbcType=VARCHAR})
+		  AND RESOURCE_CD = UPPER(#{resourceCd, jdbcType=VARCHAR})
+		;
+		
+		DELETE 
+		  FROM MOM_RESOURCE
+		 WHERE DIVISION_CD = #{divisionCd,jdbcType=VARCHAR}
+	       AND COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}
+	     <if test="resourceCd != null and resourceCd != ''">
+	       AND RESOURCE_CD = UPPER(#{resourceCd,jdbcType=VARCHAR})
+	     </if>
+	     <if test="resourceGroupCd != null and resourceGroupCd != ''">
+	       AND RESOURCE_GROUP_CD = UPPER(#{resourceGroupCd,jdbcType=VARCHAR})
+	     </if>
+	    ;
+	    
+	    SELECT
+			CASE 
+				WHEN COUNT(RESOURCE_CD) = 0 THEN 'S'
+				ELSE 'E' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_RESOURCE
+		WHERE 
+			    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		<if test="resourceCd != null and resourceCd != ''">
+	       AND RESOURCE_CD = UPPER(#{resourceCd,jdbcType=VARCHAR})
+	    </if>
+	    <if test="resourceGroupCd != null and resourceGroupCd != ''">
+	       AND RESOURCE_GROUP_CD = UPPER(#{resourceGroupCd,jdbcType=VARCHAR})
+	    </if>
+		;
+	  END
+	}
+	</delete>
+</mapper>

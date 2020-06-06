@@ -1,0 +1,615 @@
+﻿2019-04-15 11:25:06> Program: Starting Squirrel Updater: --releasify DK.POP.1.0.0.nupkg
+2019-04-15 11:25:06> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-15 11:25:06> Program: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP.1.0.0.nupkg
+2019-04-15 11:25:06> ReleasePackage: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP.1.0.0.nupkg => C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP-1.0.0-full.nupkg
+2019-04-15 11:25:13> ReleasePackage: Extracting dependent packages: []
+2019-04-15 11:25:13> ReleasePackage: Removing unnecessary data
+2019-04-15 11:25:13> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK.POP.nuspec
+2019-04-15 11:25:18> Program: Building embedded zip file for Setup.exe
+2019-04-16 10:23:53> Program: Starting Squirrel Updater: --releasify DK.POP.1.0.0.nupkg
+2019-04-16 10:23:53> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-16 10:23:53> Program: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP.1.0.0.nupkg
+2019-04-16 10:23:53> ReleasePackage: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP.1.0.0.nupkg => C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP-1.0.0-full.nupkg
+2019-04-16 10:23:59> ReleasePackage: Extracting dependent packages: []
+2019-04-16 10:23:59> ReleasePackage: Removing unnecessary data
+2019-04-16 10:23:59> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK.POP.nuspec
+2019-04-16 10:24:05> Program: Building embedded zip file for Setup.exe
+2019-04-16 10:30:41> Program: Starting Squirrel Updater: --releasify DK.POP.1.0.0.nupkg
+2019-04-16 10:30:41> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-16 10:30:41> Program: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP.1.0.0.nupkg
+2019-04-16 10:30:41> ReleasePackage: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP.1.0.0.nupkg => C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP-1.0.0-full.nupkg
+2019-04-16 10:30:48> ReleasePackage: Extracting dependent packages: []
+2019-04-16 10:30:48> ReleasePackage: Removing unnecessary data
+2019-04-16 10:30:48> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK.POP.nuspec
+2019-04-16 10:30:53> Program: Building embedded zip file for Setup.exe
+2019-04-16 10:44:43> Program: Starting Squirrel Updater: --releasify DK.POP.1.0.0.nupkg
+2019-04-16 10:44:43> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-16 10:44:43> Program: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP.1.0.0.nupkg
+2019-04-16 10:44:43> ReleasePackage: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP.1.0.0.nupkg => C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP-1.0.0-full.nupkg
+2019-04-16 10:44:50> ReleasePackage: Extracting dependent packages: []
+2019-04-16 10:44:50> ReleasePackage: Removing unnecessary data
+2019-04-16 10:44:50> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK.POP.nuspec
+2019-04-16 10:44:55> Program: Building embedded zip file for Setup.exe
+2019-04-16 11:28:47> Program: Starting Squirrel Updater: --releasify DK.POP.1.0.0.nupkg
+2019-04-16 11:28:47> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-16 11:28:47> Program: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP.1.0.0.nupkg
+2019-04-16 11:28:47> ReleasePackage: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP.1.0.0.nupkg => C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP-1.0.0-full.nupkg
+2019-04-16 11:28:54> ReleasePackage: Extracting dependent packages: []
+2019-04-16 11:28:54> ReleasePackage: Removing unnecessary data
+2019-04-16 11:28:54> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK.POP.nuspec
+2019-04-16 11:28:59> Program: Building embedded zip file for Setup.exe
+2019-04-16 11:32:34> Program: Starting Squirrel Updater: --releasify DK.ADMIN.1.0.0.nupkg
+2019-04-16 11:32:34> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-16 11:32:34> Program: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.ADMIN.1.0.0.nupkg
+2019-04-16 11:32:34> ReleasePackage: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.ADMIN.1.0.0.nupkg => C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.ADMIN-1.0.0-full.nupkg
+2019-04-16 11:32:41> ReleasePackage: Extracting dependent packages: []
+2019-04-16 11:32:41> ReleasePackage: Removing unnecessary data
+2019-04-16 11:32:41> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK.ADMIN.nuspec
+2019-04-16 11:32:46> Program: Building embedded zip file for Setup.exe
+2019-04-16 12:53:54> Program: Starting Squirrel Updater: -h
+2019-04-16 12:56:35> Program: Starting Squirrel Updater: --releasify DK.POP.1.0.0.nupkg --install C:\123
+2019-04-16 12:56:35> Program: Starting install, writing to C:\123
+2019-04-16 12:56:35> Program: RELEASES doesn't exist, creating it at C:\123\RELEASES
+2019-04-16 12:56:35> Unhandled exception: System.AggregateException: 하나 이상의 오류가 발생했습니다. ---> System.InvalidOperationException: 시퀀스에 요소가 없습니다.
+   위치: System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   위치: Squirrel.Update.Program.<Install>d__4.MoveNext()
+   --- 내부 예외 스택 추적의 끝 ---
+   위치: System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   위치: System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   위치: System.Threading.Tasks.Task.Wait()
+   위치: Squirrel.Update.Program.executeCommandLine(String[] args)
+   위치: Squirrel.Update.Program.main(String[] args)
+---> (내부 예외 #0) System.InvalidOperationException: 시퀀스에 요소가 없습니다.
+   위치: System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   위치: Squirrel.Update.Program.<Install>d__4.MoveNext()<---
+
+2019-04-16 12:56:40> Program: Starting Squirrel Updater: --releasify DK.POP.1.0.0.nupkg --install=C:\123
+2019-04-16 12:56:40> Program: Starting install, writing to C:\123
+2019-04-16 12:56:40> Unhandled exception: System.AggregateException: 하나 이상의 오류가 발생했습니다. ---> System.InvalidOperationException: 시퀀스에 요소가 없습니다.
+   위치: System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   위치: Squirrel.Update.Program.<Install>d__4.MoveNext()
+   --- 내부 예외 스택 추적의 끝 ---
+   위치: System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   위치: System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   위치: System.Threading.Tasks.Task.Wait()
+   위치: Squirrel.Update.Program.executeCommandLine(String[] args)
+   위치: Squirrel.Update.Program.main(String[] args)
+---> (내부 예외 #0) System.InvalidOperationException: 시퀀스에 요소가 없습니다.
+   위치: System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   위치: Squirrel.Update.Program.<Install>d__4.MoveNext()<---
+
+2019-04-16 12:57:09> Program: Starting Squirrel Updater: --releasify DK.POP.1.0.0.nupkg --install C:\123\
+2019-04-16 12:57:09> Program: Starting install, writing to C:\123\
+2019-04-16 12:57:09> Unhandled exception: System.AggregateException: 하나 이상의 오류가 발생했습니다. ---> System.InvalidOperationException: 시퀀스에 요소가 없습니다.
+   위치: System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   위치: Squirrel.Update.Program.<Install>d__4.MoveNext()
+   --- 내부 예외 스택 추적의 끝 ---
+   위치: System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   위치: System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   위치: System.Threading.Tasks.Task.Wait()
+   위치: Squirrel.Update.Program.executeCommandLine(String[] args)
+   위치: Squirrel.Update.Program.main(String[] args)
+---> (내부 예외 #0) System.InvalidOperationException: 시퀀스에 요소가 없습니다.
+   위치: System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   위치: Squirrel.Update.Program.<Install>d__4.MoveNext()<---
+
+2019-04-16 13:31:29> Program: Starting Squirrel Updater: --releasify DK.ADMIN.1.0.0.nupkg
+2019-04-16 13:31:29> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-16 13:31:29> Program: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.ADMIN.1.0.0.nupkg
+2019-04-16 13:31:29> ReleasePackage: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.ADMIN.1.0.0.nupkg => C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK_ADMIN-1.0.0-full.nupkg
+2019-04-16 13:31:35> ReleasePackage: Extracting dependent packages: []
+2019-04-16 13:31:35> ReleasePackage: Removing unnecessary data
+2019-04-16 13:31:35> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_ADMIN.nuspec
+2019-04-16 13:31:41> Program: Building embedded zip file for Setup.exe
+2019-04-16 13:34:36> Program: Starting Squirrel Updater: --releasify DK.POP.1.0.0.nupkg
+2019-04-16 13:34:36> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-16 13:34:36> Program: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP.1.0.0.nupkg
+2019-04-16 13:34:36> ReleasePackage: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP.1.0.0.nupkg => C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK_POP-1.0.0-full.nupkg
+2019-04-16 13:34:43> ReleasePackage: Extracting dependent packages: []
+2019-04-16 13:34:43> ReleasePackage: Removing unnecessary data
+2019-04-16 13:34:43> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_POP.nuspec
+2019-04-16 13:34:48> Program: Building embedded zip file for Setup.exe
+2019-04-16 13:39:18> Program: Starting Squirrel Updater: --releasify DK.POP.1.0.0.nupkg
+2019-04-16 13:39:18> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-16 13:39:18> Program: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP.1.0.0.nupkg
+2019-04-16 13:39:19> ReleasePackage: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP.1.0.0.nupkg => C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK_POP-1.0.0-full.nupkg
+2019-04-16 13:39:25> ReleasePackage: Extracting dependent packages: []
+2019-04-16 13:39:25> ReleasePackage: Removing unnecessary data
+2019-04-16 13:39:25> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_POP.nuspec
+2019-04-16 13:39:30> Program: Building embedded zip file for Setup.exe
+2019-04-16 13:40:55> Program: Starting Squirrel Updater: --releasify DK.ADMIN.1.0.0.nupkg
+2019-04-16 13:40:55> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-16 13:40:55> Program: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.ADMIN.1.0.0.nupkg
+2019-04-16 13:40:55> ReleasePackage: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.ADMIN.1.0.0.nupkg => C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK_ADMIN-1.0.0-full.nupkg
+2019-04-16 13:41:01> ReleasePackage: Extracting dependent packages: []
+2019-04-16 13:41:01> ReleasePackage: Removing unnecessary data
+2019-04-16 13:41:01> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_ADMIN.nuspec
+2019-04-16 13:41:06> Program: Building embedded zip file for Setup.exe
+2019-04-16 14:42:48> Program: Starting Squirrel Updater: --releasify DK.POP.1.0.0.nupkg
+2019-04-16 14:42:48> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-16 14:42:48> Program: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP.1.0.0.nupkg
+2019-04-16 14:42:48> ReleasePackage: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP.1.0.0.nupkg => C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK_POP-1.0.0-full.nupkg
+2019-04-16 14:42:55> ReleasePackage: Extracting dependent packages: []
+2019-04-16 14:42:55> ReleasePackage: Removing unnecessary data
+2019-04-16 14:42:55> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_POP.nuspec
+2019-04-16 14:43:00> Program: Building embedded zip file for Setup.exe
+2019-04-16 14:44:45> Program: Starting Squirrel Updater: --releasify DK.ADMIN.1.0.0.nupkg
+2019-04-16 14:44:45> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-16 14:44:45> Program: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.ADMIN.1.0.0.nupkg
+2019-04-16 14:44:45> ReleasePackage: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.ADMIN.1.0.0.nupkg => C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK_ADMIN-1.0.0-full.nupkg
+2019-04-16 14:44:52> ReleasePackage: Extracting dependent packages: []
+2019-04-16 14:44:52> ReleasePackage: Removing unnecessary data
+2019-04-16 14:44:52> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_ADMIN.nuspec
+2019-04-16 14:44:57> Program: Building embedded zip file for Setup.exe
+2019-04-17 11:48:02> Program: Starting Squirrel Updater: --releasify DK.POP.1.0.0.nupkg
+2019-04-17 11:48:02> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-17 11:48:02> Program: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP.1.0.0.nupkg
+2019-04-17 11:48:02> ReleasePackage: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP.1.0.0.nupkg => C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK_POP-1.0.0-full.nupkg
+2019-04-17 11:48:09> ReleasePackage: Extracting dependent packages: []
+2019-04-17 11:48:09> ReleasePackage: Removing unnecessary data
+2019-04-17 11:48:09> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_POP.nuspec
+2019-04-17 11:48:14> Program: Building embedded zip file for Setup.exe
+2019-04-17 11:49:55> Program: Starting Squirrel Updater: --releasify DK.ADMIN.1.0.0.nupkg
+2019-04-17 11:49:55> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-17 11:49:55> Program: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.ADMIN.1.0.0.nupkg
+2019-04-17 11:49:55> ReleasePackage: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.ADMIN.1.0.0.nupkg => C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK_ADMIN-1.0.0-full.nupkg
+2019-04-17 11:50:02> ReleasePackage: Extracting dependent packages: []
+2019-04-17 11:50:02> ReleasePackage: Removing unnecessary data
+2019-04-17 11:50:02> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_ADMIN.nuspec
+2019-04-17 11:50:07> Program: Building embedded zip file for Setup.exe
+2019-04-17 12:20:24> Program: Starting Squirrel Updater: --releasify DK.POP.1.0.0.nupkg
+2019-04-17 12:20:24> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-17 12:20:24> Program: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP.1.0.0.nupkg
+2019-04-17 12:20:24> ReleasePackage: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP.1.0.0.nupkg => C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK_POP-1.0.0-full.nupkg
+2019-04-17 12:20:31> ReleasePackage: Extracting dependent packages: []
+2019-04-17 12:20:31> ReleasePackage: Removing unnecessary data
+2019-04-17 12:20:31> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_POP.nuspec
+2019-04-17 12:20:36> Program: Building embedded zip file for Setup.exe
+2019-04-17 12:22:14> Program: Starting Squirrel Updater: --releasify DK.ADMIN.1.0.0.nupkg
+2019-04-17 12:22:14> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-17 12:22:14> Program: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.ADMIN.1.0.0.nupkg
+2019-04-17 12:22:14> ReleasePackage: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.ADMIN.1.0.0.nupkg => C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK_ADMIN-1.0.0-full.nupkg
+2019-04-17 12:22:21> ReleasePackage: Extracting dependent packages: []
+2019-04-17 12:22:21> ReleasePackage: Removing unnecessary data
+2019-04-17 12:22:21> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_ADMIN.nuspec
+2019-04-17 12:22:26> Program: Building embedded zip file for Setup.exe
+2019-04-17 16:27:45> Program: Starting Squirrel Updater: --releasify DK.ADMIN.1.0.0.nupkg
+2019-04-17 16:27:45> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-17 16:27:45> Unhandled exception: System.IO.FileNotFoundException: 'DK.ADMIN.1.0.0.nupkg' 파일을 찾을 수 없습니다.
+파일 이름: 'DK.ADMIN.1.0.0.nupkg'
+   위치: System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   위치: System.IO.File.InternalCopy(String sourceFileName, String destFileName, Boolean overwrite, Boolean checkHost)
+   위치: System.IO.File.Copy(String sourceFileName, String destFileName, Boolean overwrite)
+   위치: Squirrel.Update.Program.Releasify(String package, String targetDir, String packagesDir, String bootstrapperExe, String backgroundGif, String signingOpts, String baseUrl, String setupIcon, Boolean generateMsi, String frameworkVersion, Boolean generateDeltas)
+   위치: Squirrel.Update.Program.executeCommandLine(String[] args)
+   위치: Squirrel.Update.Program.main(String[] args)
+2019-04-17 16:28:10> Program: Starting Squirrel Updater: --releasify DK.ADMIN.1.0.0.nupkg
+2019-04-17 16:28:10> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-17 16:28:11> Program: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.ADMIN.1.0.0.nupkg
+2019-04-17 16:28:11> ReleasePackage: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.ADMIN.1.0.0.nupkg => C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK_ADMIN-1.0.0-full.nupkg
+2019-04-17 16:28:17> ReleasePackage: Extracting dependent packages: []
+2019-04-17 16:28:17> ReleasePackage: Removing unnecessary data
+2019-04-17 16:28:17> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_ADMIN.nuspec
+2019-04-17 16:28:22> Program: Building embedded zip file for Setup.exe
+2019-04-18 16:24:57> Program: Starting Squirrel Updater: --releasify DK.POP.1.0.0.nupkg
+2019-04-18 16:24:57> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-18 16:24:57> Program: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP.1.0.0.nupkg
+2019-04-18 16:24:57> ReleasePackage: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP.1.0.0.nupkg => C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK_POP-1.0.0-full.nupkg
+2019-04-18 16:25:04> ReleasePackage: Extracting dependent packages: []
+2019-04-18 16:25:04> ReleasePackage: Removing unnecessary data
+2019-04-18 16:25:04> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_POP.nuspec
+2019-04-18 16:25:09> Program: Building embedded zip file for Setup.exe
+2019-04-19 11:10:18> Program: Starting Squirrel Updater: --releasify DK.POP.1.0.0.nupkg
+2019-04-19 11:10:18> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-19 11:10:18> Program: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP.1.0.0.nupkg
+2019-04-19 11:10:18> ReleasePackage: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.POP.1.0.0.nupkg => C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK_POP-1.0.0-full.nupkg
+2019-04-19 11:10:26> ReleasePackage: Extracting dependent packages: []
+2019-04-19 11:10:26> ReleasePackage: Removing unnecessary data
+2019-04-19 11:10:26> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_POP.nuspec
+2019-04-19 11:10:31> Program: Building embedded zip file for Setup.exe
+2019-04-22 11:09:26> Program: Starting Squirrel Updater: --releasify DK.BOARD.1.0.0.nupkg
+2019-04-22 11:09:26> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-22 11:09:26> Program: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.BOARD.1.0.0.nupkg
+2019-04-22 11:09:26> ReleasePackage: Creating release package: C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK.BOARD.1.0.0.nupkg => C:\Mosp\MOM_POP\13.Customers\01.DK\Releases\DK_BOARD-1.0.0-full.nupkg
+2019-04-22 11:09:33> ReleasePackage: Extracting dependent packages: []
+2019-04-22 11:09:33> ReleasePackage: Removing unnecessary data
+2019-04-22 11:09:33> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_BOARD.nuspec
+2019-04-22 11:09:39> Program: Building embedded zip file for Setup.exe
+2019-04-24 12:03:47> Program: Starting Squirrel Updater: --releasify DK_POP.1.0.2.nupkg
+2019-04-24 12:03:47> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-24 12:03:47> Program: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP.1.0.2.nupkg
+2019-04-24 12:03:47> ReleasePackage: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP.1.0.2.nupkg => C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP-1.0.2-full.nupkg
+2019-04-24 12:03:54> ReleasePackage: Extracting dependent packages: []
+2019-04-24 12:03:54> ReleasePackage: Removing unnecessary data
+2019-04-24 12:03:54> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_POP.nuspec
+2019-04-24 12:03:59> Program: Building embedded zip file for Setup.exe
+2019-04-24 12:21:17> Program: Starting Squirrel Updater: --releasify DK.POP.1.0.2.nupkg
+2019-04-24 12:21:17> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-24 12:21:17> Unhandled exception: System.IO.FileNotFoundException: 'DK.POP.1.0.2.nupkg' 파일을 찾을 수 없습니다.
+파일 이름: 'DK.POP.1.0.2.nupkg'
+   위치: System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   위치: System.IO.File.InternalCopy(String sourceFileName, String destFileName, Boolean overwrite, Boolean checkHost)
+   위치: System.IO.File.Copy(String sourceFileName, String destFileName, Boolean overwrite)
+   위치: Squirrel.Update.Program.Releasify(String package, String targetDir, String packagesDir, String bootstrapperExe, String backgroundGif, String signingOpts, String baseUrl, String setupIcon, Boolean generateMsi, String frameworkVersion, Boolean generateDeltas)
+   위치: Squirrel.Update.Program.executeCommandLine(String[] args)
+   위치: Squirrel.Update.Program.main(String[] args)
+2019-04-24 12:21:31> Program: Starting Squirrel Updater: --releasify DK_POP.1.0.2.nupkg
+2019-04-24 12:21:31> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-24 12:21:31> Program: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP.1.0.2.nupkg
+2019-04-24 12:21:31> ReleasePackage: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP.1.0.2.nupkg => C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP-1.0.2-full.nupkg
+2019-04-24 12:21:38> ReleasePackage: Extracting dependent packages: []
+2019-04-24 12:21:38> ReleasePackage: Removing unnecessary data
+2019-04-24 12:21:38> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_POP.nuspec
+2019-04-24 12:21:43> Program: Building embedded zip file for Setup.exe
+2019-04-24 12:25:28> Program: Starting Squirrel Updater: --releasify DK_POP.1.0.2.nupkg
+2019-04-24 12:25:28> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-24 12:25:28> Program: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP.1.0.2.nupkg
+2019-04-24 12:25:28> ReleasePackage: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP.1.0.2.nupkg => C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP-1.0.2-full.nupkg
+2019-04-24 12:25:35> ReleasePackage: Extracting dependent packages: []
+2019-04-24 12:25:35> ReleasePackage: Removing unnecessary data
+2019-04-24 12:25:35> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_POP.nuspec
+2019-04-24 12:25:40> Program: Building embedded zip file for Setup.exe
+2019-04-24 17:14:43> Program: Starting Squirrel Updater: -h
+2019-04-24 17:15:14> Program: Starting Squirrel Updater: --releasify DK_POP.1.0.3.nupkg
+2019-04-24 17:15:14> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-24 17:15:14> Program: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP.1.0.3.nupkg
+2019-04-24 17:15:15> ReleasePackage: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP.1.0.3.nupkg => C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP-1.0.3-full.nupkg
+2019-04-24 17:15:21> ReleasePackage: Extracting dependent packages: []
+2019-04-24 17:15:21> ReleasePackage: Removing unnecessary data
+2019-04-24 17:15:21> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_POP.nuspec
+2019-04-24 17:15:26> DeltaPackageBuilder: Extracting .\Releases\DK_POP-1.0.2-full.nupkg and C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP-1.0.3-full.nupkg into C:\Users\TU\AppData\Local\SquirrelTemp\tempb
+2019-04-24 17:15:38> DeltaPackageBuilder: \lib\net461\DeltaCompressionDotNet.dll hasn't changed, writing dummy file
+2019-04-24 17:15:38> DeltaPackageBuilder: \lib\net461\DeltaCompressionDotNet.MsDelta.dll hasn't changed, writing dummy file
+2019-04-24 17:15:38> DeltaPackageBuilder: \lib\net461\DeltaCompressionDotNet.PatchApi.dll hasn't changed, writing dummy file
+2019-04-24 17:15:38> DeltaPackageBuilder: \lib\net461\DevExpress.BonusSkins.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:38> DeltaPackageBuilder: \lib\net461\DevExpress.Charts.v18.2.Core.dll hasn't changed, writing dummy file
+2019-04-24 17:15:38> DeltaPackageBuilder: \lib\net461\DevExpress.CodeConverter.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:38> DeltaPackageBuilder: \lib\net461\DevExpress.CodeParser.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:38> DeltaPackageBuilder: \lib\net461\DevExpress.Data.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:38> DeltaPackageBuilder: \lib\net461\DevExpress.DataAccess.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:38> DeltaPackageBuilder: \lib\net461\DevExpress.DemoData.v18.2.Core.dll hasn't changed, writing dummy file
+2019-04-24 17:15:38> DeltaPackageBuilder: \lib\net461\DevExpress.DemoData.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:38> DeltaPackageBuilder: \lib\net461\DevExpress.Diagram.v18.2.Core.dll hasn't changed, writing dummy file
+2019-04-24 17:15:38> DeltaPackageBuilder: \lib\net461\DevExpress.Dialogs.v18.2.Core.dll hasn't changed, writing dummy file
+2019-04-24 17:15:38> DeltaPackageBuilder: \lib\net461\DevExpress.Images.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:38> DeltaPackageBuilder: \lib\net461\DevExpress.Map.v18.2.Core.dll hasn't changed, writing dummy file
+2019-04-24 17:15:38> DeltaPackageBuilder: \lib\net461\DevExpress.Mvvm.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:38> DeltaPackageBuilder: \lib\net461\DevExpress.Office.v18.2.Core.dll hasn't changed, writing dummy file
+2019-04-24 17:15:38> DeltaPackageBuilder: \lib\net461\DevExpress.Pdf.v18.2.Core.dll hasn't changed, writing dummy file
+2019-04-24 17:15:38> DeltaPackageBuilder: \lib\net461\DevExpress.Pdf.v18.2.Drawing.dll hasn't changed, writing dummy file
+2019-04-24 17:15:38> DeltaPackageBuilder: \lib\net461\DevExpress.PivotGrid.v18.2.Core.dll hasn't changed, writing dummy file
+2019-04-24 17:15:38> DeltaPackageBuilder: \lib\net461\DevExpress.Printing.v18.2.Core.dll hasn't changed, writing dummy file
+2019-04-24 17:15:38> DeltaPackageBuilder: \lib\net461\DevExpress.RichEdit.v18.2.Core.dll hasn't changed, writing dummy file
+2019-04-24 17:15:38> DeltaPackageBuilder: \lib\net461\DevExpress.Sparkline.v18.2.Core.dll hasn't changed, writing dummy file
+2019-04-24 17:15:38> DeltaPackageBuilder: \lib\net461\DevExpress.SpellChecker.v18.2.Core.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Spreadsheet.v18.2.Core.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.TreeMap.v18.2.Core.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Utils.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Accordion.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Carousel.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Charts.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.CodeView.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Controls.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Core.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Core.v18.2.Extensions.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Dashboard.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.DataAccess.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.DemoBase.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Diagram.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Dialogs.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Docking.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.DocumentViewer.v18.2.Core.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.ExpressionEditor.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Gantt.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Gauges.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Grid.v18.2.Core.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Grid.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Grid.v18.2.Extensions.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Layout.v18.2.Core.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.LayoutControl.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Map.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.NavBar.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.PdfViewer.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.PivotGrid.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Printing.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.PrismAdapters.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.PropertyGrid.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.ReportDesigner.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Ribbon.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.RichEdit.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Scheduler.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Scheduling.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.SpellChecker.v18.2.Design.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.SpellChecker.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Spreadsheet.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.DXStyle.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.HybridApp.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.LightGray.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.MetropolisDark.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.MetropolisLight.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.Office2007Black.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.Office2007Blue.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.Office2007Silver.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.Office2010Black.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.Office2010Blue.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.Office2010Silver.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.Office2013.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.Office2013DarkGray.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.Office2013LightGray.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.Office2016Black.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.Office2016BlackSE.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.Office2016Colorful.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.Office2016ColorfulSE.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.Office2016DarkGraySE.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.Office2016White.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.Office2016WhiteSE.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.Seven.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.TouchlineDark.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.VS2010.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.VS2017Blue.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.VS2017Dark.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.Themes.VS2017Light.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.TreeMap.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpf.TypedStyles.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.Xpo.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.XtraBars.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.XtraCharts.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.XtraEditors.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.XtraGauges.v18.2.Core.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.XtraGrid.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.XtraLayout.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.XtraPrinting.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:39> DeltaPackageBuilder: \lib\net461\DevExpress.XtraReports.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\DevExpress.XtraScheduler.v18.2.Core.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\DevExpress.XtraTreeList.v18.2.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\DK.POP.config hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: Delta patching C:\Users\TU\AppData\Local\SquirrelTemp\tempa\lib\net461\DK.POP.exe => C:\Users\TU\AppData\Local\SquirrelTemp\tempb\lib\net461\DK.POP.exe
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\DK.POP.exe.config hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: Delta patching C:\Users\TU\AppData\Local\SquirrelTemp\tempa\lib\net461\DK.POP.Modules.dll => C:\Users\TU\AppData\Local\SquirrelTemp\tempb\lib\net461\DK.POP.Modules.dll
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\DK.POP_ExecutionStub.exe hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\DK.POP_log4net.config hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\DK.POP_MQTT.config hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\EnvDTE.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\EnvDTE80.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\log4net.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\M2Mqtt.Net.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\Microsoft.MSXML.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\Microsoft.VisualStudio.OLE.Interop.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\Microsoft.VisualStudio.Shell.Interop.8.0.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\Microsoft.VisualStudio.Shell.Interop.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\Microsoft.VisualStudio.TextManager.Interop.8.0.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\Microsoft.VisualStudio.TextManager.Interop.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\Microsoft.Windows.Design.Extensibility.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\Mono.Cecil.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\Mono.Cecil.Mdb.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\Mono.Cecil.Pdb.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\Mono.Cecil.Rocks.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\Newtonsoft.Json.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\NuGet.Squirrel.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\SharpCompress.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\Splat.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\Squirrel.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\stdole.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: Delta patching C:\Users\TU\AppData\Local\SquirrelTemp\tempa\lib\net461\TU.Core.dll => C:\Users\TU\AppData\Local\SquirrelTemp\tempb\lib\net461\TU.Core.dll
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\TU.Core.MQTT.dll hasn't changed, writing dummy file
+2019-04-24 17:15:40> DeltaPackageBuilder: Delta patching C:\Users\TU\AppData\Local\SquirrelTemp\tempa\lib\net461\TU.Core.SERIAL.dll => C:\Users\TU\AppData\Local\SquirrelTemp\tempb\lib\net461\TU.Core.SERIAL.dll
+2019-04-24 17:15:40> DeltaPackageBuilder: \lib\net461\VSLangProj.dll hasn't changed, writing dummy file
+2019-04-24 17:15:41> Program: Building embedded zip file for Setup.exe
+2019-04-24 17:17:26> Program: Starting Squirrel Updater: --releasify DK_POP.1.0.3.nupkg
+2019-04-24 17:17:26> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-24 17:17:26> Program: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP.1.0.3.nupkg
+2019-04-24 17:17:26> ReleasePackage: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP.1.0.3.nupkg => C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP-1.0.3-full.nupkg
+2019-04-24 17:17:33> ReleasePackage: Extracting dependent packages: []
+2019-04-24 17:17:33> ReleasePackage: Removing unnecessary data
+2019-04-24 17:17:33> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_POP.nuspec
+2019-04-24 17:17:38> Program: Building embedded zip file for Setup.exe
+2019-04-25 12:06:30> Program: Starting Squirrel Updater: --releasify DK_POP.1.0.4.nupkg
+2019-04-25 12:06:30> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-25 12:06:30> Program: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP.1.0.4.nupkg
+2019-04-25 12:06:30> ReleasePackage: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP.1.0.4.nupkg => C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP-1.0.4-full.nupkg
+2019-04-25 12:06:38> ReleasePackage: Extracting dependent packages: []
+2019-04-25 12:06:38> ReleasePackage: Removing unnecessary data
+2019-04-25 12:06:38> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_POP.nuspec
+2019-04-25 12:06:43> Program: Building embedded zip file for Setup.exe
+2019-04-25 16:44:03> Program: Starting Squirrel Updater: --releasify DK.POP.1.0.5.nupkg
+2019-04-25 16:44:03> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-25 16:44:03> Unhandled exception: System.IO.FileNotFoundException: 'DK.POP.1.0.5.nupkg' 파일을 찾을 수 없습니다.
+파일 이름: 'DK.POP.1.0.5.nupkg'
+   위치: System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   위치: System.IO.File.InternalCopy(String sourceFileName, String destFileName, Boolean overwrite, Boolean checkHost)
+   위치: System.IO.File.Copy(String sourceFileName, String destFileName, Boolean overwrite)
+   위치: Squirrel.Update.Program.Releasify(String package, String targetDir, String packagesDir, String bootstrapperExe, String backgroundGif, String signingOpts, String baseUrl, String setupIcon, Boolean generateMsi, String frameworkVersion, Boolean generateDeltas)
+   위치: Squirrel.Update.Program.executeCommandLine(String[] args)
+   위치: Squirrel.Update.Program.main(String[] args)
+2019-04-25 16:44:25> Program: Starting Squirrel Updater: --releasify DK_POP.1.0.5.nupkg
+2019-04-25 16:44:25> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-25 16:44:25> Program: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP.1.0.5.nupkg
+2019-04-25 16:44:25> ReleasePackage: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP.1.0.5.nupkg => C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP-1.0.5-full.nupkg
+2019-04-25 16:44:32> ReleasePackage: Extracting dependent packages: []
+2019-04-25 16:44:32> ReleasePackage: Removing unnecessary data
+2019-04-25 16:44:32> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_POP.nuspec
+2019-04-25 16:44:37> Program: Building embedded zip file for Setup.exe
+2019-04-25 16:54:24> Program: Starting Squirrel Updater: --releasify DK_ADMIN.1.0.1.nupkg
+2019-04-25 16:54:24> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-25 16:54:25> Program: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_ADMIN.1.0.1.nupkg
+2019-04-25 16:54:25> ReleasePackage: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_ADMIN.1.0.1.nupkg => C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_ADMIN-1.0.1-full.nupkg
+2019-04-25 16:54:32> ReleasePackage: Extracting dependent packages: []
+2019-04-25 16:54:32> ReleasePackage: Removing unnecessary data
+2019-04-25 16:54:32> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_ADMIN.nuspec
+2019-04-25 16:54:36> Program: Building embedded zip file for Setup.exe
+2019-04-25 16:58:08> Program: Starting Squirrel Updater: --releasify DK_ADMIN.1.0.1.nupkg
+2019-04-25 16:58:08> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-25 16:58:08> Program: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_ADMIN.1.0.1.nupkg
+2019-04-25 16:58:08> ReleasePackage: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_ADMIN.1.0.1.nupkg => C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_ADMIN-1.0.1-full.nupkg
+2019-04-25 16:58:15> ReleasePackage: Extracting dependent packages: []
+2019-04-25 16:58:15> ReleasePackage: Removing unnecessary data
+2019-04-25 16:58:15> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_ADMIN.nuspec
+2019-04-25 16:58:21> Program: Building embedded zip file for Setup.exe
+2019-04-26 09:21:15> Program: Starting Squirrel Updater: --releasify DK_BOARD.1.0.1.nupkg
+2019-04-26 09:21:15> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-26 09:21:15> Program: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_BOARD.1.0.1.nupkg
+2019-04-26 09:21:15> ReleasePackage: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_BOARD.1.0.1.nupkg => C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_BOARD-1.0.1-full.nupkg
+2019-04-26 09:21:23> ReleasePackage: Extracting dependent packages: []
+2019-04-26 09:21:23> ReleasePackage: Removing unnecessary data
+2019-04-26 09:21:23> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_BOARD.nuspec
+2019-04-26 09:21:28> Program: Building embedded zip file for Setup.exe
+2019-04-26 10:35:08> Program: Starting Squirrel Updater: --releasify DK_BOARD.1.0.1.nupkg
+2019-04-26 10:35:08> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-26 10:35:09> Program: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_BOARD.1.0.1.nupkg
+2019-04-26 10:35:09> ReleasePackage: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_BOARD.1.0.1.nupkg => C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_BOARD-1.0.1-full.nupkg
+2019-04-26 10:35:16> ReleasePackage: Extracting dependent packages: []
+2019-04-26 10:35:16> ReleasePackage: Removing unnecessary data
+2019-04-26 10:35:16> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_BOARD.nuspec
+2019-04-26 10:35:21> Program: Building embedded zip file for Setup.exe
+2019-04-26 12:01:27> Program: Starting Squirrel Updater: --releasify DK.POP.1.0.6.nupkg
+2019-04-26 12:01:27> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-26 12:01:27> Unhandled exception: System.IO.FileNotFoundException: 'DK.POP.1.0.6.nupkg' 파일을 찾을 수 없습니다.
+파일 이름: 'DK.POP.1.0.6.nupkg'
+   위치: System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   위치: System.IO.File.InternalCopy(String sourceFileName, String destFileName, Boolean overwrite, Boolean checkHost)
+   위치: System.IO.File.Copy(String sourceFileName, String destFileName, Boolean overwrite)
+   위치: Squirrel.Update.Program.Releasify(String package, String targetDir, String packagesDir, String bootstrapperExe, String backgroundGif, String signingOpts, String baseUrl, String setupIcon, Boolean generateMsi, String frameworkVersion, Boolean generateDeltas)
+   위치: Squirrel.Update.Program.executeCommandLine(String[] args)
+   위치: Squirrel.Update.Program.main(String[] args)
+2019-04-26 12:01:37> Program: Starting Squirrel Updater: --releasify DK.POP.1.0.6.nupkg
+2019-04-26 12:01:37> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-26 12:01:37> Unhandled exception: System.IO.FileNotFoundException: 'DK.POP.1.0.6.nupkg' 파일을 찾을 수 없습니다.
+파일 이름: 'DK.POP.1.0.6.nupkg'
+   위치: System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   위치: System.IO.File.InternalCopy(String sourceFileName, String destFileName, Boolean overwrite, Boolean checkHost)
+   위치: System.IO.File.Copy(String sourceFileName, String destFileName, Boolean overwrite)
+   위치: Squirrel.Update.Program.Releasify(String package, String targetDir, String packagesDir, String bootstrapperExe, String backgroundGif, String signingOpts, String baseUrl, String setupIcon, Boolean generateMsi, String frameworkVersion, Boolean generateDeltas)
+   위치: Squirrel.Update.Program.executeCommandLine(String[] args)
+   위치: Squirrel.Update.Program.main(String[] args)
+2019-04-26 12:01:47> Program: Starting Squirrel Updater: --releasify DK_POP.1.0.6.nupkg
+2019-04-26 12:01:47> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-26 12:01:47> Program: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP.1.0.6.nupkg
+2019-04-26 12:01:48> ReleasePackage: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP.1.0.6.nupkg => C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP-1.0.6-full.nupkg
+2019-04-26 12:01:55> ReleasePackage: Extracting dependent packages: []
+2019-04-26 12:01:55> ReleasePackage: Removing unnecessary data
+2019-04-26 12:01:55> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_POP.nuspec
+2019-04-26 12:02:00> Program: Building embedded zip file for Setup.exe
+2019-04-26 12:49:30> Program: Starting Squirrel Updater: --releasify DK_POP.1.0.6.nupkg
+2019-04-26 12:49:30> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-26 12:49:31> Program: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP.1.0.6.nupkg
+2019-04-26 12:49:31> ReleasePackage: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP.1.0.6.nupkg => C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP-1.0.6-full.nupkg
+2019-04-26 12:49:38> ReleasePackage: Extracting dependent packages: []
+2019-04-26 12:49:38> ReleasePackage: Removing unnecessary data
+2019-04-26 12:49:38> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_POP.nuspec
+2019-04-26 12:49:43> Program: Building embedded zip file for Setup.exe
+2019-04-26 17:21:03> Program: Starting Squirrel Updater: --releasify DK_POP.1.0.7.nupkg
+2019-04-26 17:21:03> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-26 17:21:03> Program: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP.1.0.7.nupkg
+2019-04-26 17:21:03> ReleasePackage: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP.1.0.7.nupkg => C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_POP-1.0.7-full.nupkg
+2019-04-26 17:21:10> ReleasePackage: Extracting dependent packages: []
+2019-04-26 17:21:10> ReleasePackage: Removing unnecessary data
+2019-04-26 17:21:10> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_POP.nuspec
+2019-04-26 17:21:15> Program: Building embedded zip file for Setup.exe
+2019-04-26 17:22:38> Program: Starting Squirrel Updater: --releasify DK_BOARD.1.0.2.nupkg
+2019-04-26 17:22:38> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-04-26 17:22:38> Program: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_BOARD.1.0.2.nupkg
+2019-04-26 17:22:38> ReleasePackage: Creating release package: C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_BOARD.1.0.2.nupkg => C:\Mosp\MOM_POP_V1.0.1.0\13.Customers\01.DK\Releases\DK_BOARD-1.0.2-full.nupkg
+2019-04-26 17:22:45> ReleasePackage: Extracting dependent packages: []
+2019-04-26 17:22:45> ReleasePackage: Removing unnecessary data
+2019-04-26 17:22:45> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\DK_BOARD.nuspec
+2019-04-26 17:22:50> Program: Building embedded zip file for Setup.exe
+2019-05-22 09:38:24> Program: Starting Squirrel Updater: --releasify MOM.INSTALLER.1.0.0.nupkg
+2019-05-22 09:38:24> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-05-22 09:38:24> Program: Creating release package: C:\Mosp\Util\02.Installer\Releases\MOM.INSTALLER.1.0.0.nupkg
+2019-05-22 09:38:24> ReleasePackage: Creating release package: C:\Mosp\Util\02.Installer\Releases\MOM.INSTALLER.1.0.0.nupkg => C:\Mosp\Util\02.Installer\Releases\MOM.INSTALLER-1.0.0-full.nupkg
+2019-05-22 09:38:31> ReleasePackage: Extracting dependent packages: []
+2019-05-22 09:38:31> ReleasePackage: Removing unnecessary data
+2019-05-22 09:38:31> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\MOM.INSTALLER.nuspec
+2019-05-22 09:38:36> Program: Building embedded zip file for Setup.exe
+2019-05-22 10:06:42> Program: Starting Squirrel Updater: --releasify MOM.INSTALLER.1.0.0.nupkg
+2019-05-22 10:06:42> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-05-22 10:06:43> Program: Creating release package: C:\Mosp\Util\02.Installer\Releases\MOM.INSTALLER.1.0.0.nupkg
+2019-05-22 10:06:43> ReleasePackage: Creating release package: C:\Mosp\Util\02.Installer\Releases\MOM.INSTALLER.1.0.0.nupkg => C:\Mosp\Util\02.Installer\Releases\MOM.INSTALLER-1.0.0-full.nupkg
+2019-05-22 10:06:50> ReleasePackage: Extracting dependent packages: []
+2019-05-22 10:06:50> ReleasePackage: Removing unnecessary data
+2019-05-22 10:06:50> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\MOM.INSTALLER.nuspec
+2019-05-22 10:06:50> Unhandled exception: System.AggregateException: 하나 이상의 오류가 발생했습니다. ---> System.IO.IOException: 'C:\Users\TU\AppData\Local\SquirrelTemp\tempa\lib\net461\MOM.Installer_ExecutionStub.exe' 파일은 다른 프로세스에서 사용 중이므로 프로세스에서 액세스할 수 없습니다.
+   위치: System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   위치: System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   위치: System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access)
+   위치: Squirrel.Utility.ExecutableUsesWin32Subsystem(String peImage)
+   위치: Squirrel.Update.Program.<>c.<Releasify>b__10_11(FileInfo x)
+   위치: System.Linq.Enumerable.<>c__DisplayClass6_0`1.<CombinePredicates>b__0(TSource x)
+   위치: System.Linq.Enumerable.WhereEnumerableIterator`1.MoveNext()
+   위치: System.Collections.Concurrent.Partitioner.DynamicPartitionerForIEnumerable`1.InternalPartitionEnumerable.GrabChunk_Buffered(KeyValuePair`2[] destArray, Int32 requestedChunkSize, Int32& actualNumElementsGrabbed)
+   위치: System.Collections.Concurrent.Partitioner.DynamicPartitionerForIEnumerable`1.InternalPartitionEnumerator.GrabNextChunk(Int32 requestedChunkSize)
+   위치: System.Collections.Concurrent.Partitioner.DynamicPartitionEnumerator_Abstract`2.MoveNext()
+   위치: System.Collections.Concurrent.OrderablePartitioner`1.EnumeratorDropIndices.MoveNext()
+   위치: Squirrel.Utility.<>c__DisplayClass13_1`1.<<ForEachAsync>b__1>d.MoveNext()
+   --- 내부 예외 스택 추적의 끝 ---
+   위치: System.Threading.Tasks.Task.ThrowIfExceptional(Boolean includeTaskCanceledExceptions)
+   위치: System.Threading.Tasks.Task.Wait(Int32 millisecondsTimeout, CancellationToken cancellationToken)
+   위치: Squirrel.Update.Program.<>c__DisplayClass10_0.<Releasify>b__7(String pkgPath)
+   위치: Squirrel.ReleasePackage.CreateReleasePackage(String outputFile, String packagesRootDir, Func`2 releaseNotesProcessor, Action`1 contentsPostProcessHook)
+   위치: Squirrel.Update.Program.Releasify(String package, String targetDir, String packagesDir, String bootstrapperExe, String backgroundGif, String signingOpts, String baseUrl, String setupIcon, Boolean generateMsi, String frameworkVersion, Boolean generateDeltas)
+   위치: Squirrel.Update.Program.executeCommandLine(String[] args)
+   위치: Squirrel.Update.Program.main(String[] args)
+---> (내부 예외 #0) System.IO.IOException: 'C:\Users\TU\AppData\Local\SquirrelTemp\tempa\lib\net461\MOM.Installer_ExecutionStub.exe' 파일은 다른 프로세스에서 사용 중이므로 프로세스에서 액세스할 수 없습니다.
+   위치: System.IO.__Error.WinIOError(Int32 errorCode, String maybeFullPath)
+   위치: System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FileShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy, Boolean useLongPath, Boolean checkHost)
+   위치: System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access)
+   위치: Squirrel.Utility.ExecutableUsesWin32Subsystem(String peImage)
+   위치: Squirrel.Update.Program.<>c.<Releasify>b__10_11(FileInfo x)
+   위치: System.Linq.Enumerable.<>c__DisplayClass6_0`1.<CombinePredicates>b__0(TSource x)
+   위치: System.Linq.Enumerable.WhereEnumerableIterator`1.MoveNext()
+   위치: System.Collections.Concurrent.Partitioner.DynamicPartitionerForIEnumerable`1.InternalPartitionEnumerable.GrabChunk_Buffered(KeyValuePair`2[] destArray, Int32 requestedChunkSize, Int32& actualNumElementsGrabbed)
+   위치: System.Collections.Concurrent.Partitioner.DynamicPartitionerForIEnumerable`1.InternalPartitionEnumerator.GrabNextChunk(Int32 requestedChunkSize)
+   위치: System.Collections.Concurrent.Partitioner.DynamicPartitionEnumerator_Abstract`2.MoveNext()
+   위치: System.Collections.Concurrent.OrderablePartitioner`1.EnumeratorDropIndices.MoveNext()
+   위치: Squirrel.Utility.<>c__DisplayClass13_1`1.<<ForEachAsync>b__1>d.MoveNext()<---
+
+2019-05-22 10:07:17> Program: Starting Squirrel Updater: --releasify MOM.INSTALLER.1.0.0.nupkg
+2019-05-22 10:07:17> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-05-22 10:07:17> Program: Creating release package: C:\Mosp\Util\02.Installer\Releases\MOM.INSTALLER.1.0.0.nupkg
+2019-05-22 10:07:17> ReleasePackage: Creating release package: C:\Mosp\Util\02.Installer\Releases\MOM.INSTALLER.1.0.0.nupkg => C:\Mosp\Util\02.Installer\Releases\MOM.INSTALLER-1.0.0-full.nupkg
+2019-05-22 10:07:25> ReleasePackage: Extracting dependent packages: []
+2019-05-22 10:07:25> ReleasePackage: Removing unnecessary data
+2019-05-22 10:07:25> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\MOM.INSTALLER.nuspec
+2019-05-22 10:07:30> Program: Building embedded zip file for Setup.exe
+2019-05-22 11:15:24> Program: Starting Squirrel Updater: 
+2019-05-22 11:15:30> Program: Starting Squirrel Updater: 
+2019-05-22 11:21:58> Program: Starting Squirrel Updater: --releasify MOM.INSTALLER.1.0.0.nupkg
+2019-05-22 11:21:58> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-05-22 11:21:58> Program: Creating release package: C:\Mosp\DK\INSTALLER\Releases\MOM.INSTALLER.1.0.0.nupkg
+2019-05-22 11:21:58> ReleasePackage: Creating release package: C:\Mosp\DK\INSTALLER\Releases\MOM.INSTALLER.1.0.0.nupkg => C:\Mosp\DK\INSTALLER\Releases\MOM.INSTALLER-1.0.0-full.nupkg
+2019-05-22 11:22:05> ReleasePackage: Extracting dependent packages: []
+2019-05-22 11:22:05> ReleasePackage: Removing unnecessary data
+2019-05-22 11:22:05> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\MOM.INSTALLER.nuspec
+2019-05-22 11:22:10> Program: Building embedded zip file for Setup.exe
+2019-05-22 12:18:06> Program: Starting Squirrel Updater: --releasify MOM.INSTALLER.1.0.0.nupkg
+2019-05-22 12:18:06> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-05-22 12:18:06> Program: Creating release package: C:\Mosp\DK\INSTALLER\Releases\MOM.INSTALLER.1.0.0.nupkg
+2019-05-22 12:18:06> ReleasePackage: Creating release package: C:\Mosp\DK\INSTALLER\Releases\MOM.INSTALLER.1.0.0.nupkg => C:\Mosp\DK\INSTALLER\Releases\MOM.INSTALLER-1.0.0-full.nupkg
+2019-05-22 12:18:13> ReleasePackage: Extracting dependent packages: []
+2019-05-22 12:18:13> ReleasePackage: Removing unnecessary data
+2019-05-22 12:18:13> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\MOM.INSTALLER.nuspec
+2019-05-22 12:18:18> Program: Building embedded zip file for Setup.exe
+2019-05-22 13:52:31> Program: Starting Squirrel Updater: --releasify MOM.INSTALLER.1.0.0.nupkg
+2019-05-22 13:52:31> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-05-22 13:52:31> Program: Creating release package: C:\Mosp\DK\INSTALLER\Releases\MOM.INSTALLER.1.0.0.nupkg
+2019-05-22 13:52:31> ReleasePackage: Creating release package: C:\Mosp\DK\INSTALLER\Releases\MOM.INSTALLER.1.0.0.nupkg => C:\Mosp\DK\INSTALLER\Releases\MOM.INSTALLER-1.0.0-full.nupkg
+2019-05-22 13:52:38> ReleasePackage: Extracting dependent packages: []
+2019-05-22 13:52:38> ReleasePackage: Removing unnecessary data
+2019-05-22 13:52:38> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\MOM.INSTALLER.nuspec
+2019-05-22 13:52:43> Program: Building embedded zip file for Setup.exe
+2019-05-22 14:55:10> Program: Starting Squirrel Updater: --releasify MOM.INSTALLER.1.0.0.nupkg
+2019-05-22 14:55:10> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-05-22 14:55:10> Program: Creating release package: C:\Mosp\DK\INSTALLER\Releases\MOM.INSTALLER.1.0.0.nupkg
+2019-05-22 14:55:10> ReleasePackage: Creating release package: C:\Mosp\DK\INSTALLER\Releases\MOM.INSTALLER.1.0.0.nupkg => C:\Mosp\DK\INSTALLER\Releases\MOM.INSTALLER-1.0.0-full.nupkg
+2019-05-22 14:55:18> ReleasePackage: Extracting dependent packages: []
+2019-05-22 14:55:18> ReleasePackage: Removing unnecessary data
+2019-05-22 14:55:18> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\MOM.INSTALLER.nuspec
+2019-05-22 14:55:23> Program: Building embedded zip file for Setup.exe
+2019-05-22 14:59:51> Program: Starting Squirrel Updater: --releasify MOM.INSTALLER.1.0.0.nupkg
+2019-05-22 14:59:51> Program: Bootstrapper EXE found at:C:\Users\TU\.nuget\packages\squirrel.windows\1.9.1\tools\Setup.exe
+2019-05-22 14:59:51> Program: Creating release package: C:\Mosp\DK\INSTALLER\Releases\MOM.INSTALLER.1.0.0.nupkg
+2019-05-22 14:59:51> ReleasePackage: Creating release package: C:\Mosp\DK\INSTALLER\Releases\MOM.INSTALLER.1.0.0.nupkg => C:\Mosp\DK\INSTALLER\Releases\MOM.INSTALLER-1.0.0-full.nupkg
+2019-05-22 14:59:58> ReleasePackage: Extracting dependent packages: []
+2019-05-22 14:59:58> ReleasePackage: Removing unnecessary data
+2019-05-22 14:59:58> ReleasePackage: No release notes found in C:\Users\TU\AppData\Local\SquirrelTemp\tempa\MOM.INSTALLER.nuspec
+2019-05-22 15:00:03> Program: Building embedded zip file for Setup.exe

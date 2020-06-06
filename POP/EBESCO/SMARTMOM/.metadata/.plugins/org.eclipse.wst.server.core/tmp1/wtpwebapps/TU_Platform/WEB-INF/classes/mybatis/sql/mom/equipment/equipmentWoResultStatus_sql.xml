@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.equipment.equipmentWoResultStatus">
+	<select id="get_equipmentWoResultStatus_list" resultType="camelMap" parameterType="java.util.HashMap">
+	    SELECT MIN(A.WO_RESULT_ID)  AS WO_RESULT_ID
+		     , A.WORK_ORDER_ID
+		     , MIN(A.EQM_WO_NAME)   AS EQM_WO_NAME
+		     , MIN(A.EQM_TYPE)  AS EQM_TYPE
+		     , MIN(A.EQM_TYPE_NAME)  AS EQM_TYPE_NAME
+		     , MIN(A.WORK_DAY)   AS WORK_DAY
+		     , MIN(A.START_TIME)    AS START_TIME
+		     , MIN(A.END_TIME)      AS END_TIME
+		     , MIN(A.EQUIPMENT_CD)  AS EQUIPMENT_CD
+		     , MIN(A.EQUIPMENT_NAME)  AS EQUIPMENT_NAME
+		     , MIN(A.STATE)           AS STATE
+		     , MAX(A.STATE_NAME) AS STATE_NAME
+		     , MIN(A.EQM_QTY)    AS EQM_QTY
+		     , SUM(A.RESULT_QTY) AS  RESULT_QTY
+		     , SUM(A.CANCEL_QTY) AS  CANCEL_QTY
+		     , MIN(A.BAD_QTY) AS BAD_QTY 
+		     , MIN(A.DESCRIPTION) AS DESCRIPTION
+		     , MIN(A.DESCRIPTION) AS DESCRIPTION
+		     , MIN(A.DESCRIPTION) AS DESCRIPTION
+		     , MIN(A.CREATE_DATE) AS CREATE_DATE
+		     , MIN(A.CREATE_BY) AS CREATE_BY
+		     , MIN(A.CREATE_BY_NAME) AS CREATE_BY_NAME
+		     , MIN(A.UPDATE_BY) AS UPDATE_BY
+		     , MIN(A.UPDATE_BY_NAME) AS UPDATE_BY_NAME
+		     , MIN(A.UPDATE_DATE) AS UPDATE_DATE
+		FROM   (SELECT A.WO_RESULT_ID
+		             , A.WORK_ORDER_ID
+		             , A.PREV_WO_RESULT_ID
+		             , B.EQM_TYPE
+		             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (B.DIVISION_CD
+				     										  , B.COMPANY_CD
+				     										  , 'EQ_WO_TYPE'
+				     										  , B.EQM_TYPE)
+		          		FROM DUAL) AS EQM_TYPE_NAME
+		             , B.EQM_WO_NAME
+		             , TO_CHAR(A.WORK_DAY, 'YYYY-MM-DD') AS WORK_DAY
+		             , TO_CHAR(A.START_TIME, 'YYYY-MM-DD HH24:MI:SS') AS START_TIME
+		             , TO_CHAR (A.END_TIME, 'YYYY-MM-DD HH24:MI:SS') AS END_TIME
+		             , B.EQUIPMENT_CD
+		             , (SELECT MOM_COMMON_PKG.FN_GET_EQUIPMENT_NAME( A.DIVISION_CD
+		                                                           , A.COMPANY_CD
+		                                                           , B.EQUIPMENT_CD)
+		                FROM DUAL) AS EQUIPMENT_NAME
+		             , A.STATE
+		             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (A.DIVISION_CD
+		                                                      , A.COMPANY_CD
+		                                                      , 'WORK_ORDER_RESULT_STATE'
+		                                                      , A.STATE)
+		                  FROM DUAL) AS STATE_NAME
+		             , A.BAD_QTY
+		             , B.EQM_QTY 
+		             , DECODE(A.STATE, 'E', A.RESULT_QTY, 0) AS RESULT_QTY
+		             , DECODE(A.STATE, 'C', A.RESULT_QTY, 0) AS CANCEL_QTY
+		             , A.DESCRIPTION
+		             , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD') AS CREATE_DATE
+		             , A.CREATE_BY
+		             , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME (A.DIVISION_CD 
+		                                                      , A.COMPANY_CD 
+		                                                      , A.CREATE_BY)
+		                  FROM DUAL) AS CREATE_BY_NAME
+		             , DECODE(A.STATE, 'E', '',  TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD')) AS UPDATE_DATE
+                     , DECODE(A.STATE, 'E', '', A.UPDATE_BY)  AS  UPDATE_BY
+                     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME (A.DIVISION_CD 
+                                                      , A.COMPANY_CD 
+                                                      , DECODE(A.STATE, 'E', '', A.UPDATE_BY))
+                        FROM DUAL) AS UPDATE_BY_NAME
+		        FROM   MOM_EQM_WO_RESULT A
+		             , MOM_EQM_WORK_ORDER B
+		        WHERE  A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		        AND    A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		        AND    A.WORK_ORDER_ID = B.EQM_WO_ID 
+		        AND    A.START_TIME BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR},'YYYY-MM-DD') AND TO_DATE(#{toDate, jdbcType=VARCHAR},'YYYY-MM-DD') + 23.9997 / 24 
+		        <if test="equipmentCd != null and equipmentCd != ''">
+	            AND    B.EQUIPMENT_CD = #{equipmentCd, jdbcType=VARCHAR}
+	           </if>
+	           <if test="woType != null and woType != ''">
+	            AND    B.EQM_TYPE = #{woType, jdbcType=VARCHAR}
+	           </if>
+	           <if test="woId != null and woId != ''">
+	            AND   (A.WORK_ORDER_ID LIKE '%' || TRIM(UPPER(#{woId, jdbcType=VARCHAR})) || '%'
+	                OR B.EQM_WO_NAME LIKE '%' || TRIM(UPPER(#{woId, jdbcType=VARCHAR})) || '%')
+	           </if>
+	           <if test="state != null and state != ''">
+	            AND    A.STATE = #{state, jdbcType=VARCHAR}
+	           </if>
+	           ) A
+		     GROUP BY  A.WORK_ORDER_ID   
+		 ORDER BY A.WORK_ORDER_ID 
+    </select>
+    
+   <insert id="create_cancelEquipmentWoResult" statementType="CALLABLE">
+	{
+        CALL SP_MOM_EQUIPMENT_PKG.P_CANCEL_WORK_ORDER_RESULT ( 
+             #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+           , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+           , #{companyCd, mode=IN, jdbcType=VARCHAR}
+           , #{woResultId, mode=IN, jdbcType=VARCHAR}
+           , #{workOrderId, mode=IN, jdbcType=VARCHAR}
+           , #{createBy, mode=IN, jdbcType=VARCHAR}
+        )
+    }
+    </insert>
+</mapper>

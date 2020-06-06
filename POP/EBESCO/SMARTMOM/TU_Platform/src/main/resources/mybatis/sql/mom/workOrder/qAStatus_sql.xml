@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.workOrder.qAStatus">
+<!-- 20200331 박연주 QA확인 신규 페이지 생성 -->
+	<!-- 20200331 박연주 QA확인 조회 쿼리 -->
+	<select id="get_qAStatus_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.MEASURE_TYPE
+		     , A.MEASURE_DETAIL_TYPE
+		     , A.IS_QA
+		     , TO_CHAR(A.STATE_TIME, 'YYYY-MM-DD') AS STATE_TIME
+		     , A.WORK_ORDER_ID
+		     , A.ITEM_ID
+		     , A.ITEM_NAME
+		     , A.PARENT_ITEM_ID
+     		 , A.PARENT_ITEM_NAME
+		     , A.RESOURCE_CD
+		     , A.RESOURCE_CD_NAME
+		     , A.GAUGE_METHOD
+		     , A.GAUGE_METHOD_NAME
+		     , A.DEFECT_TYPE
+		     , A.DEFECT_RESULT_ID
+		     , A.REASON_CODE
+		     , A.DEFECT_QTY
+		     , A.HANDLING_TIME
+		     , A.QA_REASON_CODE
+		     , A.PROBLEM_REASON
+		     , A.DEFECT_BY
+		     , A.DESCRIPTION
+		     , A.FILE_FLAG
+		     , A.CREATE_BY
+		     , A.CREATE_BY_NAME
+		  FROM (SELECT MDR.MEASURE_TYPE
+		             , MDR.MEASURE_DETAIL_TYPE
+		             , NVL(MDR.IS_QA, 'N') AS IS_QA 
+		             , MDR.STATE_TIME
+		             , MDR.WORK_ORDER_ID 
+		             , MDR.ITEM_ID 
+		             , (SELECT MOM_COMMON_PKG.FN_GET_ITEM_NAME(MDR.DIVISION_CD
+		                                                     , MDR.COMPANY_CD
+		                                                     , MDR.ITEM_ID) 
+		                  FROM DUAL) AS ITEM_NAME 
+		             , MDR.PARENT_ITEM_ID
+		             , (SELECT MOM_COMMON_PKG.FN_GET_ITEM_NAME(MDR.DIVISION_CD
+		                                                     , MDR.COMPANY_CD
+		                                                     , MDR.PARENT_ITEM_ID) 
+		                  FROM DUAL) AS PARENT_ITEM_NAME 
+		              , MO.RESOURCE_CD 
+             		  , (SELECT MOM_COMMON_PKG.FN_GET_RESOURCE_NAME(MO.DIVISION_CD
+                                                         		  , MO.COMPANY_CD
+                                                         		  , MO.RESOURCE_CD) 
+                 		  FROM DUAL) AS RESOURCE_CD_NAME 	
+		             , MDR.GAUGE_METHOD 
+		             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME ( MDR.DIVISION_CD
+		                                                       , MDR.COMPANY_CD
+		                                                       , 'GAUGE_METHOD'
+		                                                       , MDR.GAUGE_METHOD)
+		                  FROM DUAL) AS GAUGE_METHOD_NAME
+		             , MDR.DEFECT_TYPE 
+		             , MDR.DEFECT_RESULT_ID
+		             , MDR.REASON_CODE 
+		             , MDR.DEFECT_QTY 
+		             , MDR.HANDLING_TIME
+		             , MDR.QA_REASON_CODE 
+		             , MDR.PROBLEM_REASON 
+		             , MDR.DEFECT_BY 
+		             , MDR.DESCRIPTION
+		             , CASE
+		                 WHEN (SELECT COUNT(*)
+		                         FROM MOM_FILE E
+		                        WHERE MDR.DIVISION_CD = E.DIVISION_CD
+		                          AND MDR.COMPANY_CD = E.COMPANY_CD
+		                          AND MDR.DEFECT_RESULT_ID = E.ENTITY_ID
+		                          AND E.USE_YN = 'Y') > 0 THEN 'Y'
+		                 ELSE 'N'
+		               END AS FILE_FLAG 
+		             , MDR.CREATE_BY 
+		             , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME ( MDR.DIVISION_CD
+		                                                       , MDR.COMPANY_CD
+		                                                       , MDR.CREATE_BY)
+		                  FROM DUAL) AS CREATE_BY_NAME
+		          FROM MOM_DEFECT_RESULT MDR
+		             , MOM_WORK_ORDER MO
+		         WHERE MDR.DIVISION_CD = MO.DIVISION_CD
+		           AND MDR.COMPANY_CD = MO.COMPANY_CD
+		           AND MDR.WORK_ORDER_ID = MO.WORK_ORDER_ID
+		           AND MDR.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		           AND MDR.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		           AND MDR.MEASURE_TYPE = 'PQC'
+		           AND MDR.MATERIAL_FLAG = 'MATERIAL'
+		           AND MDR.DEFECT_LEVEL = 1 
+		    <if test="fromDate != null and fromDate != '' and toDate != null and toDate != ''">
+				   AND MDR.STATE_TIME BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
+					   AND TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.9997/24
+			</if>
+		    <if test="workOrder != null and workOrder != ''">
+	  			   AND MO.WORK_ORDER_ID LIKE '%' || TRIM(UPPER(#{workOrder, jdbcType=VARCHAR}) || '%')
+	 		</if>
+		    <if test="itemId != null and itemId != ''">
+				   AND MDR.ITEM_ID LIKE '%' || TRIM(UPPER(#{itemId, jdbcType=VARCHAR}) || '%')
+			</if>
+			<if test="resourceCd != null and resourceCd != ''">
+				   AND MDR.RESOURCE_CD = #{resourceCd, jdbcType=VARCHAR}
+			</if>
+			<if test="defectBy != null and defectBy != ''">
+				   AND MDR.DEFECT_BY LIKE '%' || UPPER(#{defectBy, jdbcType=VARCHAR}) || '%')
+			</if>
+			<if test="measureDetailType != null and measureDetailType != ''">
+				   AND MDR.MEASURE_DETAIL_TYPE = #{measureDetailType, jdbcType=VARCHAR}
+			</if>
+			<if test="gaugeMethod != null and gaugeMethod != ''">
+				   AND MDR.GAUGE_METHOD = #{gaugeMethod, jdbcType=VARCHAR}
+			</if>
+			<if test="reasonCode != null and reasonCode != ''">
+				   AND MDR.REASON_CODE = #{reasonCode, jdbcType=VARCHAR}
+			</if>
+			<if test="defectType != null and defectType != ''">
+				   AND MDR.DEFECT_TYPE = #{defectType, jdbcType=VARCHAR}
+			</if>
+			<if test="isQa != null and isQa != ''">
+				   AND MDR.IS_QA = #{isQa, jdbcType=VARCHAR}
+			</if>
+		           ) A
+		   WHERE 1 = 1
+	<if test="fileFlag != null and fileFlag != ''">
+		   AND A.FILE_FLAG = #{fileFlag, jdbcType=VARCHAR}
+	</if>
+		   ORDER BY A.WORK_ORDER_ID, A.ITEM_NAME, A.STATE_TIME
+	</select>
+	
+	<!-- 20200331 박연주 QA확인 조치등록 쿼리 -->
+	<update id="modify_defectResult" statementType="CALLABLE" parameterType="java.util.HashMap">
+    { CALL
+	  DECLARE
+	  BEGIN
+		#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+			
+		UPDATE MOM_DEFECT_RESULT
+		SET    IS_QA  = #{isQa, jdbcType=VARCHAR},
+			   HANDLING_TIME =  TO_DATE(#{handlingTime, jdbcType=VARCHAR}, 'YYYY-MM-DD'),
+			   QA_REASON_CODE = #{qaReasonCode, jdbcType=VARCHAR},
+			   UPDATE_DATE =  MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			   UPDATE_BY =  #{updateBy, jdbcType=VARCHAR}
+		WHERE  DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+  		AND    COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}
+  		AND    DEFECT_RESULT_ID = #{defectResultId, jdbcType=VARCHAR}
+	  	;
+	  	
+	  	INSERT INTO MOM_DEFECT_RESULT_HIST(
+				  LAST_EVENT_SEQ
+				, DIVISION_CD
+				, COMPANY_CD
+				, DEFECT_RESULT_ID
+				, DEFECT_LEVEL
+				, MEASURE_TYPE
+				, ITEM_ID
+				, MEASURE_DETAIL_TYPE
+				, MATERIAL_FLAG
+				, MEASURE_METHOD
+				, PARENT_ITEM_ID
+				, VENDOR_CD
+				, DEFECT_QTY
+				, UNIT
+				, TARGET
+				, USL
+				, LSL
+				, AQL
+				, GAUGE_METHOD
+				, CHECK_METHOD
+				, STATE_TIME
+				, DEFECT_STATE
+				, SAMPLING_BASE
+				, STRICTNESS
+				, DECISION_METHOD
+				, HANDLING_TIME
+				, CONFIRM_TIME
+				, START_TIME
+				, END_TIME
+				, CHECK_TYPE
+				, CHECK_LEVEL
+				, MATERIAL_ORDER_ID
+				, MATERIAL_DEPARTURE_ID
+				, MATERIAL_LOT_ID
+				, WORK_ORDER_ID
+				, WORK_ORDER_RESULT_ID
+				, CUSTOMER_PO_ID
+				, LOT_ID
+				, IS_DEFECT
+				, IS_REPORT
+				, IS_QULITY
+				, IS_QA
+				, OCCUR
+				, OK_QTY
+				, PRODUCT_QTY
+				, JUDGMENT_ID
+				, LOCATION_CD
+				, DEFECT_BY
+				, CONFIRMED_BY
+				, PROBLEM_REASON
+				, RESOURCE_CD
+				, DEPT_CD
+				, CUSTOM_RETURN_REASON
+				, RETURN_REASON
+				, PROCESS_DESCRIPTION
+				, MODEL_SUFFIX
+				, QA_REASON_CODE
+				, DEFECT_TYPE
+				, CUSTOMER_LINE_CODE
+				, ITEM_VALUE1
+				, ITEM_VALUE2
+				, ITEM_VALUE3
+				, ITEM_VALUE4
+				, ITEM_VALUE5
+				, ITEM_VALUE6
+				, ITEM_VALUE7
+				, ITEM_VALUE8
+				, ITEM_VALUE9
+				, ITEM_VALUE10
+				, ITEM_VALUE11
+				, ITEM_VALUE12
+				, ITEM_VALUE13
+				, ITEM_VALUE14
+				, ITEM_VALUE15
+				, ITEM_VALUE16
+				, ITEM_VALUE17
+				, ITEM_VALUE18
+				, ITEM_VALUE19
+				, ITEM_VALUE20
+				, ITEM_VALUE21
+				, ITEM_VALUE22
+				, ITEM_VALUE23
+				, ITEM_VALUE24
+				, ITEM_VALUE25
+				, ITEM_VALUE26
+				, ITEM_VALUE27
+				, ITEM_VALUE28
+				, ITEM_VALUE29
+				, ITEM_VALUE30
+				, DESCRIPTION
+				, REASON_CODE
+				, CREATE_DATE
+				, CREATE_BY
+				, UPDATE_DATE
+				, UPDATE_BY
+				)
+				SELECT s_order_seq.nextval
+				, DIVISION_CD
+				, COMPANY_CD
+				, DEFECT_RESULT_ID
+				, DEFECT_LEVEL
+				, MEASURE_TYPE
+				, ITEM_ID
+				, MEASURE_DETAIL_TYPE
+				, MATERIAL_FLAG
+				, MEASURE_METHOD
+				, PARENT_ITEM_ID
+				, VENDOR_CD
+				, DEFECT_QTY
+				, UNIT
+				, TARGET
+				, USL
+				, LSL
+				, AQL
+				, GAUGE_METHOD
+				, CHECK_METHOD
+				, STATE_TIME
+				, DEFECT_STATE
+				, SAMPLING_BASE
+				, STRICTNESS
+				, DECISION_METHOD
+				, HANDLING_TIME
+				, CONFIRM_TIME
+				, START_TIME
+				, END_TIME
+				, CHECK_TYPE
+				, CHECK_LEVEL
+				, MATERIAL_ORDER_ID
+				, MATERIAL_DEPARTURE_ID
+				, MATERIAL_LOT_ID
+				, WORK_ORDER_ID
+				, WORK_ORDER_RESULT_ID
+				, CUSTOMER_PO_ID
+				, LOT_ID
+				, IS_DEFECT
+				, IS_REPORT
+				, IS_QULITY
+				, IS_QA
+				, OCCUR
+				, OK_QTY
+				, PRODUCT_QTY
+				, JUDGMENT_ID
+				, LOCATION_CD
+				, DEFECT_BY
+				, CONFIRMED_BY
+				, PROBLEM_REASON
+				, RESOURCE_CD
+				, DEPT_CD
+				, CUSTOM_RETURN_REASON
+				, RETURN_REASON
+				, PROCESS_DESCRIPTION
+				, MODEL_SUFFIX
+				, QA_REASON_CODE
+				, DEFECT_TYPE
+				, CUSTOMER_LINE_CODE
+				, ITEM_VALUE1
+				, ITEM_VALUE2
+				, ITEM_VALUE3
+				, ITEM_VALUE4
+				, ITEM_VALUE5
+				, ITEM_VALUE6
+				, ITEM_VALUE7
+				, ITEM_VALUE8
+				, ITEM_VALUE9
+				, ITEM_VALUE10
+				, ITEM_VALUE11
+				, ITEM_VALUE12
+				, ITEM_VALUE13
+				, ITEM_VALUE14
+				, ITEM_VALUE15
+				, ITEM_VALUE16
+				, ITEM_VALUE17
+				, ITEM_VALUE18
+				, ITEM_VALUE19
+				, ITEM_VALUE20
+				, ITEM_VALUE21
+				, ITEM_VALUE22
+				, ITEM_VALUE23
+				, ITEM_VALUE24
+				, ITEM_VALUE25
+				, ITEM_VALUE26
+				, ITEM_VALUE27
+				, ITEM_VALUE28
+				, ITEM_VALUE29
+				, ITEM_VALUE30
+				, DESCRIPTION
+				, REASON_CODE
+				, CREATE_DATE
+				, CREATE_BY
+				, UPDATE_DATE
+				, UPDATE_BY
+		FROM	MOM_DEFECT_RESULT
+		WHERE   DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	    AND 	COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+	    AND     DEFECT_RESULT_ID = #{defectResultId, jdbcType=VARCHAR}
+		;
+		
+		SELECT
+			CASE 
+				WHEN COUNT(DEFECT_RESULT_ID) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_DEFECT_RESULT
+		WHERE   DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	    AND 	COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+	    AND     DEFECT_RESULT_ID = #{defectResultId, jdbcType=VARCHAR}
+		;
+	END
+	}
+    </update>
+    
+	<!-- 20200331 박연주 QA확인 불량삭제 쿼리 -->
+    <delete id="remove_qAStatus" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	DECLARE
+	BEGIN
+		#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+		
+		INSERT INTO MOM_DEFECT_RESULT_HIST(
+				  LAST_EVENT_SEQ
+				, DIVISION_CD
+				, COMPANY_CD
+				, DEFECT_RESULT_ID
+				, DEFECT_LEVEL
+				, MEASURE_TYPE
+				, ITEM_ID
+				, MEASURE_DETAIL_TYPE
+				, MATERIAL_FLAG
+				, MEASURE_METHOD
+				, PARENT_ITEM_ID
+				, VENDOR_CD
+				, DEFECT_QTY
+				, UNIT
+				, TARGET
+				, USL
+				, LSL
+				, AQL
+				, GAUGE_METHOD
+				, CHECK_METHOD
+				, STATE_TIME
+				, DEFECT_STATE
+				, SAMPLING_BASE
+				, STRICTNESS
+				, DECISION_METHOD
+				, HANDLING_TIME
+				, CONFIRM_TIME
+				, START_TIME
+				, END_TIME
+				, CHECK_TYPE
+				, CHECK_LEVEL
+				, MATERIAL_ORDER_ID
+				, MATERIAL_DEPARTURE_ID
+				, MATERIAL_LOT_ID
+				, WORK_ORDER_ID
+				, WORK_ORDER_RESULT_ID
+				, CUSTOMER_PO_ID
+				, LOT_ID
+				, IS_DEFECT
+				, IS_REPORT
+				, IS_QULITY
+				, IS_QA
+				, OCCUR
+				, OK_QTY
+				, PRODUCT_QTY
+				, JUDGMENT_ID
+				, LOCATION_CD
+				, DEFECT_BY
+				, CONFIRMED_BY
+				, PROBLEM_REASON
+				, RESOURCE_CD
+				, DEPT_CD
+				, CUSTOM_RETURN_REASON
+				, RETURN_REASON
+				, PROCESS_DESCRIPTION
+				, MODEL_SUFFIX
+				, QA_REASON_CODE
+				, DEFECT_TYPE
+				, CUSTOMER_LINE_CODE
+				, ITEM_VALUE1
+				, ITEM_VALUE2
+				, ITEM_VALUE3
+				, ITEM_VALUE4
+				, ITEM_VALUE5
+				, ITEM_VALUE6
+				, ITEM_VALUE7
+				, ITEM_VALUE8
+				, ITEM_VALUE9
+				, ITEM_VALUE10
+				, ITEM_VALUE11
+				, ITEM_VALUE12
+				, ITEM_VALUE13
+				, ITEM_VALUE14
+				, ITEM_VALUE15
+				, ITEM_VALUE16
+				, ITEM_VALUE17
+				, ITEM_VALUE18
+				, ITEM_VALUE19
+				, ITEM_VALUE20
+				, ITEM_VALUE21
+				, ITEM_VALUE22
+				, ITEM_VALUE23
+				, ITEM_VALUE24
+				, ITEM_VALUE25
+				, ITEM_VALUE26
+				, ITEM_VALUE27
+				, ITEM_VALUE28
+				, ITEM_VALUE29
+				, ITEM_VALUE30
+				, DESCRIPTION
+				, REASON_CODE
+				, CREATE_DATE
+				, CREATE_BY
+				, UPDATE_DATE
+				, UPDATE_BY
+				)
+				SELECT s_order_seq.nextval
+				, DIVISION_CD
+				, COMPANY_CD
+				, DEFECT_RESULT_ID
+				, DEFECT_LEVEL
+				, MEASURE_TYPE
+				, ITEM_ID
+				, MEASURE_DETAIL_TYPE
+				, MATERIAL_FLAG
+				, MEASURE_METHOD
+				, PARENT_ITEM_ID
+				, VENDOR_CD
+				, DEFECT_QTY
+				, UNIT
+				, TARGET
+				, USL
+				, LSL
+				, AQL
+				, GAUGE_METHOD
+				, CHECK_METHOD
+				, STATE_TIME
+				, DEFECT_STATE
+				, SAMPLING_BASE
+				, STRICTNESS
+				, DECISION_METHOD
+				, HANDLING_TIME
+				, CONFIRM_TIME
+				, START_TIME
+				, END_TIME
+				, CHECK_TYPE
+				, CHECK_LEVEL
+				, MATERIAL_ORDER_ID
+				, MATERIAL_DEPARTURE_ID
+				, MATERIAL_LOT_ID
+				, WORK_ORDER_ID
+				, WORK_ORDER_RESULT_ID
+				, CUSTOMER_PO_ID
+				, LOT_ID
+				, IS_DEFECT
+				, IS_REPORT
+				, IS_QULITY
+				, IS_QA
+				, OCCUR
+				, OK_QTY
+				, PRODUCT_QTY
+				, JUDGMENT_ID
+				, LOCATION_CD
+				, DEFECT_BY
+				, CONFIRMED_BY
+				, PROBLEM_REASON
+				, RESOURCE_CD
+				, DEPT_CD
+				, CUSTOM_RETURN_REASON
+				, RETURN_REASON
+				, PROCESS_DESCRIPTION
+				, MODEL_SUFFIX
+				, QA_REASON_CODE
+				, DEFECT_TYPE
+				, CUSTOMER_LINE_CODE
+				, ITEM_VALUE1
+				, ITEM_VALUE2
+				, ITEM_VALUE3
+				, ITEM_VALUE4
+				, ITEM_VALUE5
+				, ITEM_VALUE6
+				, ITEM_VALUE7
+				, ITEM_VALUE8
+				, ITEM_VALUE9
+				, ITEM_VALUE10
+				, ITEM_VALUE11
+				, ITEM_VALUE12
+				, ITEM_VALUE13
+				, ITEM_VALUE14
+				, ITEM_VALUE15
+				, ITEM_VALUE16
+				, ITEM_VALUE17
+				, ITEM_VALUE18
+				, ITEM_VALUE19
+				, ITEM_VALUE20
+				, ITEM_VALUE21
+				, ITEM_VALUE22
+				, ITEM_VALUE23
+				, ITEM_VALUE24
+				, ITEM_VALUE25
+				, ITEM_VALUE26
+				, ITEM_VALUE27
+				, ITEM_VALUE28
+				, ITEM_VALUE29
+				, ITEM_VALUE30
+				, 'DELETE'
+				, REASON_CODE
+				, CREATE_DATE
+				, CREATE_BY
+				, MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+				, #{updateBy, jdbcType=VARCHAR}
+		FROM	MOM_DEFECT_RESULT
+		WHERE   DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	    AND 	COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+	    AND     DEFECT_RESULT_ID = #{defectResultId, jdbcType=VARCHAR}
+		;
+		
+		DELETE FROM MOM_DEFECT_RESULT
+		WHERE   DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	    AND 	COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+	    AND     DEFECT_RESULT_ID = #{defectResultId, jdbcType=VARCHAR}
+		;
+		
+		SELECT
+			CASE 
+				WHEN COUNT(DEFECT_RESULT_ID) = 0 THEN 'S'
+				ELSE 'E' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_DEFECT_RESULT
+		WHERE   DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	    AND 	COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+	    AND     DEFECT_RESULT_ID = #{defectResultId, jdbcType=VARCHAR}
+		;
+    END
+    }
+	</delete>
+	
+</mapper>

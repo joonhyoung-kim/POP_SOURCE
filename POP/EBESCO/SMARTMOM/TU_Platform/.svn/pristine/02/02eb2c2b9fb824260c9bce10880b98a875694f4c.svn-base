@@ -1,0 +1,39 @@
+var MOMAA001 = {
+	initParam : undefined,
+	init: function() {
+		var that = this;
+		Language.init(function() {
+			that.grid();
+//			AUIGrid.setProp(momWidget.grid[0], { "selectionMode" : "singleCell" } ); 
+			
+			that.event();
+		});
+	}, retrieveCallInit: function(index, param, callBackParam, indexInfo) {
+		var that = this;
+		index = (indexInfo != undefined && indexInfo['newIndex'] != undefined && indexInfo['newIndex'] != indexInfo['index']) ? indexInfo['newIndex'] : index;
+		if(index == 0 && indexInfo.op == 'findBtn1') {
+			that.initParam = {resourceCd: "HS_MF_02"};
+		}
+		
+	}, grid: function(){
+		AUIGrid.setSelectionMode(momWidget.grid[0], 'singleRow');
+	}, event: function() {
+		var that = this;
+		// 조회
+		$(document).on("click", "#startBtn1", function(){
+			var workOrderId = AUIGrid.getCheckedRowItems(momWidget.grid[0])[0].item.workOrderId;
+			window.open('complete.html'+ workOrderId,'win','width=1500,height=800,left=0,top=0');
+			self.close();
+		});
+		
+		// 닫기
+		$(document).on("click", "#closeBtn1", function(){
+			self.close();
+		});
+		
+	}	
+};
+$(document).ready(function(event){
+	momWidget.init(1, 'MOMAA001', MOMAA001);
+	MOMAA001.init();
+});

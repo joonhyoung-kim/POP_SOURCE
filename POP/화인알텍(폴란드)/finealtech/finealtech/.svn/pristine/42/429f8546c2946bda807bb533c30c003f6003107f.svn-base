@@ -1,0 +1,62 @@
+{
+	"TestServer": true,
+	"IsSuccess": true,
+	"ErrorCode": "",
+	"ErrorParameter": null,
+	"SplitParameter": null,
+	"Response": {
+		"0": {
+			"OUT_CUR0": [
+				{
+					"ColumnId": "REPORTFILE",
+					"DataType": null,
+					"ColumnData": [
+						"./report/test.repx"
+					]
+				},
+				{
+					"ColumnId": "PRINTERNAME",
+					"DataType": null,
+					"ColumnData": [
+						""
+					]
+				},
+				{
+					"ColumnId": "COLUMN1",
+					"DataType": null,
+					"ColumnData": [
+						"TEST1"
+					]
+				},
+				{
+					"ColumnId": "COLUMN2",
+					"DataType": null,
+					"ColumnData": [
+						1111
+					]
+				},
+				{
+					"ColumnId": "COLUMN3",
+					"DataType": null,
+					"ColumnData": [
+						11.11
+					]
+				},
+				{
+					"ColumnId": "COLUMN4",
+					"DataType": null,
+					"ColumnData": [
+						"TEST1.png"
+					]
+				},
+				{
+					"ColumnId": "COLUMN5",
+					"DataType": null,
+					"ColumnData": [
+						"TEST2.png"
+					]
+				}
+			]
+		}
+	}
+}

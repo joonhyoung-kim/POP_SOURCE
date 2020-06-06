@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<head>
+<meta charset='utf-8' />
+<meta name='viewport' content='width=device-width, initial-scale=1' />
+<meta name='generator' content='Mica' />
+<meta http-equiv='CACHE-CONTROL' content='NO-CACHE' />
+<meta http-equiv='X-UA-Compatible' content='IE=edge' />
+<link rel='stylesheet' type='text/css'
+	href='/TU_Platform/Content/css/site.css' />
+<link rel='stylesheet' type='text/css'
+	href='/TU_Platform/Content/jqwidgets/styles/jqx.base.css' />
+<link rel='stylesheet' type='text/css'
+	href='/TU_Platform/Content/theme/css/datetimepicker/jquery.datetimepicker.css' />
+<link rel="stylesheet" type="text/css" href="/TU_Platform/TU_MOM.css" />
+
+<script src='/TU_Platform/Content/js/jquery.min-1.11.1.js'></script>
+<script src='/TU_Platform/Content/js/jquery-ui.min.js'></script>
+<script src='/TU_Platform/Content/js/normalize.js'></script>
+<script src='/TU_Platform/Content/amcharts/amcharts.js'></script>
+<script src='/TU_Platform/Content/amcharts/serial.js'></script>
+<script
+	src='/TU_Platform/Content/theme/js/plugins/jqGrid/jquery.jqGrid.min.js'></script>
+<script
+	src='/TU_Platform/Content/theme/js/plugins/jqGrid/i18n/grid.locale-en.js'></script>
+<script
+	src='/TU_Platform/Content/theme/js/plugins/bootstrap/bootstrap.min.js'></script>
+<script
+	src='/TU_Platform/Content/theme/js/plugins/select2/select2.min.js'></script>
+<script
+	src="/TU_Platform/Content/theme/js/plugins/datetimepicker/jquery.datetimepicker.full.js"></script>
+<script src='/TU_Platform/Content/jqwidgets/jqxcore.js'></script>
+<script src='/TU_Platform/Content/jqwidgets/jqxlistbox.js'></script>
+<script src='/TU_Platform/Content/jqwidgets/jqxcombobox.js'></script>
+<script src='/TU_Platform/Content/jqwidgets/jqxexpander.js'></script>
+<script src='/TU_Platform/Content/jqwidgets/jqxsplitter.js'></script>
+<script src='/TU_Platform/Content/jqwidgets/jqxbuttons.js'></script>
+<script src='/TU_Platform/Content/jqwidgets/jqxscrollbar.js'></script>
+<script src='/TU_Platform/Content/jqwidgets/jqxdata.js'></script>
+<script src="/TU_Platform/Content/jqwidgets/jqxmenu.js"></script>
+<script src='/TU_Platform/Content/jqwidgets/jqxtree.js'></script>
+<script src='/TU_Platform/Content/jqwidgets/jqxpanel.js'></script>
+<script src="/TU_Platform/Content/jqwidgets/jqxnotification.js"></script>
+
+<!-- auiGrid -->
+<link href="/TU_Platform/Content/AUIGrid/AUIGrid_style.css"
+	rel="stylesheet" type="text/css">
+<script src="/TU_Platform/Content/AUIGrid/AUIGridLicense.js"></script>
+<script src="/TU_Platform/Content/AUIGrid/AUIGrid.js"></script>
+<link href="/TU_Platform/Content/css/auigridEditor.css" rel="stylesheet">
+<!--  auiGrid Excel Export -->
+<script src="/TU_Platform/Content/AUIGrid/FileSaver.min.js"></script>
+<!-- echart -->
+<script
+	src="/TU_Platform/Content/PopUp/EChart/js/echarts/echarts.min.js"></script>
+
+<!-- new Common -->
+<script src="/TU_Platform/Content/resources/js/common.js"
+	type="text/javascript"></script>
+
+<!-- �떎援��뼱 -->
+<script src="/TU_Platform/Content/js/regional.js"></script>
+<script type="text/javascript" src="/TU_Platform/TU_MOM.lang.js"></script>
+<script type="text/javascript" src="/TU_Platform/TU_MOM.widget.js"></script>
+<script type="text/javascript" src="/TU_Platform/TU_MOM.common.js"></script>
+<style type="text/css">
+body {
+	background: black !important
+}
+</style>
+</head>
+<body style="overflow: auto;">
+	<ul class="main_wrapper3">
+		<li class="main_detail1">
+			<div class="details_title1 txtOpt1">
+				<div multi-lang="" class="textblock center">설비</div>
+			</div>
+			<div class="details_title2 txtOpt1">
+				<div multi-lang="" class="textblock center">작업자</div>
+			</div>
+			<div class="details_title3 txtOpt1">
+				<div multi-lang="" class="textblock center">설비상태</div>
+			</div>
+			<div class="details_title4 txtOpt1">
+				<div multi-lang="" class="textblock center">발행타입</div>
+			</div>
+		</li>
+		<li class="main_detail1">
+			<div class="details_title5 txtOpt3">
+				<div multi-lang="" class="textblock center" id="serbi">HS_H_ASSY_01</div>
+			</div>
+			<div class="details_title6 txtOpt3 ">
+				<div multi-lang="" class="textblock center" id="workerName">김준형</div>
+			</div>
+			<div class="details_title7 txtOpt3">
+				<div multi-lang="" class="textblock center" id="serbiStatus">가동중</div>
+			</div>
+			<div class="details_title8 txtOpt3">
+				<div multi-lang="" class="textblock center" id="labelType">박스</div>
+			</div>
+		</li>
+		<li class="main_detail1">
+			<div class="details_box1 txtOpt1">
+				<div multi-lang="" class="textblock center">작업지시번호.</div>
+			</div>
+			<div class="details_box2 txtOpt3">
+				<div multi-lang="" class="textblock left" id="woNo">WM2004240001</div>
+			</div>
+			<div class="details_box3 txtOpt1">
+				<div multi-lang="" class="textblock center">제품구성수량</div>
+			</div>
+			<div class="details_box4 txtOpt3">
+				<div multi-lang="" class="textblock left" id="gtQty"></div>
+			</div>
+		</li>
+		<li class="main_detail1">
+			<div class="details_box5 txtOpt1">
+				<div multi-lang="" class="textblock center">품번/품명</div>
+			</div>
+			<div class="details_box6 txtOpt3">
+				<div multi-lang="" class="textblock  left" id="itemName">등받이 다리 가공품(B_LEG_03)</div>
+			</div>
+			<div class="details_box7 txtOpt1">
+				<div multi-lang="" class="textblock center">박스구성수량</div>
+			</div>
+			<div class="details_box8 txtOpt3">
+				<div multi-lang="" class="textblock left" id="ctQty">20</div>
+			</div>
+		</li>
+		<li class="main_detail1">
+			<div class="details_box9 txtOpt1">
+				<div multi-lang="" class="textblock center">진척도</div>
+			</div>
+			<div class="details_box10 txtOpt3">
+				<div multi-lang="" class="textblock  left" id="progress">77.5%</div>
+			</div>
+			<div class="details_box11 txtOpt1">
+				<div multi-lang="" class="textblock center">기본입력수량</div>
+			</div>
+			<div class="details_box12 txtOpt3">
+				<div multi-lang="" class="textblock left" id="defaultInputQty">10</div>
+			</div>
+		</li>
+		<li class="main_detail1">
+			<div class="details_box13 txtOpt1">
+				<div multi-lang="" class="textblock center">계획수량</div>
+			</div>
+			<div class="details_box14 txtOpt3">
+				<div multi-lang="" class="textblock  left" id="planQty">900</div>
+			</div>
+		</li>
+		<li class="main_detail1">
+			<div class="details_box15 txtOpt1">
+				<div multi-lang="" class="textblock center">양품수량</div>
+			</div>
+			<div class="details_box16 txtOpt3">
+				<div multi-lang="" class="textblock  left" id="goodQty">0</div>
+			</div>
+		</li>
+		<li class="main_detail1">
+			<div class="details_box17 txtOpt1">
+				<div multi-lang="" class="textblock center">불량수량</div>
+			</div>
+			<div class="details_box18 txtOpt3">
+				<div multi-lang="" class="textblock left" id="badQty">0</div>
+			</div>
+		</li>
+	</ul>
+
+	<ul class="main_wrapper4">
+		<li class="main_detail3">
+			<div class="details_button1 txtOpt2">
+				<div multi-lang="" class="textblock center" id="performReg">실적등록</div>
+			</div>
+		</li>
+		<li class="main_detail3">
+			<div class="details_button2 txtOpt2">
+				<div multi-lang="" class="textblock center" id="woSearch">작업지시조회</div>
+			</div>
+		</li>
+		<li class="main_detail3">
+			<div class="details_button3 txtOpt2">
+				<div multi-lang="" class="textblock center" id="pause">HOLD</div>
+			</div>
+		</li>
+		<li class="main_detail3">
+			<div class="details_button4 txtOpt2">
+				<div multi-lang="" class="textblock center" id="close">닫기</div>
+			</div>
+		</li>
+	</ul>
+</body>
+</body>
+<script type="text/javascript" src="./complete.js"></script>
+</html>

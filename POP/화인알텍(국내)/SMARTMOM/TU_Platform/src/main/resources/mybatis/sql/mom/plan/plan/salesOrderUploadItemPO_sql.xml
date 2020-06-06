@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.plan.plan.salesOrderUploadItemPO">
+	<select id="get_salesOrderUploadItemPOCreate_list" resultType="camelMap" parameterType="java.util.HashMap">
+		 SELECT TO_CHAR(PLAN_DATE,'YYYY-MM-DD') AS PLAN_DATE
+		 <if test= "dataString != null and dataString != ''">
+		 , ${dataString}
+		 </if>
+		 <if test= "colDate != null and colDate != ''">
+		 , ${colDate}
+		 </if>
+		FROM MOM_DEMAND
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		AND PLAN_DATE = TO_DATE(#{planDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+<!-- 		AND UPLOAD_TYPE = #{uploadType, jdbcType=VARCHAR} -->
+		AND UPLOAD_TYPE = 'P' <!-- test -->
+		<if test= "optionValue != null and optionValue != ''">
+		GROUP BY PLAN_DATE, ${dataString}
+		</if>
+		ORDER BY DUE_DATE ASC
+	</select>
+	
+	<select id="get_salesOrderUploadItemPOOptionValueType_list" resultType="camelMap" parameterType="java.util.HashMap">
+	   SELECT CODE_VALUES  AS OPTION_VALUE
+       FROM   MOM_CODE
+       WHERE  DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+       AND    COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+       AND    CODE_ID = 'DEMAND_PO_EXCEL_UPLOAD_TYPE'
+	</select>
+</mapper>

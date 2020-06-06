@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XtraReportsLayoutSerializer SerializerVersion="18.2.6.0" Ref="0" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v18.2, Version=18.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="Report1" Margins="100, 100, 0, 0" PageWidth="850" PageHeight="1100" Version="18.2" Font="Arial, 9.75pt">
+  <Parameters>
+    <Item1 Ref="2" Description="Parameter1" Name="COLUMN1" />
+    <Item2 Ref="4" Description="Parameter1" ValueInfo="0" Name="COLUMN2" Type="#Ref-3" />
+    <Item3 Ref="6" Description="Parameter1" ValueInfo="0" Name="COLUMN3" Type="#Ref-5" />
+    <Item4 Ref="7" Description="Parameter1" Name="COLUMN4" />
+  </Parameters>
+  <Bands>
+    <Item1 Ref="8" ControlType="TopMarginBand" Name="TopMargin" HeightF="0" />
+    <Item2 Ref="9" ControlType="DetailBand" Name="Detail" HeightF="393.75">
+      <Controls>
+        <Item1 Ref="10" ControlType="XRLabel" Name="label3" Multiline="true" Text="label2" SizeF="192.708328,120.833336" LocationFloat="255.208344, 191.666672" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="11" Expression="[Parameters].[COLUMN3]" PropertyName="Text" EventName="BeforePrint" />
+          </ExpressionBindings>
+        </Item1>
+        <Item2 Ref="12" ControlType="XRPictureBox" Name="pictureBox1" SizeF="182.291672,104.166664" LocationFloat="47.9166679, 200">
+          <ExpressionBindings>
+            <Item1 Ref="13" Expression="[Parameters].[COLUMN4]" PropertyName="ImageSource" EventName="BeforePrint" />
+          </ExpressionBindings>
+        </Item2>
+        <Item3 Ref="14" ControlType="XRLabel" Name="label2" Multiline="true" Text="label2" SizeF="192.708328,120.833336" LocationFloat="255.208328, 61.4583321" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="15" Expression="[Parameters].[COLUMN2]" PropertyName="Text" EventName="BeforePrint" />
+          </ExpressionBindings>
+        </Item3>
+        <Item4 Ref="16" ControlType="XRLabel" Name="label1" Multiline="true" Text="label1" SizeF="175,126.041664" LocationFloat="44.7916679, 60.4166679" Padding="2,2,0,0,100">
+          <ExpressionBindings>
+            <Item1 Ref="17" Expression="[Parameters].[COLUMN1]" PropertyName="Text" EventName="BeforePrint" />
+          </ExpressionBindings>
+        </Item4>
+      </Controls>
+    </Item2>
+    <Item3 Ref="18" ControlType="BottomMarginBand" Name="BottomMargin" HeightF="0" />
+  </Bands>
+  <ObjectStorage>
+    <Item1 ObjectType="DevExpress.XtraReports.Serialization.ObjectStorageInfo, DevExpress.XtraReports.v18.2" Ref="3" Content="System.Int32" Type="System.Type" />
+    <Item2 ObjectType="DevExpress.XtraReports.Serialization.ObjectStorageInfo, DevExpress.XtraReports.v18.2" Ref="5" Content="System.Single" Type="System.Type" />
+  </ObjectStorage>
+</XtraReportsLayoutSerializer>

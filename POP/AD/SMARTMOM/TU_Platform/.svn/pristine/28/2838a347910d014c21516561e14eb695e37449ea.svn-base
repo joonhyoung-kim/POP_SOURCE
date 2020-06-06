@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.reference.cell.itemCell"> 
+	<select id="get_itemCell_list" resultType="camelMap" parameterType="java.util.HashMap">
+		<if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+		WITH TEMP1 AS (	
+	    </if>
+	    SELECT * FROM (
+	    	SELECT A.ITEM_ID 
+	    		 , (SELECT MOM_COMMON_PKG.FN_GET_ITEM_NAME(A.DIVISION_CD
+	    		 										 , A.COMPANY_CD
+	    		 										 , A.ITEM_ID)
+	    			FROM DUAL) AS ITEM_NAME
+	    		 , A.CELL_CD
+	    		 , (SELECT MOM_COMMON_PKG.FN_GET_CELL_NAME(A.DIVISION_CD
+	    		 										 , A.COMPANY_CD
+	    		 										 , A.CELL_CD)
+	    		 	FROM DUAL) AS CELL_NAME
+	    		 , A.SEQ
+	    		 , A.DIFFICULTY
+	    		 , A.STANDARD_TIME
+	    		 , A.ALARM_TIME1
+	    		 , A.ALARM_TIME2
+	    		 , A.USE_YN
+	    		 , A.DESCRIPTION
+	    		 , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD') AS CREATE_DATE
+	    		 , A.CREATE_BY
+	    		 , TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD') AS UPDATE_DATE
+	    		 , A.UPDATE_BY
+	    	FROM MOM_ITEM_CELL_MASTER A
+	    	WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	    	  AND A.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+	    	  ) B
+	    WHERE 1=1
+	      <if test="itemId != null and itemId != ''">
+	      AND (B.ITEM_ID LIKE '%' || TRIM(UPPER(#{itemId, jdbcType=VARCHAR})) || '%'
+	    	 OR UPPER(B.ITEM_NAME) LIKE '%' || TRIM(UPPER(#{itemId, jdbcType=VARCHAR})) || '%')
+	      </if>
+	      <if test="cell != null and cell != ''">
+	      AND B.CELL_CD = #{cell, jdbcType=VARCHAR}
+	      </if>
+	    ORDER BY B.ITEM_ID, B.SEQ
+	    <if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+				)
+	      SELECT A.*
+	           , B.ROW_COUNT
+	      FROM (SELECT A.*
+	                 , ROWNUM GRIDROW
+	              FROM TEMP1 A) A
+	         , (SELECT COUNT(*) ROW_COUNT
+	              FROM TEMP1) B 
+	      WHERE GRIDROW BETWEEN #{startPage, jdbcType=INTEGER} AND #{endPage, jdbcType=INTEGER}
+       </if>
+	</select>
+	
+	<insert id="create_itemCell" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE	  	
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+		INSERT INTO MOM_ITEM_CELL_MASTER(
+			  DIVISION_CD
+			, COMPANY_CD
+			, ITEM_ID
+			, CELL_CD
+			, SEQ
+			, DIFFICULTY
+			, STANDARD_TIME
+			, ALARM_TIME1
+			, ALARM_TIME2
+			, USE_YN
+			, DESCRIPTION
+			, CREATE_DATE
+			, CREATE_BY
+			, UPDATE_DATE
+			, UPDATE_BY
+		)
+		VALUES(
+			  #{divisionCd, jdbcType=VARCHAR}
+			, #{companyCd, jdbcType=VARCHAR}
+			, UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+			, #{cellCd, jdbcType=VARCHAR}
+			, #{seq, jdbcType=INTEGER}
+			, #{difficulty, jdbcType=VARCHAR}
+			, #{standardTime, jdbcType=INTEGER}
+			, #{alarmTime1, jdbcType=INTEGER}
+			, #{alarmTime2, jdbcType=INTEGER}
+			, NVL(UPPER(TRIM(#{useYn, jdbcType=VARCHAR})), 'Y')
+			, #{description, jdbcType=VARCHAR}
+			, MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			, #{userId, jdbcType=VARCHAR}
+			, MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			, #{userId, jdbcType=VARCHAR}
+		)
+	   ;
+	   
+	   INSERT INTO MOM_ITEM_CELL_MASTER_HIST (
+			  LAST_EVENT_SEQ
+		    , DIVISION_CD
+			, COMPANY_CD
+			, ITEM_ID
+			, CELL_CD
+			, SEQ
+			, DIFFICULTY
+			, STANDARD_TIME
+			, ALARM_TIME1
+			, ALARM_TIME2
+			, USE_YN
+			, DESCRIPTION
+			, CREATE_DATE
+			, CREATE_BY
+			, UPDATE_DATE
+			, UPDATE_BY
+	   )
+	   SELECT S_ORDER_SEQ.NEXTVAL
+	   		, DIVISION_CD
+			, COMPANY_CD
+			, ITEM_ID
+			, CELL_CD
+			, SEQ
+			, DIFFICULTY
+			, STANDARD_TIME
+			, ALARM_TIME1
+			, ALARM_TIME2
+			, USE_YN
+			, DESCRIPTION
+			, CREATE_DATE
+			, CREATE_BY
+			, UPDATE_DATE
+			, UPDATE_BY
+		 FROM MOM_ITEM_CELL_MASTER
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		  AND ITEM_ID     = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		  AND CELL_CD     = #{cellCd, jdbcType=VARCHAR}
+		 ;
+		 		 
+		SELECT
+			CASE 
+				WHEN COUNT(ITEM_ID) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_ITEM_CELL_MASTER
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		  AND ITEM_ID     = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		  AND CELL_CD     = #{cellCd, jdbcType=VARCHAR}
+		;
+	 END
+	}
+	</insert>	
+	
+	<update id="modify_itemCell" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE	  	
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+		UPDATE MOM_ITEM_CELL_MASTER
+		   SET DIFFICULTY    = #{difficulty, jdbcType=VARCHAR}
+		   	 , STANDARD_TIME = #{standardTime, jdbcType=INTEGER}
+		   	 , ALARM_TIME1    = #{alarmTime1, jdbcType=INTEGER}
+		   	 , ALARM_TIME2    = #{alarmTime2, jdbcType=INTEGER}
+			 , USE_YN	     = NVL(UPPER(TRIM(#{useYn, jdbcType=VARCHAR})), 'Y')
+			 , DESCRIPTION 	 = #{description, jdbcType=VARCHAR}
+			 , UPDATE_DATE 	 = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			 , UPDATE_BY 	 = #{userId, jdbcType=VARCHAR}
+		WHERE  DIVISION_CD 	 = #{divisionCd, jdbcType=VARCHAR}     
+  		  AND  COMPANY_CD 	 = #{companyCd,jdbcType=VARCHAR}       
+		  AND  ITEM_ID       = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		  AND  CELL_CD       = #{cellCd, jdbcType=VARCHAR}
+  	  ;
+  	  
+  	  INSERT INTO MOM_ITEM_CELL_MASTER_HIST (
+			  LAST_EVENT_SEQ
+		    , DIVISION_CD
+			, COMPANY_CD
+			, ITEM_ID
+			, CELL_CD
+			, SEQ
+			, DIFFICULTY
+			, STANDARD_TIME
+			, ALARM_TIME1
+			, ALARM_TIME2
+			, USE_YN
+			, DESCRIPTION
+			, CREATE_DATE
+			, CREATE_BY
+			, UPDATE_DATE
+			, UPDATE_BY
+	   )
+	   SELECT S_ORDER_SEQ.NEXTVAL
+		    , DIVISION_CD
+			, COMPANY_CD
+			, ITEM_ID
+			, CELL_CD
+			, SEQ
+			, DIFFICULTY
+			, STANDARD_TIME
+			, ALARM_TIME1
+			, ALARM_TIME2
+			, USE_YN
+			, DESCRIPTION
+			, CREATE_DATE
+			, CREATE_BY
+			, UPDATE_DATE
+			, UPDATE_BY
+		 FROM MOM_ITEM_CELL_MASTER
+		WHERE  DIVISION_CD 	 = #{divisionCd, jdbcType=VARCHAR}     
+  		  AND  COMPANY_CD 	 = #{companyCd,jdbcType=VARCHAR}       
+	  	  AND  ITEM_ID       = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		  AND  CELL_CD       = #{cellCd, jdbcType=VARCHAR}
+		 ;
+		
+		SELECT
+			CASE 
+				WHEN COUNT(ITEM_ID) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_ITEM_CELL_MASTER
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+  		  AND COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}       
+		  AND ITEM_ID     = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		  AND CELL_CD     = #{cellCd, jdbcType=VARCHAR}
+		;
+	 END
+	}
+	</update>
+	
+	<delete id="remove_itemCell" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  
+	  INSERT INTO MOM_ITEM_CELL_MASTER_HIST (
+		   	  LAST_EVENT_SEQ
+		    , DIVISION_CD
+			, COMPANY_CD
+			, ITEM_ID
+			, CELL_CD
+			, SEQ
+			, DIFFICULTY
+			, STANDARD_TIME
+			, ALARM_TIME1
+			, ALARM_TIME2
+			, USE_YN
+			, DESCRIPTION
+			, CREATE_DATE
+			, CREATE_BY
+			, UPDATE_DATE
+			, UPDATE_BY
+	   )
+	   SELECT S_ORDER_SEQ.NEXTVAL
+	   		, DIVISION_CD
+			, COMPANY_CD
+			, ITEM_ID
+			, CELL_CD
+			, SEQ
+			, DIFFICULTY
+			, STANDARD_TIME
+			, ALARM_TIME1
+			, ALARM_TIME2
+			, USE_YN
+			, 'Delete Data'
+			, CREATE_DATE
+			, CREATE_BY
+			, MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			, #{userId, jdbcType=VARCHAR}
+		FROM MOM_ITEM_CELL_MASTER
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+  		  AND COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}       
+		  AND ITEM_ID     = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		  AND CELL_CD     = #{cellCd, jdbcType=VARCHAR}
+	  ;	  
+	   	  
+		DELETE FROM MOM_ITEM_CELL_MASTER
+		WHERE  DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+  		  AND  COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}       
+		  AND  ITEM_ID     = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		  AND  CELL_CD     = #{cellCd, jdbcType=VARCHAR}
+  	  ;
+  	 	
+		SELECT
+			CASE 
+				WHEN COUNT(ITEM_ID) = 0 THEN 'S'
+				ELSE 'E' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_ITEM_CELL_MASTER
+		WHERE  DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+  		  AND  COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}       
+		  AND  ITEM_ID     = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		  AND  CELL_CD     = #{cellCd, jdbcType=VARCHAR}
+		;
+  	 END
+  	}
+	</delete>
+</mapper>

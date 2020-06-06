@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.eis.qualityStatus">
+	<select id="get_qualityStatus_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.MM
+		     , MAX(DECODE(A.KPI_SEQ, 1, A.QTY, 0)) AS QTY1
+		     , MAX(DECODE(A.KPI_SEQ, 2, A.QTY, 0)) AS QTY2
+		     , MAX(DECODE(A.KPI_SEQ, 3, A.QTY, 0)) AS QTY3
+		     , MAX(DECODE(A.KPI_SEQ, 4, A.QTY, 0)) AS QTY4
+		  FROM (SELECT KPI_SEQ
+		             , QTY
+		             , MM
+		          FROM MOM_EIS_QA_KPI A
+		         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		           AND QA_SEQ = #{qaSeq, jdbcType=NUMERIC}
+		           AND WEEK =  #{week, jdbcType=VARCHAR}
+		         GROUP BY KPI_SEQ, QTY, MM
+		         ) A
+		 GROUP BY A.MM
+		 ORDER BY A.MM
+	</select>
+	
+	<select id="get_qualityKpiType_list" resultType="camelMap" parameterType="java.util.HashMap">
+	SELECT KPI_SEQ
+	     , KPI_TYPE
+	  FROM (SELECT DISTINCT KPI_TYPE
+	             , KPI_SEQ
+	          FROM MOM_EIS_QA_KPI
+	         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	           AND QA_SEQ = #{qaSeq, jdbcType=NUMERIC}) A
+	 ORDER BY KPI_SEQ
+	</select>
+	
+	<insert id="create_qualityStatus" parameterType="java.util.HashMap">
+	INSERT INTO MOM_EIS_QA_KPI 
+			   (  DIVISION_CD
+				, COMPANY_CD
+				, QA_TYPE
+				, KPI_TYPE
+				, MM
+				, QTY
+				, DESCRIPTION
+				, CREATE_DATE
+				, CREATE_BY
+				, UPDATE_DATE
+				, UPDATE_BY
+				, QA_SEQ
+				, KPI_SEQ
+				, WEEK
+			   )
+	VALUES(   #{divisionCd, jdbcType=VARCHAR}
+			, #{companyCd, jdbcType=VARCHAR}
+			, #{qaType, jdbcType=VARCHAR}
+			, #{kpiType, jdbcType=VARCHAR}
+			, #{mm, jdbcType=VARCHAR}
+			, #{qty, jdbcType=INTEGER}
+			, #{description, jdbcType=VARCHAR}
+			, MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			, #{userId, jdbcType=VARCHAR}
+			, MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			, #{userId, jdbcType=VARCHAR}
+			, #{qaSeq, jdbcType=INTEGER}
+			, #{kpiSeq, jdbcType=INTEGER}
+			, #{week, jdbcType=VARCHAR}
+
+			 )
+	</insert>
+	
+	<update id="modify_qualityStatus" parameterType="java.util.HashMap">
+	UPDATE MOM_EIS_QA_KPI
+	   SET QTY = #{qty, jdbcType=INTEGER}
+	     , UPDATE_DATE = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+	     , UPDATE_BY = #{userId, jdbcType=VARCHAR}
+	 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	   AND QA_SEQ = #{qaSeq, jdbcType=INTEGER}
+	   AND KPI_SEQ = #{kpiSeq, jdbcType=INTEGER}
+	   AND MM = #{mm, jdbcType=VARCHAR}
+	   AND WEEK = #{week, jdbcType=VARCHAR}
+	</update>
+	
+	
+</mapper>

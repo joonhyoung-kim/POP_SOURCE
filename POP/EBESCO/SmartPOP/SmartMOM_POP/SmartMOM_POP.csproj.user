@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PublishUrlHistory>C:\Users\USER\Desktop\pop\|C:\Users\USER\Desktop\|C:\Users\김준형\Desktop\|D:\WindowsProjects\SmartPOP\Deploy\|D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\Deploy\</PublishUrlHistory>
+    <InstallUrlHistory>http://adinter-smartmom.iptime.org:8100/smartpop/|http://adinter-smartmom.iptime.org:8100/smartpop/ad/|http://adinter-smartmom.iptime.org:8100/smartpop/pop/|http://adinter-smartmom.iptime.org:8100/smartpop/pop/ad/|http://adinter-smartmom.iptime.org:8100/smartpop/publish.htm/</InstallUrlHistory>
+    <SupportUrlHistory />
+    <UpdateUrlHistory />
+    <BootstrapperUrlHistory />
+    <ErrorReportUrlHistory />
+    <FallbackCulture>ko-KR</FallbackCulture>
+    <VerifyUploadedFiles>true</VerifyUploadedFiles>
+  </PropertyGroup>
+  <PropertyGroup>
+    <EnableSecurityDebugging>false</EnableSecurityDebugging>
+  </PropertyGroup>
+</Project>

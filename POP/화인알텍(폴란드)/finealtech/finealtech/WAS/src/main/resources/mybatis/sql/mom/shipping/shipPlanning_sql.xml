@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.shipping.shipPlanning">
+	<select id="get_shipPlanning_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT *FROM (SELECT MLD.DIVISION_CD
+		     , (SELECT S.CUSTOMER_LINE_CD
+		          FROM MOM_SALES_ORDER S
+		         WHERE S.DIVISION_CD = MID.DIVISION_CD
+		           AND S.COMPANY_CD = MID.COMPANY_CD
+		           AND S.CUSTOMER_PO_ID = SUBSTRB(MLD.WORK_ORDER, 1, 8)
+		           AND S.ITEM_ID = MLD.PART_NO
+		           AND ROWNUM = 1 ) AS CUSTOMER_LINE_CD
+		     , SUBSTRB(MLD.WORK_ORDER, 1, 8) AS CUSTOMER_WO_ID 
+		     , MLD.ORGANIZATION_CODE AS CUSTOMER_ORG_CODE 
+		     , MID.ITEM_GROUP_CODE AS MODEL 
+		     , MLD.PO_NO AS CUSTOMER_PO_ID 
+		     , MLD.PART_NO 
+		     , MID.ITEM_NAME
+		     , MLD.DEPARTURE_NUMBER
+		     , TO_CHAR(MLD.DEPARTURE_DATE, 'YYYY-MM-DD') AS DEPARTURE_DATE
+		     , MLD.DEPARTURE_QTY 
+		     , MLD.TRANSACTION_ID
+		     , '' AS DESCRIPTION
+		  FROM MOM_LGE_B2B_DEPARTURE MLD
+		     , MOM_ITEM_DEFINITION MID
+		 WHERE MLD.DIVISION_CD = MID.DIVISION_CD(+)
+		   AND MLD.PART_NO = MID.ITEM_ID(+)
+		   AND MLD.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND TRUNC(MLD.DEPARTURE_DATE) BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR},'YYYY-MM-DD')  AND TO_DATE(#{toDate, jdbcType=VARCHAR},'YYYY-MM-DD') 
+		   AND MLD.DEPARTURE_STATUS NOT IN ('RETURN TO VENDOR'
+		             , 'CANCELLED')
+		   AND NOT EXISTS (SELECT '*'
+		          FROM MOM_SHIPMENT_PLAN MSP
+		         WHERE MSP.DIVISION_CD = MID.DIVISION_CD
+		           AND MSP.COMPANY_CD = MID.COMPANY_CD
+		           AND MSP.CUSTOMER_PO_ID = MLD.PO_NO
+		           AND MSP.DEPARTURE_NUMBER = MLD.DEPARTURE_NUMBER
+		           AND MSP.DEPARTURE_SPLIT_ID = MLD.TRANSACTION_ID
+		           AND MSP.CANCEL_DATE IS  NULL) 
+		           <if test = "itemName != null and itemName != ''">
+		           AND (UPPER(MLD.PART_NO) LIKE '%' || UPPER(#{itemName, jdbcType=VARCHAR}) || '%'
+		           	 OR UPPER(MID.ITEM_NAME) LIKE '%' || UPPER(#{itemName, jdbcType=VARCHAR}) || '%')
+		           </if>
+		     )A
+		       WHERE  1 = 1    
+		       <if test = "customerWo != null and customerWo != ''">
+		    AND UPPER(A.CUSTOMER_WO_ID) LIKE '%' || UPPER(#{customerWo, jdbcType=VARCHAR}) || '%'
+		       </if>
+		       <if test = "customerPoNo != null and customerPoNo != ''">
+		    AND UPPER(A.CUSTOMER_PO_ID) LIKE '%' || UPPER(#{customerPoNo, jdbcType=VARCHAR}) || '%'
+		    </if>
+		 ORDER BY A.DEPARTURE_NUMBER , A.TRANSACTION_ID 
+	</select>
+
+	<delete id="remove_shipPlanningTmp" parameterType="java.util.HashMap">
+    DELETE FROM MOM_SHIPMENT_PLAN_TEMP
+	 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="create_shipPlanningTmp" parameterType="java.util.HashMap">
+  	 INSERT INTO MOM_SHIPMENT_PLAN_TEMP
+			  ( DIVISION_CD,
+				COMPANY_CD,
+				SHIPMENT_SEQ_NO,
+				CUSTOMER_WO_ID,
+				CUSTOMER_PO_ID,
+				CUSTOMER_ORG_CODE,
+				CUSTOMER_LINE_CD,
+				ITEM_ID,
+				DEPARTURE_NUMBER,
+				DEPARTURE_DATE,
+				DEPARTURE_QTY,
+				DEPARTURE_SPLIT_ID,
+				DESCRIPTION,
+				CREATE_DATE,
+				CREATE_BY,
+				UPDATE_DATE,
+				UPDATE_BY
+				)
+		VALUES
+	          ( #{divisionCd, jdbcType=VARCHAR},
+				#{companyCd, jdbcType=VARCHAR},
+				#{shipmentSeqNo, jdbcType=INTEGER},
+				#{customerWoId, jdbcType=VARCHAR},
+				#{customerPoId, jdbcType=VARCHAR},
+				#{customerOrgCode, jdbcType=VARCHAR},
+				#{customerLineCd, jdbcType=VARCHAR},
+				#{partNo, jdbcType=VARCHAR},
+				#{departureNumber, jdbcType=VARCHAR},
+				TO_DATE(#{departureDate, jdbcType=VARCHAR}, 'YYYY-MM-DD'),
+				#{departureQty, jdbcType=INTEGER},
+				#{departureSplitId, jdbcType=INTEGER},
+				#{description, jdbcType=VARCHAR},
+				MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+				#{userId, jdbcType=VARCHAR},
+			    MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+				#{userId, jdbcType=VARCHAR}
+		          )
+  	</insert>
+  	
+	<insert id="create_shipPlanningCreate" statementType="CALLABLE">
+		{
+			CALL SP_MOM_SALES_ORDER_PKG.P_CREATE_SHIPMENT_PLAN (
+				 #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+				,#{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+				,#{divisionCd, mode=IN, jdbcType=VARCHAR}
+				,#{companyCd, mode=IN, jdbcType=VARCHAR}
+				,#{userId, mode=IN, jdbcType=VARCHAR}
+			)
+		}
+	</insert>
+
+</mapper>

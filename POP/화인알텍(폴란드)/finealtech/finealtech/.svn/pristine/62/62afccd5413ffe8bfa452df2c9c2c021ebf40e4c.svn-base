@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.plan.plan.psi">
+	<select id="get_psi_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT FLOOR((ROWNUM - 1) / 6) + 1 RNUM
+		     , ROWNUM JQGRIDROW
+		     , A.*
+		  FROM (SELECT A.*
+		          FROM (SELECT *
+		                  from (SELECT A.MASTER_ID
+		                             , A.PLAN_ID
+		                             , A.ITEM_ID 
+		                             , A.SEQ
+		                             , A.CATEGORY  
+		                             , TO_CHAR(A.PLAN_DATE , 'yyyymmdd') PLAN_DATE
+		                             , SUM(A.QTY) AS QTY
+		                             , MIN(A.ITEM_GROUP_CODE) AS ITEM_GROUP_CODE 
+		                             , MIN(A.ITEM_TYPE) AS ITEM_TYPE  
+		                             , min((SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.MASTER_ID, #{companyCd, jdbcType=VARCHAR}, 'ITEM_TYPE', A.ITEM_TYPE)
+		                                          FROM DUAL)) AS ITEM_TYPE_NAME
+		                             , MIN(A.TOTAL_QTY) AS TOTAL_QTY 
+		                             , MIN(A.STOCK_QTY) AS STOCK_QTY 
+		                             , MIN(NVL(A.PAST_QTY, 0)) AS PAST_QTY
+		                          FROM TH_EXP_ORDER_PSI A
+		                         WHERE A.MASTER_ID = #{divisionCd, jdbcType=VARCHAR}
+		                           AND A.PLAN_ID = #{planId, jdbcType=VARCHAR}
+		                           AND A.PLAN_DATE >= TO_DATE(SUBSTR(TO_CHAR(#{planId, jdbcType=VARCHAR}),0,8), 'YYYY-MM-DD')
+		                           AND A.PLAN_DATE &lt;= TO_DATE(SUBSTR(TO_CHAR(#{planId, jdbcType=VARCHAR}),0,8), 'YYYY-MM-DD') + 30
+		                         GROUP BY A.MASTER_ID , A.PLAN_ID , A.ITEM_ID , A.SEQ , A.CATEGORY , TO_CHAR(A.PLAN_DATE , 'yyyymmdd')) 
+		                         <if test = "pivot != null and pivot != ''">
+		                         PIVOT(SUM(QTY) FOR PLAN_DATE IN(${pivot}))
+		                         </if>
+		                          ) A
+                                 WHERE 1 = 1
+                                 <if test = "itemName != null and itemName != ''">
+                                 AND ITEM_ID LIKE UPPER('%' || #{itemName, jdbcType=VARCHAR} || '%')
+                                 </if>
+                                 <if test = "model != null and model != ''">
+                                 AND ITEM_GROUP_CODE = #{model, jdbcType=VARCHAR}
+                                 </if>
+                                 <if test = "itemType != null and itemType != ''">
+                                 AND ITEM_TYPE = #{itemType, jdbcType=VARCHAR}
+                                 </if>
+                                 <if test = "shortage != null and shortage != ''">
+	                                 <if test = "shortage == 'Y_MINUS'">
+	                                 AND ITEM_ID IN (SELECT ITEM_ID 
+	                                 				 FROM   TH_EXP_ORDER_PSI
+	                                     WHERE  SEQ ='3'
+	                                     AND 	QTY &lt; 0)
+	                                 </if>
+                                 </if>
+		         ORDER BY A.ITEM_ID, A.SEQ) A 
+	</select>
+	
+	<!-- 계획유형 조회 -->
+	<select id="get_planType_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT PLAN_TYPE AS NAME, PLAN_ID AS CODE
+		FROM   TH_MST_PLAN  A 
+		WHERE  MASTER_ID = #{divisionCd, jdbcType=VARCHAR}   
+		AND    PLAN_ID LIKE REPLACE(TO_CHAR(MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR} ), 'YYYY-MM-DD'),'-','') || '%'
+		ORDER BY NAME DESC
+	</select>
+	
+	<insert id="create_psiCreate" statementType="CALLABLE">
+	{
+        CALL P_CREATE_ORDER_PSI(
+         #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+        ,#{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+        ,#{divisionCd, mode=IN, jdbcType=VARCHAR}
+        ,#{planId, mode=IN, jdbcType=VARCHAR})
+    }
+    
+    </insert>
+	
+   
+</mapper>

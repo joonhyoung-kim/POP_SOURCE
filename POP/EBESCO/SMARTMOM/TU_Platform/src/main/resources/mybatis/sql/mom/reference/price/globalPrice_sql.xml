@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.reference.price.globalPrice"> 
+	<select id="get_globalPrice_list" resultType="camelMap" parameterType="java.util.HashMap">
+	WITH TEMP1 AS (
+		SELECT  A.DIVISION_CD
+              , A.COMPANY_CD
+              , A.CURRENCY_CD
+              , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (A.DIVISION_CD
+                                                       , A.COMPANY_CD
+                                                       , 'CURRENCY_CODE'
+                                                       , A.CURRENCY_CD)
+                   FROM DUAL) AS CURRENCY_NAME
+              , A.UNIT_PRICE
+              , TO_CHAR(A.START_DATE, 'YYYY-MM-DD')   AS START_DATE
+              , TO_CHAR(A.END_DATE, 'YYYY-MM-DD')     AS END_DATE
+              , A.USE_YN
+              , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (A.DIVISION_CD
+                                                       , A.COMPANY_CD
+                                                       , 'USE_FLAG'
+                                                       , A.USE_YN)
+                   FROM DUAL) AS USE_YN_NAME
+              , A.DESCRIPTION
+              , TO_CHAR (A.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS CREATE_DATE
+              , A.CREATE_BY
+              , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME ( A.DIVISION_CD
+                                                        , A.COMPANY_CD
+                                                        , A.CREATE_BY) 
+                   FROM DUAL) AS CREATE_USER_NAME
+              , TO_CHAR (A.UPDATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS UPDATE_DATE
+              , A.UPDATE_BY
+              , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME ( A.DIVISION_CD
+                                                        , A.COMPANY_CD
+                                                        , A.UPDATE_BY) 
+                   FROM DUAL) AS UPDATE_USER_NAME
+	      FROM   MOM_EXCHANGE_RATE A
+	     WHERE   A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND   A.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		   AND   A.CURRENCY_CD IN (SELECT CODE_ID FROM MOM_CODE 
+		                            WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		                              AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		                              AND CODE_CLASS_ID = 'CURRENCY_CODE'
+		                              AND USE_YN = 'Y')
+		  <if test="fromDate != null and fromDate != ''">
+      	   AND    TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') BETWEEN A.START_DATE AND A.END_DATE       
+      	  </if>
+      	  <if test="currencyCd != null and currencyCd != ''">
+      	   AND    A.CURRENCY_CD = #{currencyCd, jdbcType=VARCHAR}
+      	  </if>
+		 ORDER BY A.CURRENCY_CD, A.START_DATE DESC)
+     SELECT A.*
+          , B.ROW_COUNT
+     FROM (SELECT A.*
+                , ROWNUM GRIDROW
+             FROM TEMP1 A) A
+        , (SELECT COUNT(*) ROW_COUNT
+             FROM TEMP1) B 
+    <if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+     WHERE GRIDROW BETWEEN #{startPage, jdbcType=INTEGER} AND #{endPage, jdbcType=INTEGER}
+    </if>
+	</select>
+	
+	<select id="get_globalPrice" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT *
+		  FROM MOM_EXCHANGE_RATE
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND CURRENCY_CD = #{currencyCd, jdbcType=VARCHAR}
+		   AND UNIT_PRICE = #{unitPrice, jdbcType=VARCHAR}
+		   AND START_DATE = TO_DATE(#{startDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+		   AND END_DATE = TO_DATE(#{endDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+	</select>
+	
+	<select id="get_globalPriceCheck_list" resultType="camelMap" parameterType="java.util.HashMap">
+        SELECT COUNT(*) CNT
+          FROM MOM_EXCHANGE_RATE
+         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+           AND CURRENCY_CD = #{currencyCd, jdbcType=VARCHAR}
+           AND START_DATE = TO_DATE(#{startDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+    </select>
+	
+	<!-- 
+	* 20191030 / gyp / 사용하지 않는 sql로 삭제예정
+	 -->
+	 <!-- 
+	<insert id="create_globalPrice" parameterType="java.util.HashMap">
+        INSERT INTO MOM_EXCHANGE_RATE (
+            DIVISION_CD,
+            COMPANY_CD,
+            CURRENCY_CD,
+            UNIT_PRICE,
+            START_DATE,
+            END_DATE,
+            USE_YN,
+            DESCRIPTION,
+            CREATE_DATE,
+            CREATE_BY,
+            UPDATE_DATE,
+            UPDATE_BY
+        ) 
+        VALUES (
+            #{divisionCd, jdbcType=VARCHAR},
+            #{companyCd, jdbcType=VARCHAR},
+            UPPER(TRIM(#{currencyCd, jdbcType=VARCHAR})),
+            #{unitPrice, jdbcType=NUMERIC},
+            TO_DATE(#{startDate, jdbcType=VARCHAR}, 'YYYY-MM-DD'),
+            TO_DATE('4712-12-31', 'YYYY-MM-DD'),
+            'Y',
+            #{description, jdbcType=VARCHAR},
+            MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+            #{updateBy, jdbcType=VARCHAR},
+            MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+            #{updateBy, jdbcType=VARCHAR}
+        )
+    </insert>
+    
+    <update id="modify_globalPrice" parameterType="java.util.HashMap">
+        UPDATE MOM_EXCHANGE_RATE A
+           SET A.UPDATE_DATE = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+             , A.UPDATE_BY = #{updateBy, jdbcType=VARCHAR}
+             , A.END_DATE = A.START_DATE
+         WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+           AND A.CURRENCY_CD = UPPER(TRIM(#{currencyCd, jdbcType=VARCHAR}))
+
+    </update>
+     -->
+    
+    <insert id="create_globalPrice" statementType="CALLABLE">
+	{
+        CALL P_EXCHANGE_RATE_UPSERT (
+             #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+           , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+           , #{companyCd, mode=IN, jdbcType=VARCHAR}
+           , TRIM(#{currencyCd, mode=IN, jdbcType=VARCHAR})
+           , #{unitPrice, mode=IN, jdbcType=NUMERIC}
+           , TO_DATE(#{startDate, mode=IN, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+           , TO_DATE(#{endDate, mode=IN, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+           , #{description, mode=IN, jdbcType=VARCHAR}
+           , #{userId, mode=IN, jdbcType=VARCHAR}
+           , #{cudFlag, mode=IN, jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+    
+</mapper>

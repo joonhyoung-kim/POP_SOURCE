@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd">
+	
+	<!-- ObjectMapper Setting -->
+	<beans:bean id="objectMapper" class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+		<beans:property name="featuresToEnable">
+			<beans:array>
+				<beans:value type="com.fasterxml.jackson.databind.DeserializationFeature">ACCEPT_EMPTY_STRING_AS_NULL_OBJECT</beans:value>
+				<beans:value type="com.fasterxml.jackson.databind.DeserializationFeature">ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT</beans:value>
+				<beans:value type="com.fasterxml.jackson.core.JsonParser.Feature">ALLOW_UNQUOTED_FIELD_NAMES</beans:value>
+			</beans:array>
+		</beans:property>
+		<beans:property name="featuresToDisable">
+			<beans:array>
+				<beans:value type="com.fasterxml.jackson.databind.SerializationFeature">WRITE_DATES_AS_TIMESTAMPS</beans:value>
+			</beans:array>
+		</beans:property>
+		<beans:property name="modules">
+			<beans:list>
+				<beans:bean class="com.fasterxml.jackson.module.paramnames.ParameterNamesModule" />
+				<beans:bean class="com.fasterxml.jackson.datatype.jdk8.Jdk8Module" />
+				<beans:bean class="com.fasterxml.jackson.datatype.jsr310.JavaTimeModule" />
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+	
+	<!-- Spring MVC 자동설정 -->
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<beans:bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<beans:constructor-arg ref="objectMapper" />
+			</beans:bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	
+	<!-- Spring Annotation 스캔 패키지 설정 -->
+	<context:component-scan base-package="com.thirautech" />
+	
+	<!-- Spring Servlet 기본처리 설정 -->
+	<mvc:default-servlet-handler />
+	
+	<!-- Cross Origin Resource Sharing 설정 -->
+	<mvc:cors>
+		<mvc:mapping path="/**/*"/>
+	</mvc:cors>
+	
+<!-- 	<mvc:resources location="/**/*" mapping="/" /> -->
+	
+	<!-- configuration xml path 설정 -->
+	<beans:import resource="classpath:spring/spring-*.xml"/>
+	
+	<!-- properties 설정 -->
+	<util:properties id="tuPlatformProperties" location="classpath:tu_platform.properties" />
+
+	
+</beans:beans>

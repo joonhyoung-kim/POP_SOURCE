@@ -1,0 +1,152 @@
+<HTML>
+<HEAD>
+	<TITLE>MyApp Start Page</TITLE>
+<script
+	src='/TU_Platform/Content/theme/js/plugins/printer/select2.min.js'></script>
+  <script type="text/javascript" charset="utf-8" src="ebapi-modules.js"></script>  
+  <script type="text/javascript" charset="utf-8" src="elements.js"></script>
+  <script type="text/javascript" charset="utf-8" src="eb.printerzebra.js"></script>
+   <script type="text/javascript" charset="utf-8" src="eb.printer.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+	
+	function $(s) 			{ return document.querySelector(s)			}
+	function v_out(s,v) { document.querySelector(s).innerHTML=v }
+	
+	 function print_ticket() {
+		    EB.PrinterZebra.searchPrinters ({"connectionType":EB.Printer.CONNECTION_TYPE_USB}, function(cb) {    
+
+		// Prep work includes checking for found printers,  
+		// locating the right one and connecting to it.
+		// Note an individual callback for every printer found. 
+		// This simple code expects just one printer.
+
+		    var myPrinter = EB.PrinterZebra.getPrinterByID(cb.printerID)
+		    myPrinter.connect(function(cb){
+
+		// If connection is successful, 
+		// check printer state and set options and parameters.
+		// Upload images and format files.
+		// If printer is ready, print.
+
+		// Assuming printer is ready, is in ZPL mode and many other assumptions:
+
+		    myPrinter.printRawString('^XA^FO20,20^AD^FDTest^XZ',{},function(cb) {
+
+		// Update status, display "please wait," error processing, etc.
+		// Can be ignored in prototype, but not in production.
+		            })  
+		        })
+		    })
+		}
+    	
+	function get_props() {
+		v_out('#p_deviceName'			, EB.System.deviceName)
+		v_out('#p_platform'				, EB.System.platform)
+		v_out('#p_osVersion'			, EB.System.osVersion)
+
+		v_out('#p_screenHeight'		, EB.System.screenHeight)
+		v_out('#p_screenWidth'		, EB.System.screenWidth)
+
+		v_out('#p_webview'				, EB.System.webviewFramework)
+		v_out('#p_UUID'						, EB.System.uuid)
+
+		v_out('#p_country'				, EB.System.country)
+		v_out('#p_locale'					, EB.System.locale)
+	}
+
+	// WLAN Stats
+	function wlanStatus_callback (jsonObj) {
+		if (jsonObj.essid == "") 	{ 
+			jsonObj.essid = "ERROR: NOT CONNECTED"
+			$('#WLAN_ssid').style.color="red"
+		}	else {
+			$('#WLAN_ssid').style.color="green"
+		}
+
+		v_out('#WLAN_ssid'		, jsonObj.essid				)
+		v_out('#WLAN_adapter'	, jsonObj.adapterName	)
+		v_out('#WLAN_ip'			, jsonObj.ipAddress		)
+		v_out('#WLAN_rssi'		, jsonObj.rssi 				)
+	};
+
+	// Network connection check
+	var checkHost = {
+//		"host"						: "MyAppServer.company.local",
+//		"port"						: 8080,
+		"host"						: "www.google.com",
+		"port"						: 80,
+
+		"detectionTimeout": 1000,
+		"pollinterval"		: 5000
+	}
+
+	function detectConnection_callback (jsonObj) {
+		var host_URL = checkHost['host']+':'+checkHost['port']
+		var res = (jsonObj.connectionInformation == "Connected")?true:false
+
+		
+		if (res) { 
+			EB.Network.stopDetectingConnection()			
+			window.location.href = "http://"+host_URL
+		}
+		else {
+			EB.SignalIndicators.wlanStatus(wlanStatus_callback)
+			EB.SignalIndicators.showIcon({'left': 400, 'top':10,'color':'#2E8EAA'})
+			get_props()
+			v_out('#n_app_url'					, host_URL)
+
+			$("#somethingwrong"	).style.display = "block"
+			$("#connecting"			).style.display = "none"
+		}	
+	}
+
+
+  function onLoad() {
+  	reloadButton.visibility = 'visible'
+  	quitButton.visibility = 'visible'
+
+		//get_props()
+		//EB.SignalIndicators.wlanStatus(wlanStatus_callback)
+  	//EB.SignalIndicators.showIcon({'left': 400, 'top':10,'color':'#2E8EAA'})
+  	EB.Network.detectConnection(checkHost, detectConnection_callback);
+  }
+		
+</script>  
+
+</HEAD>
+
+<BODY onLoad="onLoad()">
+<div id="connecting">Please wait, connecting...</div>
+<div id="somethingwrong" style="display:none">
+
+<H1>We have a problem...</H1>
+Cannot connect to: <b><span id="n_app_url"	></span></b><br>
+<br>
+Please examine the details below<br>
+If the values are OK or do not make sense - please contact tech support
+<hr>
+Device Name:	<span id="p_deviceName"			></span><br>
+UUID: 				<span id="p_UUID"						></span><br>
+OS:				 		<span id="p_platform"				></span>
+v 						<span id="p_osVersion"			></span><br>
+Screen:			 	<span id="p_screenHeight"		></span>
+x							<span id="p_screenWidth"		></span><br>
+<hr>
+Browser: 			<span id="p_webview"				></span><br>
+Locale: 			<span id="p_country"				></span>
+/							<span id="p_locale"					></span><br>
+<hr>
+WLAN SSID: 		<span id="WLAN_ssid"				></span><br>
+WLAN Adapter: <span id="WLAN_adapter"			></span><br>
+WLAN RSSI: 		<span id="WLAN_rssi"				></span><br>
+WLAN IP: 			<span id="WLAN_ip"					></span><br>
+<hr>
+</div>
+
+<button onClick="location.reload()"			>Reload </button>
+<button onClick="EB.Application.quit()"	>Quit 	</button>
+  <button id=¡±PrintBtn¡± onClick="print_ticket()">Print</button>
+    <div><span id="print_status"></span></div>
+
+</BODY>

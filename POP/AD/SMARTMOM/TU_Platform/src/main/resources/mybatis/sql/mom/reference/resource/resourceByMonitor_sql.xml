@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.reference.resource.resourceByMonitor"> 
+	<select id="get_monitor_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT DIVISION_CD
+			 , COMPANY_CD
+			 , RESOURCE_CD
+			 , RESOURCE_MONITOR_CD
+			 , UI_SEQUENCE
+			 , USE_YN
+			 , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( DIVISION_CD
+			 										  , COMPANY_CD
+			 										  , 'USE_FLAG'
+			 										  , USE_YN) 
+			      FROM DUAL) AS USE_YN_NAME 
+			 , TO_CHAR(CREATE_DATE, 'YYYY-MM-DD') AS CREATE_DATE
+			 , CREATE_BY
+			 , TO_CHAR(UPDATE_DATE, 'YYYY-MM-DD') AS UPDATE_DATE
+			 , UPDATE_BY
+			 , DESCRIPTION
+		  FROM MOM_RESOURCE_MONITOR
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND RESOURCE_CD = #{resourceCd, jdbcType=VARCHAR}
+		 ORDER BY RESOURCE_MONITOR_CD
+	</select>
+	
+	<insert id="create_monitor" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+			#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+			
+			INSERT INTO MOM_RESOURCE_MONITOR (  
+    	    	DIVISION_CD
+			  , COMPANY_CD
+			  , RESOURCE_CD
+			  , RESOURCE_MONITOR_CD
+			  , UI_SEQUENCE
+			  , USE_YN
+			  , CREATE_DATE
+			  , CREATE_BY
+			  , UPDATE_DATE
+			  , UPDATE_BY
+			)    
+			VALUES (  
+			    #{divisionCd, jdbcType=VARCHAR} 
+			  , #{companyCd, jdbcType=VARCHAR} 
+			  , UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR})) 
+			  , UPPER(TRIM(#{resourceMonitorCd, jdbcType=VARCHAR}))
+			  , #{uiSequence, jdbcType=NUMERIC}
+			  , NVL(UPPER(TRIM(#{useYn, jdbcType=VARCHAR})), 'Y')
+		      , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		      , #{updateBy,jdbcType=VARCHAR}
+		      , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		      , #{updateBy,jdbcType=VARCHAR}
+			)
+		   ;
+	   
+		   INSERT INTO MOM_RESOURCE_MONITOR_HIST (
+   		   		LAST_EVENT_SEQ
+			  , DIVISION_CD
+			  , COMPANY_CD
+			  , RESOURCE_CD
+			  , RESOURCE_MONITOR_CD
+			  , UI_SEQUENCE
+			  , USE_YN
+			  , CREATE_DATE
+			  , CREATE_BY
+			  , UPDATE_DATE
+			  , UPDATE_BY
+		   )
+		   SELECT S_ORDER_SEQ.NEXTVAL
+		   		, DIVISION_CD
+			    , COMPANY_CD
+			    , RESOURCE_CD
+			    , RESOURCE_MONITOR_CD
+			    , UI_SEQUENCE
+			    , USE_YN
+			    , CREATE_DATE
+			    , CREATE_BY
+			    , UPDATE_DATE
+			    , UPDATE_BY
+			 FROM MOM_RESOURCE_MONITOR
+			WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			  AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+			  AND RESOURCE_MONITOR_CD = UPPER(TRIM(#{resourceMonitorCd, jdbcType=VARCHAR}))
+			;
+       
+       SELECT
+			CASE 
+				WHEN COUNT(*) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		 FROM MOM_RESOURCE_MONITOR
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		  AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+		  AND RESOURCE_MONITOR_CD = UPPER(TRIM(#{resourceMonitorCd, jdbcType=VARCHAR}))
+		;
+       
+	 END
+	} 
+	</insert>
+	
+	<update id="modify_monitor" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  		#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+		UPDATE MOM_RESOURCE_MONITOR
+		SET    RESOURCE_MONITOR_CD = UPPER(TRIM(#{resourceMonitorCd, jdbcType=VARCHAR}))
+			 , UI_SEQUENCE = #{uiSequence, jdbcType=NUMERIC}
+			 , USE_YN = NVL(UPPER(TRIM(#{useYn, jdbcType=VARCHAR})), 'Y')
+			 , UPDATE_DATE = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			 , UPDATE_BY = #{updateBy, jdbcType=VARCHAR}
+		WHERE  DIVISION_CD = #{divisionCd,jdbcType=VARCHAR}
+		AND    COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}
+		AND    RESOURCE_CD = UPPER(TRIM(#{resourceCd,jdbcType=VARCHAR}))
+		AND    RESOURCE_MONITOR_CD = UPPER(TRIM(#{resourceMonitorCd, jdbcType=VARCHAR}))
+		;
+		
+		INSERT INTO MOM_RESOURCE_MONITOR_HIST (
+ 	   		   LAST_EVENT_SEQ
+		  	 , DIVISION_CD
+		  	 , COMPANY_CD
+		  	 , RESOURCE_CD
+		  	 , RESOURCE_MONITOR_CD
+		  	 , UI_SEQUENCE
+		  	 , USE_YN
+		  	 , CREATE_DATE
+		  	 , CREATE_BY
+		  	 , UPDATE_DATE
+		  	 , UPDATE_BY
+		   )
+		SELECT S_ORDER_SEQ.NEXTVAL
+		   	 , DIVISION_CD
+		  	 , COMPANY_CD
+		  	 , RESOURCE_CD
+		  	 , RESOURCE_MONITOR_CD
+		  	 , UI_SEQUENCE
+		  	 , USE_YN
+		  	 , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		     , #{updateBy,jdbcType=VARCHAR}
+		     , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		     , #{updateBy,jdbcType=VARCHAR}
+		  FROM MOM_RESOURCE_MONITOR
+		 WHERE DIVISION_CD = #{divisionCd,jdbcType=VARCHAR}
+		   AND COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}
+		   AND RESOURCE_CD = UPPER(TRIM(#{resourceCd,jdbcType=VARCHAR}))
+		   AND RESOURCE_MONITOR_CD = UPPER(TRIM(#{resourceMonitorCd, jdbcType=VARCHAR}))
+		;
+       
+       SELECT
+			CASE 
+				WHEN COUNT(*) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		 FROM MOM_RESOURCE_MONITOR
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		  AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+		  AND RESOURCE_MONITOR_CD = UPPER(TRIM(#{resourceMonitorCd, jdbcType=VARCHAR}))
+		;
+		
+	 END
+	}
+	</update>
+	
+	<delete id="remove_monitor" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	   #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  		
+	  INSERT INTO MOM_RESOURCE_MONITOR_HIST (
+   		   	   	  LAST_EVENT_SEQ
+		  	 	, DIVISION_CD
+		  	 	, COMPANY_CD
+		  	 	, RESOURCE_CD
+		  	 	, RESOURCE_MONITOR_CD
+		  	 	, UI_SEQUENCE
+		  	 	, USE_YN
+		  	 	, CREATE_DATE
+		  	 	, CREATE_BY
+		  	 	, UPDATE_DATE
+		  	 	, UPDATE_BY
+		  	 	, DESCRIPTION
+		   )
+		   SELECT S_ORDER_SEQ.NEXTVAL
+		   		, DIVISION_CD
+		  	 	, COMPANY_CD
+		  	 	, RESOURCE_CD
+		  	 	, RESOURCE_MONITOR_CD
+		  	 	, UI_SEQUENCE
+		  	 	, USE_YN
+		  	 	, MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		     	, #{updateBy,jdbcType=VARCHAR}
+		     	, MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		     	, #{updateBy,jdbcType=VARCHAR}
+		  	 	, 'Delete Data'
+			 FROM MOM_RESOURCE_MONITOR
+			WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			  AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+			 <if test="resourceMonitorCd != null and resourceMonitorCd != ''">
+			  AND RESOURCE_MONITOR_CD = UPPER(TRIM(#{resourceMonitorCd, jdbcType=VARCHAR}))
+			 </if>
+			;
+		
+		DELETE 
+		  FROM MOM_RESOURCE_MONITOR
+		 WHERE DIVISION_CD = #{divisionCd,jdbcType=VARCHAR}
+	       AND COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}
+	       AND RESOURCE_CD = UPPER(#{resourceCd,jdbcType=VARCHAR})
+	      <if test="resourceMonitorCd != null and resourceMonitorCd != ''">
+		   AND RESOURCE_MONITOR_CD = UPPER(TRIM(#{resourceMonitorCd, jdbcType=VARCHAR}))
+		  </if>
+	    ;
+	    
+	    SELECT
+			CASE 
+				WHEN COUNT(*) = 0 THEN 'S'
+				ELSE 'E' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		  FROM MOM_RESOURCE_MONITOR
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	       AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+	       AND RESOURCE_CD = UPPER(#{resourceCd,jdbcType=VARCHAR})
+	      <if test="resourceMonitorCd != null and resourceMonitorCd != ''">
+		   AND RESOURCE_MONITOR_CD = UPPER(TRIM(#{resourceMonitorCd, jdbcType=VARCHAR}))
+	      </if>
+		;
+	  END
+	}
+	</delete>
+	
+	<insert id="create_resourceByMonitor" statementType="CALLABLE">
+	{
+        CALL SP_MOM_EQUIPMENT_PKG.P_REMOVE_MONITOR ( 
+             #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+           , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+           , #{companyCd, mode=IN, jdbcType=VARCHAR}
+		   , #{resourceGroupCd, mode=IN, jdbcType=VARCHAR}
+           , #{resourceCd, mode=IN, jdbcType=VARCHAR}
+           , #{updateBy, mode=IN, jdbcType=VARCHAR}
+        )
+    }
+	</insert>	
+	
+</mapper>

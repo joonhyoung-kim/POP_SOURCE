@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.equipment.equipmentEvent">
+	 <select id="get_equipmentEvent_list" resultType="camelMap" parameterType="java.util.HashMap">
+	 
+	 SELECT  ALARM_CODE
+		   , ALARM_NAME
+		   , ALARM_CLASS_CD
+		   , (SELECT ALARM_CLASS_NAME
+		   		FROM TU_OPC_ALARM_CLASS
+		   	   WHERE DIVISION_CD 	= A.DIVISION_CD
+		   	     AND COMPANY_CD  	= A.COMPANY_CD
+		   	     AND ALARM_CLASS_CD = A.ALARM_CLASS_CD) AS ALARM_CLASS_NAME	
+		   , ALARM_TYPE
+		   , TO_CHAR(CREATE_DATE, 'yyyy-mm-dd hh24:mi:ss') AS CREATE_DATE
+		   , TO_CHAR(UPDATE_DATE, 'yyyy-mm-dd hh24:mi:ss') AS UPDATE_DATE	    
+	  FROM TU_ALARM A
+	 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	   AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+	  ORDER BY UPDATE_DATE
+	  		 , ALARM_NAME
+	  		 	  
+	</select>
+	
+	<select id="get_equipmentEventHist_list" resultType="camelMap" parameterType="java.util.HashMap">
+	 
+	 SELECT  ALARM_CODE
+		   , ALARM_NAME
+		   , ALARM_CLASS_CD
+		   , (SELECT ALARM_CLASS_NAME
+		   		FROM TU_OPC_ALARM_CLASS
+		   	   WHERE DIVISION_CD	= A.DIVISION_CD
+		   	     AND COMPANY_CD  	= A.COMPANY_CD
+		   	     AND ALARM_CLASS_CD = A.ALARM_CLASS_CD) AS ALARM_CLASS_NAME	
+		   , ALARM_TYPE
+		   , TO_CHAR(CREATE_DATE, 'yyyy-mm-dd hh24:mi:ss') AS CREATE_DATE
+		   , TO_CHAR(UPDATE_DATE, 'yyyy-mm-dd hh24:mi:ss') AS UPDATE_DATE    
+	  FROM TU_ALARM_HIST A
+	 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	   AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+	   AND UPDATE_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR},'yyyy-mm-dd') AND TO_DATE(#{toDate, jdbcType=VARCHAR},'yyyy-mm-dd') + 23.9997/24
+	 <if test="alarmName != null and alarmName != '' ">
+	   AND  (UPPER(ALARM_NAME) LIKE '%' || TRIM(UPPER(#{alarmName, jdbcType=VARCHAR})) || '%' 
+	   		 OR UPPER(ALARM_CODE) LIKE '%' || TRIM(UPPER(#{alarmName, jdbcType=VARCHAR})) || '%')
+	 </if>
+	 <if test="alarmClassName != null and alarmClassName != '' ">		  
+	   AND ALARM_CLASS_CD = #{alarmClassName, jdbcType=VARCHAR}
+	 </if>	
+	 ORDER BY UPDATE_DATE
+	  	    , ALARM_NAME
+	  	    
+	</select>
+	
+	<select id="get_equipmentEventHistAlarmClassName_list" resultType="camelMap" parameterType="java.util.HashMap">
+	 
+	 SELECT ALARM_CLASS_CD AS CODE
+	 	  , ALARM_CLASS_CD||'('|| ALARM_CLASS_NAME ||')' AS NAME
+	   FROM TU_OPC_ALARM_CLASS
+	  WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	    AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+	  ORDER BY ALARM_CLASS_NAME
+	  
+	</select>	 		 	
+</mapper>

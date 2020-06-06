@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.admin.itemStockControl">
+	<select id="get_itemStockControl_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT DEPT_CD
+	         , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(DIVISION_CD, COMPANY_CD, 'CONTROL_DEPT', DEPT_CD) 
+	              FROM DUAL) AS DEPT_NAME
+	         , TO_CHAR(CTRL_DATE, 'YYYY-MM-DD') AS CTRL_DATE
+	         , DESCRIPTION
+	         , TO_CHAR(CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS CREATE_DATE
+	         , CREATE_BY
+	         , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(DIVISION_CD, COMPANY_CD, CREATE_BY) 
+	              FROM DUAL) AS CREATE_USER_NAME
+	         , TO_CHAR(UPDATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS UPDATE_DATE
+	         , UPDATE_BY
+	         , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(DIVISION_CD, COMPANY_CD, UPDATE_BY) 
+	              FROM DUAL) AS UPDATE_USER_NAME
+	      FROM MOM_ITEM_STOCK_CTRL
+	     WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	       AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		 <if test = "partName != null and partName != ''">
+		   AND DEPT_CD = #{partName, jdbcType=VARCHAR}
+	 	 </if>
+	</select>
+	
+	<insert id="create_itemStockControl" statementType="CALLABLE" parameterType="java.util.HashMap">
+		INSERT INTO MOM_ITEM_STOCK_CTRL (
+			DIVISION_CD,
+			COMPANY_CD,
+			DEPT_CD,
+			CTRL_DATE,
+			DESCRIPTION,
+			CREATE_DATE,
+			CREATE_BY,
+			UPDATE_DATE,
+			UPDATE_BY
+		)
+		VALUES (
+			#{divisionCd, jdbcType=VARCHAR},
+			#{companyCd, jdbcType=VARCHAR},
+			#{deptCd, jdbcType=VARCHAR},
+			TO_DATE(#{ctrlDate, jdbcType=VARCHAR}, 'YYYY-MM-DD'),
+			#{description, jdbcType=VARCHAR},
+			MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			#{userId, jdbcType=VARCHAR},
+			MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			#{userId, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="modify_itemStockControl" statementType="CALLABLE" parameterType="java.util.HashMap">
+		UPDATE MOM_ITEM_STOCK_CTRL
+		   SET CTRL_DATE = TO_DATE(#{ctrlDate, jdbcType=VARCHAR}, 'YYYY-MM-DD'),
+		   	   DESCRIPTION = #{description, jdbcType=VARCHAR},
+		   	   UPDATE_BY = #{userId, jdbcType=VARCHAR},
+		   	   UPDATE_DATE = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND DEPT_CD = #{deptCd, jdbcType=VARCHAR}
+	</update>
+	
+	<select id="get_chkItemStockControl_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT *
+		  FROM MOM_ITEM_STOCK_CTRL
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND DEPT_CD = #{deptCd, jdbcType=VARCHAR}
+	</select>
+	
+</mapper>

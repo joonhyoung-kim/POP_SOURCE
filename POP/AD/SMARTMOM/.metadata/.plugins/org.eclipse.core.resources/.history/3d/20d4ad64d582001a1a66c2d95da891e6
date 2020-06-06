@@ -1,0 +1,1625 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.reference.itemInfo.item">
+	<resultMap id="itemListMap" type="HashMap">
+		<result property="divisionCd"  column="DIVISION_CD" />
+		<result property="companyCd"  column="COMPANY_CD" />
+		<result property="itemId"  column="ITEM_ID" />
+		<result property="itemName"  column="ITEM_NAME" />
+		<result property="itemGroupCode"  column="ITEM_GROUP_CODE" />
+		<result property="itemType"  column="ITEM_TYPE" />
+		<result property="specification"  column="SPECIFICATION" />
+		<result property="vendorCd"  column="VENDOR_CD" />
+		<result property="departureVendorCd"  column="DEPARTURE_VENDOR_CD" />
+		<result property="unitPrice"  column="UNIT_PRICE" />
+		<result property="unit"  column="UNIT" />
+		<result property="purchaseUnit"  column="PURCHASE_UNIT" />
+		<result property="unitQty"  column="UNIT_QTY" />
+		<result property="conversionUnitQty"  column="CONVERSION_UNIT_QTY" />
+		<result property="moq"  column="MOQ" />
+		<result property="mom"  column="MOM" />
+		<result property="safetyStockQty"  column="SAFETY_STOCK_QTY" />
+		<result property="safetyStockDay"  column="SAFETY_STOCK_DAY" />
+		<result property="safetyStockDayUom"  column="SAFETY_STOCK_DAY_UOM" />
+		<result property="prodMinLotSize"  column="PROD_MIN_LOT_SIZE" />
+		<result property="prodMaxLotSize"  column="PROD_MAX_LOT_SIZE" />
+		<result property="prodIncrementLotSize"  column="PROD_INCREMENT_LOT_SIZE" />
+		<result property="demandLotSize"  column="DEMAND_LOT_SIZE" />
+		<result property="isPhantom"  column="IS_PHANTOM" />
+		<result property="activationFlag"  column="ACTIVATION_FLAG" />
+		<result property="isFiniteFlag"  column="IS_FINITE_FLAG" />
+		<result property="finiteTerm"  column="FINITE_TERM" />
+		<result property="finiteTermUom"  column="FINITE_TERM_UOM" />
+		<result property="inLocationId"  column="IN_LOCATION_ID" />
+		<result property="outLocationId"  column="OUT_LOCATION_ID" />
+		<result property="testReportFlag"  column="TEST_REPORT_FLAG" />
+		<result property="iqcFlag"  column="IQC_FLAG" />
+		<result property="oqcFlag"  column="OQC_FLAG" />
+		<result property="pqcFlag"  column="PQC_FLAG" />
+		<result property="rpItemId"  column="RP_ITEM_ID" />
+		<result property="vendorItemId"  column="VENDOR_ITEM_ID" />
+		<result property="altItemId"  column="ALT_ITEM_ID" />
+		<result property="itemCategory"  column="ITEM_CATEGORY" />
+		<result property="purchaseType"  column="PURCHASE_TYPE" />
+		<result property="itemUserId"  column="ITEM_USER_ID" />
+		<result property="packingSizeWidth"  column="PACKING_SIZE_WIDTH" />
+		<result property="packingSizeHeight"  column="PACKING_SIZE_HEIGHT" />
+		<result property="materialWeight"  column="MATERIAL_WEIGHT" />
+		<result property="palletWeight"  column="PALLET_WEIGHT" />
+		<result property="unitWeight"  column="UNIT_WEIGHT" />
+		<result property="boxWeight"  column="BOX_WEIGHT" />
+		<result property="itemGroupLarge"  column="ITEM_GROUP_LARGE" />
+		<result property="itemGroupMedium"  column="ITEM_GROUP_MEDIUM" />
+		<result property="itemGroupSmall"  column="ITEM_GROUP_SMALL" />
+		<result property="preBuildTerm"  column="PRE_BUILD_TERM" />
+		<result property="leadTime"  column="LEAD_TIME" />
+		<result property="trackingFlag"  column="TRACKING_FLAG" />
+		<result property="orderMethod"  column="ORDER_METHOD" />
+		<result property="itemGrade"  column="ITEM_GRADE" />
+		<result property="badLevel"  column="BAD_LEVEL" />
+		<result property="standardOutQty"  column="STANDARD_OUT_QTY" />
+		<result property="defectRate"  column="DEFECT_RATE" />
+		<result property="byProductItemId"  column="BY_PRODUCT_ITEM_ID" />
+		<result property="useYn"  column="USE_YN" />
+		<result property="description"  column="DESCRIPTION" />
+		<result property="createDate"  column="CREATE_DATE" />
+		<result property="createBy"  column="CREATE_BY" />
+		<result property="updateDate"  column="UPDATE_DATE" />
+		<result property="updateBy"  column="UPDATE_BY" />
+		<result property="tid"  column="TID" />
+		<result property="attribute1"  column="ATTRIBUTE1" />
+		<result property="attribute2"  column="ATTRIBUTE2" />
+		<result property="attribute3"  column="ATTRIBUTE3" />
+		<result property="attribute4"  column="ATTRIBUTE4" />
+		<result property="attribute5"  column="ATTRIBUTE5" />
+		<result property="attribute6"  column="ATTRIBUTE6" />
+		<result property="attribute7"  column="ATTRIBUTE7" />
+		<result property="attribute8"  column="ATTRIBUTE8" />
+		<result property="attribute9"  column="ATTRIBUTE9" />
+		<result property="attribute10"  column="ATTRIBUTE10" />
+		<result property="attribute11"  column="ATTRIBUTE11" />
+		<result property="attribute12"  column="ATTRIBUTE12" />
+		<result property="attribute13"  column="ATTRIBUTE13" />
+		<result property="attribute14"  column="ATTRIBUTE14" />
+		<result property="attribute15"  column="ATTRIBUTE15" />
+		<result property="freeOfferFlag"  column="FREE_OFFER_FLAG" />
+		<result property="conversionUnit"  column="CONVERSION_UNIT" />
+		<result property="tool"  column="TOOL" />
+		<result property="pressLine"  column="PRESS_LINE" />
+		<result property="salesFreeFlag"  column="SALES_FREE_FLAG" />
+		<result property="popMakeLotQty"  column="POP_MAKE_LOT_QTY" />
+		<result property="popInputType"  column="POP_INPUT_TYPE" />
+		<result property="popCtQty"  column="POP_CT_QTY" />
+		<result property="popGtLabelid"  column="POP_GT_LABELID" />
+		<result property="popCtLabelid"  column="POP_CT_LABELID" />
+		<result property="popPalletLabelid"  column="POP_PALLET_LABELID" />
+		<result property="popEan"  column="POP_EAN" />
+		<result property="popUpc"  column="POP_UPC" />
+		<result property="popDestination"  column="POP_DESTINATION" />
+		<result property="popMadeby"  column="POP_MADEBY" />
+		<result property="popGanbanLabelid"  column="POP_GANBAN_LABELID" />
+		<result property="labeldesc"  column="LABELDESC" />
+		<result property="labelspec"  column="LABELSPEC" />
+		<result property="binUseFlag"  column="BIN_USE_FLAG" />
+		<result property="ctOutQty"  column="CT_OUT_QTY" />
+		<result property="createItemFlag"  column="CREATE_ITEM_FLAG" />
+		<result property="itemTypeName"  column="ITEM_TYPE_NAME" />
+		<result property="createItemFlagName"  column="CREATE_ITEM_FLAG_NAME" />
+		<result property="vendorName"  column="VENDOR_NAME" />
+		<result property="departureVendorName"  column="DEPARTURE_VENDOR_NAME" />
+		<result property="unitName"  column="UNIT_NAME" />
+		<result property="activationFlagName"  column="ACTIVATION_FLAG_NAME" />
+		<result property="isFiniteFlagName"  column="IS_FINITE_FLAG_NAME" />
+		<result property="inLocationName"  column="IN_LOCATION_NAME" />
+		<result property="outLocationName"  column="OUT_LOCATION_NAME" />
+		<result property="testReportFlagName"  column="TEST_REPORT_FLAG_NAME" />
+		<result property="iqcFlagName"  column="IQC_FLAG_NAME" />
+		<result property="pqcFlagName"  column="PQC_FLAG_NAME" />
+		<result property="oqcFlagName"  column="OQC_FLAG_NAME" />
+		<result property="purchaseTypeName"  column="PURCHASE_TYPE_NAME" />
+		<result property="itemUserName"  column="ITEM_USER_NAME" />
+		<result property="itemGroupLargeName"  column="ITEM_GROUP_LARGE_NAME" />
+		<result property="itemGroupMediumName"  column="ITEM_GROUP_MEDIUM_NAME" />
+		<result property="itemGroupSmallName"  column="ITEM_GROUP_SMALL_NAME" />
+		<result property="trackingFlagName"  column="TRACKING_FLAG_NAME" />
+		<result property="orderMethodName"  column="ORDER_METHOD_NAME" />
+		<result property="itemGradeName"  column="ITEM_GRADE_NAME" />
+		<result property="badLevelName"  column="BAD_LEVEL_NAME" />
+		<result property="useYnName"  column="USE_YN_NAME" />
+		<result property="createUserName"  column="CREATE_USER_NAME" />
+		<result property="updateUserName"  column="UPDATE_USER_NAME" />
+		<result property="freeOfferFlagName"  column="FREE_OFFER_FLAG_NAME" />
+		<result property="salesFreeFlagName"  column="SALES_FREE_FLAG_NAME" />
+		<result property="attach1"  column="ATTACH1" />
+		<result property="attach2"  column="ATTACH2" />
+		<result property="inch"	 column="INCH" />
+		<result property="rowCount"    column="ROW_COUNT" />
+		<result property="materialType"  column="MATERIAL_TYPE" />
+		<result property="color"	 column="COLOR" />
+		<result property="pressItemId"    column="PRESS_ITEM_ID" />
+		<result property="otherReqFlag"    column="OTHER_REQ_FLAG" />
+		<result property="otherReqFlagName"    column="OTHER_REQ_FLAG_NAME" />
+		<result property="orgCode"    column="ORG_CODE" />
+		<result property="materialMeasureFlag"    column="MATERIAL_MEASURE_FLAG" />
+		<result property="materialMeasureFlagName"    column="MATERIAL_MEASURE_FLAG" />
+    </resultMap>
+    
+	<select id="get_item_list" resultMap="itemListMap" parameterType="java.util.HashMap">
+	   <if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+		WITH TEMP1 AS (	
+	   </if>
+	  			 SELECT A.DIVISION_CD
+				       , A.COMPANY_CD
+				       , A.ITEM_ID
+				  	   , A.ITEM_NAME
+				       , A.ITEM_GROUP_CODE
+				       , A.ITEM_TYPE
+				       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD
+				                                               , A.COMPANY_CD  
+				                                               , 'ITEM_TYPE'
+				                                               , A.ITEM_TYPE)
+				            FROM DUAL) AS ITEM_TYPE_NAME
+				       , A.SPECIFICATION
+				       , A.VENDOR_CD
+				       , (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME(A.DIVISION_CD
+				                                                 , A.COMPANY_CD
+				                                                 , A.VENDOR_CD) 
+				            FROM DUAL) AS VENDOR_NAME
+				       , A.DEPARTURE_VENDOR_CD
+				       , (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME(A.DIVISION_CD
+				                                                 , A.COMPANY_CD
+				                                                 , A.DEPARTURE_VENDOR_CD) 
+				            FROM DUAL) AS DEPARTURE_VENDOR_NAME
+				       , A.UNIT_PRICE
+				       , A.UNIT
+				       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+				                                                , A.COMPANY_CD  
+				                                                , 'ITEM_UNIT'
+				                                                , A.UNIT)
+				            FROM DUAL) AS UNIT_NAME 
+				       , A.PURCHASE_UNIT
+				       , A.UNIT_QTY
+				       , A.CONVERSION_UNIT
+				       , NVL(A.CONVERSION_UNIT_QTY, 1) AS CONVERSION_UNIT_QTY
+				       , A.MOQ
+				       , A.MOM
+				       , A.SAFETY_STOCK_QTY
+				       , A.SAFETY_STOCK_DAY
+				       , A.SAFETY_STOCK_DAY_UOM
+				       , A.PROD_MIN_LOT_SIZE
+				       , A.PROD_MAX_LOT_SIZE
+				       , A.PROD_INCREMENT_LOT_SIZE
+				       , A.DEMAND_LOT_SIZE
+				       , A.ACTIVATION_FLAG
+				       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+				                                                , A.COMPANY_CD  
+				                                                , 'USE_FLAG'
+				                                                , A.ACTIVATION_FLAG)
+				            FROM DUAL) AS ACTIVATION_FLAG_NAME          
+				       , A.IS_FINITE_FLAG
+				       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+				                                                , A.COMPANY_CD  
+				                                                , 'USE_FLAG'
+				                                                , A.IS_FINITE_FLAG)
+				            FROM DUAL) AS IS_FINITE_FLAG_NAME 
+				       , A.FINITE_TERM
+				       , A.FINITE_TERM_UOM
+				       , A.IN_LOCATION_ID
+				       , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME( A.DIVISION_CD
+				                                                    , A.COMPANY_CD 
+				                                                    , A.IN_LOCATION_ID) 
+				            FROM DUAL) AS IN_LOCATION_NAME
+				       , A.OUT_LOCATION_ID
+				       , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME( A.DIVISION_CD
+				                                                    , A.COMPANY_CD 
+				                                                    , A.OUT_LOCATION_ID) 
+				            FROM DUAL) AS OUT_LOCATION_NAME
+				       , A.TEST_REPORT_FLAG
+				       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+				                                                , A.COMPANY_CD  
+				                                                , 'USE_FLAG'
+				                                                , A.TEST_REPORT_FLAG)
+				            FROM DUAL) AS TEST_REPORT_FLAG_NAME  
+				       , A.IQC_FLAG
+				       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+				                                                , A.COMPANY_CD  
+				                                                , 'USE_FLAG'
+				                                                , A.IQC_FLAG)
+				            FROM DUAL) AS IQC_FLAG_NAME
+				       , A.PQC_FLAG
+			           , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+			                                                    , A.COMPANY_CD  
+			                                                    , 'USE_FLAG'
+			                                                    , A.PQC_FLAG)
+			                FROM DUAL) AS PQC_FLAG_NAME
+				       , A.OQC_FLAG
+				       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+				                                                , A.COMPANY_CD  
+				                                                , 'USE_FLAG'
+				                                                , A.OQC_FLAG)
+				            FROM DUAL) AS OQC_FLAG_NAME
+				       , A.RP_ITEM_ID
+				       , A.VENDOR_ITEM_ID
+				       , A.ALT_ITEM_ID
+				       , A.ITEM_CATEGORY
+				       , A.PURCHASE_TYPE
+				       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+				                                                , A.COMPANY_CD  
+				                                                , 'USE_FLAG'
+				                                                , A.PURCHASE_TYPE)
+				            FROM DUAL) AS PURCHASE_TYPE_NAME
+				       , A.ITEM_USER_ID
+				       , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( A.DIVISION_CD
+				                                                , A.COMPANY_CD  
+				                                                , A.ITEM_USER_ID)
+				            FROM DUAL) AS ITEM_USER_NAME
+				       , A.PACKING_SIZE_WIDTH
+			           , A.PACKING_SIZE_HEIGHT
+				       , A.MATERIAL_WEIGHT
+			           , A.PALLET_WEIGHT
+			           , A.UNIT_WEIGHT
+				       , A.BOX_WEIGHT
+				       , A.ITEM_GROUP_LARGE
+				       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+				                                                , A.COMPANY_CD  
+				                                                , 'ITEM_GROUP_LARGE'
+				                                                , A.ITEM_GROUP_LARGE)
+				            FROM DUAL) AS ITEM_GROUP_LARGE_NAME
+				       , A.ITEM_GROUP_MEDIUM
+				       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+				                                                , A.COMPANY_CD  
+				                                                , 'ITEM_GROUP_MEDIUM'
+				                                                , A.ITEM_GROUP_MEDIUM)
+				            FROM DUAL) AS ITEM_GROUP_MEDIUM_NAME
+				       , A.ITEM_GROUP_SMALL
+				       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+				                                                , A.COMPANY_CD  
+				                                                , 'ITEM_GROUP_SMALL'
+				                                                , A.ITEM_GROUP_SMALL)
+				            FROM DUAL) AS ITEM_GROUP_SMALL_NAME
+				       , A.DESCRIPTION
+				       , A.PRE_BUILD_TERM
+			           , A.LEAD_TIME
+				       , A.TRACKING_FLAG
+			           , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+			                                                    , A.COMPANY_CD  
+			                                                    , 'USE_FLAG'
+			                                                    , A.TRACKING_FLAG)
+				            FROM DUAL) AS TRACKING_FLAG_NAME
+				       , A.ORDER_METHOD
+				       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+			                                                    , A.COMPANY_CD 
+			                                                    , 'ORDER_METHOD'
+			                                                    , A.ORDER_METHOD)
+				            FROM DUAL) AS ORDER_METHOD_NAME
+				       , A.ITEM_GRADE
+				       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+				                                                , A.COMPANY_CD 
+				                                                , 'ITEM_GRADE'
+				                                                , A.ITEM_GRADE)
+				            FROM DUAL) AS ITEM_GRADE_NAME
+				       , A.BAD_LEVEL
+				       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+				                                                , A.COMPANY_CD 
+				                                                , 'BAD_LEVEL'
+				                                                , A.BAD_LEVEL)
+				            FROM DUAL) AS BAD_LEVEL_NAME          
+				       , A.STANDARD_OUT_QTY
+				       , A.DEFECT_RATE
+				       , A.BY_PRODUCT_ITEM_ID
+				       , A.USE_YN
+				       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+				                                                , A.COMPANY_CD  
+				                                                , 'USE_FLAG'
+				                                                , A.USE_YN)
+				            FROM DUAL) AS USE_YN_NAME          
+				       , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS CREATE_DATE
+				       , A.CREATE_BY
+				       , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( A.DIVISION_CD
+				                                                , A.COMPANY_CD  
+				                                                , A.CREATE_BY)
+				            FROM DUAL) AS CREATE_USER_NAME          
+				       , TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS UPDATE_DATE
+				       , A.UPDATE_BY
+				       , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( A.DIVISION_CD
+				                                                , A.COMPANY_CD  
+				                                                , A.UPDATE_BY)
+				            FROM DUAL) AS UPDATE_USER_NAME
+				       , A.ATTRIBUTE1
+				       , A.ATTRIBUTE2
+				       , A.ATTRIBUTE3
+				       , A.ATTRIBUTE4
+				       , A.ATTRIBUTE5
+				       , A.ATTRIBUTE6
+				       , A.ATTRIBUTE7
+				       , A.ATTRIBUTE8
+				       , A.ATTRIBUTE9
+				       , A.ATTRIBUTE10
+				       , A.ATTRIBUTE11
+				       , A.ATTRIBUTE12
+				       , A.ATTRIBUTE13
+				       , A.ATTRIBUTE14
+				       , A.ATTRIBUTE15
+				       , A.FREE_OFFER_FLAG
+				       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+				                                                , A.COMPANY_CD
+				                                                , 'FREE_OFFER_FLAG'
+				                                                , A.FREE_OFFER_FLAG) 
+				            FROM DUAL) AS FREE_OFFER_FLAG_NAME
+				       , A.TOOL
+				       , A.PRESS_LINE
+				       , A.SALES_FREE_FLAG
+				       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+				                                                , A.COMPANY_CD
+				                                                , 'FREE_OFFER_FLAG'
+				                                                , A.SALES_FREE_FLAG) 
+				            FROM DUAL) AS SALES_FREE_FLAG_NAME
+				       , POP_MAKE_LOT_QTY
+				       , POP_INPUT_TYPE
+					   , POP_CT_QTY
+					   , POP_GT_LABELID
+					   , POP_CT_LABELID
+					   , POP_PALLET_LABELID
+					   , POP_EAN
+					   , POP_UPC
+					   , POP_DESTINATION
+					   , POP_MADEBY
+					   , POP_GANBAN_LABELID
+					   , LABELDESC
+					   , LABELSPEC   
+					   , BIN_USE_FLAG
+					   , CT_OUT_QTY
+					   , NVL(CREATE_ITEM_FLAG, 'N') AS CREATE_ITEM_FLAG
+					   , TO_CHAR(DBMS_LOB.SUBSTR(A.ATTACH1, 20, 1)) AS ATTACH1
+                       , TO_CHAR(DBMS_LOB.SUBSTR(A.ATTACH2, 20, 1)) AS ATTACH2
+                       , A.INCH
+                       , A.MATERIAL_TYPE
+                       , A.COLOR
+                       , A.PRESS_ITEM_ID
+                       , A.OTHER_REQ_FLAG
+                       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+				                                                , A.COMPANY_CD
+				                                                , 'USE_FLAG'
+				                                                , A.OTHER_REQ_FLAG) 
+				            FROM DUAL) AS OTHER_REQ_FLAG_NAME
+				       , A.ORG_CODE
+				       , A.MATERIAL_MEASURE_FLAG
+				       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+				                                                , A.COMPANY_CD
+				                                                , 'USE_FLAG'
+				                                                , A.MATERIAL_MEASURE_FLAG) 
+				            FROM DUAL) AS MATERIAL_MEASURE_FLAG_NAME
+				    FROM  MOM_ITEM_DEFINITION A
+				   WHERE  A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+				     AND  A.COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}
+				    <if test="itemId != null and itemId != ''">
+				     AND (A.ITEM_ID LIKE '%' || TRIM(UPPER(#{itemId, jdbcType=VARCHAR})) || '%'
+				          OR UPPER(A.ITEM_NAME) LIKE '%' || TRIM(UPPER(#{itemId, jdbcType=VARCHAR})) || '%')
+				    </if>
+				    <if test="specification != null and specification != ''">
+				     AND UPPER(A.SPECIFICATION) LIKE '%' || TRIM(UPPER(#{specification, jdbcType=VARCHAR})) || '%' 
+				    </if>
+				    <if test="vendorCd != null and vendorCd != ''">
+				     AND A.VENDOR_CD = #{vendorCd, jdbcType=VARCHAR}
+				    </if>
+				    <if test="departureVendorCd != null and departureVendorCd != ''">
+				     AND A.DEPARTURE_VENDOR_CD = #{departureVendorCd, jdbcType=VARCHAR}
+				    </if>
+				    <if test="inLocationId != null and inLocationId != ''">
+				     AND A.IN_LOCATION_ID = #{inLocationId, jdbcType=VARCHAR}
+				    </if>
+				    <if test="outLocationId != null and outLocationId != ''">
+				     AND A.OUT_LOCATION_ID = #{outLocationId, jdbcType=VARCHAR}
+				    </if>
+				    <if test="itemUserId != null and itemUserId != ''">
+				     AND A.ITEM_USER_ID = #{itemUserId, jdbcType=VARCHAR}
+				    </if>
+				    <if test="itemType != null and itemType != ''">
+				     AND A.ITEM_TYPE = #{itemType, jdbcType=VARCHAR}
+				    </if>
+				    <if test="useYn != null and useYn != ''">
+				     AND A.USE_YN = #{useYn, jdbcType=VARCHAR}
+				    </if>
+				    <if test="createItemFlag != null and createItemFlag != ''">
+				     AND A.CREATE_ITEM_FLAG = #{createItemFlag, jdbcType=VARCHAR}
+				    </if>
+				    <if test="orgCode != null and orgCode != ''">
+				     AND A.ORG_CODE = #{orgCode, jdbcType=VARCHAR}
+				    </if>
+				   ORDER BY A.ITEM_ID 
+	   <if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+				)
+	      SELECT A.*
+	           , B.ROW_COUNT
+	      FROM (SELECT A.*
+	                 , ROWNUM GRIDROW
+	              FROM TEMP1 A) A
+	         , (SELECT COUNT(*) ROW_COUNT
+	              FROM TEMP1) B 
+	      WHERE GRIDROW BETWEEN #{startPage, jdbcType=INTEGER} AND #{endPage, jdbcType=INTEGER}
+       </if>
+	</select>
+	
+	<select id="get_item" resultType="camelMap" parameterType="java.util.HashMap">
+	    SELECT *
+	      FROM   MOM_ITEM_DEFINITION
+	     WHERE  DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	       AND    COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}
+	       AND    ITEM_ID = #{itemId,jdbcType=VARCHAR}
+	</select>
+	
+	<insert id="create_item" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	DECLARE
+	BEGIN
+		#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+		
+		INSERT INTO MOM_ITEM_DEFINITION(
+			DIVISION_CD,
+			COMPANY_CD,
+			ITEM_ID,
+			ITEM_NAME,
+			ITEM_GROUP_CODE,
+			ITEM_TYPE,
+			SPECIFICATION,
+			VENDOR_CD,
+			DEPARTURE_VENDOR_CD,
+			UNIT_PRICE,
+			UNIT,
+			PURCHASE_UNIT,
+			UNIT_QTY,
+			CONVERSION_UNIT,
+			CONVERSION_UNIT_QTY,
+			MOQ,
+			MOM,
+			SAFETY_STOCK_QTY,
+			SAFETY_STOCK_DAY,
+			SAFETY_STOCK_DAY_UOM,
+			PROD_MIN_LOT_SIZE,
+			PROD_MAX_LOT_SIZE,
+			PROD_INCREMENT_LOT_SIZE,
+			DEMAND_LOT_SIZE,
+<!-- 			IS_PHANTOM, -->
+			ACTIVATION_FLAG,
+			IS_FINITE_FLAG,
+			FINITE_TERM,
+			FINITE_TERM_UOM,
+			IN_LOCATION_ID,
+			OUT_LOCATION_ID,
+			TEST_REPORT_FLAG,
+			IQC_FLAG,
+			PQC_FLAG,
+			OQC_FLAG,
+			RP_ITEM_ID,
+			VENDOR_ITEM_ID,
+			ALT_ITEM_ID,
+			ITEM_CATEGORY,
+			PURCHASE_TYPE,
+			ITEM_USER_ID,
+			PACKING_SIZE_WIDTH,
+			PACKING_SIZE_HEIGHT,
+			MATERIAL_WEIGHT,
+			PALLET_WEIGHT,
+			UNIT_WEIGHT,
+			BOX_WEIGHT,
+			ITEM_GROUP_LARGE,
+			ITEM_GROUP_MEDIUM,
+			ITEM_GROUP_SMALL,
+			PRE_BUILD_TERM,
+			LEAD_TIME,
+			TRACKING_FLAG,
+			ORDER_METHOD,
+			ITEM_GRADE,
+			BAD_LEVEL,
+			STANDARD_OUT_QTY,
+			DEFECT_RATE,
+			BY_PRODUCT_ITEM_ID,
+			USE_YN,
+			DESCRIPTION,
+			CREATE_DATE,
+			CREATE_BY,
+			UPDATE_DATE,
+			UPDATE_BY,
+			TID,
+			ATTRIBUTE1,
+			ATTRIBUTE2,
+			ATTRIBUTE3,
+			ATTRIBUTE4,
+			ATTRIBUTE5,
+			ATTRIBUTE6,
+			ATTRIBUTE7,
+			ATTRIBUTE8,
+			ATTRIBUTE9,
+			ATTRIBUTE10,
+			ATTRIBUTE11,
+			ATTRIBUTE12,
+			ATTRIBUTE13,
+			ATTRIBUTE14,
+			ATTRIBUTE15,
+			FREE_OFFER_FLAG,
+			TOOL,
+			PRESS_LINE,
+			SALES_FREE_FLAG,
+			POP_MAKE_LOT_QTY,
+			POP_INPUT_TYPE,
+			POP_CT_QTY,
+			POP_GT_LABELID,
+			POP_CT_LABELID,
+			POP_PALLET_LABELID,
+			POP_EAN,
+			POP_UPC,
+			POP_DESTINATION,
+			POP_MADEBY,
+			POP_GANBAN_LABELID,
+			LABELDESC,
+			LABELSPEC,
+			BIN_USE_FLAG,
+			CT_OUT_QTY,
+			CREATE_ITEM_FLAG,
+			INCH,
+			MATERIAL_TYPE,
+			COLOR,
+			PRESS_ITEM_ID,
+			OTHER_REQ_FLAG,
+			ORG_CODE,
+			MATERIAL_MEASURE_FLAG
+		)
+		VALUES(
+			#{divisionCd, jdbcType=VARCHAR},
+			#{companyCd, jdbcType=VARCHAR},
+			UPPER(TRIM(#{itemId, jdbcType=VARCHAR})),
+			#{itemName, jdbcType=VARCHAR},
+			#{itemGroupCode, jdbcType=VARCHAR},
+			UPPER(TRIM(#{itemType, jdbcType=VARCHAR})),
+			#{specification, jdbcType=VARCHAR},
+			UPPER(TRIM(#{vendorCd, jdbcType=VARCHAR})),
+			UPPER(TRIM(#{departureVendorCd, jdbcType=VARCHAR})),
+			#{unitPrice, jdbcType=INTEGER},
+			#{unit, jdbcType=VARCHAR},
+			#{purchaseUnit, jdbcType=VARCHAR},
+			#{unitQty, jdbcType=INTEGER},
+			#{conversionUnit, jdbcType=VARCHAR},
+			NVL(#{conversionUnitQty, jdbcType=INTEGER}, 1),
+			#{moq, jdbcType=INTEGER},
+			#{mom, jdbcType=INTEGER},
+			#{safetyStockQty, jdbcType=INTEGER},
+			#{safetyStockDay, jdbcType=INTEGER},
+			#{safetyStockDayUom, jdbcType=INTEGER},
+			#{prodMinLotSize, jdbcType=INTEGER},
+			#{prodMaxLotSize, jdbcType=INTEGER},
+			#{prodIncrementLotSize, jdbcType=VARCHAR},
+			#{demandLotSize, jdbcType=VARCHAR},
+			#{activationFlag, jdbcType=VARCHAR},
+			#{isFiniteFlag, jdbcType=VARCHAR},
+			#{finiteTerm, jdbcType=INTEGER},
+			#{finiteTermUom, jdbcType=VARCHAR},
+			UPPER(TRIM(#{inLocationId, jdbcType=VARCHAR})),
+			UPPER(TRIM(#{outLocationId, jdbcType=VARCHAR})),
+			NVL(UPPER(TRIM(#{testReportFlag, jdbcType=VARCHAR})), 'N'),
+			NVL(UPPER(TRIM(#{iqcFlag, jdbcType=VARCHAR})), 'N'),
+			NVL(UPPER(TRIM(#{pqcFlag, jdbcType=VARCHAR})), 'N'),
+			NVL(UPPER(TRIM(#{oqcFlag, jdbcType=VARCHAR})), 'N'),
+			#{rpItemId, jdbcType=VARCHAR},
+			#{vendorItemId, jdbcType=VARCHAR},
+			#{altItemId, jdbcType=VARCHAR},
+			#{itemCategory, jdbcType=VARCHAR},
+			#{purchaseType, jdbcType=VARCHAR},
+			#{itemUserId, jdbcType=VARCHAR},
+			#{packingSizeWidth, jdbcType=INTEGER},
+			#{packingSizeHeight, jdbcType=INTEGER},
+			#{materialWeight, jdbcType=INTEGER},
+			#{palletWeight, jdbcType=INTEGER},
+			#{unitWeight, jdbcType=INTEGER},
+			#{boxWeight, jdbcType=INTEGER},
+			#{itemGroupLarge, jdbcType=VARCHAR},
+			#{itemGroupMedium, jdbcType=VARCHAR},
+			#{itemGroupSmall, jdbcType=VARCHAR},
+			#{preBuildTerm, jdbcType=INTEGER},
+			#{leadTime, jdbcType=INTEGER},
+			#{trackingFlag, jdbcType=VARCHAR},
+			#{orderMethod, jdbcType=VARCHAR},
+			#{itemGrade, jdbcType=VARCHAR},
+			#{badLevel, jdbcType=VARCHAR},
+			#{standardOutQty, jdbcType=INTEGER},
+			#{defectRate, jdbcType=INTEGER},
+			#{byProductItemId, jdbcType=VARCHAR},
+			NVL(UPPER(TRIM(#{useYn, jdbcType=VARCHAR})), 'Y'),
+			#{description, jdbcType=VARCHAR},
+			MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			#{createBy, jdbcType=VARCHAR},
+			MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			#{updateBy, jdbcType=VARCHAR},
+			#{tid, jdbcType=VARCHAR},
+			#{attribute1, jdbcType=VARCHAR},
+			#{attribute2, jdbcType=VARCHAR},
+			#{attribute3, jdbcType=VARCHAR},
+			#{attribute4, jdbcType=VARCHAR},
+			#{attribute5, jdbcType=VARCHAR},
+			#{attribute6, jdbcType=VARCHAR},
+			#{attribute7, jdbcType=VARCHAR},
+			#{attribute8, jdbcType=VARCHAR},
+			#{attribute9, jdbcType=VARCHAR},
+			#{attribute10, jdbcType=VARCHAR},
+			#{attribute11, jdbcType=VARCHAR},
+			#{attribute12, jdbcType=VARCHAR},
+			#{attribute13, jdbcType=VARCHAR},
+			#{attribute14, jdbcType=VARCHAR},
+			#{attribute15, jdbcType=VARCHAR},
+			#{freeOfferFlag, jdbcType=VARCHAR},
+			#{tool, jdbcType=VARCHAR},
+			#{pressLine, jdbcType=VARCHAR},
+			#{salesFreeFlag, jdbcType=VARCHAR},
+			#{popMakeLotQty, jdbcType=INTEGER},
+			#{popInputType, jdbcType=VARCHAR},
+			#{popCtQty, jdbcType=INTEGER},
+			#{popGtLabelid, jdbcType=VARCHAR},
+			#{popCtLabelid, jdbcType=VARCHAR},
+			#{popPalletLabelid, jdbcType=VARCHAR},
+			#{popEan, jdbcType=VARCHAR},
+			#{popUpc, jdbcType=VARCHAR},
+			#{popDestination, jdbcType=VARCHAR},
+			#{popMadeby, jdbcType=VARCHAR},
+			#{popGanbanLabelid, jdbcType=VARCHAR},
+			#{labeldesc, jdbcType=VARCHAR},
+			#{labelspec, jdbcType=VARCHAR},
+			UPPER(TRIM(#{binUseFlag, jdbcType=VARCHAR})),
+			#{ctOutQty, jdbcType=NUMERIC},
+			'N',
+			#{inch, jdbcType=VARCHAR},
+			#{materialType, jdbcType=VARCHAR},
+			#{color, jdbcType=VARCHAR},
+			#{pressItemId, jdbcType=VARCHAR},
+			NVL(#{otherReqFlag, jdbcType=VARCHAR},'N'),
+			#{orgCode, jdbcType=VARCHAR},
+			#{materialMeasureFlag, jdbcType=VARCHAR}
+		);
+		
+		INSERT INTO MOM_ITEM_DEFINITION_HIST(
+			LAST_EVENT_SEQ,
+			DIVISION_CD,
+			COMPANY_CD,
+			ITEM_ID,
+			ITEM_NAME,
+			ITEM_GROUP_CODE,
+			ITEM_TYPE,
+			SPECIFICATION,
+			VENDOR_CD,
+			DEPARTURE_VENDOR_CD,
+			UNIT_PRICE,
+			UNIT,
+			PURCHASE_UNIT,
+			UNIT_QTY,
+			CONVERSION_UNIT,
+			CONVERSION_UNIT_QTY,
+			MOQ,
+			MOM,
+			SAFETY_STOCK_QTY,
+			SAFETY_STOCK_DAY,
+			SAFETY_STOCK_DAY_UOM,
+			PROD_MIN_LOT_SIZE,
+			PROD_MAX_LOT_SIZE,
+			PROD_INCREMENT_LOT_SIZE,
+			DEMAND_LOT_SIZE,
+			ACTIVATION_FLAG,
+			IS_FINITE_FLAG,
+			FINITE_TERM,
+			FINITE_TERM_UOM,
+			IN_LOCATION_ID,
+			OUT_LOCATION_ID,
+			TEST_REPORT_FLAG,
+			IQC_FLAG,
+			OQC_FLAG,
+			PQC_FLAG,
+			RP_ITEM_ID,
+			VENDOR_ITEM_ID,
+			ALT_ITEM_ID,
+			ITEM_CATEGORY,
+			PURCHASE_TYPE,
+			ITEM_USER_ID,
+			PACKING_SIZE_WIDTH,
+			PACKING_SIZE_HEIGHT,
+			MATERIAL_WEIGHT,
+			PALLET_WEIGHT,
+			UNIT_WEIGHT,
+			BOX_WEIGHT,
+			ITEM_GROUP_LARGE,
+			ITEM_GROUP_MEDIUM,
+			ITEM_GROUP_SMALL,
+			PRE_BUILD_TERM,
+			LEAD_TIME,
+			TRACKING_FLAG,
+			ORDER_METHOD,
+			ITEM_GRADE,
+			BAD_LEVEL,
+			STANDARD_OUT_QTY,
+			DEFECT_RATE,
+			BY_PRODUCT_ITEM_ID,
+			USE_YN,
+			DESCRIPTION,
+			CREATE_DATE,
+			CREATE_BY,
+			UPDATE_DATE,
+			UPDATE_BY,
+			TID,
+			ATTRIBUTE1,
+			ATTRIBUTE2,
+			ATTRIBUTE3,
+			ATTRIBUTE4,
+			ATTRIBUTE5,
+			ATTRIBUTE6,
+			ATTRIBUTE7,
+			ATTRIBUTE8,
+			ATTRIBUTE9,
+			ATTRIBUTE10,
+			ATTRIBUTE11,
+			ATTRIBUTE12,
+			ATTRIBUTE13,
+			ATTRIBUTE14,
+			ATTRIBUTE15,
+			FREE_OFFER_FLAG,
+			TOOL,
+			PRESS_LINE,
+			SALES_FREE_FLAG,
+			POP_MAKE_LOT_QTY,
+			POP_INPUT_TYPE,
+			POP_CT_QTY,
+			POP_GT_LABELID,
+			POP_CT_LABELID,
+			POP_PALLET_LABELID,
+			POP_EAN,
+			POP_UPC,
+			POP_DESTINATION,
+			POP_MADEBY,
+			POP_GANBAN_LABELID,
+			LABELDESC,
+			LABELSPEC,
+			BIN_USE_FLAG,
+			CT_OUT_QTY,
+			CREATE_ITEM_FLAG,
+			INCH,
+			MATERIAL_TYPE,
+			COLOR,
+			PRESS_ITEM_ID,
+			OTHER_REQ_FLAG,
+			ORG_CODE,
+			MATERIAL_MEASURE_FLAG
+		)
+		SELECT s_order_seq.nextval,
+			DIVISION_CD,
+			COMPANY_CD,
+			ITEM_ID,
+			ITEM_NAME,
+			ITEM_GROUP_CODE,
+			ITEM_TYPE,
+			SPECIFICATION,
+			VENDOR_CD,
+			DEPARTURE_VENDOR_CD,
+			UNIT_PRICE,
+			UNIT,
+			PURCHASE_UNIT,
+			UNIT_QTY,
+			CONVERSION_UNIT,
+			CONVERSION_UNIT_QTY,
+			MOQ,
+			MOM,
+			SAFETY_STOCK_QTY,
+			SAFETY_STOCK_DAY,
+			SAFETY_STOCK_DAY_UOM,
+			PROD_MIN_LOT_SIZE,
+			PROD_MAX_LOT_SIZE,
+			PROD_INCREMENT_LOT_SIZE,
+			DEMAND_LOT_SIZE,
+			ACTIVATION_FLAG,
+			IS_FINITE_FLAG,
+			FINITE_TERM,
+			FINITE_TERM_UOM,
+			IN_LOCATION_ID,
+			OUT_LOCATION_ID,
+			TEST_REPORT_FLAG,
+			IQC_FLAG,
+			OQC_FLAG,
+			PQC_FLAG,
+			RP_ITEM_ID,
+			VENDOR_ITEM_ID,
+			ALT_ITEM_ID,
+			ITEM_CATEGORY,
+			PURCHASE_TYPE,
+			ITEM_USER_ID,
+			PACKING_SIZE_WIDTH,
+			PACKING_SIZE_HEIGHT,
+			MATERIAL_WEIGHT,
+			PALLET_WEIGHT,
+			UNIT_WEIGHT,
+			BOX_WEIGHT,
+			ITEM_GROUP_LARGE,
+			ITEM_GROUP_MEDIUM,
+			ITEM_GROUP_SMALL,
+			PRE_BUILD_TERM,
+			LEAD_TIME,
+			TRACKING_FLAG,
+			ORDER_METHOD,
+			ITEM_GRADE,
+			BAD_LEVEL,
+			STANDARD_OUT_QTY,
+			DEFECT_RATE,
+			BY_PRODUCT_ITEM_ID,
+			USE_YN,
+			DESCRIPTION,
+			CREATE_DATE,
+			CREATE_BY,
+			UPDATE_DATE,
+			UPDATE_BY,
+			TID,
+			ATTRIBUTE1,
+			ATTRIBUTE2,
+			ATTRIBUTE3,
+			ATTRIBUTE4,
+			ATTRIBUTE5,
+			ATTRIBUTE6,
+			ATTRIBUTE7,
+			ATTRIBUTE8,
+			ATTRIBUTE9,
+			ATTRIBUTE10,
+			ATTRIBUTE11,
+			ATTRIBUTE12,
+			ATTRIBUTE13,
+			ATTRIBUTE14,
+			ATTRIBUTE15,
+			FREE_OFFER_FLAG,
+			TOOL,
+			PRESS_LINE,
+			SALES_FREE_FLAG,
+			POP_MAKE_LOT_QTY,
+			POP_INPUT_TYPE,
+			POP_CT_QTY,
+			POP_GT_LABELID,
+			POP_CT_LABELID,
+			POP_PALLET_LABELID,
+			POP_EAN,
+			POP_UPC,
+			POP_DESTINATION,
+			POP_MADEBY,
+			POP_GANBAN_LABELID,
+			LABELDESC,
+			LABELSPEC,
+			BIN_USE_FLAG,
+			CT_OUT_QTY,
+			CREATE_ITEM_FLAG,
+			INCH,
+			MATERIAL_TYPE,
+			COLOR,
+			PRESS_ITEM_ID,
+			OTHER_REQ_FLAG,
+			ORG_CODE,
+			MATERIAL_MEASURE_FLAG
+	FROM	MOM_ITEM_DEFINITION
+	WHERE   DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+    AND 	COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+    AND 	ITEM_ID = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+			;
+		
+		SELECT
+			CASE 
+				WHEN COUNT(ITEM_ID) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_ITEM_DEFINITION
+		WHERE 
+			    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			AND ITEM_ID = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		;
+	END
+	}
+	</insert>	
+	
+	<update id="modify_item" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL 
+	DECLARE
+	BEGIN
+		#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+		
+		UPDATE MOM_ITEM_DEFINITION
+		SET   ITEM_NAME 		      =  #{itemName,jdbcType=VARCHAR}
+			, ITEM_GROUP_CODE		  =  #{itemGroupCode,jdbcType=VARCHAR}
+			, ITEM_TYPE				  =  UPPER(TRIM(#{itemType,jdbcType=VARCHAR}))
+			, SPECIFICATION 		  =  #{specification,jdbcType=VARCHAR}
+			, VENDOR_CD				  =  UPPER(TRIM(#{vendorCd,jdbcType=VARCHAR}))
+			, DEPARTURE_VENDOR_CD	  =  UPPER(TRIM(#{departureVendorCd,jdbcType=VARCHAR}))
+			, UNIT_PRICE 			  =  #{unitPrice,jdbcType=INTEGER}
+			, UNIT 					  =  #{unit,jdbcType=VARCHAR}
+			, PURCHASE_UNIT 		  =  #{purchaseUnit,jdbcType=VARCHAR}
+			, UNIT_QTY 				  =  #{unitQty,jdbcType=INTEGER}
+			, CONVERSION_UNIT 		  =  #{conversionUnit,jdbcType=VARCHAR}
+			, CONVERSION_UNIT_QTY 	  =  NVL(#{conversionUnitQty,jdbcType=INTEGER}, 1)
+			, MOQ                     =  #{moq,jdbcType=INTEGER} 
+			, MOM                     =  #{mom,jdbcType=INTEGER} 
+			, SAFETY_STOCK_QTY        =  #{safetyStockQty,jdbcType=INTEGER} 
+			, SAFETY_STOCK_DAY        =  #{safetyStockDay,jdbcType=INTEGER} 
+			, SAFETY_STOCK_DAY_UOM    =  #{safetyStockDayUom,jdbcType=VARCHAR} 
+			, PROD_MIN_LOT_SIZE       =  #{prodMinLotSize,jdbcType=INTEGER} 
+			, PROD_MAX_LOT_SIZE       =  #{prodMaxLotSize,jdbcType=INTEGER} 
+			, PROD_INCREMENT_LOT_SIZE =  #{prodIncrementLotSize,jdbcType=INTEGER} 
+			, DEMAND_LOT_SIZE         =  #{demandLotSize,jdbcType=INTEGER} 
+			, ACTIVATION_FLAG         =  #{activationFlag,jdbcType=VARCHAR} 
+			, IS_FINITE_FLAG          =  #{isFiniteFlag,jdbcType=VARCHAR} 
+			, FINITE_TERM             =  #{finiteTerm,jdbcType=INTEGER} 
+			, FINITE_TERM_UOM         =  #{finiteTermUom,jdbcType=VARCHAR} 
+			, IN_LOCATION_ID          =  UPPER(TRIM(#{inLocationId,jdbcType=VARCHAR}))
+			, OUT_LOCATION_ID         =  UPPER(TRIM(#{outLocationId,jdbcType=VARCHAR})) 
+			, TEST_REPORT_FLAG        =  NVL(UPPER(TRIM(#{testReportFlag,jdbcType=VARCHAR})), 'N') 
+			, IQC_FLAG                =  NVL(UPPER(TRIM(#{iqcFlag,jdbcType=VARCHAR})), 'N')
+			, PQC_FLAG                =  NVL(UPPER(TRIM(#{pqcFlag,jdbcType=VARCHAR})), 'N')
+			, OQC_FLAG                =  NVL(UPPER(TRIM(#{oqcFlag,jdbcType=VARCHAR})), 'N') 
+			, RP_ITEM_ID              =  #{rpItemId,jdbcType=VARCHAR} 
+			, VENDOR_ITEM_ID          =  #{vendorItemId,jdbcType=VARCHAR} 
+			, ALT_ITEM_ID             =  #{altItemId,jdbcType=VARCHAR} 
+			, ITEM_CATEGORY           =  #{itemCategory,jdbcType=VARCHAR} 
+			, PURCHASE_TYPE           =  #{purchaseType,jdbcType=VARCHAR} 
+			, ITEM_USER_ID            =  #{itemUserId,jdbcType=VARCHAR} 
+			, PACKING_SIZE_WIDTH      =  #{packingSizeWidth,jdbcType=INTEGER} 
+			, PACKING_SIZE_HEIGHT     =  #{packingSizeHeight,jdbcType=INTEGER} 
+			, MATERIAL_WEIGHT         =  #{materialWeight,jdbcType=INTEGER} 
+			, PALLET_WEIGHT           =  #{palletWeight,jdbcType=INTEGER} 
+			, UNIT_WEIGHT             =  #{unitWeight,jdbcType=INTEGER} 
+			, BOX_WEIGHT              =  #{boxWeight,jdbcType=INTEGER} 
+			, ITEM_GROUP_LARGE        =  #{itemGroupLarge,jdbcType=VARCHAR} 
+			, ITEM_GROUP_MEDIUM       =  #{itemGroupMedium,jdbcType=VARCHAR} 
+			, ITEM_GROUP_SMALL        =  #{itemGroupSmall,jdbcType=VARCHAR} 
+			, PRE_BUILD_TERM          =  #{preBuildTerm,jdbcType=INTEGER} 
+			, LEAD_TIME               =  #{leadTime,jdbcType=INTEGER} 
+			, TRACKING_FLAG           =  #{trackingFlag,jdbcType=VARCHAR} 
+			, ORDER_METHOD            =  #{orderMethod,jdbcType=VARCHAR} 
+			, ITEM_GRADE              =  #{itemGrade,jdbcType=VARCHAR} 
+			, BAD_LEVEL               =  #{badLevel,jdbcType=VARCHAR} 
+			, STANDARD_OUT_QTY        =  #{standardOutQty,jdbcType=INTEGER} 
+			, DEFECT_RATE             =  #{defectRate,jdbcType=INTEGER} 
+			, BY_PRODUCT_ITEM_ID      =  #{byProductItemId,jdbcType=VARCHAR} 
+			, USE_YN			  	  =  NVL(UPPER(TRIM(#{useYn,jdbcType=VARCHAR})),'Y')
+			, DESCRIPTION         	  =  #{description,jdbcType=VARCHAR}
+			, UPDATE_DATE         	  =  MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			, UPDATE_BY          	  =  #{updateBy,jdbcType=VARCHAR}
+			, FREE_OFFER_FLAG		  =  #{freeOfferFlag, jdbcType=VARCHAR}
+			, TOOL		 			  =  #{tool, jdbcType=VARCHAR}
+			, PRESS_LINE 			  =  #{pressLine, jdbcType=VARCHAR}
+			, SALES_FREE_FLAG		  =  #{salesFreeFlag, jdbcType=VARCHAR}
+			, POP_MAKE_LOT_QTY        =  #{popMakeLotQty, jdbcType=INTEGER}
+			, POP_INPUT_TYPE          =  #{popInputType, jdbcType=VARCHAR}
+			, POP_CT_QTY              =  #{popCtQty, jdbcType=INTEGER}
+			, POP_GT_LABELID          =  #{popGtLabelid, jdbcType=VARCHAR}
+			, POP_CT_LABELID          =  #{popCtLabelid, jdbcType=VARCHAR}
+			, POP_PALLET_LABELID      =  #{popPalletLabelid, jdbcType=VARCHAR}
+			, POP_EAN                 =  #{popEan, jdbcType=VARCHAR}
+			, POP_UPC                 =  #{popUpc, jdbcType=VARCHAR}
+			, POP_DESTINATION         =  #{popDestination, jdbcType=VARCHAR}
+			, POP_MADEBY              =  #{popMadeby, jdbcType=VARCHAR}
+			, POP_GANBAN_LABELID      =  #{popGanbanLabelid, jdbcType=VARCHAR}
+			, LABELDESC               =  #{labeldesc, jdbcType=VARCHAR}
+			, LABELSPEC      		  =  #{labelspec, jdbcType=VARCHAR}
+			, BIN_USE_FLAG 			  =  #{binUseFlag, jdbcType=VARCHAR}
+			, CT_OUT_QTY			  =  #{ctOutQty, jdbcType=NUMERIC}
+			, INCH					  =  #{inch, jdbcType=VARCHAR}
+			, MATERIAL_TYPE			  =  #{materialType, jdbcType=VARCHAR}
+			, COLOR			  		  =  #{color, jdbcType=VARCHAR}
+			, PRESS_ITEM_ID			  =  #{pressItemId, jdbcType=VARCHAR}
+			, OTHER_REQ_FLAG		  =  NVL(UPPER(TRIM(#{otherReqFlag, jdbcType=VARCHAR})), 'N')
+			, ORG_CODE 				  =  #{orgCode, jdbcType=VARCHAR}
+			<!-- , MATERIAL_MEASURE_FLAG	  =  #{materialMeasureFlag, jdbcType=VARCHAR} -->
+		WHERE DIVISION_CD     		  =  #{divisionCd,jdbcType=VARCHAR}
+		AND COMPANY_CD      		  =  #{companyCd,jdbcType=VARCHAR}
+		AND ITEM_ID					  =  UPPER(TRIM(#{itemId,jdbcType=VARCHAR}))
+		;
+		INSERT INTO MOM_ITEM_DEFINITION_HIST(
+			LAST_EVENT_SEQ,
+			DIVISION_CD,
+			COMPANY_CD,
+			ITEM_ID,
+			ITEM_NAME,
+			ITEM_GROUP_CODE,
+			ITEM_TYPE,
+			SPECIFICATION,
+			VENDOR_CD,
+			DEPARTURE_VENDOR_CD,
+			UNIT_PRICE,
+			UNIT,
+			PURCHASE_UNIT,
+			UNIT_QTY,
+			CONVERSION_UNIT,
+			CONVERSION_UNIT_QTY,
+			MOQ,
+			MOM,
+			SAFETY_STOCK_QTY,
+			SAFETY_STOCK_DAY,
+			SAFETY_STOCK_DAY_UOM,
+			PROD_MIN_LOT_SIZE,
+			PROD_MAX_LOT_SIZE,
+			PROD_INCREMENT_LOT_SIZE,
+			DEMAND_LOT_SIZE,
+			ACTIVATION_FLAG,
+			IS_FINITE_FLAG,
+			FINITE_TERM,
+			FINITE_TERM_UOM,
+			IN_LOCATION_ID,
+			OUT_LOCATION_ID,
+			TEST_REPORT_FLAG,
+			IQC_FLAG,
+			OQC_FLAG,
+			PQC_FLAG,
+			RP_ITEM_ID,
+			VENDOR_ITEM_ID,
+			ALT_ITEM_ID,
+			ITEM_CATEGORY,
+			PURCHASE_TYPE,
+			ITEM_USER_ID,
+			PACKING_SIZE_WIDTH,
+			PACKING_SIZE_HEIGHT,
+			MATERIAL_WEIGHT,
+			PALLET_WEIGHT,
+			UNIT_WEIGHT,
+			BOX_WEIGHT,
+			ITEM_GROUP_LARGE,
+			ITEM_GROUP_MEDIUM,
+			ITEM_GROUP_SMALL,
+			PRE_BUILD_TERM,
+			LEAD_TIME,
+			TRACKING_FLAG,
+			ORDER_METHOD,
+			ITEM_GRADE,
+			BAD_LEVEL,
+			STANDARD_OUT_QTY,
+			DEFECT_RATE,
+			BY_PRODUCT_ITEM_ID,
+			USE_YN,
+			DESCRIPTION,
+			CREATE_DATE,
+			CREATE_BY,
+			UPDATE_DATE,
+			UPDATE_BY,
+			TID,
+			ATTRIBUTE1,
+			ATTRIBUTE2,
+			ATTRIBUTE3,
+			ATTRIBUTE4,
+			ATTRIBUTE5,
+			ATTRIBUTE6,
+			ATTRIBUTE7,
+			ATTRIBUTE8,
+			ATTRIBUTE9,
+			ATTRIBUTE10,
+			ATTRIBUTE11,
+			ATTRIBUTE12,
+			ATTRIBUTE13,
+			ATTRIBUTE14,
+			ATTRIBUTE15,
+			FREE_OFFER_FLAG,
+			TOOL,
+			PRESS_LINE,
+			SALES_FREE_FLAG,
+			POP_MAKE_LOT_QTY,
+			POP_INPUT_TYPE,
+			POP_CT_QTY,
+			POP_GT_LABELID,
+			POP_CT_LABELID,
+			POP_PALLET_LABELID,
+			POP_EAN,
+			POP_UPC,
+			POP_DESTINATION,
+			POP_MADEBY,
+			POP_GANBAN_LABELID,
+			LABELDESC,
+			LABELSPEC,
+			BIN_USE_FLAG,
+			CT_OUT_QTY,
+			CREATE_ITEM_FLAG,
+			INCH,
+			MATERIAL_TYPE,
+			COLOR,
+			PRESS_ITEM_ID,
+			OTHER_REQ_FLAG,
+			ORG_CODE,
+			<!-- MATERIAL_MEASURE_FLAG -->
+		)
+		SELECT s_order_seq.nextval,
+			DIVISION_CD,
+			COMPANY_CD,
+			ITEM_ID,
+			ITEM_NAME,
+			ITEM_GROUP_CODE,
+			ITEM_TYPE,
+			SPECIFICATION,
+			VENDOR_CD,
+			DEPARTURE_VENDOR_CD,
+			UNIT_PRICE,
+			UNIT,
+			PURCHASE_UNIT,
+			UNIT_QTY,
+			CONVERSION_UNIT,
+			CONVERSION_UNIT_QTY,
+			MOQ,
+			MOM,
+			SAFETY_STOCK_QTY,
+			SAFETY_STOCK_DAY,
+			SAFETY_STOCK_DAY_UOM,
+			PROD_MIN_LOT_SIZE,
+			PROD_MAX_LOT_SIZE,
+			PROD_INCREMENT_LOT_SIZE,
+			DEMAND_LOT_SIZE,
+			ACTIVATION_FLAG,
+			IS_FINITE_FLAG,
+			FINITE_TERM,
+			FINITE_TERM_UOM,
+			IN_LOCATION_ID,
+			OUT_LOCATION_ID,
+			TEST_REPORT_FLAG,
+			IQC_FLAG,
+			OQC_FLAG,
+			PQC_FLAG,
+			RP_ITEM_ID,
+			VENDOR_ITEM_ID,
+			ALT_ITEM_ID,
+			ITEM_CATEGORY,
+			PURCHASE_TYPE,
+			ITEM_USER_ID,
+			PACKING_SIZE_WIDTH,
+			PACKING_SIZE_HEIGHT,
+			MATERIAL_WEIGHT,
+			PALLET_WEIGHT,
+			UNIT_WEIGHT,
+			BOX_WEIGHT,
+			ITEM_GROUP_LARGE,
+			ITEM_GROUP_MEDIUM,
+			ITEM_GROUP_SMALL,
+			PRE_BUILD_TERM,
+			LEAD_TIME,
+			TRACKING_FLAG,
+			ORDER_METHOD,
+			ITEM_GRADE,
+			BAD_LEVEL,
+			STANDARD_OUT_QTY,
+			DEFECT_RATE,
+			BY_PRODUCT_ITEM_ID,
+			USE_YN,
+			DESCRIPTION,
+			CREATE_DATE,
+			CREATE_BY,
+			UPDATE_DATE,
+			UPDATE_BY,
+			TID,
+			ATTRIBUTE1,
+			ATTRIBUTE2,
+			ATTRIBUTE3,
+			ATTRIBUTE4,
+			ATTRIBUTE5,
+			ATTRIBUTE6,
+			ATTRIBUTE7,
+			ATTRIBUTE8,
+			ATTRIBUTE9,
+			ATTRIBUTE10,
+			ATTRIBUTE11,
+			ATTRIBUTE12,
+			ATTRIBUTE13,
+			ATTRIBUTE14,
+			ATTRIBUTE15,
+			FREE_OFFER_FLAG,
+			TOOL,
+			PRESS_LINE,
+			SALES_FREE_FLAG,
+			POP_MAKE_LOT_QTY,
+			POP_INPUT_TYPE,
+			POP_CT_QTY,
+			POP_GT_LABELID,
+			POP_CT_LABELID,
+			POP_PALLET_LABELID,
+			POP_EAN,
+			POP_UPC,
+			POP_DESTINATION,
+			POP_MADEBY,
+			POP_GANBAN_LABELID,
+			LABELDESC,
+			LABELSPEC,
+			BIN_USE_FLAG,
+			CT_OUT_QTY,
+			CREATE_ITEM_FLAG,
+			INCH,
+			MATERIAL_TYPE,
+			COLOR,
+			PRESS_ITEM_ID,
+			OTHER_REQ_FLAG,
+			ORG_CODE,
+			<!-- MATERIAL_MEASURE_FLAG -->
+	FROM	MOM_ITEM_DEFINITION
+	WHERE   DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+    AND 	COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+    AND 	ITEM_ID = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+            ;
+    	
+		SELECT
+			CASE 
+				WHEN COUNT(ITEM_ID) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_ITEM_DEFINITION
+		WHERE 
+			    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			AND ITEM_ID = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		;
+     END
+    }
+	</update>
+	
+	<!-- <insert id="create_file" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	DECLARE
+	BEGIN
+		#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	
+	UPDATE 
+		MOM_ITEM_DEFINITION
+	SET
+		ATTACH1 = UTL_RAW.CAST_TO_RAW(#{value, jdbcType=BLOB})
+	WHERE 
+		    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		AND ITEM_ID = UPPER(#{itemId, jdbcType=VARCHAR})
+	;
+	
+	SELECT
+		CASE 
+			WHEN COUNT(ITEM_ID) = 1 THEN 'S'
+			ELSE 'E' 
+		END  
+		INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+	FROM 
+		MOM_ITEM_DEFINITION
+	WHERE 
+		    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		AND ITEM_ID = UPPER(#{itemId, jdbcType=VARCHAR})
+		AND #{key, jdbcType=VARCHAR} IS NOT NULL
+	;
+	</insert> -->
+	<insert id="create_file" parameterType="java.util.HashMap">
+	INSERT INTO 
+		MOM_ITEM_DEFINITION(DIVISION_CD, COMPANY_CD, ITEM_ID)
+	VALUES(
+		  #{divisionCd, jdbcType=VARCHAR}
+		, #{companyCd, jdbcType=VARCHAR}
+		, UPPER(#{itemId, jdbcType=VARCHAR})
+	)
+	</insert>
+	
+	<update id="modify_file" parameterType="java.util.HashMap">
+	UPDATE 
+		MOM_ITEM_DEFINITION
+	SET
+		<!-- ATTACH1 = UTL_RAW.CAST_TO_RAW(#{value, jdbcType=BLOB}) -->
+		  ATTACH1 = #{value, jdbcType=BLOB}
+		, ATTACH_NAME1 = #{attachName1, jdbcType=VARCHAR}
+	WHERE 
+		    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		AND ITEM_ID = UPPER(#{itemId, jdbcType=VARCHAR})
+	</update>
+	
+	<insert id="create_file2" parameterType="java.util.HashMap">
+	INSERT INTO 
+		MOM_ITEM_DEFINITION(DIVISION_CD, COMPANY_CD, ITEM_ID)
+	VALUES(
+		  #{divisionCd, jdbcType=VARCHAR}
+		, #{companyCd, jdbcType=VARCHAR}
+		, UPPER(#{itemId, jdbcType=VARCHAR})
+	)
+	</insert>
+	
+	<update id="modify_file2" parameterType="java.util.HashMap">
+	UPDATE 
+		MOM_ITEM_DEFINITION
+	SET
+		  ATTACH2 = #{value, jdbcType=BLOB}
+		, ATTACH_NAME2 = #{attachName2, jdbcType=VARCHAR}
+	WHERE 
+		    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		AND ITEM_ID = UPPER(#{itemId, jdbcType=VARCHAR})
+	</update>
+	
+	<resultMap 	type="HashMap" 			id="itemImageMap">
+		<result property="attach1"		column="ATTACH1"		jdbcType="CLOB"		javaType="java.lang.String" />
+		<result property="attachName1" 	column="ATTACH_NAME1" 	jdbcType="VARCHAR"	javaType="java.lang.String" />
+	</resultMap>
+	<resultMap 	type="HashMap" 			id="itemImageMap2">
+		<result property="attach2"		column="ATTACH2"		jdbcType="CLOB"		javaType="java.lang.String" />
+		<result property="attachName2" 	column="ATTACH_NAME2" 	jdbcType="VARCHAR"	javaType="java.lang.String" />
+	</resultMap>
+	<select id="get_file_list" resultMap="itemImageMap" parameterType="java.util.HashMap">
+		SELECT 
+			  ATTACH1
+			, ATTACH_NAME1
+		FROM 
+			MOM_ITEM_DEFINITION
+		WHERE
+			    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+			AND ITEM_ID = UPPER(#{itemId, jdbcType=VARCHAR})
+	</select>
+	<select id="get_file2_list" resultMap="itemImageMap2" parameterType="java.util.HashMap">
+		SELECT 
+			  ATTACH2
+			, ATTACH_NAME2
+		FROM 
+			MOM_ITEM_DEFINITION
+		WHERE
+			    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+			AND ITEM_ID = UPPER(#{itemId, jdbcType=VARCHAR})
+	</select>
+	
+	<delete id="remove_item" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	DECLARE
+	BEGIN
+		#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+		
+	UPDATE MOM_ITEM_DEFINITION
+		   SET DESCRIPTION = 'Delete Data'
+		     , UPDATE_DATE = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		     , UPDATE_BY = #{userId, jdbcType=VARCHAR}
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND ITEM_ID = UPPER(#{itemId, jdbcType=VARCHAR})
+		   ;
+	INSERT INTO MOM_ITEM_DEFINITION_HIST(
+			LAST_EVENT_SEQ,
+			DIVISION_CD,
+			COMPANY_CD,
+			ITEM_ID,
+			ITEM_NAME,
+			ITEM_GROUP_CODE,
+			ITEM_TYPE,
+			SPECIFICATION,
+			VENDOR_CD,
+			DEPARTURE_VENDOR_CD,
+			UNIT_PRICE,
+			UNIT,
+			PURCHASE_UNIT,
+			UNIT_QTY,
+			CONVERSION_UNIT,
+			CONVERSION_UNIT_QTY,
+			MOQ,
+			MOM,
+			SAFETY_STOCK_QTY,
+			SAFETY_STOCK_DAY,
+			SAFETY_STOCK_DAY_UOM,
+			PROD_MIN_LOT_SIZE,
+			PROD_MAX_LOT_SIZE,
+			PROD_INCREMENT_LOT_SIZE,
+			DEMAND_LOT_SIZE,
+			ACTIVATION_FLAG,
+			IS_FINITE_FLAG,
+			FINITE_TERM,
+			FINITE_TERM_UOM,
+			IN_LOCATION_ID,
+			OUT_LOCATION_ID,
+			TEST_REPORT_FLAG,
+			IQC_FLAG,
+			OQC_FLAG,
+			PQC_FLAG,
+			RP_ITEM_ID,
+			VENDOR_ITEM_ID,
+			ALT_ITEM_ID,
+			ITEM_CATEGORY,
+			PURCHASE_TYPE,
+			ITEM_USER_ID,
+			PACKING_SIZE_WIDTH,
+			PACKING_SIZE_HEIGHT,
+			MATERIAL_WEIGHT,
+			PALLET_WEIGHT,
+			UNIT_WEIGHT,
+			BOX_WEIGHT,
+			ITEM_GROUP_LARGE,
+			ITEM_GROUP_MEDIUM,
+			ITEM_GROUP_SMALL,
+			PRE_BUILD_TERM,
+			LEAD_TIME,
+			TRACKING_FLAG,
+			ORDER_METHOD,
+			ITEM_GRADE,
+			BAD_LEVEL,
+			STANDARD_OUT_QTY,
+			DEFECT_RATE,
+			BY_PRODUCT_ITEM_ID,
+			USE_YN,
+			DESCRIPTION,
+			CREATE_DATE,
+			CREATE_BY,
+			UPDATE_DATE,
+			UPDATE_BY,
+			TID,
+			ATTRIBUTE1,
+			ATTRIBUTE2,
+			ATTRIBUTE3,
+			ATTRIBUTE4,
+			ATTRIBUTE5,
+			ATTRIBUTE6,
+			ATTRIBUTE7,
+			ATTRIBUTE8,
+			ATTRIBUTE9,
+			ATTRIBUTE10,
+			ATTRIBUTE11,
+			ATTRIBUTE12,
+			ATTRIBUTE13,
+			ATTRIBUTE14,
+			ATTRIBUTE15,
+			FREE_OFFER_FLAG,
+			TOOL,
+			PRESS_LINE,
+			SALES_FREE_FLAG,
+			POP_MAKE_LOT_QTY,
+			POP_INPUT_TYPE,
+			POP_CT_QTY,
+			POP_GT_LABELID,
+			POP_CT_LABELID,
+			POP_PALLET_LABELID,
+			POP_EAN,
+			POP_UPC,
+			POP_DESTINATION,
+			POP_MADEBY,
+			POP_GANBAN_LABELID,
+			LABELDESC,
+			LABELSPEC,
+			BIN_USE_FLAG,
+			CT_OUT_QTY,
+			CREATE_ITEM_FLAG,
+			INCH,
+			MATERIAL_TYPE,
+			COLOR,
+			PRESS_ITEM_ID,
+			OTHER_REQ_FLAG,
+			ORG_CODE,
+			MATERIAL_MEASURE_FLAG
+		)
+		SELECT s_order_seq.nextval,
+			DIVISION_CD,
+			COMPANY_CD,
+			ITEM_ID,
+			ITEM_NAME,
+			ITEM_GROUP_CODE,
+			ITEM_TYPE,
+			SPECIFICATION,
+			VENDOR_CD,
+			DEPARTURE_VENDOR_CD,
+			UNIT_PRICE,
+			UNIT,
+			PURCHASE_UNIT,
+			UNIT_QTY,
+			CONVERSION_UNIT,
+			CONVERSION_UNIT_QTY,
+			MOQ,
+			MOM,
+			SAFETY_STOCK_QTY,
+			SAFETY_STOCK_DAY,
+			SAFETY_STOCK_DAY_UOM,
+			PROD_MIN_LOT_SIZE,
+			PROD_MAX_LOT_SIZE,
+			PROD_INCREMENT_LOT_SIZE,
+			DEMAND_LOT_SIZE,
+			ACTIVATION_FLAG,
+			IS_FINITE_FLAG,
+			FINITE_TERM,
+			FINITE_TERM_UOM,
+			IN_LOCATION_ID,
+			OUT_LOCATION_ID,
+			TEST_REPORT_FLAG,
+			IQC_FLAG,
+			OQC_FLAG,
+			PQC_FLAG,
+			RP_ITEM_ID,
+			VENDOR_ITEM_ID,
+			ALT_ITEM_ID,
+			ITEM_CATEGORY,
+			PURCHASE_TYPE,
+			ITEM_USER_ID,
+			PACKING_SIZE_WIDTH,
+			PACKING_SIZE_HEIGHT,
+			MATERIAL_WEIGHT,
+			PALLET_WEIGHT,
+			UNIT_WEIGHT,
+			BOX_WEIGHT,
+			ITEM_GROUP_LARGE,
+			ITEM_GROUP_MEDIUM,
+			ITEM_GROUP_SMALL,
+			PRE_BUILD_TERM,
+			LEAD_TIME,
+			TRACKING_FLAG,
+			ORDER_METHOD,
+			ITEM_GRADE,
+			BAD_LEVEL,
+			STANDARD_OUT_QTY,
+			DEFECT_RATE,
+			BY_PRODUCT_ITEM_ID,
+			USE_YN,
+			'Delete Data',
+			CREATE_DATE,
+			CREATE_BY,
+			MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			#{userId, jdbcType=VARCHAR},
+			TID,
+			ATTRIBUTE1,
+			ATTRIBUTE2,
+			ATTRIBUTE3,
+			ATTRIBUTE4,
+			ATTRIBUTE5,
+			ATTRIBUTE6,
+			ATTRIBUTE7,
+			ATTRIBUTE8,
+			ATTRIBUTE9,
+			ATTRIBUTE10,
+			ATTRIBUTE11,
+			ATTRIBUTE12,
+			ATTRIBUTE13,
+			ATTRIBUTE14,
+			ATTRIBUTE15,
+			FREE_OFFER_FLAG,
+			TOOL,
+			PRESS_LINE,
+			SALES_FREE_FLAG,
+			POP_MAKE_LOT_QTY,
+			POP_INPUT_TYPE,
+			POP_CT_QTY,
+			POP_GT_LABELID,
+			POP_CT_LABELID,
+			POP_PALLET_LABELID,
+			POP_EAN,
+			POP_UPC,
+			POP_DESTINATION,
+			POP_MADEBY,
+			POP_GANBAN_LABELID,
+			LABELDESC,
+			LABELSPEC,
+			BIN_USE_FLAG,
+			CT_OUT_QTY,
+			CREATE_ITEM_FLAG,
+			INCH,
+			MATERIAL_TYPE,
+			COLOR,
+			PRESS_ITEM_ID,
+			OTHER_REQ_FLAG,
+			ORG_CODE,
+			MATERIAL_MEASURE_FLAG
+	FROM	MOM_ITEM_DEFINITION
+	WHERE   DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+    AND 	COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+    AND 	ITEM_ID = UPPER(#{itemId, jdbcType=VARCHAR})
+            ;
+		DELETE FROM MOM_ITEM_DEFINITION
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR} 
+		AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		AND ITEM_ID = UPPER(#{itemId, jdbcType=VARCHAR})
+		;
+		
+		SELECT
+			CASE 
+				WHEN COUNT(ITEM_ID) = 0 THEN 'S'
+				ELSE 'E' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_ITEM_DEFINITION
+		WHERE 
+			    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			AND ITEM_ID = UPPER(#{itemId, jdbcType=VARCHAR})
+		;
+	END
+	}
+	</delete>
+	
+	<select id="get_itemPopLabel_list" resultType="camelMap" parameterType="java.util.HashMap">
+	 SELECT LABEL_ID  AS CODE, 
+	 		LABEL_DESC || '(' || PRINT_ID  || ')' AS NAME 
+	 FROM   MOM_POP_LABELLIST
+	</select>
+</mapper>

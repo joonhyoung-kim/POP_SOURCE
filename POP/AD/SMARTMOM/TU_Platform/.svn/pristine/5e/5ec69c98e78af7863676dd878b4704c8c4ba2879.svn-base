@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html project-id="P201804111903105551018ozUvjWVkVGo" data-site="TU_MOM" data-page="MOMID001" page-id="PG201806181016484721051lpVHngIlN06" data-language="ko" contextPath="/TU_Platform" class=' w-mod-js w-mod-no-touch w-mod-video w-mod-no-ios'>
+<head>
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <meta name='generator' content='Mica' />
+    <meta http-equiv='CACHE-CONTROL' content='NO-CACHE' />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+    <link rel='stylesheet' type='text/css' href='/TU_Platform/Content/css/site.css' />
+    <link rel='stylesheet' type='text/css' href='/TU_Platform/Content/jqwidgets/styles/jqx.base.css' />
+    <link rel='stylesheet' type='text/css' href='/TU_Platform/Content/theme/css/datetimepicker/jquery.datetimepicker.css' />
+    <link rel="stylesheet" type="text/css" href="./../TU_MOM.css"/>
+
+    <script src='/TU_Platform/Content/js/jquery.min-1.11.1.js'></script>
+    <script src='/TU_Platform/Content/js/jquery-ui.min.js'></script>
+    <script src='/TU_Platform/Content/js/normalize.js'></script>
+    <script src='/TU_Platform/Content/amcharts/amcharts.js'></script>
+    <script src='/TU_Platform/Content/amcharts/serial.js'></script>
+    <script src='/TU_Platform/Content/theme/js/plugins/jqGrid/jquery.jqGrid.min.js'></script>
+    <script src='/TU_Platform/Content/theme/js/plugins/jqGrid/i18n/grid.locale-en.js'></script>
+    <script src='/TU_Platform/Content/theme/js/plugins/bootstrap/bootstrap.min.js'></script>
+    <script src='/TU_Platform/Content/theme/js/plugins/select2/select2.min.js'></script>
+    <script src="/TU_Platform/Content/theme/js/plugins/datetimepicker/jquery.datetimepicker.full.js"></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxcore.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxlistbox.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxcombobox.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxexpander.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxsplitter.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxbuttons.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxscrollbar.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxdata.js'></script>
+    <script src="/TU_Platform/Content/jqwidgets/jqxmenu.js"></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxtree.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxpanel.js'></script>
+    <script src="/TU_Platform/Content/jqwidgets/jqxnotification.js"></script>
+
+    <!-- MICA -->
+    <script src="/TU_Platform/Content/js/common.js"></script>
+    <script src='/TU_Platform/Content/js/mica.js'></script>
+    <script src="/TU_Platform/Content/js/mica/export.js"></script>
+    <script src="/TU_Platform/Content/js/mica/mica.common.js"></script>
+    
+    <!-- auiGrid -->
+	<link href="/TU_Platform/Content/AUIGrid/AUIGrid_style.css" rel="stylesheet" type="text/css">
+	<script src="/TU_Platform/Content/AUIGrid/AUIGridLicense.js"></script>
+	<script src="/TU_Platform/Content/AUIGrid/AUIGrid.js"></script>
+   	<link href="/TU_Platform/Content/css/auigridEditor.css" rel="stylesheet">
+	<!--  auiGrid Excel Export -->
+	<script src="/TU_Platform/Content/AUIGrid/FileSaver.min.js"></script>
+	<!-- echart -->
+	<script src="/TU_Platform/Content/PopUp/EChart/js/echarts/echarts.min.js"></script>
+	
+	<!-- new Common -->
+	<script src="/TU_Platform/Content/resources/js/common.js" type="text/javascript" ></script> 
+	
+    <!-- �떎援��뼱 -->
+    <script src="/TU_Platform/Content/js/regional.js"></script>
+	<script type="text/javascript" src="/TU_Platform/TU_MOM.lang.js"></script>
+    <script type="text/javascript" src="./../TU_MOM.common.js"></script> 
+</head>
+<body style="overflow:auto;">
+	<div class="tabcontentarea">
+		<div class="searcharea h02">
+			<div class="w-form formwrapper">
+				<form name="form" id="form" class="form-inline" data-name="Form">
+					<ul id="ul" class="w-list-unstyled w-clearfix b3">
+						<li class="w32p">
+							<div class="w-clearfix listitem">
+								<div class="labelbox w110">
+									<div class="circle"></div>
+									<div multi-lang="" style="display:none;" class="textblock">MESSAGES11209</div>
+								</div>
+								<input maxlength="256" id="fromDate" input-type="datepicker" type="text" data-format="Y-m-d" class="w-input fieldbox w110" date-format="date"></input>
+								<div multi-lang="" style="display:none;" class="textblock">~</div>
+								<input maxlength="256" id="toDate" input-type="datepicker" type="text" data-format="Y-m-d" class="w-input fieldbox w110" date-format="date"></input>
+							</div>
+						</li>
+						<li class="w32p">
+							<div id="modelIdCondition" class="w-clearfix listitem">
+								<div class="labelbox w110">
+									<div class="circle"></div>
+									<div multi-lang="" style="display:none;" class="textblock">MESSAGES10413</div>
+								</div>
+								<input maxlength="256" id="modelId" input-type="text" type="text" class="w-input fieldbox w200" date-format="date"></input>
+							</div>
+							<div id="reqModelIdCondition" class="w-clearfix listitem none">
+								<div class="labelbox">
+									<div class="circle"></div>
+									<div multi-lang="" style="display:none;" class="textblock">MESSAGES10324</div>
+								</div>
+								<select id="repModelId" class="w-select fieldbox w200"></select>
+							</div>
+						</li>
+						<li class="w36p">
+							<div class="w-clearfix listitem">
+								<div class="labelbox w110">
+									<div class="circle"></div>
+									<div multi-lang="ECO_NO" class="textblock">ECO NO</div>
+								</div>
+								<input maxlength="256" id="ecoNo" input-type="text" type="text" class="w-input fieldbox w200" date-format="date"></input>
+							</div>
+						</li>
+					</ul>
+					<ul id="ul" class="w-list-unstyled w-clearfix">
+						<li class="w32p">
+							<div class="w-clearfix listitem">
+								<div class="labelbox w110">
+									<div class="circle"></div>
+									<div multi-lang="" style="display:none;" class="textblock">MESSAGES11216</div>
+								</div>
+								<input maxlength="256" id="type" input-type="text" type="text" class="w-input fieldbox w235" date-format="date"></input>
+							</div>
+						</li>
+						<li class="w32p">
+							<div class="listitem"></div>
+						</li>
+						<li class="w36p">
+							<div class="listitem">
+								<a btnSearch="btnSearch" widgetId="W201804171937587591000dvUxX5NEG7n" name="findBtn" id="findBtn" href="#" targetGrid="auigrid" class="w-inline-block searchbutton" data-name="findBtn">
+									<div tmpTabId="four" class="w-icon fa fa-search icon"></div>
+									<div multi-lang="" style="display:none;" class="textblock">MESSAGES11233</div>
+								</a>
+							</div>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+		<div id="openSearchPop" class="opensearch">
+			<a id="openBtn" href="#" class="w-inline-block openbutton">
+				<div tmpTabId="six" class="w-icon fa fa-angle-up icon"></div>
+			</a>
+		</div>
+		<div class="h02-h">
+			<div class="card h100p">
+				<div class="w-clearfix cardheard">
+					<div tmpTabId="four" class="w-icon fa fa-reorder icon r5"></div>
+					<div multi-lang="" style="display:none;" class="textblock">MESSAGES10767</div>
+					<a id="excelDownBtn" href="#" class="w-inline-block btntool floatr">
+						<div tmpTabId="two" class="w-icon fa fa-file-excel-o icon"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10863</div>
+					</a>
+					<a id="delBtn" href="#" class="w-inline-block btntool floatr">
+						<div tmpTabId="five" class="w-icon fa fa-trash-o icon"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10577</div>
+					</a>
+					<a id="histBtn" href="#" class="w-inline-block btntool floatr none">
+						<div tmpTabId="four" class="w-icon fa fa-search icon"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10997</div>
+					</a>
+					<a id="copyBtn" href="#" class="w-inline-block btntool floatr">
+						<div tmpTabId="four" class="w-icon fa fa-copy icon"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10490</div>
+					</a>
+					<a id="delBtn" href="#" class="w-inline-block btntool floatr none">
+						<div tmpTabId="five" class="w-icon fa fa-trash-o icon"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10577</div>
+					</a>
+					<a id="createBtn" href="#" class="w-inline-block btntool floatr">
+						<div tmpTabId="three" class="w-icon fa fa-pencil icon"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10337</div>
+					</a>
+				</div>
+				<div class="cardcontent">
+					<div id="grid" class="w-widget w-dyn-list w-unbound grid w-widget-auigrid"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="pop" class="modal">
+		<div id="panel" class="panel messagebox w680">
+			<div data-panelHeader="n" panelHeader="n" class="panel-heading hide">
+				<h5>Panel</h5>
+			</div>
+			<div data-panelToolbar="n" panelToolbar="n" class="panel-toolbar hide"></div>
+			<div class="panel-body panel-body">
+				<div class="panelbody">
+					<div class="w-clearfix panelheader panel-heading">
+						<div tmpTabId="two" class="w-icon fa fa-edit icon r5"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10761</div>
+						<a href="#" class="w-inline-block bntpopclose"></a>
+					</div>
+					<div class="searcharea pop">
+						<div class="w-form">
+							<form id="form2" class="form-inline">
+								<ul id="ul" class="w-list-unstyled w-clearfix b5">
+									<li class="w50p">
+										<div class="w-clearfix listitem">
+											<div class="labelbox w110">
+												<div class="circle bg-orange"></div>
+												<div id="modelIdPopLabel" multi-lang="" style="display:none;" class="textblock orange">MESSAGES10413</div>
+											</div>
+											<select id="pModelId" class="w-select fieldbox w180"></select>
+										</div>
+									</li>
+									<li class="w50p">
+										<div class="w-clearfix listitem">
+											<div class="labelbox w110">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES11216</div>
+											</div>
+											<input maxlength="256" id="pType" input-type="text" type="text" class="w-input fieldbox col2r" date-format="date"></input>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled w-clearfix b5">
+									<li class="w50p">
+										<div class="w-clearfix listitem">
+											<div class="labelbox w110">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10856</div>
+											</div>
+											<select id="customerId" class="w-select fieldbox w180"></select>
+										</div>
+									</li>
+									<li class="w50p">
+										<div class="w-clearfix listitem">
+											<div class="labelbox w110">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10904</div>
+											</div>
+											<input maxlength="256" id="bussinessConfirm" input-type="text" type="text" class="w-input fieldbox col2r" date-format="date" required></input>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled w-clearfix b5">
+									<li class="w50p">
+										<div class="w-clearfix listitem">
+											<div class="labelbox w110">
+												<div class="circle bg-orange"></div>
+												<div multi-lang="" class="textblock orange">ECO NO</div>
+											</div>
+											<input maxlength="256" id="pEcoNo" input-type="text" type="text" class="w-input fieldbox w180" date-format="date" required></input>
+										</div>
+									</li>
+									<li class="w50p">
+										<div class="w-clearfix listitem">
+											<div class="labelbox w110">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10635</div>
+											</div>
+											<input maxlength="256" id="productionConfirm" input-type="text" type="text" class="w-input fieldbox col2r" date-format="date" required></input>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled w-clearfix b5">
+									<li class="w50p">
+										<div class="w-clearfix listitem">
+											<div class="labelbox w110">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10765</div>
+											</div>
+											<a id="attachFile" href="#" class="w-inline-block btntool blue">
+												<div tmpTabId="six" class="w-icon fa fa-folder-open-o icon"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES11317</div>
+											</a>
+										</div>
+									</li>
+									<li class="w50p">
+										<div class="w-clearfix listitem">
+											<div class="labelbox w110">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES11123</div>
+											</div>
+											<input maxlength="256" id="materialConfirm" input-type="text" type="text" class="w-input fieldbox col2r" date-format="date" required></input>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled w-clearfix b5">
+									<li class="w50p">
+										<div class="w-clearfix listitem">
+											<div class="labelbox w110">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10766</div>
+											</div>
+											<input maxlength="256" id="uploadFileName" input-type="text" type="text" class="w-input fieldbox w180" date-format="date"></input>
+										</div>
+									</li>
+									<li class="w50p">
+										<div class="w-clearfix listitem">
+											<div class="labelbox w110">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES11624</div>
+											</div>
+											<input maxlength="256" id="vendorConfirm" input-type="text" type="text" class="w-input fieldbox col2r" date-format="date" required></input>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled w-clearfix b5">
+									<li class="w50p">
+										<div class="w-clearfix listitem">
+											<div class="labelbox w110">
+												<div class="circle bg-orange"></div>
+												<div multi-lang="" style="display:none;" class="textblock orange">MESSAGES10762</div>
+											</div>
+											<input maxlength="256" id="specPassword" input-type="password" type="password" class="w-input fieldbox w180" date-format="date"></input>
+										</div>
+									</li>
+									<li class="w50p">
+										<div class="w-clearfix listitem">
+											<div class="labelbox w110">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10753</div>
+											</div>
+											<input maxlength="256" id="approveTime" input-type="text" type="text" class="w-input fieldbox col2r" date-format="date" required></input>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled w-clearfix b5">
+									<li class="w50p">
+										<div class="w-clearfix listitem">
+											<div class="labelbox w110">
+												<div class="circle bg-orange"></div>
+												<div multi-lang="" style="display:none;" class="textblock orange">MESSAGES11197</div>
+											</div>
+											<input maxlength="256" id="applyTime" input-type="datepicker" type="text" data-format="Y-m-d" class="w-input fieldbox w180" date-format="date"></input>
+										</div>
+									</li>
+									<li class="w50p">
+										<div class="w-clearfix listitem">
+											<div class="labelbox w110">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10743</div>
+											</div>
+											<input maxlength="256" id="updateDate" input-type="text" type="text" class="w-input fieldbox col2r" date-format="date" required></input>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled w-clearfix b5">
+									<li class="w50p">
+										<div class="w-clearfix listitem">
+											<div class="labelbox w110">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES11209</div>
+											</div>
+											<input maxlength="256" id="createTime" input-type="datepicker" type="text" data-format="Y-m-d" class="w-input fieldbox w180" date-format="date"></input>
+										</div>
+									</li>
+									<li class="w50p">
+										<div class="w-clearfix listitem">
+											<div class="labelbox w110">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10747</div>
+											</div>
+											<input maxlength="256" id="updateUserName" input-type="text" type="text" class="w-input fieldbox col2r" date-format="date" required></input>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled b5">
+									<li>
+										<div class="w-clearfix listitem">
+											<div class="labelbox w110">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10545</div>
+											</div>
+											<input maxlength="256" id="reasonCode" input-type="text" type="text" class="w-input fieldbox w513" date-format="date"></input>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled">
+									<li>
+										<div class="w-clearfix">
+											<div class="labelbox w110">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10760</div>
+											</div>
+											<textarea maxlength="5000" id="description" type="text" class="w-input textbox w513"></textarea>
+										</div>
+									</li>
+								</ul>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="panelfooter">
+					<a id="pSaveBtn" href="#" class="w-inline-block btnpop">
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES11192</div>
+					</a>
+					<a id="pCancelBtn" href="#" class="w-inline-block btnpop grey">
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES11457</div>
+					</a>
+				</div>
+			</div>
+			<div panelFooter="n" class="panel-footer hide" data-panelFooter="n"></div>
+		</div>
+	</div>
+	<div id="popFileUpload" class="modal">
+		<div id="panel" class="panel messagebox">
+			<div data-panelHeader="n" panelHeader="n" class="panel-heading hide">
+				<h5>Panel</h5>
+			</div>
+			<div data-panelToolbar="n" panelToolbar="n" class="panel-toolbar hide"></div>
+			<div class="panel-body panel-body">
+				<div class="panelbody">
+					<div class="w-clearfix panelheader panel-heading">
+						<div tmpTabId="six" class="w-icon fa fa-clipboard icon r5"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES11521</div>
+						<a href="#" class="w-inline-block bntpopclose"></a>
+					</div>
+					<div class="panelcontent">
+						<div class="calc100">
+							<div class="searcharea pop">
+								<div class="w-clearfix fieldline">
+									<a id="fileBtn" href="#" class="w-inline-block filebutton">
+										<div tmpTabId="two" class="w-icon fa fa-folder-open icon"></div>
+										<div multi-lang="" style="display:none;" class="textblock">MESSAGES11524</div>
+									</a>
+									<input maxlength="256" name="input2" id="fileUpload" type="input2" class="w-input fileinput" data-name="Input Data2" date-format="date" required></input>
+								</div>
+							</div>
+							<div class="card h150">
+								<div id="auigrid" class="w-widget w-dyn-list w-unbound grid w-widget-auigrid"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="panelfooter">
+					<a id="fileUploadBtn" href="#" class="w-inline-block btnpop">
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10337</div>
+					</a>
+					<a id="fileDownBtn" href="#" class="w-inline-block btnpop success">
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10290</div>
+					</a>
+					<a id="fileDelBtn" href="#" class="w-inline-block btnpop failure">
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10577</div>
+					</a>
+					<a id="fileCloseBtn" href="#" class="w-inline-block btnpop grey">
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10307</div>
+					</a>
+				</div>
+			</div>
+			<div panelFooter="n" class="panel-footer hide" data-panelFooter="n"></div>
+		</div>
+	</div>
+	<div id="popPassword" class="modal">
+		<div id="panel" class="panel messagebox w340">
+			<div data-panelHeader="n" panelHeader="n" class="panel-heading hide">
+				<h5>Panel</h5>
+			</div>
+			<div data-panelToolbar="n" panelToolbar="n" class="panel-toolbar hide"></div>
+			<div class="panel-body panel-body">
+				<div class="panelbody">
+					<div class="w-clearfix panelheader panel-heading">
+						<div tmpTabId="seven" class="w-icon fa fa-unlock-alt icon r5"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10547</div>
+						<a href="#" class="w-inline-block bntpopclose"></a>
+					</div>
+					<div class="searcharea pop">
+						<div class="w-form">
+							<form name="form" id="form3" class="form-inline" data-name="Form">
+								<ul id="ul" class="w-list-unstyled">
+									<li>
+										<div class="w-clearfix listitem">
+											<div class="labelbox">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10547</div>
+											</div>
+											<input maxlength="256" id="password" input-type="password" type="password" class="w-input fieldbox w200" date-format="date"></input>
+										</div>
+									</li>
+								</ul>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="panelfooter">
+					<a id="checkPwBtn" href="#" class="w-inline-block btnpop">
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES11639</div>
+					</a>
+					<a id="checkPwCancelBtn" href="#" class="w-inline-block btnpop grey">
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES11457</div>
+					</a>
+				</div>
+			</div>
+			<div panelFooter="n" class="panel-footer hide" data-panelFooter="n"></div>
+		</div>
+	</div>
+	<div id="popChangepassword" class="modal">
+		<div id="panel" class="panel messagebox w340">
+			<div data-panelHeader="n" panelHeader="n" class="panel-heading hide">
+				<h5>Panel</h5>
+			</div>
+			<div data-panelToolbar="n" panelToolbar="n" class="panel-toolbar hide"></div>
+			<div class="panel-body panel-body">
+				<div class="panelbody">
+					<div class="w-clearfix panelheader panel-heading">
+						<div tmpTabId="seven" class="w-icon fa fa-unlock-alt icon r5"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10762</div>
+						<a href="#" class="w-inline-block bntpopclose"></a>
+					</div>
+					<div class="searcharea pop">
+						<div class="w-form">
+							<form name="form" id="form4" class="form-inline" data-name="Form">
+								<ul id="ul" class="w-list-unstyled b5">
+									<li>
+										<div class="w-clearfix listitem">
+											<div class="labelbox w100">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES11007</div>
+											</div>
+											<input maxlength="256" id="nowPassword" input-type="password" type="password" class="w-input fieldbox w180" date-format="date"></input>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled b5">
+									<li>
+										<div class="w-clearfix listitem">
+											<div class="labelbox w100">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10800</div>
+											</div>
+											<input maxlength="256" id="newPassword" input-type="password" type="password" class="w-input fieldbox w180" date-format="date"></input>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled b5">
+									<li>
+										<div class="w-clearfix listitem">
+											<div class="labelbox w100">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES11640</div>
+											</div>
+											<input maxlength="256" id="newPasswordConfirm" input-type="password" type="password" class="w-input fieldbox w180" date-format="date"></input>
+										</div>
+									</li>
+								</ul>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="panelfooter">
+					<a id="changePwBtn" href="#" class="w-inline-block btnpop">
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES11639</div>
+					</a>
+					<a id="changePwCancelBtn" href="#" class="w-inline-block btnpop grey">
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES11457</div>
+					</a>
+				</div>
+			</div>
+			<div panelFooter="n" class="panel-footer hide" data-panelFooter="n"></div>
+		</div>
+	</div>
+</body>
+	<script type="text/javascript" src="./MOMID001.js"></script>
+</html>

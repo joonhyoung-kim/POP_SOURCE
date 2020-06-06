@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html project-id="P201804111903105551018ozUvjWVkVGo" data-site="TU_MOM" data-page="MOMJA002" page-id="PG201808311022349931004AFM1jQkoxU9" data-language="ko" contextPath="/TU_Platform" class=' w-mod-js w-mod-no-touch w-mod-video w-mod-no-ios'>
+<head>
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <meta name='generator' content='Mica' />
+    <meta http-equiv='CACHE-CONTROL' content='NO-CACHE' />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+    <link rel='stylesheet' type='text/css' href='/TU_Platform/Content/css/site.css' />
+    <link rel='stylesheet' type='text/css' href='/TU_Platform/Content/jqwidgets/styles/jqx.base.css' />
+    <link rel='stylesheet' type='text/css' href='/TU_Platform/Content/theme/css/datetimepicker/jquery.datetimepicker.css' />
+    <link rel="stylesheet" type="text/css" href="./../TU_MOM.css"/>
+
+    <script src='/TU_Platform/Content/js/jquery.min-1.11.1.js'></script>
+    <script src='/TU_Platform/Content/js/jquery-ui.min.js'></script>
+    <script src='/TU_Platform/Content/js/normalize.js'></script>
+    <script src='/TU_Platform/Content/amcharts/amcharts.js'></script>
+    <script src='/TU_Platform/Content/amcharts/serial.js'></script>
+    <script src='/TU_Platform/Content/theme/js/plugins/jqGrid/jquery.jqGrid.min.js'></script>
+    <script src='/TU_Platform/Content/theme/js/plugins/jqGrid/i18n/grid.locale-en.js'></script>
+    <script src='/TU_Platform/Content/theme/js/plugins/bootstrap/bootstrap.min.js'></script>
+    <script src='/TU_Platform/Content/theme/js/plugins/select2/select2.min.js'></script>
+    <script src="/TU_Platform/Content/theme/js/plugins/datetimepicker/jquery.datetimepicker.full.js"></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxcore.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxlistbox.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxcombobox.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxexpander.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxsplitter.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxbuttons.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxscrollbar.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxdata.js'></script>
+    <script src="/TU_Platform/Content/jqwidgets/jqxmenu.js"></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxtree.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxpanel.js'></script>
+    <script src="/TU_Platform/Content/jqwidgets/jqxnotification.js"></script>
+
+    <!-- MICA -->
+    <script src="/TU_Platform/Content/js/common.js"></script>
+    <script src='/TU_Platform/Content/js/mica.js'></script>
+    <script src="/TU_Platform/Content/js/mica/export.js"></script>
+    <script src="/TU_Platform/Content/js/mica/mica.common.js"></script>
+    
+    <!-- auiGrid -->
+	<link href="/TU_Platform/Content/AUIGrid/AUIGrid_style.css" rel="stylesheet" type="text/css">
+	<script src="/TU_Platform/Content/AUIGrid/AUIGridLicense.js"></script>
+	<script src="/TU_Platform/Content/AUIGrid/AUIGrid.js"></script>
+   	<link href="/TU_Platform/Content/css/auigridEditor.css" rel="stylesheet">
+	<!--  auiGrid Excel Export -->
+	<script src="/TU_Platform/Content/AUIGrid/FileSaver.min.js"></script>
+	<!-- echart -->
+	<script src="/TU_Platform/Content/PopUp/EChart/js/echarts/echarts.min.js"></script>
+	
+	<!-- new Common -->
+	<script src="/TU_Platform/Content/resources/js/common.js" type="text/javascript" ></script> 
+	
+    <!-- �떎援��뼱 -->
+    <script src="/TU_Platform/Content/js/regional.js"></script>
+	<script type="text/javascript" src="/TU_Platform/TU_MOM.lang.js"></script>
+    <script type="text/javascript" src="./../TU_MOM.common.js"></script> 
+</head>
+<body style="overflow:auto;">
+	<div class="tabcontentarea">
+		<div class="setup_area">
+			<div class="setup_content">
+				<div class="w-clearfix setup_header">
+					<a btnSearch="btnSearch" widgetId="W201804171937587591000dvUxX5NEG7n" name="findBtn" id="findBtn" href="#" targetGrid="auigrid" class="w-inline-block searchbutton setup" data-name="findBtn">
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES11233</div>
+					</a>
+					<a name="findBtn" id="SaveBtn" href="#" class="w-inline-block searchbutton setup bg-green" data-name="findBtn">
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES11192</div>
+					</a>
+				</div>
+				<div class="setup_card">
+					<div class="steup_line">
+						<div class="w-form formwrapper h100per">
+							<form name="form" id="form" class="form-inline h100per" data-name="Form">
+								<ul id="ul" class="w-list-unstyled w-clearfix centerline">
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w168">
+												<div class="circle"></div>
+												<div class="textblock">Local Time</div>
+											</div>
+											<select id="localTime" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w180">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES11654</div>
+											</div>
+											<select id="currencyCd" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w220">
+												<div class="circle"></div>
+												<div class="textblock">Market</div>
+											</div>
+											<select id="marketCd" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled w-clearfix centerline">
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w168">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10733</div>
+											</div>
+											<input maxlength="256" id="demandHorizon" input-type="text" type="text" class="w-input fieldbox w200" date-format="date"></input>
+										</div>
+									</li>
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w180">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10726</div>
+											</div>
+											<select id="demandCreateType" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w220">
+												<div class="circle"></div>
+												<div class="textblock">CONFIG SET ID</div>
+											</div>
+											<input maxlength="256" id="configSetId" input-type="text" type="text" class="w-input fieldbox w200" date-format="date"></input>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled w-clearfix centerline">
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w168">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10895</div>
+											</div>
+											<select id="demandUploadType" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w180">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10892</div>
+											</div>
+											<select id="demandPoUploadType" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w220">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10891</div>
+											</div>
+											<select id="itemPoUploadType" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled w-clearfix centerline">
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w168">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10142</div>
+											</div>
+											<input maxlength="256" id="planHorizon" input-type="text" type="text" class="w-input fieldbox w200" date-format="date"></input>
+										</div>
+									</li>
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w180">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES11642</div>
+											</div>
+											<select id="syncPlanUseFlag" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled w-clearfix centerline">
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w168">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10295</div>
+											</div>
+											<select id="moPriceBlockingFlag" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w180">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10929</div>
+											</div>
+											<select id="outsourcingUseFlag" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w220">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10608</div>
+											</div>
+											<select id="pgOrderUseFlag" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled w-clearfix centerline">
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w168">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES11142</div>
+											</div>
+											<select id="autoCancelWoUseFlag" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w180">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10502</div>
+											</div>
+											<select id="defectQtyUseFlag" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w220">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10805</div>
+											</div>
+											<select id="woResultOverFlag" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled w-clearfix centerline">
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w168">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES11177</div>
+											</div>
+											<select id="shippingOverFlag" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w180">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10979</div>
+											</div>
+											<select id="allowMinusQty" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w220">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES11086</div>
+											</div>
+											<select id="autoDeductionFlag" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled w-clearfix centerline">
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w168">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10764</div>
+											</div>
+											<select id="specificationType" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+									<li class="w33p">
+										<div class="listitem">
+											<div class="toplabel w180">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10847</div>
+											</div>
+											<select id="autoVendorLocationFlag" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled w-clearfix centerline">
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w168">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES11090</div>
+											</div>
+											<select id="materialLotUseFlag" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w180">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10614</div>
+											</div>
+											<select id="productLotUseFlag" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w220">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES11424</div>
+											</div>
+											<select id="shippingLotUseFlag" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled w-clearfix centerline">
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w168">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10077</div>
+											</div>
+											<input maxlength="256" id="reportExcelPath" input-type="text" type="text" class="w-input fieldbox w200" date-format="date"></input>
+										</div>
+									</li>
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w180">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10076</div>
+											</div>
+											<input maxlength="256" id="reportApplicationUrl" input-type="text" type="text" class="w-input fieldbox w200" date-format="date"></input>
+										</div>
+									</li>
+									<li class="w33p">
+										<div class="listitem"></div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled w-clearfix centerline">
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w168">
+												<div class="circle"></div>
+												<div class="textblock">B2BI Vendor Code</div>
+											</div>
+											<input maxlength="256" id="b2biVendorCd" input-type="text" type="text" class="w-input fieldbox w200" date-format="date"></input>
+										</div>
+									</li>
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w180">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10004</div>
+											</div>
+											<select id="b2bippuseflag" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w220">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10002</div>
+											</div>
+											<select id="b2bipouseflag" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled w-clearfix lastline">
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w168">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10008</div>
+											</div>
+											<select id="b2bidepartureuseflag" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+									<li class="w33p">
+										<div class="w-clearfix listitem">
+											<div class="toplabel w180">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10006</div>
+											</div>
+											<select id="b2bireceivinguseflag" class="w-select fieldbox w200"></select>
+										</div>
+									</li>
+									<li class="w33p">
+										<div class="listitem"></div>
+									</li>
+								</ul>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+	<script type="text/javascript" src="./MOMJA002.js"></script>
+</html>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.plan.plan.resourceUsageR">
+	<select id="get_resourceUsageR_list" resultType="camelMap" parameterType="java.util.HashMap">
+		 SELECT *
+		    FROM (SELECT ROUTE_ID
+		               , RESOURCE_ID
+		               , ITEM_ID
+		               , CATEGORY_ID
+		               <if test="pivot != null and pivot != ''">
+				        ${pivot}  
+				       </if> 
+		          FROM   (SELECT A.ROUTE_ID
+		                       , A.RESOURCE_ID || '(' ||
+	                                 (SELECT MOM_COMMON_PKG.FN_GET_RESOURCE_NAME(A.MASTER_ID, #{companyCd, jdbcType=VARCHAR}, A.RESOURCE_ID)
+	                                  FROM   DUAL) || ')' AS  RESOURCE_ID
+                               , A.ITEM_ID|| '(' ||
+                                     (SELECT MOM_COMMON_PKG.FN_GET_ITEM_NAME(A.MASTER_ID, 'FINEALTECH', A.ITEM_ID)
+                                      FROM   DUAL) || ')' AS  ITEM_ID
+		                       , TO_CHAR(A.PLAN_DATE, 'YYYYMMDD') PLAN_DATE
+		                       , SUM(A.PLAN_RESULT) PLAN_RESULT
+		                       , A.CATEGORY_ID
+		                  FROM   TH_EXP_RESOURCEUSAGE A
+		                  WHERE 1 = 1
+		                  AND A.RESOURCE_ID NOT IN ('DUMMY')
+		                  AND A.PLAN_ID = #{planId, jdbcType=VARCHAR}
+		                  AND A.MASTER_ID = #{divisionCd, jdbcType=VARCHAR}
+		                  <if test="resourceId != null and resourceId != ''">
+				          AND A.RESOURCE_ID = #{resourceId, jdbcType=VARCHAR} 
+				          </if>
+				          <if test="itemId != null and itemId != ''">
+				          AND UPPER(A.ITEM_ID ||
+		                         	DECODE(D.ITEM_NAME,
+		                                NULL,
+		                                NULL,
+		                                '(' || D.ITEM_NAME || ')')) LIKE '%' || UPPER(#{itemId, jdbcType=VARCHAR}) || '%' 
+				          </if>
+				          <if test="routeId != null and routeId != ''">
+				          AND UPPER(A.ROUTE_ID) LIKE '%' || UPPER(#{routeId, jdbcType=VARCHAR}) || '%'
+				          </if>
+		                  GROUP BY A.MASTER_ID
+		                         , A.ROUTE_ID
+		                         , A.RESOURCE_ID
+		                         , A.ITEM_ID
+		                         , A.CATEGORY_ID
+		                         , A.PLAN_DATE
+		                         , A.PLAN_RESULT)
+		          GROUP BY  ROUTE_ID, RESOURCE_ID, ITEM_ID, CATEGORY_ID
+		          UNION ALL
+		          SELECT ROUTE_ID
+		               , RESOURCE_ID
+		               , ITEM_ID
+		               , CATEGORY_ID
+		               <if test="pivot != null and pivot != ''">
+				        ${pivot}  
+				       </if> 
+		          FROM   (SELECT A.ROUTE_ID  
+		                       , A.RESOURCE_ID || '(' ||
+	                                 (SELECT MOM_COMMON_PKG.FN_GET_RESOURCE_NAME(A.MASTER_ID, #{companyCd, jdbcType=VARCHAR}, A.RESOURCE_ID)
+	                                  FROM   DUAL) || ')' AS  RESOURCE_ID
+		                       , 'TOTAL' ITEM_ID
+		                       , TO_CHAR(A.PLAN_DATE, 'yyyymmdd')  AS PLAN_DATE
+		                       , SUM(A.PLAN_RESULT) AS PLAN_RESULT
+		                       , A.CATEGORY_ID
+		                  FROM   TH_EXP_RESOURCEUSAGE A
+		                  WHERE 1 = 1
+		                  AND   A.RESOURCE_ID NOT IN ('DUMMY')
+		                  AND   A.MASTER_ID = #{divisionCd, jdbcType=VARCHAR}
+		                  AND   A.PLAN_ID = #{planId, jdbcType=VARCHAR}		                  
+					   	  <if test="resourceId != null and resourceId != ''">
+				          AND A.RESOURCE_ID = #{resourceId, jdbcType=VARCHAR} 
+				          </if>
+				          <if test="itemId != null and itemId != ''">
+				          AND UPPER(A.ITEM_ID ||
+		                         	DECODE(D.ITEM_NAME,
+		                                NULL,
+		                                NULL,
+		                                '(' || D.ITEM_NAME || ')')) LIKE '%' || UPPER(#{itemId, jdbcType=VARCHAR}) || '%' 
+				          </if>
+				          <if test="routeId != null and routeId != ''">
+				          AND UPPER(A.ROUTE_ID) LIKE '%' || UPPER(#{routeId, jdbcType=VARCHAR}) || '%'
+				          </if>
+		                  GROUP BY A.MASTER_ID
+		                         , A.ROUTE_ID
+		                         , A.RESOURCE_ID
+		                         , A.ITEM_ID
+		                         , A.CATEGORY_ID
+		                         , A.PLAN_DATE
+		                         , A.PLAN_RESULT)
+		          GROUP BY  ROUTE_ID, RESOURCE_ID, ITEM_ID, CATEGORY_ID
+		          UNION ALL
+		          SELECT ROUTE_ID
+		               , RESOURCE_ID
+		               , ITEM_ID
+		               , CATEGORY_ID
+		               <if test="pivot != null and pivot != ''">
+				        ${pivot}  
+				       </if> 
+		            FROM (SELECT 'TOTAL' ROUTE_ID
+		                       , 'TOTAL' RESOURCE_ID
+		                       , 'SUB_TOTAL' ITEM_ID
+		                       , TO_CHAR(A.PLAN_DATE, 'yyyymmdd') AS PLAN_DATE
+		                       , SUM(A.PLAN_RESULT) PLAN_RESULT
+		                       , A.CATEGORY_ID
+		                  FROM    TH_EXP_RESOURCEUSAGE A
+		                  WHERE 1 = 1
+		                  AND   A.RESOURCE_ID NOT IN ('DUMMY')
+		                  AND   A.MASTER_ID = #{divisionCd, jdbcType=VARCHAR}
+		                  AND   A.PLAN_ID = #{planId, jdbcType=VARCHAR}
+		                  <if test="resourceId != null and resourceId != ''">
+				          AND   A.RESOURCE_ID = #{resourceId, jdbcType=VARCHAR} 
+				          </if>
+				          <if test="itemId != null and itemId != ''">
+				          AND UPPER(A.ITEM_ID ||
+		                         	DECODE(D.ITEM_NAME,
+		                                NULL,
+		                                NULL,
+		                                '(' || D.ITEM_NAME || ')')) LIKE '%' || UPPER(#{itemId, jdbcType=VARCHAR}) || '%' 
+				          </if>
+				          <if test="routeId != null and routeId != ''">
+				          AND UPPER(A.ROUTE_ID) LIKE '%' || UPPER(#{routeId, jdbcType=VARCHAR}) || '%'
+				          </if>
+		                  GROUP BY A.CATEGORY_ID, A.PLAN_DATE, A.PLAN_RESULT)
+		           GROUP BY  ROUTE_ID, RESOURCE_ID, ITEM_ID, CATEGORY_ID)
+		   ORDER BY DECODE(RESOURCE_ID, 'TOTAL', 99, NULL, 1, 0),
+		            RESOURCE_ID,
+		            ITEM_ID,
+		            CATEGORY_ID                
+	</select>
+	
+	<select id="get_planId_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.PLAN_ID AS CODE,
+			   A.PLAN_ID AS NAME
+  		FROM TH_MST_PLAN A
+ 		WHERE 1 = 1
+   		AND A.MASTER_ID = #{divisionCd, jdbcType=VARCHAR}
+ 		GROUP BY A.PLAN_ID
+ 		ORDER BY A.PLAN_ID DESC	
+	</select>
+   
+</mapper>

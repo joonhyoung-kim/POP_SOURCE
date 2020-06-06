@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.106
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartMOM_POP", "SmartMOM_POP\SmartMOM_POP.csproj", "{27622591-9052-4B4A-9857-A4BCAED99DAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartMom_Lib", "SmartMom_Lib\SmartMom_Lib.csproj", "{1174E30F-C64B-426D-83FB-6CA4687EF769}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetroFramework", "MetroFramework\MetroFramework.csproj", "{8FE8DA76-8D80-4E12-821B-504E6D870C97}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SmartPOP", "SmartPOP\SmartPOP.vdproj", "{13EFA8E7-EC0A-4253-8F50-FCFDD25FB924}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{27622591-9052-4B4A-9857-A4BCAED99DAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27622591-9052-4B4A-9857-A4BCAED99DAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27622591-9052-4B4A-9857-A4BCAED99DAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27622591-9052-4B4A-9857-A4BCAED99DAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1174E30F-C64B-426D-83FB-6CA4687EF769}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1174E30F-C64B-426D-83FB-6CA4687EF769}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1174E30F-C64B-426D-83FB-6CA4687EF769}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1174E30F-C64B-426D-83FB-6CA4687EF769}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FE8DA76-8D80-4E12-821B-504E6D870C97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FE8DA76-8D80-4E12-821B-504E6D870C97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FE8DA76-8D80-4E12-821B-504E6D870C97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FE8DA76-8D80-4E12-821B-504E6D870C97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13EFA8E7-EC0A-4253-8F50-FCFDD25FB924}.Debug|Any CPU.ActiveCfg = Debug
+		{13EFA8E7-EC0A-4253-8F50-FCFDD25FB924}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D1119CAC-DDA5-4EAF-B673-CD97A50458C9}
+	EndGlobalSection
+EndGlobal

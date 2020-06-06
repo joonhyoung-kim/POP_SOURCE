@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.addition.dashboard">
+	<select id="get_orderInputRate_list" resultType="camelMap" parameterType="java.util.HashMap">
+	SELECT NVL(Z.ORDER_SUM_QTY, 0) AS ORDER_SUM_QTY
+	     , NVL(Z.IN_SUM_QTY, 0) AS IN_SUM_QTY
+	     , CASE WHEN NVL(Z.ORDER_SUM_QTY, 0) = 0 THEN 0
+	            ELSE ROUND((Z.IN_SUM_QTY / Z.ORDER_SUM_QTY) * 100)
+	        END AS PER
+	  FROM (
+	        SELECT SUM(M.ORDER_REMAIN_QTY * NVL(M.CODE_VALUES,1)) AS ORDER_SUM_QTY
+	             , SUM(M.IN_SUM_QTY) AS IN_SUM_QTY
+	          FROM (
+	                SELECT A.MATERIAL_ORDER_ID
+	                     , (A.ORDER_QTY - NVL(A.CANCEL_QTY, 0)) AS ORDER_REMAIN_QTY
+	                     , D.CODE_VALUES
+	                     , NVL(S.IN_SUM_QTY, 0) AS IN_SUM_QTY
+	                  FROM MOM_MATERIAL_ORDER A
+	                     , (
+	                        SELECT I.ITEM_ID
+	                             , C.CODE_VALUES
+	                          FROM MOM_ITEM_DEFINITION I
+	                             , (    
+	                                SELECT B.CODE_ID, A.CODE_VALUES
+	                                  FROM
+	                                      (
+	                                        SELECT CODE_ID, CODE_VALUES FROM MOM_CODE 
+	                                         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	                                           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	                                           AND CODE_CLASS_ID = 'FA_KPI'
+	                                           AND NVL(USE_YN , 'Y') = 'Y'
+	                                      ) A
+	                                      , (
+	                                        SELECT CODE_ID, ATTRIBUTE1 FROM MOM_CODE 
+	                                         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	                                           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	                                           AND CODE_CLASS_ID = 'ITEM_GROUP_LARGE'
+	                                           AND NVL(USE_YN , 'Y') = 'Y'
+	                                      ) B
+	                                 WHERE B.ATTRIBUTE1 = A.CODE_ID (+)
+	                                ) C
+	                         WHERE I.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	                           AND I.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	                           AND I.ITEM_GROUP_LARGE = C.CODE_ID(+)
+	                           AND NVL(I.USE_YN, 'Y') = 'Y'
+	                      ) D
+	                     , (SELECT SUM(QTY) IN_SUM_QTY
+	                             , ITEM_ORDER_ID
+	                          FROM MOM_ITEM_STOCK_INOUT MIS
+	                         WHERE MIS.IO_CATEGORY IN ('I001','I002') 
+	                           AND MIS.IO_TYPE = 'I'
+	                           AND MIS.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	                           AND MIS.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	                           AND MIS.ITEM_ORDER_ID IS NOT NULL
+	                           AND TO_CHAR(MIS.IO_TIME, 'YYYY-MM') = TO_CHAR(MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR},#{companyCd, jdbcType=VARCHAR}), 'YYYY-MM')
+	                           AND NOT EXISTS (SELECT '*' FROM MOM_ITEM_STOCK_INOUT IC 
+                                                WHERE IC.DIVISION_CD = MIS.DIVISION_CD 
+                                                  AND IC.COMPANY_CD = MIS.COMPANY_CD 
+                                                  AND IC.IO_TYPE = MIS.IO_TYPE 
+                                                  AND IC.PREV_STOCK_INOUT_ID = MIS.ITEM_STOCK_INOUT_ID)
+	                         GROUP BY ITEM_ORDER_ID) S
+	                 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	                   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	                   AND TO_CHAR(ORDER_DATE, 'YYYY-MM') = TO_CHAR(MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR},#{companyCd, jdbcType=VARCHAR}), 'YYYY-MM')
+	                   AND A.ORDER_STATE != 'CANCEL'
+	                   AND A.ITEM_ID = D.ITEM_ID(+)
+	                   AND A.MATERIAL_ORDER_ID = S.ITEM_ORDER_ID (+)
+	              ) M
+	       ) Z
+	 WHERE 1=1
+	</select>
+	<!-- 계획대비실적율 -->
+	<select id="get_planPreparePerformanceRate_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT NVL(A.SUM_GOOD_QTY, 0) AS SUM_GOOD_QTY
+		     , NVL(B.PLAN_QTY, 0) AS PLAN_QTY
+		     , CASE WHEN NVL(A.SUM_GOOD_QTY, 0) = 0 THEN 0 
+		            ELSE ROUND ( (A.SUM_GOOD_QTY / DECODE (B.PLAN_QTY, 0, 1, B.PLAN_QTY)) * 100)
+		        END AS PER
+		  FROM (SELECT SUM (GOOD_QTY) AS SUM_GOOD_QTY
+		          FROM MOM_WORK_ORDER
+		         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		           AND WO_STATE IN ('T', 'R')
+		           AND TO_CHAR (START_TIME, 'YYYY-MM') = TO_CHAR (MOM_COMMON_PKG.FN_GET_LOCAL_TIME (#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}), 'YYYY-MM')) A
+		     , (SELECT MAX (P.WO_PLAN_QTY) + MAX (P.EX_PLAN_QTY) AS PLAN_QTY
+		          FROM (SELECT SUM (PLAN_QTY) AS WO_PLAN_QTY
+		                     , 0 AS EX_PLAN_QTY
+		                  FROM MOM_WORK_ORDER 
+		                 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR} 
+		                   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR} 
+		                   AND WO_STATE != 'C' 
+		                   AND PLAN_DATE <![CDATA[<]]> (MOM_COMMON_PKG.FN_GET_LOCAL_TIME (#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}))
+		                UNION ALL
+		                SELECT 0 AS WO_PLAN_QTY
+		                     , NVL (SUM (PLAN_QTY), 0) AS EX_PLAN_QTY
+		                  FROM TH_EXP_PRODUCTIONPLANDETAIL
+		                 WHERE MASTER_ID = #{divisionCd, jdbcType=VARCHAR} 
+		                   AND PLAN_DATE >= MOM_COMMON_PKG.FN_GET_LOCAL_TIME (#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		               ) P
+		        ) B
+		 WHERE 1 = 1
+	</select>
+	<!-- 주문대비출하율 -->
+	<select id="get_salesShippingRate_list" resultType="camelMap" parameterType="java.util.HashMap">
+	SELECT NVL(A.SUM_ORDER, 0) AS SUM_ORDER
+	     , NVL(B.SUM_SHIP, 0) AS SUM_SHIP
+	     , CASE WHEN NVL(A.SUM_ORDER, 0) = 0 THEN 0
+	            ELSE TRUNC((B.SUM_SHIP/A.SUM_ORDER) * 100) 
+	        END AS RATE_SHIP
+	  FROM (SELECT SUM(ORDER_QTY) AS SUM_ORDER
+	          FROM MOM_SALES_ORDER
+	         WHERE TO_CHAR(DUE_DATE, 'YYYY-MM') = TO_CHAR(MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}), 'YYYY-MM')
+	           AND ORDER_STATE IN ('T','N', 'F')
+	           AND DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR})A
+	     , (SELECT SUM(NVL(SHIP_QTY,0)) AS SUM_SHIP
+	          FROM MOM_SALES_ORDER
+	         WHERE DUE_DATE BETWEEN TRUNC(MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}), 'MM')
+	                            AND TRUNC(MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}))
+	           AND DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR})B
+     WHERE 1=1
+	</select>
+	<!-- 매출계획대비 진척(금액) -->
+	<select id="get_comPurchaseSalesQtyToday_list" resultType="camelMap" parameterType="java.util.HashMap">
+<!-- 	       WITH DATE_ID AS -->
+<!--             ( -->
+<!--                 SELECT MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}) AS IO_TIME  -->
+<!--                 FROM DUAL -->
+<!--             ) -->
+<!--             SELECT IO_TIME -->
+<!--                , TRUNC(IN_QTY) AS IN_QTY -->
+<!--                , TRUNC(OUT_QTY) AS OUT_QTY -->
+<!--                , CASE NVL(TRUNC(IN_QTY),0) WHEN 0 THEN 0 -->
+<!--                       ELSE CASE NVL(TRUNC(OUT_QTY),0) WHEN 0 THEN 0 -->
+<!--                                 ELSE TRUNC((TRUNC(IN_QTY) / TRUNC(OUT_QTY)) * 100, 2) -->
+<!--                            END -->
+<!--                   END AS PER -->
+<!--             FROM ( -->
+<!--                     SELECT TO_CHAR(IO_TIME, 'YYYY-MM-DD') AS IO_TIME -->
+<!--                          , (SELECT NVL(MOM_COMMON_PKG.FN_GET_INOUT_QTY_SUM(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}, 'IN', 'M', IO_TIME),0) FROM DUAL)  AS IN_QTY -->
+<!--                          , (SELECT NVL(MOM_COMMON_PKG.FN_GET_INOUT_QTY_SUM(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}, 'OUT', 'M', IO_TIME),0) FROM DUAL)  AS OUT_QTY -->
+<!--                       FROM DATE_ID  -->
+<!--                  ) -->
+<!--             ORDER BY 1 -->
+		WITH DATE_ID
+		     AS (SELECT MOM_COMMON_PKG.FN_GET_LOCAL_TIME (#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		                   AS IO_TIME
+		           FROM DUAL)
+		  SELECT IO_TIME
+		       , TRUNC (IN_QTY) AS IN_QTY
+<!-- 			   , (SELECT NVL(MOM_COMMON_PKG.FN_GET_INOUT_PRICE_SUM(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}, 'OUT', 'M', TRUNC(IO_TIME)), 0) FROM DUAL) AS IN_QTY -->
+		       , TRUNC (OUT_QTY) AS OUT_QTY
+		       , CASE NVL (TRUNC (IN_QTY), 0)
+		            WHEN 0
+		            THEN
+		               0
+		            ELSE
+		               CASE NVL (TRUNC (OUT_QTY), 0)
+		                  WHEN 0 THEN 0
+		                  ELSE TRUNC ( (TRUNC (IN_QTY) / TRUNC (OUT_QTY)) * 100, 2)
+		               END
+		         END
+		            AS PER
+		    FROM (SELECT Z.IO_TIME
+		               , (SELECT NVL((SELECT SUM(B.INOUT_PRICE)
+					                  FROM   MOM_ITEM_STOCK_INOUT B
+					                  WHERE  B.DIVISION_CD =  #{divisionCd, jdbcType=VARCHAR}
+					                  AND    B.COMPANY_CD   = #{companyCd, jdbcType=VARCHAR}
+					                  AND    B.IO_TYPE      = 'I'
+					                  AND    B.IO_CATEGORY IN (SELECT MC.CODE_ID
+                                                               FROM   MOM_CODE MC
+                                                               WHERE  MC.DIVISION_CD   = B.DIVISION_CD
+                                                               AND    MC.COMPANY_CD    = B.COMPANY_CD
+                                                               AND    MC.CODE_CLASS_ID = 'IO_CATEGORY'
+                                                               AND    MC.USE_YN        = 'Y'
+                                                               AND    MC.ATTRIBUTE13   = 'Y' )
+					                  AND    TO_CHAR(B.IO_TIME, 'YYYYMM') = TO_CHAR(TRUNC(Z.IO_TIME), 'YYYYMM')
+					                  AND    NOT EXISTS ( SELECT '*'
+                                                          FROM   MOM_ITEM_STOCK_INOUT C
+                                                          WHERE  C.DIVISION_CD = B.DIVISION_CD
+                                                          AND    C.COMPANY_CD = B.COMPANY_CD
+                                                          AND    C.IO_TYPE    = B.IO_TYPE
+                                                          AND    C.PREV_STOCK_INOUT_ID = B.ITEM_STOCK_INOUT_ID)
+<!-- 					                  AND    B.ITEM_ORDER_ID IN (SELECT S.SALES_ORDER_ID -->
+<!-- 					                                              FROM   MOM_SALES_ORDER S -->
+<!-- 					                                              WHERE  DIVISION_CD = #{divisionCd, jdbcType=VARCHAR} -->
+<!-- 					                                              AND	 COMPANY_CD  = #{companyCd, jdbcType=VARCHAR} -->
+<!-- 					                                              AND    TO_CHAR(S.DUE_DATE, 'YYYYMM')  = TO_CHAR(TRUNC(Z.IO_TIME), 'YYYYMM')) -->
+					                                              )
+					                 , 0)
+		                    FROM DUAL)
+		                    AS IN_QTY
+		               , (SELECT TRUNC(SUM(QTY * NVL(PRICE,1) * NVL(EXCHANGE_RATE, 1)))
+                          FROM  ( SELECT T.ORDER_QTY - NVL(T.CANCEL_QTY, 0) AS QTY
+                                       , (MOM_COMMON_PKG.FN_GET_SALES_PRICE(T.DIVISION_CD, T.COMPANY_CD, T.VENDOR_CD, T.ITEM_ID, T.MARKET_CD, T.CURRENCY_CD, TRUNC(D.IO_TIME))) AS PRICE
+                                       , CASE WHEN P.CURRENCY_CD =  T.CURRENCY_CD THEN 1
+                                         ELSE NVL((MOM_COMMON_PKG.FN_GET_CURRENT_EXCHANGE_RATE(T.DIVISION_CD, T.COMPANY_CD, T.CURRENCY_CD, TRUNC(D.IO_TIME))),1)
+                                         END  AS EXCHANGE_RATE
+                                  FROM  MOM_SALES_ORDER T
+                                      , MOM_PARAMETER P
+                                      , DATE_ID D
+                                  WHERE T.DIVISION_CD = P.DIVISION_CD
+                                  AND   T.COMPANY_CD = P.COMPANY_CD
+                                  AND   T.DIVISION_CD =  #{divisionCd, jdbcType=VARCHAR}
+                                  AND   T.COMPANY_CD   = #{companyCd, jdbcType=VARCHAR}
+                                  AND   TO_CHAR(T.DUE_DATE, 'YYYYMM')  = TO_CHAR(TRUNC(D.IO_TIME), 'YYYYMM')
+                                  AND   T.ORDER_QTY - NVL(T.CANCEL_QTY, 0) > 0 )) AS OUT_QTY
+		            FROM DATE_ID Z)
+		ORDER BY 1
+	</select>
+	<!-- 매입/매출(금액) -->
+	<select id="get_comPurchaseSalesPriceToday_list" resultType="camelMap" parameterType="java.util.HashMap">
+  	        WITH DATE_ID AS
+            (
+                SELECT MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}) AS IO_TIME 
+                FROM DUAL
+            )
+            SELECT IO_TIME
+               , TRUNC(IN_PRICE) AS IN_PRICE
+               , TRUNC(OUT_PRICE) AS OUT_PRICE
+               , CASE NVL(TRUNC(IN_PRICE),0) WHEN 0 THEN 0
+                      ELSE CASE NVL(TRUNC(OUT_PRICE),0) WHEN 0 THEN 0
+                                ELSE TRUNC((TRUNC(IN_PRICE) / TRUNC(OUT_PRICE)) * 100, 2)
+                           END
+                  END AS PER
+            FROM (
+                    SELECT TO_CHAR(IO_TIME, 'YYYY-MM-DD') AS IO_TIME
+                         , (SELECT NVL(MOM_COMMON_PKG.FN_GET_INOUT_PRICE_SUM(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}, 'IN', 'M', IO_TIME),0) FROM DUAL)  AS IN_PRICE
+                         , (SELECT NVL(MOM_COMMON_PKG.FN_GET_INOUT_PRICE_SUM(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}, 'OUT', 'M', IO_TIME),0) FROM DUAL)  AS OUT_PRICE
+                      FROM DATE_ID 
+                 )
+            ORDER BY 1
+	</select>
+	<!-- 재고현황 -->
+	<select id="get_stockStatus_list" resultType="camelMap" parameterType="java.util.HashMap">
+	SELECT NVL(Z.ITEM_GROUP_LARGE_NAME, '-') || '(' || NVL(Z.ITEM_GROUP_MEDIUM_NAME, '-') || ')' AS ITEM_GROUP_LARGE_NAME
+	     , Z.PREV_AMOUNT
+	     , Z.THIS_AMOUNT
+	  FROM (
+		SELECT B.ITEM_GROUP_LARGE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}, 'ITEM_GROUP_LARGE',  B.ITEM_GROUP_LARGE) FROM DUAL) AS ITEM_GROUP_LARGE_NAME
+		     , B.ITEM_GROUP_MEDIUM
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}, 'ITEM_GROUP_MEDIUM',  B.ITEM_GROUP_MEDIUM) FROM DUAL) AS ITEM_GROUP_MEDIUM_NAME
+		     , TRUNC(SUM(A.PREV_AMOUNT/1000)) AS PREV_AMOUNT
+	     	 , TRUNC(SUM(A.THIS_AMOUNT/1000)) AS THIS_AMOUNT
+		  FROM     
+		      ( SELECT ITEM_ID 
+		             , NVL(SUM(STOCK_AMOUNT), 0) AS PREV_AMOUNT
+		             , 0 AS THIS_AMOUNT
+		          FROM MOM_MONTH_MATERIAL
+		         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		           AND BASIS_YYYYMM = TO_CHAR(ADD_MONTHS(MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}), -1), 'YYYY-MM')
+		         GROUP BY ITEM_ID
+		         UNION ALL
+		        SELECT A.ITEM_ID
+		             , 0 AS PREV_AMOUNT
+		             , SUM(A.CURRENT_QTY * NVL(B.UNIT_PRICE, 0)) AS THIS_AMOUNT 
+		          FROM MOM_ITEM_STOCK A
+		             , (SELECT * FROM MOM_STANDARD_PRICE WHERE PRICE_TYPE = 'ST' AND TRUNC(MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})) BETWEEN START_DATE AND END_DATE) B
+		         WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		           AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		           AND A.DIVISION_CD = B.DIVISION_CD(+)
+		           AND A.COMPANY_CD = B.COMPANY_CD(+)
+		           AND A.ITEM_ID = B.ITEM_ID(+)
+		         GROUP BY A.ITEM_ID
+		      ) A
+		     , (SELECT CASE WHEN ((B.ITEM_GROUP_LARGE = 'FA1000' AND B.ITEM_GROUP_MEDIUM = '1000') 
+                                  OR (B.ITEM_GROUP_LARGE = 'FA2100' AND B.ITEM_GROUP_MEDIUM = '1000')
+                                  OR (B.ITEM_GROUP_LARGE = 'FA3100' AND B.ITEM_GROUP_MEDIUM = '1000')
+                                  OR (B.ITEM_GROUP_LARGE = 'FA3200' AND B.ITEM_GROUP_MEDIUM = '2000')
+                                  OR (B.ITEM_GROUP_LARGE = 'FA7000' AND B.ITEM_GROUP_MEDIUM = '5000')) THEN B.ITEM_GROUP_LARGE
+                            ELSE 'FA9000'
+                        END ITEM_GROUP_LARGE
+                     , CASE WHEN ((B.ITEM_GROUP_LARGE = 'FA1000' AND B.ITEM_GROUP_MEDIUM = '1000') 
+                                  OR (B.ITEM_GROUP_LARGE = 'FA2100' AND B.ITEM_GROUP_MEDIUM = '1000')
+                                  OR (B.ITEM_GROUP_LARGE = 'FA3100' AND B.ITEM_GROUP_MEDIUM = '1000')
+                                  OR (B.ITEM_GROUP_LARGE = 'FA3200' AND B.ITEM_GROUP_MEDIUM = '2000')
+                                  OR (B.ITEM_GROUP_LARGE = 'FA7000' AND B.ITEM_GROUP_MEDIUM = '5000') )THEN B.ITEM_GROUP_MEDIUM
+                            ELSE '9000'
+                        END ITEM_GROUP_MEDIUM
+                     , ITEM_ID
+                  FROM MOM_ITEM_DEFINITION B
+                 WHERE B.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+                   AND B.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+                   AND NVL(B.USE_YN, 'Y') = 'Y' )B
+		 WHERE 1=1
+		   AND A.ITEM_ID = B.ITEM_ID
+		 GROUP BY B.ITEM_GROUP_MEDIUM, B.ITEM_GROUP_LARGE
+		 ORDER BY B.ITEM_GROUP_MEDIUM, B.ITEM_GROUP_LARGE
+		 ) Z
+	</select>
+	<select id="get_comPurchaseSalesWeekly_list" resultType="camelMap" parameterType="java.util.HashMap">
+    	WITH DATE_ID AS
+	        (SELECT DISTINCT WEEK, WEEKSTART_DATE
+	           FROM TH_MST_TIME
+	          WHERE DATE_ID BETWEEN MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}) - 90 AND MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}))
+	      SELECT IO_TIME
+	           , TO_CHAR(IO_DATE,'YYYY-MM-DD') AS IO_DATE
+	           , TRUNC(IN_PRICE / 1000) AS IN_PRICE
+	           , TRUNC(OUT_PRICE / 1000) AS OUT_PRICE
+	           , CASE NVL(TRUNC(IN_PRICE / 1000),0) WHEN 0 THEN 0
+	                  ELSE CASE NVL(TRUNC(OUT_PRICE / 1000),0) WHEN 0 THEN 0
+	                            ELSE TRUNC((TRUNC(IN_PRICE / 1000) / TRUNC(OUT_PRICE / 1000)) * 100, 2)
+	                       END
+	              END AS PER
+	        FROM (
+	                SELECT SUBSTR (A.WEEK, 0, 4) || '-' || SUBSTR (A.WEEK, 5, 2) AS IO_TIME
+	                     , A.WEEKSTART_DATE AS IO_DATE
+	                     , (SELECT NVL(mom_common_pkg.FN_GET_INOUT_PRICE_SUM(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}, 'IN', 'W', A.WEEKSTART_DATE),0) FROM DUAL)  AS IN_PRICE
+	                     , (SELECT NVL(mom_common_pkg.FN_GET_INOUT_PRICE_SUM(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}, 'OUT', 'W', A.WEEKSTART_DATE),0) FROM DUAL)  AS OUT_PRICE
+	                  FROM DATE_ID A
+	             )
+	       ORDER BY 1
+	</select>
+	
+	<!-- 설비가동률 -->
+	<select id="get_comResourceUilizationRate_list" resultType="camelMap" parameterType="java.util.HashMap">
+        WITH DATE_ID AS
+		   (SELECT MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}) IO_TIME 
+		      FROM DUAL
+		    )
+		    SELECT Z.IN_QTY
+		         , Z.OUT_QTY
+		         , CASE WHEN OUT_QTY = 0 THEN 0
+		                ELSE ROUND((IN_QTY / OUT_QTY) * 100, 2)
+		            END AS PER
+		      FROM (
+		            SELECT NVL((SELECT COUNT(DISTINCT RESOURCE_CD) 
+		                          FROM MOM_WORK_ORDER 
+		                         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		                           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		                           AND TRUNC(START_TIME) = TRUNC(T.IO_TIME)
+		                           AND RESOURCE_CD IN (SELECT RESOURCE_CD
+                                                         FROM MOM_RESOURCE 
+                                                        WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+                                                          AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+                                                          AND NVL(USE_YN, 'N') = 'Y'
+                                                          AND NVL(OUTSOURCING_FLAG,'N') = 'N'))
+		                       , 0) IN_QTY
+		                 , NVL((SELECT COUNT(*) 
+		                          FROM MOM_RESOURCE 
+		                         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		                           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		                           AND NVL(USE_YN, 'N') = 'Y'
+		                           AND NVL(OUTSOURCING_FLAG,'N') = 'N')
+		                       , 0) OUT_QTY
+		              FROM DATE_ID T 
+		            ) Z
+		  
+    </select>
+	
+</mapper>

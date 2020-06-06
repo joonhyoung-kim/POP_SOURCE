@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.equipment.equipmentCheckSetup">
+<!-- 	<select id="get_equipment_list" resultType="camelMap" parameterType="java.util.HashMap"> -->
+<!-- 		SELECT EQUIPMENT_CD -->
+<!-- 		     , EQUIPMENT_NAME -->
+<!-- 		  FROM MOM_EQUIPMENT -->
+<!-- 		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR} -->
+<!-- 		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR} -->
+<!-- 		   AND USE_YN = 'Y' -->
+<!-- 		 ORDER BY EQUIPMENT_NAME -->
+<!--     </select> -->
+    
+    <select id="get_equipmentCheckSetup_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.DIVISION_CD
+		     , A.COMPANY_CD
+		     , A.EQUIPMENT_TYPE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (A.DIVISION_CD
+		     										  , A.COMPANY_CD
+		     										  , 'EQUIPMENT_TYPE'
+		     										  , A.EQUIPMENT_TYPE)
+		          FROM DUAL) AS EQUIPMENT_TYPE_NAME
+		     , A.CHECK_TYPE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (A.DIVISION_CD
+		     										  , A.COMPANY_CD
+		     										  , 'EQM_CHECK_TYPE'
+		     										  , A.CHECK_TYPE)
+		          FROM DUAL) AS CHECK_TYPE_NAME
+		     , A.CHECK_METHOD
+		     , A.CYCLE_TYPE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (A.DIVISION_CD
+		     										  , A.COMPANY_CD
+		     										  , 'EQM_INSPEC_INTERVAL'
+		     										  , A.CYCLE_TYPE)
+		          FROM DUAL) AS CYCLE_TYPE_NAME
+		     , A.CHECK_SEQ
+		     , A.PRIORITY
+		     , A.USE_YN
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (A.DIVISION_CD
+		     										  , A.COMPANY_CD
+		     										  , 'USE_FLAG'
+		     										  , A.USE_YN)
+		          FROM DUAL) AS USE_YN_NAME
+		     , A.DESCRIPTION
+		     , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD') AS CREATE_DATE
+		     , A.CREATE_BY
+		     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( A.DIVISION_CD
+	                                                  , A.COMPANY_CD  
+	                                                  , A.CREATE_BY)
+	              FROM DUAL) AS CREATE_BY_NAME 
+		     , TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD') AS UPDATE_DATE
+		     , A.UPDATE_BY
+		     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( A.DIVISION_CD
+	                                                  , A.COMPANY_CD  
+	                                                  , A.UPDATE_BY)
+	              FROM DUAL) AS UPDATE_BY_NAME 
+		  FROM MOM_EQM_CHECK A
+		 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND A.EQUIPMENT_TYPE = #{code, jdbcType=VARCHAR}
+	 	 ORDER BY A.PRIORITY
+    </select>
+    
+    <insert id="create_equipmentCheckSetup"  statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	DECLARE
+	BEGIN
+		#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+		
+	INSERT INTO MOM_EQM_CHECK
+			( DIVISION_CD
+			, COMPANY_CD
+			, EQUIPMENT_TYPE
+			, CHECK_TYPE
+			, CHECK_METHOD
+			, CYCLE_TYPE
+			, USE_YN
+			, DESCRIPTION
+			, CREATE_DATE
+			, CREATE_BY
+			, UPDATE_DATE
+			, UPDATE_BY
+			, CHECK_SEQ
+			, PRIORITY
+			)
+		VALUES (
+			  #{divisionCd, jdbcType=VARCHAR}
+			, #{companyCd, jdbcType=VARCHAR}
+			, #{equipmentType, jdbcType=VARCHAR}
+			, #{checkType, jdbcType=VARCHAR}
+			, #{checkMethod, jdbcType=VARCHAR}
+			, #{cycleType, jdbcType=VARCHAR}
+			, #{useYn, jdbcType=VARCHAR}
+			, #{description, jdbcType=VARCHAR}
+			, MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			, #{userId, jdbcType=VARCHAR}
+			, MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			, #{userId, jdbcType=VARCHAR}
+			, #{checkSeq, jdbcType=NUMERIC}
+			, #{priority, jdbcType=NUMERIC}
+		);
+		
+		INSERT INTO MOM_EQM_CHECK_HIST
+			( LAST_EVENT_SEQ
+			, DIVISION_CD
+			, COMPANY_CD
+			, EQUIPMENT_TYPE
+			, CHECK_TYPE
+			, CHECK_METHOD
+			, CYCLE_TYPE
+			, USE_YN
+			, DESCRIPTION
+			, CREATE_DATE
+			, CREATE_BY
+			, UPDATE_DATE
+			, UPDATE_BY
+			, CHECK_SEQ
+			, PRIORITY
+			)
+		SELECT s_order_seq.nextval
+			, DIVISION_CD
+			, COMPANY_CD
+			, EQUIPMENT_TYPE
+			, CHECK_TYPE
+			, CHECK_METHOD
+			, CYCLE_TYPE
+			, USE_YN
+			, DESCRIPTION
+			, CREATE_DATE
+			, CREATE_BY
+			, UPDATE_DATE
+			, UPDATE_BY
+			, CHECK_SEQ
+			, PRIORITY
+		 FROM MOM_EQM_CHECK
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		  AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		  AND CHECK_SEQ = #{checkSeq, jdbcType=NUMERIC}
+		;
+		
+		SELECT
+			CASE 
+				WHEN COUNT(CHECK_TYPE) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		  FROM MOM_EQM_CHECK
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND CHECK_SEQ = #{checkSeq, jdbcType=NUMERIC}
+		;
+	END
+	}
+	</insert>
+
+	<update id="modify_equipmentCheckSetup" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	DECLARE
+	BEGIN
+		#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+		
+		UPDATE MOM_EQM_CHECK
+		   SET CHECK_METHOD = #{checkMethod, jdbcType=VARCHAR}
+		     , CYCLE_TYPE = #{cycleType, jdbcType=VARCHAR}
+		     , PRIORITY = #{priority, jdbcType=NUMERIC}
+		     , USE_YN = #{useYn, jdbcType=VARCHAR}
+		     , UPDATE_DATE = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		     , UPDATE_BY = #{userId, jdbcType=VARCHAR}
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		  AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		  AND CHECK_SEQ = #{checkSeq, jdbcType=NUMERIC};
+		  
+		  INSERT INTO MOM_EQM_CHECK_HIST
+			( LAST_EVENT_SEQ
+			, DIVISION_CD
+			, COMPANY_CD
+			, EQUIPMENT_TYPE
+			, CHECK_TYPE
+			, CHECK_METHOD
+			, CYCLE_TYPE
+			, USE_YN
+			, DESCRIPTION
+			, CREATE_DATE
+			, CREATE_BY
+			, UPDATE_DATE
+			, UPDATE_BY
+			, CHECK_SEQ
+			, PRIORITY
+			)
+		SELECT s_order_seq.nextval
+			, DIVISION_CD
+			, COMPANY_CD
+			, EQUIPMENT_TYPE
+			, CHECK_TYPE
+			, CHECK_METHOD
+			, CYCLE_TYPE
+			, USE_YN
+			, DESCRIPTION
+			, CREATE_DATE
+			, CREATE_BY
+			, UPDATE_DATE
+			, UPDATE_BY
+			, CHECK_SEQ
+			, PRIORITY
+		 FROM MOM_EQM_CHECK
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		  AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		  AND CHECK_SEQ = #{checkSeq, jdbcType=NUMERIC}
+		;
+		
+		SELECT
+			CASE 
+				WHEN COUNT(CHECK_TYPE) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		  FROM MOM_EQM_CHECK
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND CHECK_SEQ = #{checkSeq, jdbcType=NUMERIC}
+		;
+	END
+	}
+	</update>
+	
+	<delete id="remove_equipmentCheckSetup" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	DECLARE
+	BEGIN
+		#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+		
+		INSERT INTO MOM_EQM_CHECK_HIST
+			( LAST_EVENT_SEQ
+			, DIVISION_CD
+			, COMPANY_CD
+			, EQUIPMENT_TYPE
+			, CHECK_TYPE
+			, CHECK_METHOD
+			, CYCLE_TYPE
+			, USE_YN
+			, DESCRIPTION
+			, CREATE_DATE
+			, CREATE_BY
+			, UPDATE_DATE
+			, UPDATE_BY
+			, CHECK_SEQ
+			, PRIORITY
+			)
+		SELECT s_order_seq.nextval
+			, DIVISION_CD
+			, COMPANY_CD
+			, EQUIPMENT_TYPE
+			, CHECK_TYPE
+			, CHECK_METHOD
+			, CYCLE_TYPE
+			, USE_YN
+			, DESCRIPTION
+			, CREATE_DATE
+			, CREATE_BY
+			, UPDATE_DATE
+			, UPDATE_BY
+			, CHECK_SEQ
+			, PRIORITY
+		 FROM MOM_EQM_CHECK
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		  AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		  AND CHECK_SEQ = #{checkSeq, jdbcType=NUMERIC}
+		;
+		
+		DELETE 
+		  FROM MOM_EQM_CHECK
+		  WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		    AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		    AND CHECK_SEQ = #{checkSeq, jdbcType=NUMERIC}
+		    ;
+   		SELECT
+			CASE 
+				WHEN COUNT(CHECK_TYPE) != 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		  FROM MOM_EQM_CHECK
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND CHECK_SEQ = #{checkSeq, jdbcType=NUMERIC}
+		;
+	END
+	}
+		    
+	</delete>
+	
+
+</mapper>

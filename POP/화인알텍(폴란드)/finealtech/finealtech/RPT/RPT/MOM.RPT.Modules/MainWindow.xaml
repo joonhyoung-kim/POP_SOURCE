@@ -1,0 +1,54 @@
+﻿<dx:ThemedWindow x:Class="MOM.RPT.Modules.MainWindow"
+                 xmlns="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+                 xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+                 xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+                 xmlns:cs="clr-namespace:TU.Core.Services;assembly=TU.Core"
+                 xmlns:bh="clr-namespace:TU.Core.Behavior;assembly=TU.Core"             
+                 xmlns:local="clr-namespace:MOM.RPT.Modules"
+                 dx:ScrollBarExtensions.ScrollBarMode="TouchOverlap" 
+                 WindowStartupLocation="CenterScreen"
+                 UseLayoutRounding="True"
+                 ShowIcon="False"
+                 WindowKind="Ribbon"
+                 WindowStyle="{Binding WINDOWSTYLE, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 WindowState="{Binding WINDOWSTATE, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 Title="{Binding TITLE, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 Style="{DynamicResource MediumFontStyle}"
+>
+    <dx:ThemedWindow.DataContext>
+        <local:MainWindowViewModel />
+    </dx:ThemedWindow.DataContext>
+
+    <dxmvvm:Interaction.Behaviors>
+        <local:MainWindowService />
+        <cs:ReportPrintService />
+        <bh:NotifyIconBehaviour  />
+        <dx:DXSplashScreenService />
+
+        <dxmvvm:CurrentWindowService ClosingCommand="{Binding OnClosingCommand}" />
+        <dxmvvm:NotificationService UseWin8NotificationsIfAvailable="False" 
+                                    PredefinedNotificationDuration="Long"
+                                    PredefinedNotificationTemplate="ShortHeaderAndLongText" />
+
+        <dxmvvm:DispatcherService x:Name="FinishModuleChangingDispatcherService" Delay="0:0:0.975" DispatcherPriority="ApplicationIdle" />
+        <dxmvvm:ApplicationJumpListService />
+        <dx:DialogService x:Name="FilterDialogService">
+            <dx:DialogService.DialogStyle>
+                <Style TargetType="dx:DXDialogWindow">
+                    <Setter Property="SizeToContent" Value="WidthAndHeight"/>
+                    <Setter Property="MinWidth" Value="500"/>
+                    <Setter Property="MinHeight" Value="370"/>
+                </Style>
+            </dx:DialogService.DialogStyle>
+        </dx:DialogService>        
+    </dxmvvm:Interaction.Behaviors>
+    
+    <Grid>
+        <local:RibbonView x:Name="ribbon" Margin="0" />
+
+    </Grid>
+    
+</dx:ThemedWindow>

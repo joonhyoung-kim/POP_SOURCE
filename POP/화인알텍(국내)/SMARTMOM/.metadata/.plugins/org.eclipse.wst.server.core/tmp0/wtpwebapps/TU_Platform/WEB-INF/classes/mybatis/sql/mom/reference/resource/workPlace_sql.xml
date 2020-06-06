@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.reference.resource.workPlace"> 
+	<select id="get_workPlaceCd_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT RESOURCE_CD
+		  FROM MOM_RESOURCE
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND RESOURCE_GROUP_CD = #{resourceGroupCd, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="get_equipment_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT DIVISION_CD
+ 			 , COMPANY_CD 
+			 , RESOURCE_CD
+			 , EQUIPMENT_CD
+			 , EQUIPMENT_NAME
+			 , USE_YN
+			 , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( DIVISION_CD, COMPANY_CD, 'USE_FLAG', USE_YN) FROM DUAL) AS USE_YN_NAME 
+			 , DESCRIPTION
+			 , TO_CHAR(CREATE_DATE, 'YYYY-MM-DD') AS CREATE_DATE
+			 , CREATE_BY
+			 , TO_CHAR(UPDATE_DATE, 'YYYY-MM-DD') AS UPDATE_DATE
+			 , UPDATE_BY
+		  FROM MOM_EQUIPMENT
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND RESOURCE_CD = #{resourceCd, jdbcType=VARCHAR}
+		 ORDER BY EQUIPMENT_CD
+	</select>
+	
+	<insert id="create_equipment" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+			#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+			
+			INSERT INTO MOM_EQUIPMENT (  
+		    	DIVISION_CD
+			  , COMPANY_CD
+			  , RESOURCE_CD
+			  , EQUIPMENT_CD
+			  , EQUIPMENT_NAME
+			  , USE_YN
+			  , DESCRIPTION
+			  , CREATE_DATE
+			  , CREATE_BY
+			  , UPDATE_DATE
+			  , UPDATE_BY
+			  , TID
+			)    
+			VALUES (  
+			    #{divisionCd,jdbcType=VARCHAR} 
+			  , #{companyCd,jdbcType=VARCHAR} 
+			  , UPPER(TRIM(#{resourceCd,jdbcType=VARCHAR})) 
+			  , UPPER(TRIM(#{equipmentCd,jdbcType=VARCHAR}))
+			  , #{equipmentName, jdbcType=VARCHAR}
+			  , NVL(UPPER(TRIM(#{useYn, jdbcType=VARCHAR})), 'Y')
+			  , #{description,jdbcType=VARCHAR}
+		      , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		      , #{updateBy,jdbcType=VARCHAR}
+		      , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		      , #{updateBy,jdbcType=VARCHAR}
+		      , #{tid, jdbcType=VARCHAR}
+			)
+		   ;
+	   
+		   INSERT INTO MOM_EQUIPMENT_HIST (
+   		   	   	  LAST_EVENT_SEQ
+				, DIVISION_CD
+				, COMPANY_CD
+				, RESOURCE_CD
+				, EQUIPMENT_CD
+				, EQUIPMENT_NAME
+				, USE_YN
+				, DESCRIPTION
+				, CREATE_DATE
+				, CREATE_BY
+				, UPDATE_DATE
+				, UPDATE_BY
+				, TID
+		   )
+		   SELECT S_ORDER_SEQ.NEXTVAL
+		   		, DIVISION_CD
+				, COMPANY_CD
+				, RESOURCE_CD
+				, EQUIPMENT_CD
+				, EQUIPMENT_NAME
+				, USE_YN
+				, DESCRIPTION
+				, CREATE_DATE
+				, CREATE_BY
+				, UPDATE_DATE
+				, UPDATE_BY
+				, TID
+			 FROM MOM_EQUIPMENT
+			WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			  AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+			  AND EQUIPMENT_CD = UPPER(TRIM(#{equipmentCd, jdbcType=VARCHAR}))
+			;
+       
+       SELECT
+			CASE 
+				WHEN COUNT(EQUIPMENT_CD) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		 FROM MOM_EQUIPMENT
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		  AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+		  AND EQUIPMENT_CD = UPPER(TRIM(#{equipmentCd, jdbcType=VARCHAR}))
+		;
+       
+	 END
+	} 
+	</insert>
+	
+	<update id="modify_equipment" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  		#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+		UPDATE MOM_EQUIPMENT
+		SET    EQUIPMENT_NAME = #{equipmentName, jdbcType=VARCHAR}
+			 , USE_YN = #{useYn, jdbcType=VARCHAR}
+			 , DESCRIPTION = #{description, jdbcType=VARCHAR}
+			 , UPDATE_DATE = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			 , UPDATE_BY = #{updateBy, jdbcType=VARCHAR}
+		WHERE  DIVISION_CD = #{divisionCd,jdbcType=VARCHAR}
+		AND    COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}
+		AND    RESOURCE_CD = UPPER(TRIM(#{resourceCd,jdbcType=VARCHAR}))
+		AND    EQUIPMENT_CD = UPPER(TRIM(#{equipmentCd, jdbcType=VARCHAR}))
+		;
+		
+		INSERT INTO MOM_EQUIPMENT_HIST (
+   		   	   	  LAST_EVENT_SEQ
+				, DIVISION_CD
+				, COMPANY_CD
+				, RESOURCE_CD
+				, EQUIPMENT_CD
+				, EQUIPMENT_NAME
+				, USE_YN
+				, DESCRIPTION
+				, CREATE_DATE
+				, CREATE_BY
+				, UPDATE_DATE
+				, UPDATE_BY
+				, TID
+		   )
+		   SELECT S_ORDER_SEQ.NEXTVAL
+		   		, DIVISION_CD
+				, COMPANY_CD
+				, RESOURCE_CD
+				, EQUIPMENT_CD
+				, EQUIPMENT_NAME
+				, USE_YN
+				, DESCRIPTION
+				, CREATE_DATE
+                , CREATE_BY
+                , UPDATE_DATE
+                , UPDATE_BY
+				, TID
+			 FROM MOM_EQUIPMENT
+			WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			  AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+			  AND EQUIPMENT_CD = UPPER(TRIM(#{equipmentCd, jdbcType=VARCHAR}))
+			;
+       
+       SELECT
+			CASE 
+				WHEN COUNT(EQUIPMENT_CD) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		 FROM MOM_EQUIPMENT
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		  AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+		  AND EQUIPMENT_CD = UPPER(TRIM(#{equipmentCd, jdbcType=VARCHAR}))
+		;
+		
+	 END
+	}
+	</update>
+	
+	<delete id="remove_equipment" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	   #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  		
+	  INSERT INTO MOM_EQUIPMENT_HIST (
+   		   	   	  LAST_EVENT_SEQ
+				, DIVISION_CD
+				, COMPANY_CD
+				, RESOURCE_CD
+				, EQUIPMENT_CD
+				, EQUIPMENT_NAME
+				, USE_YN
+				, DESCRIPTION
+				, CREATE_DATE
+				, CREATE_BY
+				, UPDATE_DATE
+				, UPDATE_BY
+				, TID
+		   )
+		   SELECT S_ORDER_SEQ.NEXTVAL
+		   		, DIVISION_CD
+				, COMPANY_CD
+				, RESOURCE_CD
+				, EQUIPMENT_CD
+				, EQUIPMENT_NAME
+				, USE_YN
+				, 'Delete Data'
+				, CREATE_DATE
+				, CREATE_BY
+				, MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+				, UPDATE_BY
+				, TID
+			 FROM MOM_EQUIPMENT
+			WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			  AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+			 <if test="equipmentCd != null and equipmentCd != ''">
+			  AND EQUIPMENT_CD = UPPER(TRIM(#{equipmentCd, jdbcType=VARCHAR}))
+			 </if>
+			;
+		
+		DELETE 
+		  FROM MOM_EQUIPMENT
+		 WHERE DIVISION_CD = #{divisionCd,jdbcType=VARCHAR}
+	       AND COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}
+	       AND RESOURCE_CD = UPPER(#{resourceCd,jdbcType=VARCHAR})
+	     <if test="equipmentCd != null and equipmentCd != ''">
+	       AND EQUIPMENT_CD = UPPER(TRIM(#{equipmentCd, jdbcType=VARCHAR}))
+	     </if>
+	    ;
+	    
+	    SELECT
+			CASE 
+				WHEN COUNT(EQUIPMENT_CD) = 0 THEN 'S'
+				ELSE 'E' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_EQUIPMENT
+		WHERE 
+			    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+	       AND RESOURCE_CD = UPPER(#{resourceCd,jdbcType=VARCHAR})
+	    <if test="equipmentCd != null and equipmentCd != ''">
+	       AND EQUIPMENT_CD = UPPER(TRIM(#{equipmentCd, jdbcType=VARCHAR}))
+	    </if>
+		;
+	  END
+	}
+	</delete>
+	
+	<delete id="remove_equipmentByResources" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	   #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	   
+	  	   INSERT INTO MOM_EQUIPMENT_HIST (
+   		   	   	  LAST_EVENT_SEQ
+				, DIVISION_CD
+				, COMPANY_CD
+				, RESOURCE_CD
+				, EQUIPMENT_CD
+				, EQUIPMENT_NAME
+				, USE_YN
+				, DESCRIPTION
+				, CREATE_DATE
+				, CREATE_BY
+				, UPDATE_DATE
+				, UPDATE_BY
+				, TID
+		   )
+		   SELECT S_ORDER_SEQ.NEXTVAL
+		   		, DIVISION_CD
+				, COMPANY_CD
+				, RESOURCE_CD
+				, EQUIPMENT_CD
+				, EQUIPMENT_NAME
+				, USE_YN
+				, 'Delete Data'
+				, CREATE_DATE
+				, CREATE_BY
+				, MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+				, UPDATE_BY
+				, TID
+			 FROM MOM_EQUIPMENT
+			WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			 <if test="resourceCd != null and resourceCd != ''">
+			  AND RESOURCE_CD IN(${resourceCd})
+			 </if>
+			;
+		
+			DELETE 
+			  FROM MOM_EQUIPMENT
+			 WHERE DIVISION_CD = #{divisionCd,jdbcType=VARCHAR}
+		       AND COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}
+		     <if test="resourceCd != null and resourceCd != ''">
+		       AND RESOURCE_CD IN(${resourceCd})
+		     </if>
+		    ;
+		    
+		    SELECT
+				CASE 
+					WHEN COUNT(EQUIPMENT_CD) = 0 THEN 'S'
+					ELSE 'E' 
+				END  
+				INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+			  FROM MOM_EQUIPMENT
+			 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			   AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			<if test="resourceCd != null and resourceCd != ''">
+		       AND RESOURCE_CD IN(${resourceCd})
+		    </if>
+			;
+		  END
+	}
+	</delete>
+	
+</mapper>

@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.reference.cell.dailyItemCell"> 
+	<select id="get_dailyItemCell_list" resultType="camelMap" parameterType="java.util.HashMap">
+		<if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+		WITH TEMP1 AS (	
+	    </if>
+		SELECT TO_CHAR(MAC.WORK_DATE, 'YYYY-MM-DD') AS WORK_DATE
+		     , MAC.LINE
+		     , MAC.ITEM_ID
+		     , (SELECT MOM_COMMON_PKG.FN_GET_ITEM_NAME(MAC.DIVISION_CD, MAC.COMPANY_CD, MAC.ITEM_ID)
+		          FROM DUAL) AS ITEM_NAME
+		     , MAC.CELL_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CELL_NAME(MAC.DIVISION_CD, MAC.COMPANY_CD, MAC.CELL_CD)
+		          FROM DUAL) AS CELL_NAME
+		     , MAC.SEQ
+		     , MAC.DIFFICULTY
+		     , MAC.STANDARD_TIME
+		     , MAC.ALARM_TIME1
+		     , MAC.ALARM_TIME2
+		     , MAC.WORKER_CD
+		     , MAC.USE_YN
+		     , MAC.DESCRIPTION
+		  FROM MOM_DAILY_ITEM_CELL MAC
+		 WHERE MAC.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND MAC.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND MAC.WORK_DATE  BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
+		                          AND     TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.9997 / 24
+		   <if test="line != null and line !=''">
+		   AND MAC.LINE = #{line, jdbcType=VARCHAR}
+		   </if>
+		   <if test="itemId != null and itemId !=''">
+		   AND MAC.ITEM_ID = #{itemId, jdbcType=VARCHAR}
+		   </if>                       
+		   <if test="cell != null and cell !=''">
+		   AND MAC.CELL_CD = #{cell, jdbcType=VARCHAR}
+		   </if>
+		  ORDER BY MAC.WORK_DATE DESC, MAC.LINE, MAC.SEQ
+	     <if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+				)
+	      SELECT A.*
+	           , B.ROW_COUNT
+	      FROM (SELECT A.*
+	                 , ROWNUM GRIDROW
+	              FROM TEMP1 A) A
+	         , (SELECT COUNT(*) ROW_COUNT
+	              FROM TEMP1) B 
+	      WHERE GRIDROW BETWEEN #{startPage, jdbcType=INTEGER} AND #{endPage, jdbcType=INTEGER}
+       </if>
+	</select>
+	
+	<insert id="create_dailyItemCell" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  	
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+			INSERT INTO MOM_DAILY_ITEM_CELL 
+					  ( DIVISION_CD
+					  , COMPANY_CD
+					  , WORK_DATE
+					  , LINE
+					  , ITEM_ID
+					  , CELL_CD
+					  , SEQ
+					  , WORKER_CD
+					  , DIFFICULTY
+					  , STANDARD_TIME
+					  , ALARM_TIME1
+					  , ALARM_TIME2
+					  , USE_YN
+					  , DESCRIPTION
+					  , CREATE_DATE
+					  , CREATE_BY
+					  , UPDATE_DATE
+					  , UPDATE_BY
+					  ) 
+				VALUES(
+					    #{divisionCd, jdbcType=VARCHAR}
+					  , #{companyCd, jdbcType=VARCHAR}
+					  , #{workDate, jdbcType=VARCHAR}
+					  , #{line, jdbcType=VARCHAR}
+					  , #{itemId, jdbcType=VARCHAR}
+					  , #{cellCd, jdbcType=VARCHAR}
+					  , #{seq, jdbcType=INTEGER}
+					  , #{workerCd, jdbcType=VARCHAR}
+					  , #{difficulty, jdbcType=VARCHAR}
+					  , #{standardTime, jdbcType=INTEGER}
+					  , #{alarmTime1, jdbcType=INTEGER}
+					  , #{alarmTime2, jdbcType=INTEGER}
+					  , NVL(#{useYn, jdbcType=VARCHAR}, 'Y')
+					  , #{description, jdbcType=VARCHAR}
+					  , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+					  , #{userId, jdbcType=VARCHAR}
+					  , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+					  , #{userId, jdbcType=VARCHAR}
+						 )
+						 ;
+			
+			INSERT INTO MOM_DAILY_ITEM_CELL_HIST
+						(LAST_EVENT_SEQ
+					   , DIVISION_CD
+					   , COMPANY_CD
+					   , WORK_DATE
+					   , LINE
+					   , ITEM_ID
+					   , CELL_CD
+					   , SEQ
+					   , WORKER_CD
+					   , DIFFICULTY
+					   , STANDARD_TIME
+					   , ALARM_TIME1
+					   , ALARM_TIME2
+					   , USE_YN
+					   , DESCRIPTION
+					   , CREATE_DATE
+					   , CREATE_BY
+					   , UPDATE_DATE
+					   , UPDATE_BY
+						) 
+				SELECT   S_ORDER_SEQ.NEXTVAL
+					   , DIVISION_CD
+					   , COMPANY_CD
+					   , WORK_DATE
+					   , LINE
+					   , ITEM_ID
+					   , CELL_CD
+					   , SEQ
+					   , WORKER_CD
+					   , DIFFICULTY
+					   , STANDARD_TIME
+					   , ALARM_TIME1
+					   , ALARM_TIME2
+					   , USE_YN
+					   , DESCRIPTION
+					   , CREATE_DATE
+					   , CREATE_BY
+					   , UPDATE_DATE
+					   , UPDATE_BY
+				FROM	MOM_DAILY_ITEM_CELL
+				WHERE   DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			    AND 	COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			    AND 	WORK_DATE = TO_DATE(#{workDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+			    AND 	LINE = #{line, jdbcType=VARCHAR}
+			    AND 	ITEM_ID = #{itemId, jdbcType=VARCHAR}
+			    AND 	CELL_CD = #{cellCd, jdbcType=VARCHAR}
+		        ;
+			        
+			SELECT
+				CASE 
+					WHEN count(LINE) = 0 THEN 'E'
+					ELSE 'S' 
+				END  
+				INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+			FROM MOM_DAILY_ITEM_CELL
+			WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			AND   COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+			AND   WORK_DATE = TO_DATE(#{workDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+		    AND   LINE = #{line, jdbcType=VARCHAR}
+		    AND   ITEM_ID = #{itemId, jdbcType=VARCHAR}
+		    AND   CELL_CD = #{cellCd, jdbcType=VARCHAR}
+			;
+	END
+	}
+	</insert>	
+	
+	<update id="modify_dailyItemCell" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+		UPDATE MOM_DAILY_ITEM_CELL
+		   SET WORKER_CD = #{workerCd, jdbcType=VARCHAR},
+		       DESCRIPTION =  #{description, jdbcType=VARCHAR},
+		       UPDATE_DATE =  MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+		       UPDATE_BY =  #{updateBy, jdbcType=VARCHAR}
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND WORK_DATE = TO_DATE(#{workDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+		   AND LINE = #{line, jdbcType=VARCHAR}
+		   AND ITEM_ID = #{itemId, jdbcType=VARCHAR}
+		   AND CELL_CD = #{cellCd, jdbcType=VARCHAR}
+	   ;
+	  
+	  INSERT INTO MOM_DAILY_ITEM_CELL_HIST (
+			    LAST_EVENT_SEQ
+			  , DIVISION_CD
+		      , COMPANY_CD
+		      , WORK_DATE
+		      , LINE
+		      , ITEM_ID
+		      , CELL_CD
+		      , SEQ
+		      , WORKER_CD
+		      , DIFFICULTY
+		      , STANDARD_TIME
+		      , ALARM_TIME1
+			  , ALARM_TIME2
+		      , USE_YN
+		      , DESCRIPTION
+		      , CREATE_DATE
+		      , CREATE_BY
+		      , UPDATE_DATE
+		      , UPDATE_BY
+			)
+		SELECT S_ORDER_SEQ.NEXTVAL
+			  , DIVISION_CD
+		      , COMPANY_CD
+		      , WORK_DATE
+		      , LINE
+		      , ITEM_ID
+		      , CELL_CD
+		      , SEQ
+		      , WORKER_CD
+		      , DIFFICULTY
+		      , STANDARD_TIME
+		      , ALARM_TIME1
+			  , ALARM_TIME2
+		      , USE_YN
+		      , DESCRIPTION
+		      , CREATE_DATE
+		      , CREATE_BY
+		      , UPDATE_DATE
+		      , UPDATE_BY
+		 FROM MOM_DAILY_ITEM_CELL
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		  AND WORK_DATE = TO_DATE(#{workDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+		  AND LINE = #{line, jdbcType=VARCHAR}
+		  AND ITEM_ID = #{itemId, jdbcType=VARCHAR}
+		  AND CELL_CD = #{cellCd, jdbcType=VARCHAR}
+	  ;
+	  	
+		SELECT
+			CASE 
+				WHEN COUNT(LINE) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_DAILY_ITEM_CELL
+		WHERE 
+			    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			AND WORK_DATE = TO_DATE(#{workDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+		    AND LINE = #{line, jdbcType=VARCHAR}
+		    AND ITEM_ID = #{itemId, jdbcType=VARCHAR}
+		    AND CELL_CD = #{cellCd, jdbcType=VARCHAR}
+		;
+	 END
+	}	
+	</update>
+	
+	<delete id="remove_dailyItemCell" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+	  INSERT INTO MOM_DAILY_ITEM_CELL_HIST (
+			    LAST_EVENT_SEQ
+			  , DIVISION_CD
+		      , COMPANY_CD
+		      , WORK_DATE
+		      , LINE
+		      , ITEM_ID
+		      , CELL_CD
+		      , SEQ
+		      , WORKER_CD
+		      , DIFFICULTY
+		      , STANDARD_TIME
+		      , ALARM_TIME1
+			  , ALARM_TIME2
+		      , USE_YN
+		      , DESCRIPTION
+		      , CREATE_DATE
+		      , CREATE_BY
+		      , UPDATE_DATE
+		      , UPDATE_BY
+		)
+		SELECT S_ORDER_SEQ.NEXTVAL
+			   , DIVISION_CD
+		       , COMPANY_CD
+		       , WORK_DATE
+		       , LINE
+		       , ITEM_ID
+		       , CELL_CD
+		       , SEQ
+		       , WORKER_CD
+		       , DIFFICULTY
+		       , STANDARD_TIME
+		       , ALARM_TIME1
+			   , ALARM_TIME2
+		       , USE_YN
+		       , 'Delete Data'
+		       , CREATE_DATE
+		       , CREATE_BY
+		       , UPDATE_DATE
+		       , UPDATE_BY
+		  FROM MOM_DAILY_ITEM_CELL
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		   AND WORK_DATE = TO_DATE(#{workDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+		   AND LINE = #{line, jdbcType=VARCHAR}
+		   AND ITEM_ID = #{itemId, jdbcType=VARCHAR}
+		   AND CELL_CD = #{cellCd, jdbcType=VARCHAR}
+	  ;
+	   
+		DELETE FROM MOM_DAILY_ITEM_CELL
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR} 
+	   	   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND WORK_DATE = TO_DATE(#{workDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+		   AND LINE = #{line, jdbcType=VARCHAR}
+		   AND ITEM_ID = #{itemId, jdbcType=VARCHAR}
+		   AND CELL_CD = #{cellCd, jdbcType=VARCHAR}
+	  ;
+	  	
+		SELECT
+			CASE 
+				WHEN COUNT(LINE) = 0 THEN 'S'
+				ELSE 'E' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_DAILY_ITEM_CELL
+		WHERE 
+			    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			AND WORK_DATE = TO_DATE(#{workDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+		    AND LINE = #{line, jdbcType=VARCHAR}
+		    AND ITEM_ID = #{itemId, jdbcType=VARCHAR}
+		    AND CELL_CD = #{cellCd, jdbcType=VARCHAR}
+		;
+	 END
+	}
+	</delete>
+	
+	<select id="get_dailyItemCellLine_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT DISTINCT LINE AS CODE
+		     , LINE AS NAME
+		  FROM MOM_LINE_CELL_MASTER
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND USE_YN = 'Y'
+		 ORDER BY LINE 
+	</select>
+	
+	<select id="get_dailyItemCellItem_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT DISTINCT MIC.ITEM_ID AS CODE
+		     , ITEM_ID || '(' || (SELECT MOM_COMMON_PKG.FN_GET_ITEM_NAME(MIC.DIVISION_CD
+		                                                               , MIC.COMPANY_CD
+		                                                               , MIC.ITEM_ID)
+		          FROM DUAL) || ')' AS NAME
+		  FROM MOM_ITEM_CELL_MASTER MIC
+		 WHERE MIC.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND MIC.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND MIC.USE_YN = 'Y'
+		   AND MIC.SEQ = (SELECT MAX(SEQ)
+		                    FROM MOM_LINE_CELL_MASTER A
+		                   WHERE A.DIVISION_CD = MIC.DIVISION_CD 
+		                     AND A.COMPANY_CD = MIC.COMPANY_CD
+		                     AND A.LINE = #{line, jdbcType=VARCHAR})
+		 ORDER BY MIC.ITEM_ID 
+	</select>
+	
+</mapper>

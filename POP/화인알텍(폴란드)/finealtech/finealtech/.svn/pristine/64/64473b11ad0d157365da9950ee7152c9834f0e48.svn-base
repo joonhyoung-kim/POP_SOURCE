@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 	xmlns="http://www.springframework.org/schema/beans" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans
+							http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- JWT Token -->
+	<bean id="JwtTokenFactoryBean" class="com.thirautech.framework.common.token.factory.JwtTokenFactoryBean">
+		<property name="secretKey" value="secretKey" />
+		<property name="expiresAt" value="30" />
+	</bean>
+	<bean id="jwt" class="com.thirautech.framework.common.token.filter.JwtTokenAuthorizationFilter" />
+	
+	
+	<!-- Shiro Beans -->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+    <bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager" />
+    
+    <bean id="defaultRealm" class="com.thirautech.mom.realm.DefaultJdbcRealm"/>
+    
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+    	<property name="securityManager" ref="securityManager" />
+     	<property name="loginUrl" value="/" />
+ 		<property name="successUrl" value="/main.html" />
+<!-- 		<property name="unauthorizedUrl" value="/unauthorized.html" /> -->
+<!--     	<property name="filters"> -->
+<!--     		<map> -->
+<!--     			<entry key="jwt" value-ref="jwt" /> -->
+<!--     			<entry key="micaRoles" value-ref="micaRoles" />  -->
+<!--     		</map> -->
+<!--     	</property> -->
+    	<property name="filterChainDefinitions">
+    		<!--
+    			ex) url = filter1, filter2, filter3[role1 && role2 && role3...]...
+    			
+    			[ attention! ]
+	    			servletFilter 방식을 차용하여 선언된 순서대로 순차적으로
+	    			권한을 체크하기 때문에 전역적 선언은 마지막에 해야함
+	    			ex ) /account/** = authc
+	    				 /account/signup/index.html = anon
+	    			위의 경우 /account/**가 인증을 요구가
+	    			뒤에 선언되어 있는 /account/singup/index.html보다 먼저 적용되어 인증요구 처리가 됨
+	    		/**/*.html = authc
+				/mom/**/* = authc
+    		-->
+	        <value>
+	        	/system/login = anon
+	        	/system/logout = anon
+	        	/system/loginCheck = anon
+				/**/*.js = anon
+				/**/*.css = anon
+				/**/*.jpg = anon
+				/**/*.png = anon
+				/**/*.gif = anon
+				/**/*.svg = anon
+				/**/*.svgz = anon
+				/**/*.eot = anon
+				/**/*.woff = anon
+				/**/*.ttf = anon
+				/**/*.otf = anon
+				/index.html = anon
+				/login.html = anon
+				<!-- /mom/**/* = anon -->
+				<!-- /mica/**/* = anon -->
+				
+				<!-- /**/* = authc -->
+	        </value>
+	    </property>
+    </bean>
+       
+    <bean id="securityManager" class="com.thirautech.framework.security.shiro.ShiroSecurityManager">
+    	<!-- <property name="sessionMode" value="http" /> -->
+    	<property name="sessionMode" value="native" />
+    	<!-- 사용자 단일 로그인 - true : 중복로그인 허용(N명의 사용자 로그인 사용가능), false : 단일로그인(중복 로그인시 다른 로그인 사용자 로그아웃 처리) -->
+    	<property name="isDuplicate" value="false" />
+    	<property name="cacheManager" ref="cacheManager" />
+  		<property name="realm" ref="defaultRealm" />
+    	<property name="rememberMeManager.cipherKey" value="Y2lwaGVyS2V5PQ==" />
+    </bean>
+    
+    <bean id="AuthManager" class="com.thirautech.framework.security.manager.AuthManager">
+    	<property name="sessionGroup" value="TU_Platform"/>
+    </bean>
+    
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	    <property name="maxUploadSize" value="10000000"/>
+	</bean>
+</beans>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.purchase.stock.itemStockInOutStatus">
+	<select id="get_itemStockInOutStatus_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.ITEM_STOCK_INOUT_ID
+		     , TO_CHAR(MAX(A.IO_TIME), 'YYYY-MM-DD') AS IO_TIME
+		     , MAX((SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'IO_TYPE', A.IO_TYPE) FROM DUAL)) AS IO_TYPE_NAME
+		     , MAX((SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'IO_CATEGORY', A.IO_CATEGORY) FROM DUAL)) AS IO_CATEGORY_NAME
+		     , MAX((SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME (A.DIVISION_CD, A.COMPANY_CD, A.PREV_LOCATION_CD) FROM DUAL)) AS FROM_LOCATION_NAME
+		     , MAX(A.LOCATION_CD) AS LOCATION_CD
+		     , MAX((SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME (A.DIVISION_CD, A.COMPANY_CD, A.LOCATION_CD) FROM DUAL)) AS LOCATION_NAME
+		     , MAX((SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'ITEM_TYPE', B.ITEM_TYPE) FROM DUAL)) AS ITEM_TYPE_NAME
+		     , MAX(A.ITEM_ID) AS ITEM_ID
+		     , MAX(B.ITEM_NAME) AS ITEM_NAME
+		     , MAX(B.SPECIFICATION) AS SPECIFICATION
+		     , MAX(B.ITEM_GRADE) AS ITEM_GRADE
+		     , MAX(B.ITEM_GROUP_LARGE) AS ITEM_GROUP_LARGE
+             , MAX((SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'ITEM_GROUP_LARGE', B.ITEM_GROUP_LARGE) FROM DUAL)) AS ITEM_GROUP_LARGE_NAME
+             , MAX(B.ITEM_GROUP_MEDIUM) AS ITEM_GROUP_MEDIUM
+             , MAX((SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'ITEM_GROUP_MEDIUM', B.ITEM_GROUP_MEDIUM) FROM DUAL)) AS ITEM_GROUP_MEDIUM_NAME
+		     , SUM(NVL (A.QTY, 0)) AS QTY
+		     , MAX(NVL (A.CURRENCY_CD, '-')) AS CURRENCY_CD
+		     , MAX(NVL (A.UNIT_PRICE, 0)) AS UNIT_PRICE
+		     , SUM(NVL (A.INOUT_PRICE, 0)) AS TOTAL_PRICE
+		     , TO_CHAR(MAX(A.CREATE_DATE), 'YYYY-MM-DD') AS CREATE_DATE
+		     , MAX((SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(A.DIVISION_CD, A.COMPANY_CD, A.CREATE_BY) FROM DUAL)) AS CREATE_USER_NAME
+		     , MAX(A.WORK_ORDER_ID)       AS WORK_ORDER_ID     
+             , MAX(A.ITEM_ORDER_ID)       AS ITEM_ORDER_ID     
+             , MAX(A.ITEM_DEPARTURE_ID)   AS ITEM_DEPARTURE_ID 
+		  FROM MOM_ITEM_STOCK_INOUT A
+		     , MOM_ITEM_DEFINITION B
+		 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND A.DIVISION_CD = B.DIVISION_CD(+)
+		   AND A.COMPANY_CD = B.COMPANY_CD(+)
+		   AND A.ITEM_ID = B.ITEM_ID(+)
+		   AND A.IO_TIME BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR},'YYYY-MM-DD') AND TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+		  <if test="locationName != null and locationName != ''">
+		   AND A.LOCATION_CD = #{locationName, jdbcType=VARCHAR}
+		  </if>
+		  <if test="itemName != null and itemName != ''">
+		   AND A.ITEM_ID LIKE UPPER ('%' || #{itemName, jdbcType=VARCHAR} || '%')
+		  </if>
+		  <if test="ioType != null and ioType != ''">
+		   AND A.IO_TYPE = #{ioType, jdbcType=VARCHAR}
+		  </if>
+		  <if test="category != null and category != ''">
+		   AND A.IO_CATEGORY = #{category, jdbcType=VARCHAR}
+		  </if>
+		  <if test="itemType != null and itemType != ''">
+		   AND B.ITEM_TYPE = #{itemType, jdbcType=VARCHAR}
+		  </if>
+		  <if test="itemGrade != null and itemGrade != ''">
+		   AND B.ITEM_GRADE = #{itemGrade, jdbcType=VARCHAR}
+		  </if>
+		  <if test="itemGroupLarge != null and itemGroupLarge != ''">
+		   AND B.ITEM_GROUP_LARGE = #{itemGroupLarge, jdbcType=VARCHAR}
+		  </if>
+		  <if test="itemGroupMedium != null and itemGroupMedium != ''">
+		   AND B.ITEM_GROUP_MEDIUM = #{itemGroupMedium, jdbcType=VARCHAR}
+		  </if>
+		   GROUP BY A.ITEM_STOCK_INOUT_ID
+		   ORDER BY MAX(A.IO_TIME), A.ITEM_STOCK_INOUT_ID
+	</select>
+
+</mapper>

@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.smtp">
+	<select id="get_smtp_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT SMTP_ID
+			 , SMTP_URL
+			 , SMTP_PORT
+			 , SEND_USER
+			 , SEND_PWD
+			 , ACTION
+			 , TITLE
+			 , CONTENTS
+             , ATTACH
+			 , SEND_FLAG
+			 , UPDATE_BY
+		  FROM MOM_SMTP
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		<if test="action != '' and action != null">
+		   AND ACTION = #{action, jdbcType=VARCHAR}
+		</if>
+		 ORDER BY SMTP_ID ASC
+	</select>
+	
+	<insert id="create_smtp" parameterType="java.util.HashMap">
+        INSERT INTO MOM_SMTP(
+        	  DIVISION_CD
+			, COMPANY_CD
+			, SMTP_ID
+			, SMTP_URL
+			, SMTP_PORT
+			, SEND_USER
+			, SEND_PWD
+			, ACTION
+			, TITLE
+            , CONTENTS
+            , ATTACH
+			, SEND_FLAG
+			, UPDATE_BY
+        )
+        VALUES (
+        	  #{divisionCd, jdbcType=VARCHAR}
+        	, #{companyCd, jdbcType=VARCHAR}
+        	, TRIM(UPPER(#{smtpId, jdbcType=VARCHAR}))
+        	, #{smtpUrl, jdbcType=VARCHAR}
+        	, #{smtpPort, jdbcType=VARCHAR}
+        	, #{sendUser, jdbcType=VARCHAR}
+        	, #{sendPwd, jdbcType=VARCHAR}
+        	, #{action, jdbcType=VARCHAR}
+        	, #{title, jdbcType=VARCHAR}
+        	, #{contents, jdbcType=VARCHAR}
+        	, #{attach, jdbcType=VARCHAR}
+        	, #{sendFlag, jdbcType=VARCHAR}
+        	, #{userId, jdbcType=VARCHAR}
+        )
+    </insert>
+    
+    <update id="modify_smtp" parameterType="java.util.HashMap">
+    	UPDATE MOM_SMTP
+    	  SET SMTP_URL = #{smtpUrl, jdbcType=VARCHAR}
+            , SMTP_PORT = #{smtpPort, jdbcType=VARCHAR}
+            , SEND_USER = #{sendUser, jdbcType=VARCHAR}
+            , SEND_PWD = #{sendPwd, jdbcType=VARCHAR}
+            , ACTION = #{action, jdbcType=VARCHAR}
+            , TITLE = #{title, jdbcType=VARCHAR}
+            , CONTENTS = #{contents, jdbcType=VARCHAR}
+<!--             , ATTACH = #{attach, jdbcType=VARCHAR} -->
+            , SEND_FLAG = #{sendFlag, jdbcType=VARCHAR}
+            , UPDATE_BY = #{userId, jdbcType=VARCHAR}
+    	WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+          AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+          AND SMTP_ID = TRIM(UPPER(#{smtpId, jdbcType=VARCHAR}))
+    </update>
+    
+    <delete id="remove_smtp" parameterType="java.util.HashMap">
+        DELETE FROM MOM_SMTP
+        WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+          AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+          AND SMTP_ID = #{smtpId, jdbcType=VARCHAR}
+    </delete>
+    
+    <select id="get_smtpdetail_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT SM.DIVISION_CD
+			 , SM.COMPANY_CD
+			 , SM.SMTP_ID
+			 , SM.VENDOR_CD
+			 , (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME(SM.DIVISION_CD, SM.COMPANY_CD, SM.VENDOR_CD) FROM DUAL) AS VENDOR_NAME
+             , SM.EMAIL
+             , SM.RECEIV_USER
+		  FROM MOM_SMTP_DETAIL SM
+		 WHERE SM.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND SM.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND SM.SMTP_ID = #{smtpId, jdbcType=VARCHAR}
+		 ORDER BY SM.VENDOR_CD, SM.EMAIL
+	</select>
+	
+	<insert id="create_smtpdetail" parameterType="java.util.HashMap">
+        INSERT INTO MOM_SMTP_DETAIL(
+        	  DIVISION_CD
+			, COMPANY_CD
+			, SMTP_ID
+            , VENDOR_CD
+            , EMAIL
+			, RECEIV_USER
+        )
+        VALUES (
+        	  #{divisionCd, jdbcType=VARCHAR}
+        	, #{companyCd, jdbcType=VARCHAR}
+        	, TRIM(UPPER(#{smtpId, jdbcType=VARCHAR}))
+        	, TRIM(UPPER(#{vendorCd, jdbcType=VARCHAR}))
+        	, #{email, jdbcType=VARCHAR}
+        	, #{receivUser, jdbcType=VARCHAR}
+        )
+    </insert>
+    
+    <update id="modify_smtpdetail" parameterType="java.util.HashMap">
+    	UPDATE MOM_SMTP_DETAIL
+    	   SET RECEIV_USER = #{receivUser, jdbcType=VARCHAR}
+    	     , VENDOR_CD = TRIM(UPPER(#{vendorCd, jdbcType=VARCHAR}))
+    	     , EMAIL = #{email, jdbcType=VARCHAR}
+    	 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+           AND SMTP_ID = TRIM(UPPER(#{smtpId, jdbcType=VARCHAR}))
+           AND EMAIL = #{email, jdbcType=VARCHAR}
+    </update>
+    
+    <delete id="remove_smtpdetail" parameterType="java.util.HashMap">
+        DELETE FROM MOM_SMTP_DETAIL
+         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+           AND SMTP_ID = #{smtpId, jdbcType=VARCHAR}
+           AND EMAIL = #{email, jdbcType=VARCHAR}
+    </delete>
+    
+    <select id="get_smtpinfo_list" resultType="camelMap" parameterType="java.util.HashMap">
+    	SELECT M.SMTP_URL
+		     , M.SMTP_PORT
+		     , M.SEND_USER
+		     , M.SEND_PWD
+             , M.TITLE
+             , M.CONTENTS
+             , M.ATTACH
+		     , S.RECEIV_USER
+		     , S.EMAIL
+		  FROM MOM_SMTP M
+			 , MOM_SMTP_DETAIL S
+		 WHERE M.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND M.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND M.ACTION = SUBSTR(#{action, jdbcType=VARCHAR}, 20)
+           AND M.SEND_FLAG = 'Y'
+		   AND M.DIVISION_CD = S.DIVISION_CD
+		   AND M.COMPANY_CD = S.COMPANY_CD
+		   AND M.SMTP_ID = S.SMTP_ID
+		   AND S.VENDOR_CD = #{vendorCd, jdbcType=VARCHAR}
+		 ORDER BY S.EMAIL
+    </select>
+    
+    <select id="get_smtpVendorInfo_list" resultType="camelMap" parameterType="java.util.HashMap">
+        SELECT DISTINCT S.VENDOR_CD
+             , S.DIVISION_CD
+             , S.COMPANY_CD
+             , D.ATTR1
+             , D.ATTR2
+             , D.ATTR3
+             , D.ATTR4
+             , D.ATTR5
+          FROM MOM_SMTP M
+             , MOM_SMTP_DETAIL S
+             , MOM_SMTP_DOC D
+         WHERE M.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           AND M.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+           AND M.ACTION = SUBSTR(#{action, jdbcType=VARCHAR}, 20)
+           AND M.SEND_FLAG = 'Y'
+           AND M.DIVISION_CD = S.DIVISION_CD
+           AND M.COMPANY_CD = S.COMPANY_CD
+           AND M.SMTP_ID = S.SMTP_ID
+           AND M.DIVISION_CD = D.DIVISION_CD
+           AND M.COMPANY_CD = D.COMPANY_CD
+           AND M.ACTION = D.SMTP_ACTION_ID
+         <if test="attr1 != null and attr1 != ''">
+           AND D.ATTR1 = #{attr1, jdbcType=VARCHAR}
+         </if> 
+         <if test="attr2 != null and attr2 != ''">
+           AND D.ATTR2 = #{attr2, jdbcType=VARCHAR}
+         </if> 
+         <if test="attr3 != null and attr3 != ''">
+           AND D.ATTR3 = #{attr3, jdbcType=VARCHAR}
+         </if> 
+         <if test="attr4 != null and attr4 != ''">
+           AND D.ATTR4 = #{attr4, jdbcType=VARCHAR}
+         </if> 
+         <if test="attr5 != null and attr5 != ''">
+           AND D.ATTR5 = #{attr5, jdbcType=VARCHAR}
+         </if> 
+         ORDER BY S.VENDOR_CD
+    </select>
+    
+    <!-- modify_hists 
+    * XMOMA11 / 20191105 / gyp / TRIM, UPPER 처리
+     -->
+    <select id="get_smtpDocInfo_list" resultType="camelMap" parameterType="java.util.HashMap">
+        SELECT DIVISION_CD
+        	 , COMPANY_CD
+        	 , SMTP_ACTION_ID
+             , (SELECT MOM_COMMON_PKG.FN_GET_MULTI_LANG ( DIVISION_CD
+                                                        , COMPANY_CD
+                                                        , SMTP_ACTION_NAME
+                                                        , 'FRONT'
+                                                        , #{locale, jdbcType=VARCHAR}) 
+                  FROM DUAL) AS SMTP_ACTION_NAME
+             , ATTACH_ACTION_ID
+             , ATTACH_SEQ
+             , ATTACH_HEADER
+             , (SELECT MOM_COMMON_PKG.FN_GET_MULTI_LANG ( DIVISION_CD
+                                                        , COMPANY_CD
+                                                        , ATTACH_HEADER
+                                                        , 'FRONT'
+                                                        , #{locale, jdbcType=VARCHAR}) 
+                  FROM DUAL) AS ATTACH_HEADER_NAME
+             , ATTACH_CONTENTS
+             , DESCRIPTION
+             , ATTR1
+             , ATTR2
+             , ATTR3
+             , ATTR4
+             , ATTR5
+             , TO_CHAR(UPDATE_DATE, 'YYYY-MM-DD') AS UPDATE_DATE
+             , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(DIVISION_CD, COMPANY_CD, UPDATE_BY) FROM DUAL) AS UPDATE_BY
+          FROM MOM_SMTP_DOC 
+         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+          <if test="action != null and action != ''">
+           AND SMTP_ACTION_ID = SUBSTR(#{action, jdbcType=VARCHAR}, 20)
+          </if>
+          <if test="searchActionId != null and searchActionId != ''">
+           AND (UPPER(SMTP_ACTION_ID) LIKE '%' || TRIM(UPPER(#{searchActionId, jdbcType=VARCHAR})) || '%'
+                OR  UPPER(ATTACH_ACTION_ID) LIKE '%' || TRIM(UPPER(#{searchActionId, jdbcType=VARCHAR})) || '%')
+          </if>
+          <if test="searchActionName != null and searchActionName != ''">
+           AND UPPER(SMTP_ACTION_NAME) LIKE '%' || TRIM(UPPER(#{searchActionName, jdbcType=VARCHAR})) || '%'
+          </if>
+          <if test="searchDescription != null and searchDescription != ''">
+           AND UPPER(DESCRIPTION) LIKE '%' || TRIM(UPPER(#{searchDescription, jdbcType=VARCHAR})) || '%'
+          </if>
+         ORDER BY SMTP_ACTION_ID, ATTACH_SEQ
+    </select>
+    
+    
+    <select id="get_smtpAction_list" resultType="camelMap" parameterType="java.util.HashMap">
+        SELECT DISTINCT SMTP_ACTION_ID   AS CODE
+             , (SELECT MOM_COMMON_PKG.FN_GET_MULTI_LANG ( DIVISION_CD
+                                                        , COMPANY_CD
+                                                        , SMTP_ACTION_NAME
+                                                        , 'FRONT'
+                                                        , #{locale, jdbcType=VARCHAR}) 
+                  FROM DUAL) AS NAME
+          FROM MOM_SMTP_DOC 
+         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+         ORDER BY SMTP_ACTION_ID
+    </select>
+    
+    <insert id="create_smtpDocInfo" parameterType="java.util.HashMap">
+    	INSERT INTO MOM_SMTP_DOC (   
+    		DIVISION_CD
+		  , COMPANY_CD
+		  , SMTP_ACTION_ID
+		  , SMTP_ACTION_NAME
+		  , ATTACH_ACTION_ID
+		  , ATTACH_SEQ
+		  , ATTACH_HEADER
+		  , ATTACH_CONTENTS
+		  , DESCRIPTION
+		  , ATTR1
+		  , ATTR2
+		  , ATTR3
+		  , ATTR4
+		  , ATTR5
+		  , CREATE_DATE
+		  , CREATE_BY
+		  , UPDATE_DATE
+		  , UPDATE_BY
+    	)
+    	VALUES (
+    	    #{divisionCd, jdbcType=VARCHAR}
+    	  , #{companyCd, jdbcType=VARCHAR}
+    	  , #{smtpActionId, jdbcType=VARCHAR}
+    	  , #{smtpActionName, jdbcType=VARCHAR}
+    	  , #{attachActionId, jdbcType=VARCHAR}
+    	  , #{attachSeq, jdbcType=NUMERIC}
+    	  , #{attachHeader, jdbcType=VARCHAR}
+    	  , #{attachContents, jdbcType=VARCHAR}
+    	  , #{description, jdbcType=VARCHAR}
+    	  , #{attr1, jdbcType=VARCHAR}
+    	  , #{attr2, jdbcType=VARCHAR}
+    	  , #{attr3, jdbcType=VARCHAR}
+    	  , #{attr4, jdbcType=VARCHAR}
+    	  , #{attr5, jdbcType=VARCHAR}
+    	  , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+    	  , #{userId, jdbcType=VARCHAR}
+    	  , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+    	  , #{userId, jdbcType=VARCHAR}
+    	)
+    </insert>
+    
+    <update id="modify_smtpDocInfo" parameterType="java.util.HashMap">
+    	UPDATE MOM_SMTP_DOC
+    	   SET SMTP_ACTION_ID = #{smtpActionId, jdbcType=VARCHAR}
+    	     , SMTP_ACTION_NAME = #{smtpActionName, jdbcType=VARCHAR}
+    	     , ATTACH_ACTION_ID = #{attachActionId, jdbcType=VARCHAR}
+    	     , ATTACH_SEQ = #{attachSeq, jdbcType=NUMERIC}
+    	     , ATTACH_HEADER = #{attachHeader, jdbcType=VARCHAR}
+    	     , ATTACH_CONTENTS = #{attachContents, jdbcType=VARCHAR}
+    	     , DESCRIPTION = #{description, jdbcType=VARCHAR}
+    	     , ATTR1 = #{attr1, jdbcType=VARCHAR}
+			 , ATTR2 = #{attr2, jdbcType=VARCHAR}
+			 , ATTR3 = #{attr3, jdbcType=VARCHAR}
+			 , ATTR4 = #{attr4, jdbcType=VARCHAR}
+			 , ATTR5 = #{attr5, jdbcType=VARCHAR}
+    	     , UPDATE_DATE = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+    	     , UPDATE_BY = #{userId, jdbcType=VARCHAR} 
+    	 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+    	   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+    	   AND SMTP_ACTION_ID = #{smtpActionId, jdbcType=VARCHAR}
+    	   AND ATTACH_SEQ = #{attachSeq, jdbcType=NUMERIC}
+    </update>
+    
+    <delete id="remove_smtpDocInfo" parameterType="java.util.HashMap">
+    	DELETE FROM MOM_SMTP_DOC
+    	 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+    	   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+    	   AND SMTP_ACTION_ID = #{smtpActionId, jdbcType=VARCHAR}
+    	   AND ATTACH_SEQ = #{attachSeq, jdbcType=NUMERIC}
+    </delete>
+    
+    <select id="get_materialOrderMail_list" resultType="camelMap" parameterType="java.util.HashMap">
+        SELECT (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME(B.DIVISION_CD,B.COMPANY_CD, B.VENDOR_CD) FROM DUAL) AS VENDOR_NAME
+             , (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME(B.DIVISION_CD,B.COMPANY_CD, B.DEPARTURE_VENDOR_CD) FROM DUAL) AS DEPARTURE_VENDOR_NAME
+             , B.ITEM_ID
+             , A.ITEM_NAME
+             , A.SPECIFICATION
+             , A.UNIT
+             , B.ORDER_QTY
+             , TO_CHAR(B.ORDER_DATE,'yyyy-mm-dd') AS REQUEST_DATE
+             , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME(B.DIVISION_CD,B.COMPANY_CD, B.LOCATION_CD) FROM DUAL) AS LOCATION_NAME
+             , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(B.DIVISION_CD,B.COMPANY_CD, #{createBy, jdbcType=VARCHAR}) FROM DUAL) AS USER_NAME
+             , B.SEQ
+          FROM MOM_ITEM_DEFINITION A
+             , MOM_MATERIAL_ORDER_UPLOAD B
+         WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR} 
+           AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR} 
+           AND A.DIVISION_CD = B.DIVISION_CD
+           AND A.COMPANY_CD = B.COMPANY_CD
+           AND A.ITEM_ID = B.ITEM_ID
+           AND B.VENDOR_CD = #{vendorCd, jdbcType=VARCHAR}
+         ORDER BY B.SEQ
+    </select>
+    
+    <select id="get_materialOrderCancelMail_list" resultType="camelMap" parameterType="java.util.HashMap">
+        SELECT B.MATERIAL_ORDER_ID
+             , B.VENDOR_CD
+             , (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME(B.DIVISION_CD,B.COMPANY_CD, B.VENDOR_CD) FROM DUAL) AS VENDOR_NAME
+             , B.DEPARTURE_VENDOR_CD
+             , (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME(B.DIVISION_CD,B.COMPANY_CD, B.DEPARTURE_VENDOR_CD) FROM DUAL) AS DEPARTURE_VENDOR_NAME
+             , B.ITEM_ID
+             , C.ITEM_NAME
+             , C.SPECIFICATION
+             , C.UNIT
+             , B.ORDER_QTY
+             , TO_CHAR(B.ORDER_DATE, 'yyyy-mm-dd') AS ORDER_DATE
+             , A.VALUE4 AS CANCEL_QTY 
+             , ROWNUM AS SEQ
+          FROM MOM_DATA_DEL_TMP A 
+             , MOM_MATERIAL_ORDER B
+             , MOM_ITEM_DEFINITION C
+         WHERE A.TABLE_ID = 'MOM_MATERIAL_ORDER'
+           AND A.VALUE2 = #{attr1, jdbcType=VARCHAR}
+           AND A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR} 
+           AND A.DIVISION_CD = B.DIVISION_CD
+           AND A.COMPANY_CD = B.COMPANY_CD
+           AND A.VALUE1 = B.MATERIAL_ORDER_ID
+<!--            AND B.MATERIAL_ORDER_ID = #{materialOrderId, jdbcType=VARCHAR}  -->
+           AND B.VENDOR_CD = #{vendorCd, jdbcType=VARCHAR}
+           AND B.DIVISION_CD = C.DIVISION_CD
+           AND B.COMPANY_CD = C.COMPANY_CD
+           AND B.ITEM_ID = C.ITEM_ID
+         ORDER BY B.VENDOR_CD, B.MATERIAL_ORDER_ID
+    </select>
+    
+</mapper>

@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.equipment.equipments"> 
+	<select id="get_equipments_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.DIVISION_CD
+		     , A.COMPANY_CD
+		     , A.RESOURCE_CD
+		     , A.RESOURCE_NAME
+		     , B.EQUIPMENT_CD
+		     , B.EQUIPMENT_NAME
+		     , B.EQUIPMENT_TYPE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (B.DIVISION_CD
+		     										  , B.COMPANY_CD
+		     										  , 'EQUIPMENT_TYPE'
+		     										  , B.EQUIPMENT_TYPE)
+		          FROM DUAL) AS EQUIPMENT_TYPE_NAME
+		     , B.LOCATION_CD AS EQUIPMENT_LOCATION_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (B.DIVISION_CD
+	                                                  , B.COMPANY_CD
+	                                                  , 'EQM_LOCATION'
+	                                                  , B.LOCATION_CD)
+		          FROM DUAL) AS EQUIPMENT_LOCATION_NAME
+		     , B.SPECIFICATION
+		     , B.TOTAL_RUN_COUNT
+		     , B.RUN_COUNT
+		     , B.CHECK_COUNT
+		     , B.STATE
+		     , B.STATE_TIME
+		     , B.MODEL_NUMBER
+		     , B.SERIAL_NO
+		     , B.PRODUCTION_YEAR
+		     , B.INSTALLATION_DATE
+		     , B.PRODUCTION_AMOUNT
+		     , TO_CHAR(B.INSPECTION_DATE, 'YYYY-MM-DD') AS INSPECTION_DATE
+		     , B.INSPECTION_TYPE
+		     , B.INSPECTION_INTERVAL
+		     , B.PRODUCTION_PLACE
+		     , B.USE_PLACE
+		     , B.RESOURCE_FREIGHT_RATE
+		     , B.MEASURE_USER_ID
+		     , B.COUNT_UNIT
+		     , B.EQUIPMENT_LEVEL
+		     , B.LINE_INIT
+		     , B.MEASURE_TYPE
+		     , B.ALARM_ID
+		     , B.CONTROL_MODE
+		     , TO_CHAR(B.CONTROL_MODE_TIME, 'YYYY-MM-DD') AS CONTROL_MODE_TIME
+		     , B.OPERATION_MODE
+		     , B.CAPABILITY
+		     , B.CAPABILITY_UNIT
+		     , B.TACT_TIME
+		     , B.TACT_TIME_UNIT
+		     , B.CYCLE_TIME
+		     , B.USEFUL_LIFE
+		     , B.DATA_MAPPING_TYPE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (B.DIVISION_CD
+	                                                  , B.COMPANY_CD
+	                                                  , 'DATA_MAPPING_TYPE'
+	                                                  , B.DATA_MAPPING_TYPE)
+	              FROM DUAL) AS DATA_MAPPING_TYPE_NAME
+	         , B.DATA_MAPPING_ID
+		     , TO_CHAR(B.CREATE_DATE, 'YYYY-MM-DD') AS CREATE_DATE
+		     , B.CREATE_BY
+		     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( B.DIVISION_CD
+		                                              , B.COMPANY_CD
+		                                              , B.CREATE_BY)
+		          FROM DUAL) AS CREATE_USER_NAME
+		     , TO_CHAR(B.UPDATE_DATE, 'YYYY-MM-DD') AS UPDATE_DATE
+		     , B.UPDATE_BY
+		     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( B.DIVISION_CD
+		                                              , B.COMPANY_CD  
+		                                              , B.UPDATE_BY)
+		          FROM DUAL) AS UPDATE_USER_NAME
+		     , B.USE_YN
+	         , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (B.DIVISION_CD
+	                                                  , B.COMPANY_CD
+	                                                  , 'USE_FLAG'
+	                                                  , B.USE_YN)
+	              FROM DUAL) AS USE_YN_NAME
+		  FROM MOM_RESOURCE A
+		     , MOM_EQUIPMENT B
+		 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND A.DIVISION_CD = B.DIVISION_CD
+		   AND A.COMPANY_CD = B.COMPANY_CD
+		   AND A.RESOURCE_CD = B.RESOURCE_CD
+		   AND NVL(A.USE_YN, 'N') = 'Y'
+		  <if test="resourceCd != null and resourceCd != ''">
+		   AND B.RESOURCE_CD = #{resourceCd, jdbcType=VARCHAR}
+		  </if>
+		  <if test="equipmentCd != null and equipmentCd != ''">
+		   AND (B.EQUIPMENT_CD LIKE '%' || TRIM(UPPER(#{equipmentCd, jdbcType=VARCHAR})) || '%'
+		        OR UPPER(B.EQUIPMENT_NAME) LIKE '%' || TRIM(UPPER(#{equipmentCd, jdbcType=VARCHAR})) || '%')
+		  </if>
+		  <if test="equipmentType != null and equipmentType != ''">
+		   AND B.EQUIPMENT_TYPE = #{equipmentType, jdbcType=VARCHAR}
+		  </if>
+		  <if test="useYn != null and useYn != ''">
+		   AND B.USE_YN = #{useYn, jdbcType=VARCHAR}
+		  </if>
+		 ORDER BY A.RESOURCE_NAME, B.EQUIPMENT_NAME
+	</select>
+	
+	<insert id="create_equipments" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+			#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+			
+			INSERT INTO MOM_EQUIPMENT (  
+		    	DIVISION_CD
+			  , COMPANY_CD
+			  , RESOURCE_CD
+			  , EQUIPMENT_CD
+			  , EQUIPMENT_NAME
+			  , EQUIPMENT_TYPE
+			  , LOCATION_CD
+			  , SPECIFICATION
+			  , CHECK_COUNT
+			  , COUNT_UNIT
+			  , EQUIPMENT_LEVEL
+			  , MODEL_NUMBER
+			  , SERIAL_NO
+			  , PRODUCTION_YEAR
+			  , INSTALLATION_DATE
+			  , PRODUCTION_AMOUNT
+			  , INSPECTION_DATE
+			  , INSPECTION_TYPE
+			  , INSPECTION_INTERVAL
+			  , PRODUCTION_PLACE
+			  , USE_PLACE
+			  , MEASURE_USER_ID
+			  , USEFUL_LIFE
+			  , DATA_MAPPING_TYPE 
+			  , DATA_MAPPING_ID 
+			  , USE_YN
+			  , CREATE_DATE
+			  , CREATE_BY
+			  , UPDATE_DATE
+			  , UPDATE_BY
+			)     
+			VALUES (  
+			    #{divisionCd, jdbcType=VARCHAR} 
+			  , #{companyCd, jdbcType=VARCHAR} 
+			  , UPPER(TRIM(#{resourceCd,jdbcType=VARCHAR})) 
+			  , UPPER(TRIM(#{equipmentCd,jdbcType=VARCHAR}))
+			  , #{equipmentName, jdbcType=VARCHAR}
+			  , #{equipmentType, jdbcType=VARCHAR}
+			  , #{equipmentLocationCd, jdbcType=VARCHAR}
+			  , #{specification, jdbcType=VARCHAR}
+			  , #{checkCount, jdbcType=NUMERIC}
+			  , #{countUnit, jdbcType=VARCHAR}
+			  , #{equipmentLevel, jdbcType=VARCHAR}
+			  , #{modelNumber, jdbcType=VARCHAR}
+			  , #{serialNo, jdbcType=VARCHAR}
+			  , #{productionYear, jdbcType=VARCHAR}
+			  , #{installationDate, jdbcType=VARCHAR}
+			  , #{productionAmount, jdbcType=NUMERIC}
+			  , TO_DATE(#{inspectionDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+			  , #{inspectionType, jdbcType=VARCHAR}
+			  , #{inspectionInterval, jdbcType=VARCHAR}
+			  , #{productionPlace, jdbcType=VARCHAR}
+			  , #{usePlace, jdbcType=VARCHAR}
+			  , #{measureUserId, jdbcType=VARCHAR}
+			  , #{usefulLife, jdbcType=VARCHAR}
+			  , #{dataMappingType, jdbcType=VARCHAR}
+			  , #{dataMappingId, jdbcType=VARCHAR}
+			  , NVL(UPPER(TRIM(#{useYn, jdbcType=VARCHAR})), 'Y')
+		      , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		      , #{updateBy,jdbcType=VARCHAR}
+		      , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		      , #{updateBy,jdbcType=VARCHAR}
+			)
+		   ;
+	   
+		   INSERT INTO MOM_EQUIPMENT_HIST (
+   		   		LAST_EVENT_SEQ
+			  , DIVISION_CD
+			  , COMPANY_CD
+			  , RESOURCE_CD
+			  , EQUIPMENT_CD
+			  , EQUIPMENT_NAME
+			  , EQUIPMENT_TYPE
+			  , LOCATION_CD
+			  , SPECIFICATION
+			  , CHECK_COUNT
+			  , COUNT_UNIT
+			  , EQUIPMENT_LEVEL
+			  , MODEL_NUMBER
+			  , SERIAL_NO
+			  , PRODUCTION_YEAR
+			  , INSTALLATION_DATE
+			  , PRODUCTION_AMOUNT
+			  , INSPECTION_DATE
+			  , INSPECTION_TYPE
+			  , INSPECTION_INTERVAL
+			  , PRODUCTION_PLACE
+			  , USE_PLACE
+			  , MEASURE_USER_ID
+			  , USEFUL_LIFE
+			  , DATA_MAPPING_TYPE 
+			  , DATA_MAPPING_ID 
+			  , USE_YN
+			  , CREATE_DATE
+			  , CREATE_BY
+			  , UPDATE_DATE
+			  , UPDATE_BY
+		   )
+		   SELECT S_ORDER_SEQ.NEXTVAL
+		   		, DIVISION_CD
+			    , COMPANY_CD
+			    , RESOURCE_CD
+			    , EQUIPMENT_CD
+			    , EQUIPMENT_NAME
+			    , EQUIPMENT_TYPE
+			    , LOCATION_CD
+			    , SPECIFICATION
+			    , CHECK_COUNT
+			    , COUNT_UNIT
+			    , EQUIPMENT_LEVEL
+			    , MODEL_NUMBER
+			    , SERIAL_NO
+			    , PRODUCTION_YEAR
+			    , INSTALLATION_DATE
+			    , PRODUCTION_AMOUNT
+			    , INSPECTION_DATE
+			    , INSPECTION_TYPE
+			    , INSPECTION_INTERVAL
+			    , PRODUCTION_PLACE
+			    , USE_PLACE
+			    , MEASURE_USER_ID
+			    , USEFUL_LIFE
+			    , DATA_MAPPING_TYPE 
+			    , DATA_MAPPING_ID 
+			    , USE_YN
+			    , CREATE_DATE
+			    , CREATE_BY
+			    , UPDATE_DATE
+			    , UPDATE_BY
+			 FROM MOM_EQUIPMENT
+			WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			  AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+			  AND EQUIPMENT_CD = UPPER(TRIM(#{equipmentCd, jdbcType=VARCHAR}))
+			;
+       
+          SELECT
+			  CASE 
+				WHEN COUNT(EQUIPMENT_CD) = 0 THEN 'E'
+				ELSE 'S' 
+			  END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		    FROM MOM_EQUIPMENT
+		   WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		     AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		     AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+		     AND EQUIPMENT_CD = UPPER(TRIM(#{equipmentCd, jdbcType=VARCHAR}))
+		;
+       
+	  END
+	} 
+	</insert>
+	
+	<update id="modify_equipments" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  		#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+			UPDATE MOM_EQUIPMENT
+			SET    EQUIPMENT_NAME = #{equipmentName, jdbcType=VARCHAR}
+			     , EQUIPMENT_TYPE = #{equipmentType, jdbcType=VARCHAR}
+				 , LOCATION_CD = #{equipmentLocationCd, jdbcType=VARCHAR}
+				 , SPECIFICATION = #{specification, jdbcType=VARCHAR}
+				 , CHECK_COUNT = #{checkCount, jdbcType=NUMERIC}
+				 , COUNT_UNIT = #{countUnit, jdbcType=VARCHAR}
+				 , EQUIPMENT_LEVEL = #{equipmentLevel, jdbcType=VARCHAR}
+				 , MODEL_NUMBER = #{modelNumber, jdbcType=VARCHAR}
+				 , SERIAL_NO = #{serialNo, jdbcType=VARCHAR}
+				 , PRODUCTION_YEAR = #{productionYear, jdbcType=VARCHAR}
+				 , INSTALLATION_DATE = #{installationDate, jdbcType=VARCHAR}
+				 , PRODUCTION_AMOUNT = #{productionAmount, jdbcType=NUMERIC}
+				 , INSPECTION_DATE = TO_DATE(#{inspectionDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+				 , INSPECTION_TYPE = #{inspectionType, jdbcType=VARCHAR}
+				 , INSPECTION_INTERVAL = #{inspectionInterval, jdbcType=VARCHAR}
+				 , PRODUCTION_PLACE = #{productionPlace, jdbcType=VARCHAR}
+				 , USE_PLACE = #{usePlace, jdbcType=VARCHAR}
+				 , MEASURE_USER_ID = #{measureUserId, jdbcType=VARCHAR}
+				 , USEFUL_LIFE = #{usefulLife, jdbcType=VARCHAR}
+				 , DATA_MAPPING_TYPE = #{dataMappingType, jdbcType=VARCHAR}
+			     , DATA_MAPPING_ID = #{dataMappingId, jdbcType=VARCHAR}
+				 , UPDATE_DATE = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+				 , UPDATE_BY = #{updateBy,jdbcType=VARCHAR}
+			WHERE  DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			AND    COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			AND    RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+			AND    EQUIPMENT_CD = UPPER(TRIM(#{equipmentCd, jdbcType=VARCHAR}))
+			;
+			
+			INSERT INTO MOM_EQUIPMENT_HIST (
+		   			 LAST_EVENT_SEQ
+				   , DIVISION_CD
+				   , COMPANY_CD
+				   , RESOURCE_CD
+				   , EQUIPMENT_CD
+				   , EQUIPMENT_NAME
+				   , EQUIPMENT_TYPE
+				   , LOCATION_CD
+				   , SPECIFICATION
+				   , CHECK_COUNT
+				   , COUNT_UNIT
+				   , EQUIPMENT_LEVEL
+				   , MODEL_NUMBER
+				   , SERIAL_NO
+				   , PRODUCTION_YEAR
+				   , INSTALLATION_DATE
+				   , PRODUCTION_AMOUNT
+				   , INSPECTION_DATE
+				   , INSPECTION_TYPE
+				   , INSPECTION_INTERVAL
+				   , PRODUCTION_PLACE
+				   , USE_PLACE
+				   , MEASURE_USER_ID
+				   , USEFUL_LIFE
+				   , DATA_MAPPING_TYPE
+				   , DATA_MAPPING_ID
+				   , USE_YN
+				   , CREATE_DATE
+				   , CREATE_BY
+				   , UPDATE_DATE
+				   , UPDATE_BY
+			  )
+			  SELECT S_ORDER_SEQ.NEXTVAL
+			  	   , DIVISION_CD
+				   , COMPANY_CD
+				   , RESOURCE_CD
+				   , EQUIPMENT_CD
+				   , EQUIPMENT_NAME
+				   , EQUIPMENT_TYPE
+				   , LOCATION_CD
+				   , SPECIFICATION
+				   , CHECK_COUNT
+				   , COUNT_UNIT
+				   , EQUIPMENT_LEVEL
+				   , MODEL_NUMBER
+				   , SERIAL_NO
+				   , PRODUCTION_YEAR
+				   , INSTALLATION_DATE
+				   , PRODUCTION_AMOUNT
+				   , INSPECTION_DATE
+				   , INSPECTION_TYPE
+				   , INSPECTION_INTERVAL
+				   , PRODUCTION_PLACE
+				   , USE_PLACE
+				   , MEASURE_USER_ID
+				   , USEFUL_LIFE
+				   , DATA_MAPPING_TYPE
+				   , DATA_MAPPING_ID
+				   , USE_YN
+		           , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		      	   , #{updateBy,jdbcType=VARCHAR}
+		           , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		      	   , #{updateBy,jdbcType=VARCHAR}
+				FROM MOM_EQUIPMENT
+			   WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+				 AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+				 AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+				 AND EQUIPMENT_CD = UPPER(TRIM(#{equipmentCd, jdbcType=VARCHAR}))
+				;
+	       
+	       SELECT
+			   CASE WHEN COUNT(EQUIPMENT_CD) = 0 THEN 'E'
+					ELSE 'S' 
+				END  
+			   INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+			 FROM MOM_EQUIPMENT
+			WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			  AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+			  AND EQUIPMENT_CD = UPPER(TRIM(#{equipmentCd, jdbcType=VARCHAR}))
+			;
+		
+	  END
+	}
+	</update>
+	
+	<delete id="remove_equipments" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	   #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  		
+	  INSERT INTO MOM_EQUIPMENT_HIST (
+   	  		   LAST_EVENT_SEQ
+		     , DIVISION_CD
+		     , COMPANY_CD
+		     , RESOURCE_CD
+		     , EQUIPMENT_CD
+		     , EQUIPMENT_NAME
+		     , EQUIPMENT_TYPE
+		     , LOCATION_CD
+		     , SPECIFICATION
+		     , CHECK_COUNT
+		     , COUNT_UNIT
+		     , EQUIPMENT_LEVEL
+		     , MODEL_NUMBER
+		     , SERIAL_NO
+		     , PRODUCTION_YEAR
+		     , INSTALLATION_DATE
+		     , PRODUCTION_AMOUNT
+		     , INSPECTION_DATE
+		     , INSPECTION_TYPE
+		     , INSPECTION_INTERVAL
+		     , PRODUCTION_PLACE
+		     , USE_PLACE
+		     , MEASURE_USER_ID
+		     , USEFUL_LIFE
+		     , DATA_MAPPING_TYPE
+			 , DATA_MAPPING_ID
+		     , USE_YN
+		     , CREATE_DATE
+		     , CREATE_BY
+		     , UPDATE_DATE
+		     , UPDATE_BY
+		     , DESCRIPTION
+		   )
+	    SELECT S_ORDER_SEQ.NEXTVAL
+	  	     , DIVISION_CD
+		     , COMPANY_CD
+		     , RESOURCE_CD
+		     , EQUIPMENT_CD
+		     , EQUIPMENT_NAME
+		     , EQUIPMENT_TYPE
+		     , LOCATION_CD
+		     , SPECIFICATION
+		     , CHECK_COUNT
+		     , COUNT_UNIT
+		     , EQUIPMENT_LEVEL
+		     , MODEL_NUMBER
+		     , SERIAL_NO
+		     , PRODUCTION_YEAR
+		     , INSTALLATION_DATE
+		     , PRODUCTION_AMOUNT
+		     , INSPECTION_DATE
+		     , INSPECTION_TYPE
+		     , INSPECTION_INTERVAL
+		     , PRODUCTION_PLACE
+		     , USE_PLACE
+		     , MEASURE_USER_ID
+		     , USEFUL_LIFE
+		     , DATA_MAPPING_TYPE
+			 , DATA_MAPPING_ID
+		     , USE_YN
+             , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		     , #{updateBy,jdbcType=VARCHAR}
+             , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+             , #{updateBy, jdbcType=VARCHAR}
+             , 'Delete Data'
+		  FROM MOM_EQUIPMENT
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		   AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+		   AND EQUIPMENT_CD = UPPER(TRIM(#{equipmentCd, jdbcType=VARCHAR}))
+		;
+		
+		DELETE 
+		  FROM MOM_EQUIPMENT
+		 WHERE DIVISION_CD = #{divisionCd,jdbcType=VARCHAR}
+	       AND COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}
+	       AND RESOURCE_CD = UPPER(#{resourceCd,jdbcType=VARCHAR})
+	       AND EQUIPMENT_CD = UPPER(TRIM(#{equipmentCd, jdbcType=VARCHAR}))
+	    ;
+	    
+	    SELECT
+			CASE 
+				WHEN COUNT(EQUIPMENT_CD) = 0 THEN 'S'
+				ELSE 'E' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		  FROM MOM_EQUIPMENT
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+	       AND RESOURCE_CD = UPPER(#{resourceCd,jdbcType=VARCHAR})
+	       AND EQUIPMENT_CD = UPPER(TRIM(#{equipmentCd, jdbcType=VARCHAR}))
+		;
+	  END
+	}
+	</delete>
+	
+	<select id="get_workPlace_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT RESOURCE_CD AS CODE
+             , RESOURCE_CD || '(' || RESOURCE_NAME || ')' AS NAME
+          FROM MOM_RESOURCE
+         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+           AND NVL(USE_YN, 'N') = 'Y'
+         ORDER BY RESOURCE_NAME
+	</select>
+	
+</mapper>

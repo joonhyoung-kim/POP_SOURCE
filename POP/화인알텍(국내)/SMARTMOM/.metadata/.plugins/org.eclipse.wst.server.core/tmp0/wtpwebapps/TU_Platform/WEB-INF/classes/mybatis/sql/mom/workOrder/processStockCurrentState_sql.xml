@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.workOrder.processStockCurrentState">
+	<select id="get_processStockCurrentState_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.ITEM_ID
+		     , B.ITEM_NAME
+		     , B.SPECIFICATION
+		     , A.LOCATION_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME (A.DIVISION_CD, A.COMPANY_CD, A.LOCATION_CD) FROM DUAL) AS LOCATION_NAME
+		     , A.CURRENT_QTY
+		     , NVL(B.SAFETY_STOCK_QTY, 0) SAFETY_STOCK_QTY
+		     , CASE WHEN (A.CURRENT_QTY - NVL(B.SAFETY_STOCK_QTY, 0)) >= 0 THEN 0 
+		            ELSE (A.CURRENT_QTY - NVL(B.SAFETY_STOCK_QTY, 0)) 
+		        END AS SHORTAGE_STOCK_QTY
+		     , B.UNIT
+		     , A.DESCRIPTION
+		     , B.ITEM_TYPE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME ( B.DIVISION_CD
+		                                               , B.COMPANY_CD
+		                                               , 'ITEM_TYPE'
+		                                               , B.ITEM_TYPE)
+		          FROM DUAL)  AS ITEM_TYPE_NAME
+		     , '' IO_TIME
+		     , B.ITEM_GRADE
+		     , B.VENDOR_CD
+		     , NVL((SELECT MOM_COMMON_PKG.FN_GET_CODE_VALUES(A.DIVISION_CD, A.COMPANY_CD, 'ONHAND_SETUP', 'STOCK_REVISION_TYPE') 
+		              FROM DUAL), 'C') AS STOCK_REVISION_TYPE
+		     , TO_CHAR(MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}), 'YYYY-MM-DD HH24:MI:SS') AS CUR_TIME
+		  FROM  MOM_ITEM_STOCK A
+		      , MOM_ITEM_DEFINITION B
+		 WHERE 1 = 1
+		   AND A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND A.DIVISION_CD = B.DIVISION_CD
+		   AND A.COMPANY_CD = B.COMPANY_CD
+		   AND A.ITEM_ID = B.ITEM_ID
+		   AND B.USE_YN = 'Y'
+		   AND A.LOCATION_CD IN (SELECT FACILITY_CD FROM MOM_FACILITY 
+		                          WHERE DIVISION_CD = A.DIVISION_CD 
+		                            AND COMPANY_CD = A.COMPANY_CD 
+		                            AND FACILITY_TYPE IN ('FAC300','FAC500'))
+		
+		  <if test="itemId != null and itemId != ''">
+		   AND (UPPER(A.ITEM_ID) LIKE '%' || UPPER(#{itemId, jdbcType=VARCHAR}) || '%'
+		  	OR UPPER(B.ITEM_NAME) LIKE '%' || UPPER(#{itemId, jdbcType=VARCHAR}) || '%')
+		  </if>
+		  <if test="type != null and type != ''">
+		   AND B.ITEM_TYPE = #{type, jdbcType=VARCHAR}
+		  </if>
+		  <if test="locationCd != null and locationCd != ''">
+		   AND A.LOCATION_CD = #{locationCd, jdbcType=VARCHAR}
+		  </if>
+		  <if test="itemGrade != null and itemGrade != ''">
+		   AND B.ITEM_GRADE = #{itemGrade, jdbcType=VARCHAR}
+		  </if>
+		  <if test="stockQty != null and stockQty != ''">
+			  <choose>
+				  <when test='stockQty == "N"'>
+				   AND A.CURRENT_QTY != 0
+				  </when>
+				  <when test="stockQty == 'minus'">
+				  	<![CDATA[AND A.CURRENT_QTY < 0]]>
+				  </when>
+			  </choose>
+		  </if>
+		  <if test="shortageFlag != null and shortageFlag != ''">
+			  <choose>
+				  <when test='shortageFlag == "N"'>
+				   AND CASE WHEN (A.CURRENT_QTY - NVL(B.SAFETY_STOCK_QTY, 0)) >= 0 THEN 0 
+				            ELSE (A.CURRENT_QTY - NVL(B.SAFETY_STOCK_QTY, 0)) 
+				        END != 0
+				  </when>  
+			  </choose>
+		  </if>
+		ORDER BY A.LOCATION_CD, A.ITEM_ID
+	</select>
+	
+	<select id="get_materialHist_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.ITEM_ID
+		     , B.ITEM_NAME
+		     , B.SPECIFICATION
+		     , A.LOCATION_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME (A.DIVISION_CD, A.COMPANY_CD, A.LOCATION_CD) FROM DUAL) AS LOCATION_NAME
+		     , A.IO_TYPE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME ( A.DIVISION_CD
+		                                               , A.COMPANY_CD
+		                                               , 'IO_TYPE'
+		                                               , A.IO_TYPE)
+		          FROM DUAL) AS IO_TYPE_NAME
+		     , A.IO_TIME
+		     , A.IO_CATEGORY
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME ( A.DIVISION_CD
+		                                               , A.COMPANY_CD
+		                                               , 'IO_CATEGORY'
+		                                               , A.IO_CATEGORY)
+		          FROM DUAL) AS IO_CATEGORY_NAME
+		     , DECODE (A.IO_TYPE, 'I', NVL (A.STOCK_QTY, 0) - NVL (A.QTY, 0),  NVL (A.STOCK_QTY, 0) + NVL (A.QTY, 0)) FROM_QTY
+		     , NVL(A.QTY, 0) QTY
+		     , NVL(A.STOCK_QTY, 0) TO_QTY
+		     , B.UNIT
+		     , A.UPDATE_BY
+		     , A.UPDATE_DATE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME (A.DIVISION_CD, A.COMPANY_CD, A.UPDATE_BY) FROM DUAL) AS UPDATE_USER_NAME
+		  FROM MOM_ITEM_STOCK_INOUT A
+		     , MOM_ITEM_DEFINITION B
+		 WHERE A.DIVISION_CD =  #{divisionCd, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND A.DIVISION_CD = B.DIVISION_CD(+)
+		   AND A.COMPANY_CD = B.COMPANY_CD(+)
+		   AND A.ITEM_ID = B.ITEM_ID(+)
+		  <if test="itemId != null and itemId != ''">
+		   AND (UPPER(A.ITEM_ID) LIKE '%' || UPPER(#{itemId, jdbcType=VARCHAR}) || '%' 
+		    OR UPPER(B.ITEM_NAME) LIKE '%' || UPPER(#{itemId, jdbcType=VARCHAR}) || '%' )
+		  </if>
+		  <if test="fromDate != null and fromDate != ''">
+		   AND A.IO_TIME BETWEEN  #{fromDate, jdbcType=VARCHAR} AND #{toDate, jdbcType=VARCHAR} 
+		  </if>
+		  <if test="locationCd != null and locationCd">
+		   AND A.LOCATION_CD = #{locationCd, jdbcType=VARCHAR}
+		  </if>
+		ORDER BY A.IO_TIME DESC, A.ITEM_ID, A.ITEM_STOCK_INOUT_ID DESC, A.IO_TYPE DESC
+	</select>
+	
+</mapper>

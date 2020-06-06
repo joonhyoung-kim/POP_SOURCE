@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.equipment.iFPerformanceStatus">
+	<select id="get_iFPerformanceStatus_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT SCENARIO_TYPE
+       		 , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(
+       		 											 #{divisionCd, jdbcType=VARCHAR} 
+		     										   , #{companyCd, jdbcType=VARCHAR} 
+       		 										   , 'SCENARIO_TYPE'
+       		 										   , SCENARIO_TYPE) 
+            	FROM DUAL) AS SCENARIO_NAME
+       		 , QTY
+       		 , GAP_TIME
+      		 , TO_CHAR(UPDATE_DATE, 'YYYY-MM-DD') AS UPDATE_DATE
+    	FROM (
+			      SELECT SCENARIO_TYPE
+			           , COUNT(*) AS QTY 
+			           , ROUND((MAX(UPDATE_DATE) - MIN(UPDATE_DATE)) * 24 * 60, 2) AS GAP_TIME
+			           , TRUNC(UPDATE_DATE) AS UPDATE_DATE
+			      FROM TU_OPC_S1_HIST
+			      WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			        AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR} 
+			        AND SCENARIO_TYPE IN ('S1_R1', 'S1_R2', 'S1_R3', 'S1_R4', 'S1_R5')
+			        AND TRUNC(UPDATE_DATE) BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR},'YYYY-MM-DD') AND TO_DATE(#{toDate, jdbcType=VARCHAR},'YYYY-MM-DD') + 23.9997/24
+			      GROUP BY SCENARIO_TYPE, TRUNC(UPDATE_DATE)
+			    UNION ALL
+			      SELECT SCENARIO_TYPE
+			           , COUNT(*) AS QTY 
+			           , ROUND((MAX(UPDATE_DATE) - MIN(UPDATE_DATE)) * 24 * 60, 2) AS GAP_TIME
+			           , TRUNC(UPDATE_DATE) AS UPDATE_DATE
+			      FROM TU_OPC_S2_HIST
+			      WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			        AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}  
+			        AND SCENARIO_TYPE IN ('S2_U')
+			        AND TRUNC(UPDATE_DATE) BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR},'YYYY-MM-DD') AND TO_DATE(#{toDate, jdbcType=VARCHAR},'YYYY-MM-DD') + 23.9997/24
+			      GROUP BY SCENARIO_TYPE, TRUNC(UPDATE_DATE)
+		        UNION ALL
+			      SELECT SCENARIO_TYPE
+			           , COUNT(*) AS QTY 
+			           , ROUND((MAX(UPDATE_DATE) - MIN(UPDATE_DATE)) * 24 * 60, 2) AS GAP_TIME
+			           , TRUNC(UPDATE_DATE) AS UPDATE_DATE
+			      FROM TU_OPC_S3_HIST
+			      WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			        AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}  
+			        AND SCENARIO_TYPE IN ('S3_U')
+			        AND TRUNC(UPDATE_DATE) BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR},'YYYY-MM-DD') AND TO_DATE(#{toDate, jdbcType=VARCHAR},'YYYY-MM-DD') + 23.9997/24
+			      GROUP BY SCENARIO_TYPE, TRUNC(UPDATE_DATE)
+			    UNION ALL
+			      SELECT SCENARIO_TYPE
+			           , COUNT(*) AS QTY 
+			           , ROUND((MAX(UPDATE_DATE) - MIN(UPDATE_DATE)) * 24 * 60, 2) AS GAP_TIME
+			           , TRUNC(UPDATE_DATE) AS UPDATE_DATE
+			      FROM TU_OPC_S4_HIST
+			      WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			        AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}  
+			        AND SCENARIO_TYPE IN ('S4_U')
+			        AND TRUNC(UPDATE_DATE) BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR},'YYYY-MM-DD') AND TO_DATE(#{toDate, jdbcType=VARCHAR},'YYYY-MM-DD') + 23.9997/24
+			      GROUP BY SCENARIO_TYPE, TRUNC(UPDATE_DATE)
+			    UNION ALL
+			      SELECT 'S5_U' SCENARIO_TYPE
+			           , COUNT(*) AS QTY 
+			           , ROUND((MAX(S5_END_TM) - MIN(S5_START_TM)) * 24 * 60, 2) AS GAP_TIME
+			           , TRUNC(UPDATE_DATE) AS UPDATE_DATE
+			      FROM TU_OPC_S5_HIST
+			      WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			        AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}  
+			        AND S5_ENTIRE_JUDGE = 'OK'
+			        AND TRUNC(UPDATE_DATE) BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR},'YYYY-MM-DD') AND TO_DATE(#{toDate, jdbcType=VARCHAR},'YYYY-MM-DD') + 23.9997/24
+			      GROUP BY TRUNC(UPDATE_DATE)
+             )
+     <if test="scenarioType != null and scenarioType != ''">
+	    WHERE SCENARIO_TYPE = #{scenarioType, jdbcType=VARCHAR}
+     </if>
+        ORDER BY UPDATE_DATE, SCENARIO_TYPE
+		
+	</select>	
+</mapper>

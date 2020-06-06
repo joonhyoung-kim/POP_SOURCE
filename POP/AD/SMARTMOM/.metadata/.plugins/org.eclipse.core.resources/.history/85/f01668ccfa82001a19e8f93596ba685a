@@ -1,0 +1,3806 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.pop.popResult">
+    <!-- AD인터내셔날 -->
+	<!-- ################################################################################ -->
+	
+	<select id="get_materialInput_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT '0' AS SCANQTY
+		     , A.MATERIAL_ORDER_ID
+		     , A.MATERIAL_DEPARTURE_ID
+		     , A.ORDER_GROUP_ID
+		     , A.VENDOR_CD
+		     
+             ,'N'		AS CHKYN  
+		     , (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME( A.DIVISION_CD
+		                                                , A.COMPANY_CD
+		                                                , A.VENDOR_CD) 
+		        FROM  DUAL)                             AS VENDOR_NAME  
+		     ,  A.DEPARTURE_VENDOR_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME( A.DIVISION_CD
+		                                                , A.COMPANY_CD
+		                                                , A.DEPARTURE_VENDOR_CD )
+		        FROM  DUAL)     AS DEPARTURE_VENDOR_NAME 
+		     , A.ITEM_ID
+		     , MID.ITEM_NAME
+		     , MID.SPECIFICATION
+		     , MID.UNIT  
+		     , TO_CHAR(ROUND(NVL(MID.POP_CT_QTY, A.DEPARTURE_QTY), 4), 'FM9,999,999,999,990.00') AS POPCTQTY
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( MID.DIVISION_CD
+		                                              , MID.COMPANY_CD
+		                                              , 'ITEM_UNIT'
+		                                              , MID.UNIT )
+		        FROM DUAL)                            AS UNIT_NAME 
+		     , A.IQC_FLAG     
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              , 'USE_FLAG'
+		                                              , A.IQC_FLAG )
+		        FROM DUAL)                            AS IQC_FLAG_NAME
+		     , TO_CHAR(ROUND(A.ORDER_QTY, 4), 'FM9,999,999,999,990.00') ORDER_QTY  
+		     , TO_CHAR(ROUND(A.DEPARTURE_QTY, 4), 'FM9,999,999,999,990.00') DEPARTURE_QTY
+		     , CASE WHEN A.ORDER_REMAIN_QTY = 0 THEN '0'
+                    ELSE TO_CHAR(ROUND(A.ORDER_REMAIN_QTY, 4), 'FM9,999,999,999,990.00') 
+                END AS ORDER_REMAIN_QTY
+		     , A.DELIVERY_DATE              
+		     , A.ORDER_DATE    
+		     , A.DEPARTURE_DATE             
+		     , A.DEPARTURE_STATE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              , 'MATERIAL_DEPARTURE_STATE'
+		                                              , A.DEPARTURE_STATE )
+		        FROM DUAL)                            AS DEPARTURE_STATE_NAME    
+		     , A.ORDER_STATE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              , 'MATERIAL_ORDER_STATE'
+		                                              , A.ORDER_STATE )
+		        FROM DUAL)                            AS ORDER_STATE_NAME    
+		     , A.ORDER_TYPE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              ,'SYSTEM_FLAG'
+		                                              , A.ORDER_TYPE )
+		        FROM DUAL)                            AS ORDER_TYPE_NAME    
+		     , A.CREATE_DATE 
+		     , A.CREATE_BY
+		     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( A .DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              , A.CREATE_BY) 
+		        FROM  DUAL)                            AS CREATE_BY_NAME  
+		     , A.UPDATE_DATE        
+		     , A.UPDATE_BY 
+		     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              , A.UPDATE_BY) 
+		        FROM  DUAL)                            AS UPDATE_BY_NAME
+		     , A.LOCATION_CD                          AS LOCATION_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME( A.DIVISION_CD
+		                                                  , A.COMPANY_CD
+		                                                  , A.LOCATION_CD)
+		        FROM   DUAL )     AS LOCATION_NAME 
+		     , A.MARKET_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              , 'MARKET_CODE'
+		                                              , A.MARKET_CD )
+		        FROM DUAL)                            AS MARKET_NAME       
+		     , A.CURRENCY_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              , 'CURRENCY_CODE'
+		                                              , A.CURRENCY_CD )
+		        FROM DUAL)                            AS CURRENCY_NAME
+		     , A.ORDER_SEQ
+		     , A.VENDOR_LOT
+		     , (SELECT MOM_COMMON_PKG.FN_GET_MATERIAL_PRICE( A.DIVISION_CD
+		                                                   , A.COMPANY_CD
+		                                                   , A.VENDOR_CD
+		                                                   , A.ITEM_ID
+		                                                   , A.MARKET_CD
+		                                                   , A.CURRENCY_CD
+		                                                   , TRUNC(SYSDATE) )
+		        FROM DUAL)                            AS UNIT_PRICE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CURRENT_EXCHANGE_RATE( A.DIVISION_CD
+		                                                          , A.COMPANY_CD
+		                                                          , A.CURRENCY_CD
+		                                                          , TRUNC(SYSDATE) )
+		        FROM DUAL)                            AS EX_UNIT_PRICE  
+		     , A.DEPARTURE_FLAG   
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              , 'USE_FLAG'
+		                                              , A.DEPARTURE_FLAG )
+		        FROM DUAL)                            AS DEPARTURE_FLAG_NAME  
+		     , MID.ITEM_TYPE 
+		     ,(SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              , 'ITEM_TYPE'
+		                                              , MID.ITEM_TYPE  )
+		        FROM DUAL)                            AS ITEM_TYPE_NAME   
+		     , CASE WHEN A.IQC_FLAG = 'N' AND A.DEPARTURE_FLAG = 'N' THEN  A.ORDER_REMAIN_QTY
+		       ELSE A.DEPARTURE_QTY
+		       END    AS  INPUT_QTY
+		     , MID.FREE_OFFER_FLAG
+	         , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (A.DIVISION_CD
+	                                                  , A.COMPANY_CD
+	                                                  , 'FREE_OFFER_FLAG'
+	                                                  , MID.FREE_OFFER_FLAG)
+	            FROM DUAL)							  AS FREE_OFFER_FLAG_NAME
+		     , '' AS DESCRIPTION
+		     , A.ORDER_FLAG
+		     , A.ORDER_FLAG_NAME
+		     , NVL(A.CONVERSION_UNIT_QTY, 1) AS CONVERSION_UNIT_QTY
+		     , NVL(MID.CONVERSION_UNIT_QTY, 1) AS ORIGIN_CONVERSION_UNIT_QTY
+             , MID.CONVERSION_UNIT
+             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (A.DIVISION_CD
+	                                                  , A.COMPANY_CD
+	                                                  , 'ITEM_UNIT'
+	                                                  , MID.CONVERSION_UNIT)
+	            FROM DUAL)							  AS CONVERSION_UNIT
+	         , A.TRANSACTION_SEQ
+	         , (SELECT CASE WHEN COUNT(1) = 0 THEN 'N'
+	                        ELSE 'Y' END
+	              FROM TU_GANBAN
+	             WHERE DEPARTURE_GROUP_ID = A.MATERIAL_DEPARTURE_ID)
+	             AS GANBANYN
+	         , CASE WHEN MID.POP_GANBAN_LABELID IS NULL OR MID.POP_GANBAN_LABELID = 'NONE' THEN 'N' ELSE 'Y' END AS GANBANLABELYN 
+		FROM   (SELECT MO.DIVISION_CD
+		             , MO.COMPANY_CD
+		             , MO.MATERIAL_ORDER_ID
+		             , MD.MATERIAL_DEPARTURE_ID
+		             , MO.ORDER_GROUP_ID
+		             , MO.VENDOR_CD
+		             , NVL(MO.DEPARTURE_VENDOR_CD, MO.VENDOR_CD) AS DEPARTURE_VENDOR_CD
+		             , MO.ITEM_ID
+		             , MO.IQC_FLAG     
+		             , MO.ORDER_QTY
+		             , MD.DEPARTURE_QTY
+		             , MO.ORDER_QTY - NVL(MO.CANCEL_QTY, 0) - DECODE(NVL(MD.DEPARTURE_QTY, 0), 0, MO.CLOSED_QTY, MD.DEPARTURE_QTY) AS  ORDER_REMAIN_QTY
+		             , TO_CHAR(MO.DELIVERY_DATE  , 'YYYY-MM-DD')   AS DELIVERY_DATE              
+		             , TO_CHAR(MO.ORDER_DATE , 'YYYY-MM-DD')       AS ORDER_DATE    
+		             , TO_CHAR(MD.DEPARTURE_DATE , 'YYYY-MM-DD')   AS DEPARTURE_DATE             
+		             , MD.DEPARTURE_STATE
+		             , MO.ORDER_STATE
+		             , MO.ORDER_TYPE
+		             , TO_CHAR(MO.CREATE_DATE  , 'YYYY-MM-DD')   AS CREATE_DATE 
+		             , MO.CREATE_BY
+		             , TO_CHAR(MO.UPDATE_DATE   , 'YYYY-MM-DD') AS UPDATE_DATE        
+		             , MO.UPDATE_BY 
+		             , MO.LOCATION_CD                          AS LOCATION_CD
+		             , MO.MARKET_CD
+		             , MO.CURRENCY_CD
+		             , MO.ORDER_SEQ
+		             , MD.VENDOR_LOT
+		             , MD.DEPARTURE_GROUP_ID
+		             , MO.DEPARTURE_FLAG
+		             , MO.ORDER_FLAG
+	                 , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (MO.DIVISION_CD
+	                                                          , MO.COMPANY_CD
+	                                                          , 'ORDER_FLAG'
+	                                                          , MO.ORDER_FLAG)
+	                      FROM DUAL)                            AS ORDER_FLAG_NAME
+	                 , MD.CONVERSION_UNIT_QTY
+	                 , MD.TRANSACTION_SEQ
+		        FROM   MOM_MATERIAL_ORDER MO
+		             , MOM_MATERIAL_DEPARTURE MD
+		        WHERE  MO.DIVISION_CD = MD.DIVISION_CD
+		        AND    MO.COMPANY_CD  = MD.COMPANY_CD
+		        AND    MO.MATERIAL_ORDER_ID = MD.MATERIAL_ORDER_ID
+		        AND    MO.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		        AND    MO.COMPANY_CD  =  #{companyCd, jdbcType=VARCHAR}
+		        AND    NVL(MO.DEPARTURE_FLAG, 'N') = 'Y'
+		        <if test = "shortage != null and shortage != ''">
+		        AND    MD.DEPARTURE_STATE  = DECODE(MO.IQC_FLAG, 'Y', 'CHECK_PASS', #{flag, jdbcType=VARCHAR})
+		        AND    MO.ORDER_STATE  != DECODE(MO.IQC_FLAG, 'Y', 'CHECK_PASS', 'ORDER')
+		        </if>
+		        <if test = "shortage == null or shortage == ''">
+		        AND    MD.DEPARTURE_STATE  = DECODE(MO.IQC_FLAG, 'Y', 'CHECK_PASS', 'DEPARTURE')
+		        </if>
+		        AND    MO.ORDER_DATE BETWEEN SYSDATE - 180 AND SYSDATE + 7 
+				UNION ALL
+		        SELECT MO.DIVISION_CD
+		             , MO.COMPANY_CD
+		             , MO.MATERIAL_ORDER_ID
+		             , MD.MATERIAL_DEPARTURE_ID
+		             , MO.ORDER_GROUP_ID
+		             , MO.VENDOR_CD
+		             , NVL(MO.DEPARTURE_VENDOR_CD, MO.VENDOR_CD) AS DEPARTURE_VENDOR_CD
+		             , MO.ITEM_ID
+		             , MO.IQC_FLAG     
+		             , MO.ORDER_QTY
+		             , MD.DEPARTURE_QTY
+		             , MO.ORDER_QTY - NVL(MO.CANCEL_QTY, 0) - NVL(MD.DEPARTURE_QTY, 0)  AS  ORDER_REMAIN_QTY
+		             , TO_CHAR(MO.DELIVERY_DATE, 'YYYY-MM-DD')   AS DELIVERY_DATE              
+		             , TO_CHAR(MO.ORDER_DATE, 'YYYY-MM-DD')       AS ORDER_DATE    
+		             , TO_CHAR(MD.DEPARTURE_DATE, 'YYYY-MM-DD')   AS DEPARTURE_DATE             
+		             , MD.DEPARTURE_STATE
+		             , MO.ORDER_STATE
+		             , MO.ORDER_TYPE
+		             , TO_CHAR(MO.CREATE_DATE, 'YYYY-MM-DD')   AS CREATE_DATE 
+		             , MO.CREATE_BY
+		             , TO_CHAR(MO.UPDATE_DATE, 'YYYY-MM-DD') AS UPDATE_DATE        
+		             , MO.UPDATE_BY 
+		             , MO.LOCATION_CD                          AS LOCATION_CD
+		             , MO.MARKET_CD
+		             , MO.CURRENCY_CD
+		             , MO.ORDER_SEQ
+		             , MD.VENDOR_LOT
+		             , MD.DEPARTURE_GROUP_ID
+		             , MO.DEPARTURE_FLAG
+		             , MO.ORDER_FLAG
+	                 , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (MO.DIVISION_CD
+	                                                          , MO.COMPANY_CD
+	                                                          , 'ORDER_FLAG'
+	                                                          , MO.ORDER_FLAG)
+	                      FROM DUAL)                            AS ORDER_FLAG_NAME
+	                 , MD.CONVERSION_UNIT_QTY
+	                 , MD.TRANSACTION_SEQ
+		        FROM   MOM_MATERIAL_ORDER MO
+		             , MOM_MATERIAL_DEPARTURE MD
+		        WHERE  MO.DIVISION_CD = MD.DIVISION_CD
+		        AND    MO.COMPANY_CD  = MD.COMPANY_CD
+		        AND    MO.MATERIAL_ORDER_ID = MD.MATERIAL_ORDER_ID
+		        AND    MO.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		        AND    MO.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		        AND    NVL(MO.DEPARTURE_FLAG, 'N') = 'N'
+		        AND    MD.DEPARTURE_STATE  = 'CHECK_PASS'
+		        AND    MO.ORDER_DATE BETWEEN SYSDATE - 180 AND SYSDATE + 7  
+		        UNION ALL
+		        SELECT MO.DIVISION_CD
+		             , MO.COMPANY_CD
+		             , MO.MATERIAL_ORDER_ID
+		             , ''                     AS MATERIAL_DEPARTURE_ID
+		             , MO.ORDER_GROUP_ID
+		             , MO.VENDOR_CD
+		             , NVL(MO.DEPARTURE_VENDOR_CD, MO.VENDOR_CD) AS DEPARTURE_VENDOR_CD
+		             , MO.ITEM_ID
+		             , MO.IQC_FLAG     
+		             , MO.ORDER_QTY
+		             , 0                          AS DEPARTURE_QTY
+		             , MO.ORDER_QTY - NVL(MO.CANCEL_QTY, 0) + NVL(MO.CLOSED_QTY, 0) AS  ORDER_REMAIN_QTY
+		             , TO_CHAR(MO.DELIVERY_DATE  , 'YYYY-MM-DD')   AS DELIVERY_DATE              
+		             , TO_CHAR(MO.ORDER_DATE , 'YYYY-MM-DD')       AS ORDER_DATE    
+		             , TO_CHAR(MO.DEPARTURE_DATE , 'YYYY-MM-DD')   AS DEPARTURE_DATE
+		             , ''                                          AS DEPARTURE_STATE
+		             , MO.ORDER_STATE
+		             , MO.ORDER_TYPE
+		             , TO_CHAR(MO.CREATE_DATE  , 'YYYY-MM-DD')   AS CREATE_DATE 
+		             , MO.CREATE_BY
+		             , TO_CHAR(MO.UPDATE_DATE   , 'YYYY-MM-DD') AS UPDATE_DATE        
+		             , MO.UPDATE_BY 
+		             , MO.LOCATION_CD                          AS LOCATION_CD
+		             , MO.MARKET_CD
+		             , MO.CURRENCY_CD
+		             , MO.ORDER_SEQ
+		             , ''                                      AS VENDOR_LOT
+		             , ''                                      AS DEPARTURE_GROUP_ID
+		             , MO.DEPARTURE_FLAG
+		             , MO.ORDER_FLAG
+	                 , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (MO.DIVISION_CD
+	                                                          , MO.COMPANY_CD
+	                                                          , 'ORDER_FLAG'
+	                                                          , MO.ORDER_FLAG)
+	                    FROM   DUAL)                            AS ORDER_FLAG_NAME       
+	                 , NVL((SELECT MOM_COMMON_PKG.FN_GET_CONVERSION_QTY( MO.DIVISION_CD
+                                 							  	   , MO.COMPANY_CD
+                                  								   , MO.ITEM_ID ) 
+                        FROM DUAL), 1)	* MO.ORDER_QTY					 AS ORIGIN_CONVERSION_UNIT_QTY
+                     , MO.TRANSACTION_SEQ
+		        FROM   MOM_MATERIAL_ORDER MO
+		        WHERE  MO.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR} 
+		        AND    MO.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR} 
+		        AND    NVL(MO.DEPARTURE_FLAG, 'N') = 'N'
+		        AND    MO.IQC_FLAG  = 'N'
+		        AND    MO.ORDER_STATE = 'ORDER' 
+		        AND    MO.ORDER_DATE BETWEEN SYSDATE - 180 AND SYSDATE + 7 
+		        ) A
+		      , MOM_ITEM_DEFINITION MID
+		      
+			WHERE   A.DIVISION_CD = MID.DIVISION_CD
+			AND     A.COMPANY_CD    = MID.COMPANY_CD
+			AND     A.ITEM_ID       = MID.ITEM_ID
+			
+			 <!--   AND     C.DEPARTURE_GROUP_ID= A.MATERIAL_DEPARTURE_ID -->    
+		   <if test="locationCd != null and locationCd != ''">
+			AND    A.LOCATION_CD = #{locationCd, jdbcType=VARCHAR} 
+		   </if>  
+	</select>
+	
+	<select id="get_test_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    'AAA' AS AAA
+		FROM DUAL
+	</select>
+	
+	<select id="get_division_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+			DIVISION_CD 
+			, DIVISION_NAME
+			, DESCRIPTION 
+		FROM MOM_SITE
+		ORDER BY DESCRIPTION
+	</select>
+	
+	<select id="get_labelDesign_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    A.METHOD_ID        
+		    , A.METHOD_DESC      
+		    , A.METHOD_FIELD
+		    , A.METHOD_FIELD_DESC
+		  FROM MOM_POP_LABELDESIGN A
+		ORDER BY A.METHOD_DESC
+	</select>
+	
+	<select id="get_badCode_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT CODE_ID      AS BAD_CODE
+		     , CODE_NAME    AS BAD_CODE_NM
+		  FROM MOM_CODE
+		 WHERE DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{COMPANY_CD, jdbcType=VARCHAR}
+		   AND CODE_CLASS_ID = 'WO_BAD_TYPE'
+
+	</select>
+	
+	<select id="get_popVendor_list" resultType="camelMap" parameterType="java.util.HashMap">
+        SELECT DISTINCT A.VENDOR_CD AS CODE 
+		     , A.VENDOR_CD || '(' || A.VENDOR_NAME || ')' AS NAME 
+		  FROM MOM_VENDOR A, MOM_MATERIAL_ORDER B
+		 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+           AND A.DIVISION_CD = B.DIVISION_CD
+           AND A.COMPANY_CD = B.COMPANY_CD       
+           AND A.VENDOR_CD = B.VENDOR_CD          
+           AND B.ORDER_STATE = 'ORDER'  
+		   AND NVL(A.USE_YN, 'Y') = 'Y'
+		   AND NVL(A.DEPARTURE_FLAG, 'N') = 'Y'
+	</select>
+	
+	<select id="get_label_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    A.LABEL_ID   
+		    , A.LABEL_DESC 
+		    , A.PRINT_ID   
+		    , A.LABELSTATUS
+		    , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS CREATE_DATE
+		    , A.CREATE_BY  
+		    , TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS UPDATE_DATE
+		    , A.UPDATE_BY 
+		  FROM MOM_POP_LABELLIST A 
+		 ORDER BY A.LABEL_DESC
+	</select>
+	
+	<select id="get_label" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    A.LABEL_ID   
+		    , A.LABEL_DESC 
+		    , A.PRINT_ID   
+		    , A.LABELSTATUS
+		    , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS CREATE_DATE
+		    , A.CREATE_BY  
+		    , TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS UPDATE_DATE
+		    , A.UPDATE_BY 
+		  FROM MOM_POP_LABELLIST A 
+		 WHERE LABEL_ID = #{LABEL_ID, jdbcType=VARCHAR}
+		
+	</select>
+	
+	<select id="get_bcrport" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT
+            A.MACADDRESS 
+            , A.PCNAME     
+            , A.IP         
+            , A.GTPRINT    
+            , A.CTPRINT    
+            , A.PALLETPRINT
+            , A.SLEEP      
+            , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS CREATE_DATE
+            , A.CREATE_BY  
+            , TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS UPDATE_DATE
+            , A.UPDATE_BY
+            , A.PUSHBUTTON1
+            , A.PUSHBUTTON2
+            , A.USEMANAGEMENT
+            , A.LABELYN
+            , A.LOGINREMEMBER
+            , A.LINEREMEMBER
+            , A.GANBANPRINT
+            , A.PRINT_ID
+            , B.PRINT_DPI_MM
+          FROM MOM_POP_BCRPORT A,
+               MOM_POP_PRINTINFO B
+		 WHERE A.PRINT_ID = B.PRINT_ID
+		 AND   A.MACADDRESS = #{MACADDRESS, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="get_printInfo" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    A.PRINT_ID, 
+		    A.PRINT_DESC, 
+		    A.PRINT_DPI_MM 
+		  FROM MOM_POP_PRINTINFO A
+		ORDER BY A.PRINT_DESC
+	</select>
+	
+	<select id="getGanbanPrintList" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT GANBAN_ID
+			 , GANBAN_TYPE
+		  FROM TU_GANBAN_TMP A
+		 WHERE A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{COMPANY_CD, jdbcType=VARCHAR}
+		   AND A.LABEL_ID = #{LABEL_ID, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="get_popline_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    A.RESOURCE_CD
+		    , A.RESOURCE_NAME
+		    , A.RESOURCE_NAME || '(' || A.RESOURCE_CD || ')' AS NAME
+		 FROM MOM_RESOURCE A
+		WHERE A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		AND   A.COMPANY_CD = #{COMPANY_CD, jdbcType=VARCHAR}
+		AND   A.OUTSOURCING_FLAG != 'Y'
+		AND   A.USE_YN = 'Y'
+		ORDER BY A.RESOURCE_NAME
+	</select>
+	
+	<select id="get_labelObject_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    A.LABEL_ID 
+		    , A.PRINT_ID
+		    , A.LABEL_SEQ 
+		    , A.METHOD_ID 
+		    , TO_CHAR(A.X_POSITION_MM)        AS X_POSITION_MM
+		    , TO_CHAR(A.Y_POSITION_MM)        AS  Y_POSITION_MM
+		    , TO_CHAR(A.X_POSITION_PIX)       AS  X_POSITION_PIX
+		    , TO_CHAR(A.Y_POSITION_PIX)       AS  Y_POSITION_PIX
+		    , TO_CHAR(A.LINE_THICKNESS)       AS  LINE_THICKNESS
+		    , TO_CHAR(A.WIDTH_AREA_MM)        AS  WIDTH_AREA_MM
+		    , TO_CHAR(A.HEIGHT_AREA_MM)       AS HEIGHT_AREA_MM  
+		    , TO_CHAR(A.WIDTH_AREA_PIX)       AS  WIDTH_AREA_PIX
+		    , TO_CHAR(A.HEIGHT_AREA_PIX)      AS  HEIGHT_AREA_PIX
+		    , TO_CHAR(A.BARCODE_MODULE_WIDTH) AS  BARCODE_MODULE_WIDTH
+		    , TO_CHAR(A.BARCODE_RATIO)        AS  BARCODE_RATIO
+		    , A.LANDSCAPE 
+		    , TO_CHAR(A.BARCODE_HEIGHT_MM)    AS BARCODE_HEIGHT_MM
+		    , TO_CHAR(A.BARCODE_HEIGHT_PIX)   AS BARCODE_HEIGHT_PIX
+		    , A.BARCODE_TEXT_UNDER_YN
+		    , A.BARCODE_2D_SIZE
+		    , A.LABEL_VALUE
+		    , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS CREATE_DATE
+		    , A.CREATE_BY
+		    , TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS UPDATE_DATE 
+		    , A.UPDATE_BY
+		FROM MOM_POP_LABELOBJECT A
+		WHERE A.LABEL_ID = #{LABEL_ID, jdbcType=VARCHAR}
+		AND   A.PRINT_ID = #{PRINT_ID, jdbcType=VARCHAR}
+		ORDER BY A.LABEL_SEQ
+	</select>
+	
+	<!-- 자재불출 라인 조회  2019.06.17 조아람 조회-->
+	<select id="get_materialGILine_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT FACILITY_CD
+     		 , FACILITY_NAME 
+		  FROM MOM_FACILITY
+		 WHERE DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{COMPANY_CD, jdbcType=VARCHAR}
+		   AND FACILITY_CLASS_CD = 'AREA'
+		   AND FACILITY_TYPE  IN ('FAC300')
+		   AND USE_YN = 'Y'
+		   AND STOCK_USE_FLAG = 'Y'
+		 ORDER BY PARENT_FACILITY_CD, FACILITY_SEQ
+	</select>
+	
+	<!-- ganban 목록 조회 -->
+	<select id="get_ganban_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT GANBAN_ID
+		     , ITEM_ID
+		     , ITEM_NAME
+		     , QTY
+		     , USE_YN
+		FROM (
+				SELECT A.GANBAN_ID
+				     , A.ITEM_ID
+				     , B.ITEM_NAME
+				     , A.QTY
+				     , A.USE_YN
+				     , (SELECT COUNT(1) FROM TU_GANBAN WHERE PARENT_GANBAN_ID = A.GANBAN_ID) AS CHILD_CNT
+				     , CASE WHEN A.GANBAN_TYPE = 'BUTTON'
+				            THEN (SELECT COUNT(1)
+				                    FROM MOM_WORK_ORDER_RESULT
+				                   WHERE STATE = 'C'
+				                     AND PREV_WORK_ORDER_RESULT_ID IN (SELECT WORK_ORDER_RESULT_ID 
+                                                                         FROM MOM_WORK_ORDER_RESULT
+                                                                        WHERE CT = A.GANBAN_ID))
+                            ELSE 0
+                        END AS CANCEL_CHK
+				  FROM TU_GANBAN A
+				  LEFT OUTER JOIN MOM_ITEM_DEFINITION B
+				    ON A.DIVISION_CD        = B.DIVISION_CD
+				   AND A.COMPANY_CD         = B.COMPANY_CD
+				   AND A.ITEM_ID            = B.ITEM_ID
+				 WHERE 1=1
+				   AND A.DIVISION_CD                        = #{DIVISION_CD, jdbcType=VARCHAR}
+				   AND A.COMPANY_CD                         = #{COMPANY_CD,  jdbcType=VARCHAR}
+				   AND TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD') = #{NOWDATE, jdbcType=VARCHAR}
+				<if test="LOCATION_CD != null and LOCATION_CD != ''">
+		           AND A.LOCATION_CD                        = #{LOCATION_CD, jdbcType=VARCHAR}
+		        </if>
+		        <if test="USE_YN != null and USE_YN != ''">
+		           AND A.USE_YN                             = #{USE_YN, jdbcType=VARCHAR}
+		        </if>
+		        ) ROWDT
+		WHERE ROWDT.CHILD_CNT = 0
+		  AND ROWDT.CANCEL_CHK = 0
+	</select>
+	
+	<!-- 작업지시서 목록 조회 -->
+	<select id="get_popwo_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    A.RESOURCE_CD
+		    , A.WORK_ORDER_ID
+		    , A.PRODUCT_ORDER_ID
+		    , TO_CHAR(A.PLAN_DATE, 'YYYY-MM-DD') AS PLANDATE
+		    , TO_CHAR(A.START_TIME, 'YY-MM-DD HH24:MI') AS START_TIME
+		    , TO_CHAR(A.END_TIME, 'YY-MM-DD HH24:MI') AS END_TIME
+		    , A.ITEM_ID
+		    , B.ITEM_NAME
+		    , A.CONFIRM_QTY
+		    , NVL (A.CONFIRM_QTY, 0) - NVL (A.GOOD_QTY, 0) - NVL (A.CANCEL_QTY, '0') AS REMAIN_QTY 
+		    , NVL (A.GOOD_QTY, '0') AS QTY
+		    , NVL (A.BAD_QTY, '0') AS BAD_QTY
+		    , NVL (A.CANCEL_QTY, '0') AS CANCEL_QTY
+		    , A.PRODUCT_ORDER_TYPE AS WO_TYPE
+		    , C.CODE_NAME AS WOTYPENAME
+		    , A.WO_STATE
+		    , D.CODE_NAME AS WOSTATENAME
+		    , NVL(B.POP_MAKE_LOT_QTY, A.CONFIRM_QTY) AS POP_MAKE_LOT_QTY
+		    , B.POP_INPUT_TYPE
+		    , NVL(B.POP_CT_QTY, A.CONFIRM_QTY) AS POP_CT_QTY
+		    , B.POP_GT_LABELID     
+            , B.POP_CT_LABELID     
+            , B.POP_PALLET_LABELID
+            , B.POP_GANBAN_LABELID  
+            , B.POP_EAN             AS EAN
+            , B.POP_UPC             AS UPC
+            , B.POP_DESTINATION     AS DESTINATION
+            , B.POP_MADEBY          AS MADEBY
+            , ''                    AS SN
+            , ''                    AS CT
+            , ''                    AS PALLETID
+            , B.SPECIFICATION
+            , B.MATERIAL_MEASURE_FLAG
+            , A.PRODUCT_ORDER_TYPE
+		FROM MOM_WORK_ORDER A,
+		     MOM_ITEM_DEFINITION B,
+		     (SELECT 
+		        CC.CODE_ID
+		        , CC.CODE_NAME
+		      FROM MOM_CODE CC
+		      WHERE CC.DIVISION_CD    = #{DIVISION_CD, jdbcType=VARCHAR}
+		      AND   CC.COMPANY_CD     = #{COMPANY_CD, jdbcType=VARCHAR}
+		      AND   CC.CODE_CLASS_ID  = 'PRODUCT_ORDER_TYPE'
+		      ) C,
+		      (SELECT 
+		        DD.CODE_ID
+		        , DD.CODE_NAME
+		      FROM MOM_CODE DD
+		      WHERE DD.DIVISION_CD    = #{DIVISION_CD, jdbcType=VARCHAR}
+		      AND   DD.COMPANY_CD     = #{COMPANY_CD, jdbcType=VARCHAR}
+		      AND   DD.CODE_CLASS_ID  = 'WORK_ORDER_STATE'
+		      ) D
+		WHERE 1=1
+		AND   A.ITEM_ID = B.ITEM_ID 
+		AND   A.PRODUCT_ORDER_TYPE = C.CODE_ID
+		AND   A.WO_STATE           = D.CODE_ID
+		AND   B.DIVISION_CD        = #{DIVISION_CD, jdbcType=VARCHAR}
+		AND   B.COMPANY_CD         = #{COMPANY_CD,  jdbcType=VARCHAR}
+		AND   A.RESOURCE_CD        = #{RESOURCE_CD, jdbcType=VARCHAR}
+		<if test="WORK_ORDER_ID != null and WORK_ORDER_ID != ''">
+        	AND A.WORK_ORDER_ID = #{WORK_ORDER_ID, jdbcType=VARCHAR}
+        </if>
+        <if test="PRODUCT_ORDER_TYPE != null and PRODUCT_ORDER_TYPE != ''">
+        	AND A.PRODUCT_ORDER_TYPE = #{PRODUCT_ORDER_TYPE, jdbcType=VARCHAR}
+        </if>
+        <if test="TODAYFLAG != null and TODAYFLAG != ''">
+        	<choose>
+	        <when test='TODAYFLAG.equals("TODAY")'>
+	        	<![CDATA[AND   A.PLAN_DATE = TO_DATE(#{NOWDATE, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24MISS')]]>
+    	    </when>
+    	    <when test='TODAYFLAG.equals("YESTERDAY")'>
+    	    	<![CDATA[AND   A.PLAN_DATE < TO_DATE(#{NOWDATE, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24MISS') + 1]]>
+    	    </when>
+    	    </choose>
+        </if>
+        <if test="WO_STATE != null and WO_STATE != ''">
+        	<choose>
+	        <when test='WO_STATE.equals("ALL")'>
+	        	AND   A.WO_STATE IN ('A', 'R', 'H')
+    	    </when>
+    	    <when test='TODAYFLAG.equals("R")'>
+    	    	AND   A.WO_STATE = 'R'
+    	    </when>
+    	    </choose>
+        </if>
+        <if test="TODAYFLAG != null and TODAYFLAG != ''">
+        	<choose>
+	        <when test='TODAYFLAG.equals("TODAY")'>
+	        	ORDER BY A.PLAN_DATE, A.WORK_ORDER_ID
+    	    </when>
+    	    <when test='TODAYFLAG.equals("YESTERDAY")'>
+    	    	ORDER BY A.PLAN_DATE DESC, A.WORK_ORDER_ID
+    	    </when>
+    	    </choose>
+        </if>
+	</select>
+	
+	<!-- 작업지시서 항목 조회 -->
+	<select id="get_popwo" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT
+		    A.RESOURCE_CD
+		    , A.WORK_ORDER_ID
+		    , A.PRODUCT_ORDER_ID
+		    , TO_CHAR(A.PLAN_START_TIME, 'YYYY-MM-DD HH24:MI:SS') AS PLANDATE
+		    , TO_CHAR(A.START_TIME, 'YY-MM-DD HH24:MI') AS START_TIME
+		    , TO_CHAR(A.END_TIME, 'YY-MM-DD HH24:MI') AS END_TIME
+		    , A.ITEM_ID
+		    , B.ITEM_NAME
+		    , A.CONFIRM_QTY
+		    , NVL (A.CONFIRM_QTY, 0) - NVL (A.GOOD_QTY, 0) - NVL (A.CANCEL_QTY, '0') AS REMAIN_QTY 
+		    , NVL (A.GOOD_QTY, '0') AS QTY
+		    , NVL (A.BAD_QTY, '0') AS BAD_QTY
+		    , NVL (A.CANCEL_QTY, '0') AS CANCEL_QTY
+		    , A.PRODUCT_ORDER_TYPE AS WO_TYPE
+		    , C.CODE_NAME AS WOTYPENAME
+		    , A.WO_STATE
+		    , D.CODE_NAME AS WOSTATENAME
+		    , NVL(B.POP_MAKE_LOT_QTY, A.CONFIRM_QTY) AS POP_MAKE_LOT_QTY
+		    , B.POP_INPUT_TYPE
+		    , NVL(B.POP_CT_QTY, A.CONFIRM_QTY) AS POP_CT_QTY
+		    , B.POP_GT_LABELID
+                    , TO_CHAR(SYSDATE, 'YYYY.MM.DD') AS PRINTDATE
+            , B.POP_CT_LABELID     
+            , B.POP_PALLET_LABELID
+            , B.POP_GANBAN_LABELID  
+            , B.POP_EAN             AS EAN
+            , B.POP_UPC             AS UPC
+            , B.POP_DESTINATION     AS DESTINATION
+            , B.POP_MADEBY          AS MADEBY
+            , ''                    AS SN
+            , ''                    AS CT
+            , ''                    AS PALLETID
+            , TO_CHAR(A.PLAN_DATE, 'YYYY-MM-DD') AS PLAN_DATE 
+            , TO_CHAR(A.PLAN_DATE, 'MM') || '월 ' || TO_CHAR(A.PLAN_DATE, 'DD') || '일 총 생산현황(양품기준)'  AS TODAYTEXT
+            , (
+		        SELECT 
+		            SUM(AA.PLAN_QTY) 
+		        FROM MOM_WORK_ORDER AA 
+		        WHERE AA.PLAN_DATE BETWEEN TO_DATE(TO_CHAR(A.PLAN_DATE, 'YYYYMMDD') || '000000', 'YYYYMMDDHH24MISS') AND TO_DATE(TO_CHAR(A.PLAN_DATE, 'YYYYMMDD') || '235959', 'YYYYMMDDHH24MISS') 
+		        AND AA.RESOURCE_CD        = A.RESOURCE_CD
+		      ) AS TODAYPLAN
+		    , (
+		        SELECT 
+		            SUM(AA.GOOD_QTY) 
+		        FROM MOM_WORK_ORDER AA 
+		        WHERE AA.PLAN_DATE BETWEEN TO_DATE(TO_CHAR(A.PLAN_DATE, 'YYYYMMDD') || '000000', 'YYYYMMDDHH24MISS') AND TO_DATE(TO_CHAR(A.PLAN_DATE, 'YYYYMMDD') || '235959', 'YYYYMMDDHH24MISS') 
+		        AND AA.RESOURCE_CD        = A.RESOURCE_CD
+		      ) AS TODAYGOODQTY
+		      , (SELECT MAX(NVL(AA.CT, 'NODATA')) FROM MOM_WORK_ORDER_RESULT AA WHERE AA.DIVISION_CD = A.DIVISION_CD AND AA.COMPANY_CD = A.COMPANY_CD AND AA.WORK_ORDER_ID = A.WORK_ORDER_ID) AS AAA
+		      , FN_GET_POP_BOXNUMBER(A.DIVISION_CD, A.COMPANY_CD, A.WORK_ORDER_ID, (SELECT NVL(MAX(AA.CT), 'NODATA') FROM MOM_WORK_ORDER_RESULT AA WHERE AA.DIVISION_CD = A.DIVISION_CD AND AA.COMPANY_CD = A.COMPANY_CD AND AA.WORK_ORDER_ID = A.WORK_ORDER_ID AND AA.CT != 'NODATA'), NVL(B.POP_CT_QTY, A.CONFIRM_QTY), 'BOXNUMBER') AS NOWBOXCOUNT
+              , FN_GET_POP_BOXNUMBER(A.DIVISION_CD, A.COMPANY_CD, A.WORK_ORDER_ID, '', NVL(B.POP_CT_QTY, A.CONFIRM_QTY), 'ALLBOXNUMBER') AS ALLBOXCOUNT
+              , B.SPECIFICATION
+              , B.LABELDESC
+              , B.LABELSPEC
+              , ''         AS SHORTSN
+              , ''         AS LONGSN
+              , E.GOOD_LOCATION_CD
+              , B.MATERIAL_MEASURE_FLAG
+		FROM MOM_WORK_ORDER A,
+		     MOM_ITEM_DEFINITION B,
+		     (SELECT 
+		        CC.CODE_ID
+		        , CC.CODE_NAME
+		      FROM MOM_CODE CC
+		      WHERE CC.DIVISION_CD    = #{DIVISION_CD, jdbcType=VARCHAR}
+		      AND   CC.COMPANY_CD     = #{COMPANY_CD, jdbcType=VARCHAR}
+		      AND   CC.CODE_CLASS_ID  = 'PRODUCT_ORDER_TYPE'
+		      ) C,
+		      (SELECT 
+		        DD.CODE_ID
+		        , DD.CODE_NAME
+		      FROM MOM_CODE DD
+		      WHERE DD.DIVISION_CD    = #{DIVISION_CD, jdbcType=VARCHAR}
+		      AND   DD.COMPANY_CD     = #{COMPANY_CD, jdbcType=VARCHAR}
+		      AND   DD.CODE_CLASS_ID  = 'WORK_ORDER_STATE'
+		      ) D,
+		      MOM_RESOURCE E
+		WHERE 1=1
+		AND   A.ITEM_ID = B.ITEM_ID 
+		AND   A.PRODUCT_ORDER_TYPE = C.CODE_ID
+		AND   A.WO_STATE           = D.CODE_ID
+		AND	  A.DIVISION_CD 	   = E.DIVISION_CD
+        AND   A.COMPANY_CD	 	   = E.COMPANY_CD
+        AND   A.RESOURCE_CD 	   = E.RESOURCE_CD
+		AND   B.DIVISION_CD        = #{DIVISION_CD, jdbcType=VARCHAR}
+		AND   B.COMPANY_CD         = #{COMPANY_CD,  jdbcType=VARCHAR}
+		AND   A.RESOURCE_CD        = #{RESOURCE_CD, jdbcType=VARCHAR}
+		<if test="WORK_ORDER_ID != null and WORK_ORDER_ID != ''">
+        	AND A.WORK_ORDER_ID = #{WORK_ORDER_ID, jdbcType=VARCHAR}
+        </if>
+	</select>
+	
+	<select id="get_longshortsn" resultType="camelMap" parameterType="java.util.HashMap">
+                 SELECT 
+                     FN_GET_POP_SHORTLONG('SHORTSN', #{DIVISION_CD, jdbcType=VARCHAR}, #{COMPANY_CD, jdbcType=VARCHAR}, #{ITEM_ID, jdbcType=VARCHAR}, #{PRODUCT_ORDER_ID, jdbcType=VARCHAR})  AS SHORTSN
+                     , FN_GET_POP_SHORTLONG('LONGSN', #{DIVISION_CD, jdbcType=VARCHAR}, #{COMPANY_CD, jdbcType=VARCHAR}, #{ITEM_ID, jdbcType=VARCHAR}, #{PRODUCT_ORDER_ID, jdbcType=VARCHAR})  AS LONGSN
+                  FROM DUAL
+	</select>
+
+	<!-- SN생성 -->
+	<select id="get_snmake" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+			SNMAKE(#{SNTYPE, jdbcType=VARCHAR}, #{P_WORK_ORDER_ID, jdbcType=VARCHAR}, #{P_CREATE_BY, jdbcType=VARCHAR})
+			AS SERIALNUMBER
+		FROM DUAL
+	</select>
+	
+	<!-- SN 리스트 -->
+	<select id="get_popgt_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    A.WORK_ORDER_RESULT_ID,
+		    A.CT,
+		    A.GOOD_QTY,
+		    A.BAD_QTY
+		FROM MOM_WORK_ORDER_RESULT A
+		WHERE A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		AND   A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		AND   A.WORK_ORDER_ID = #{WORK_ORDER_ID, jdbcType=VARCHAR}
+		AND   A.BADCODE = 'NODATA'
+		AND   A.PALLETID = 'NODATA'
+		AND   A.STATE NOT IN ('C')
+		ORDER BY A.CREATE_DATE DESC
+	</select>
+	
+	<!-- CT 리스트 -->
+	<select id="get_popct_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT GANBAN_ID AS CT
+		     , QTY
+		  FROM TU_GANBAN
+		 WHERE DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{COMPANY_CD, jdbcType=VARCHAR}
+		   AND WORK_ORDER_ID = #{WORK_ORDER_ID, jdbcType=VARCHAR}
+		   AND GANBAN_TYPE = 'CT'
+		   AND USE_YN = 'Y'
+		 ORDER BY CREATE_DATE DESC
+	</select>
+	
+	<!-- CT의 SN 리스트 -->
+	<select id="get_popctingt_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    A.WORK_ORDER_RESULT_ID,
+		    A.CT,
+		    A.GOOD_QTY,
+		    A.BAD_QTY
+		FROM MOM_WORK_ORDER_RESULT A
+		WHERE A.DIVISION_CD   = #{DIVISION_CD, jdbcType=VARCHAR}
+		AND   A.COMPANY_CD    = #{COMPANY_CD, jdbcType=VARCHAR}
+		AND   A.WORK_ORDER_ID = #{WORK_ORDER_ID, jdbcType=VARCHAR}
+		AND   A.CT            = #{CT, jdbcType=VARCHAR}
+		ORDER BY A.CREATE_DATE
+	</select>
+	
+	<!-- 불량 리스트 -->
+	<select id="get_popbadprod_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    A.WORK_ORDER_RESULT_ID,
+		    A.CT,
+		    A.GOOD_QTY,
+		    A.BAD_QTY
+		FROM MOM_WORK_ORDER_RESULT A
+		WHERE A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		AND   A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		AND   A.WORK_ORDER_ID = #{WORK_ORDER_ID, jdbcType=VARCHAR}
+		AND   A.BADCODE != 'NODATA'
+		ORDER BY A.CREATE_DATE DESC
+	</select>
+	
+	<!-- 라벨인쇄용 정보 Load -->
+	<select id="get_labelsninfo" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT B.GANBAN_ID                          AS GANBANID
+		     , B.GANBAN_ID                          AS SN
+             , E.CT
+		     , C.WORK_ORDER_ID                      AS WORKORDERID
+		     , D.ITEM_ID                            AS ITEMID
+		     , D.ITEM_NAME                          AS ITEMNAME
+		     , C.PLAN_QTY                           AS WOQTY
+		     , TO_CHAR(B.CREATE_DATE, 'YY.MM.DD') AS PRINTDATE
+		     , D.POP_GT_LABELID     
+		     , D.POP_CT_LABELID     
+		     , D.POP_PALLET_LABELID 
+		     , D.POP_GANBAN_LABELID	     
+		     , C.RESOURCE_CD
+		     , F.RESOURCE_NAME
+		     , C.PRODUCT_ORDER_ID
+		     , D.ITEM_GROUP_LARGE
+		     , D.ITEM_GROUP_MEDIUM
+		     , D.POP_DESTINATION          AS DESTINATION
+		     , SUM(B.QTY)                           AS GANBANGOODQTY
+		  FROM TU_GANBAN_TMP A
+		  LEFT OUTER JOIN TU_GANBAN B
+		    ON A.DIVISION_CD   = B.DIVISION_CD
+		   AND A.COMPANY_CD    = B.COMPANY_CD
+		   AND A.GANBAN_ID     = B.GANBAN_ID
+		  LEFT OUTER JOIN MOM_WORK_ORDER C
+		    ON B.DIVISION_CD   = C.DIVISION_CD
+		   AND B.COMPANY_CD    = C.COMPANY_CD
+		   AND B.WORK_ORDER_ID = C.WORK_ORDER_ID
+		  LEFT OUTER JOIN MOM_ITEM_DEFINITION D
+		    ON C.DIVISION_CD   = D.DIVISION_CD
+		   AND C.COMPANY_CD    = D.COMPANY_CD
+		   AND C.ITEM_ID       = D.ITEM_ID
+		  LEFT OUTER JOIN MOM_RESOURCE F
+		    ON C.DIVISION_CD   = F.DIVISION_CD
+		   AND C.COMPANY_CD    = F.COMPANY_CD
+		   AND C.RESOURCE_CD   = F.RESOURCE_CD
+             , MOM_WORK_ORDER_RESULT E
+		 WHERE A.DIVISION_CD   = E.DIVISION_CD
+		   AND A.COMPANY_CD    = E.COMPANY_CD
+           AND A.DIVISION_CD   = #{DIVISION_CD, jdbcType=VARCHAR}         
+		   AND A.COMPANY_CD    = #{COMPANY_CD, jdbcType=VARCHAR}
+		   AND E.WORK_ORDER_ID = #{WORK_ORDER_ID, jdbcType=VARCHAR}
+           <if test = "CT != '' and CT != null">
+		   AND A.GANBAN_ID     = #{CT, jdbcType=VARCHAR}
+           AND A.GANBAN_ID     = E.CT
+           </if>
+           <if test = "PT != '' and PT != null">
+           AND A.GANBAN_ID     = #{PT, jdbcType=VARCHAR}
+           AND A.GANBAN_ID     = E.PALLETID
+           </if>
+		 GROUP BY B.GANBAN_ID                        
+		     , B.GANBAN_ID
+             , E.CT
+		     , C.WORK_ORDER_ID
+		     , D.ITEM_ID
+		     , D.ITEM_NAME
+		     , C.PLAN_QTY
+		     , TO_CHAR(B.CREATE_DATE, 'YY.MM.DD')
+		     , D.POP_GT_LABELID
+		     , D.POP_CT_LABELID
+		     , D.POP_PALLET_LABELID
+		     , D.POP_GANBAN_LABELID
+		     , C.RESOURCE_CD
+		     , F.RESOURCE_NAME
+		     , C.PRODUCT_ORDER_ID
+		     , D.ITEM_GROUP_LARGE
+		     , D.ITEM_GROUP_MEDIUM
+		     , D.POP_DESTINATION   
+    </select>
+	
+	<!-- 간판라벨인쇄용 정보 Load -->
+	<select id="get_labelganbaninfo" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT
+			A.GANBAN_ID                  AS GANBANID
+		    , D.ITEM_ID                  AS ITEMID
+		    , D.ITEM_NAME                AS ITEMNAME
+		    , SUBSTR(D.SPECIFICATION, 1, 20) AS SPEC
+		    , D.ITEM_GROUP_CODE          AS MODELSPEC
+		    , A.QTY                      AS GANBANGOODQTY
+		    , D.POP_CT_QTY               AS CTQTY
+		    , TO_CHAR(A.CREATE_DATE, 'YYYY.MM.DD') AS PRINTDATE
+		    , ''                         AS SN
+		    , ''                         AS CT  
+		    , ''                         AS PALLETNUMBER
+		    , A.WORK_ORDER_ID            AS WO      
+		    , ''                         AS LINEID
+		    , A.LOCATION_CD              AS SLOCID
+		    , B.FACILITY_NAME            AS SLOCNAME
+		    , D.POP_EAN                  AS EAN
+		    , D.POP_UPC                  AS UPC
+		    , D.POP_DESTINATION          AS DESTINATION
+		    , D.POP_MADEBY               AS MADEBY
+		    , D.POP_GT_LABELID     
+		    , D.POP_CT_LABELID     
+		    , D.POP_PALLET_LABELID 
+		    , D.POP_GANBAN_LABELID
+		    , D.LABELDESC
+		    , D.LABELSPEC
+		FROM TU_GANBAN A,
+		     (
+		        SELECT
+		            DIVISION_CD
+		            , COMPANY_CD
+		            , FACILITY_CD
+		            , FACILITY_NAME
+		        FROM MOM_FACILITY
+		        WHERE DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		        AND   COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		        AND   FACILITY_CLASS_CD = 'AREA'
+		     ) B,
+		     MOM_ITEM_DEFINITION D
+		WHERE A.DIVISION_CD   = B.DIVISION_CD(+)
+		AND   A.COMPANY_CD    = B.COMPANY_CD(+) 
+		AND   A.DIVISION_CD   = D.DIVISION_CD
+		AND   A.COMPANY_CD    = D.COMPANY_CD
+		AND   A.ITEM_ID       = D.ITEM_ID
+		AND   A.LOCATION_CD   = B.FACILITY_CD(+)
+		AND   A.GANBAN_ID     = #{GANBAN_ID, jdbcType=VARCHAR}
+    </select>
+	
+	<select id="get_userline_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+			A.NAME || '(' || A.USER_ID || ')' AS NAME
+			, A.MANAGER_YN
+        FROM TU_USER A,
+             (
+                SELECT 
+                    CODE_ID
+                    , CODE_NAME
+                    , ATTRIBUTE1
+                FROM MOM_CODE
+                WHERE CODE_CLASS_ID = 'DEPT_CD'
+                  AND ATTRIBUTE1 = 'POP'
+             ) B
+        WHERE A.DEPT_CD = B.CODE_ID(+)
+        AND A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}         
+        AND A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+        ORDER BY A.NAME
+	</select>
+	
+	<!-- 기 구성된 파레트 리스트 -->
+	<select id="get_palletpack_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT
+			B.PRODUCT_ORDER_ID
+		    , A.PALLETID
+		    , B.ITEM_ID
+		    , A.WORK_ORDER_RESULT_ID AS SN
+		    , A.WORK_ORDER_ID
+		    , A.CT
+		    , A.GOOD_QTY
+		    , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS CREATEDATE
+		FROM MOM_WORK_ORDER_RESULT A,
+		     MOM_WORK_ORDER B
+		WHERE A.DIVISION_CD = B.DIVISION_CD
+		AND   A.COMPANY_CD  = B.COMPANY_CD
+		AND   A.WORK_ORDER_ID = B.WORK_ORDER_ID
+		AND   A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		AND   A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		AND   A.PALLETID    = #{PALLETID, jdbcType=VARCHAR}
+		ORDER BY A.UPDATE_DATE DESC
+	</select>
+	
+	<!-- 파레트 구성 전 정보 LOAD -->
+	<select id="get_palletpack" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT
+		    B.PRODUCT_ORDER_ID
+		    , A.PALLETID
+		    , B.ITEM_ID
+		    , A.WORK_ORDER_RESULT_ID AS SN
+		    , A.WORK_ORDER_ID
+		    , A.CT
+		FROM MOM_WORK_ORDER_RESULT A,
+		     MOM_WORK_ORDER B
+		WHERE A.DIVISION_CD = B.DIVISION_CD
+		AND   A.COMPANY_CD  = B.COMPANY_CD
+		AND   A.WORK_ORDER_ID = B.WORK_ORDER_ID
+		AND   A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		AND   A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		<if test = "SN != '' and SN != null">
+			AND   A.WORK_ORDER_RESULT_ID = #{SN, jdbcType=VARCHAR}
+		</if>
+		<if test = "CT != '' and CT != null">
+			AND   A.CT = #{CT, jdbcType=VARCHAR}
+		</if>
+	</select>
+	
+	<!-- DIVISION, COMPANY에 대하여 불량수량 사용여부 확인 -->
+	<select id="get_badqtyflag" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT NVL(defect_qty_use_flag, 'Y') AS BADQTYFLAG  
+            from   mom_parameter 
+            where  division_cd = #{DIVISION_CD, jdbcType=VARCHAR}
+            and    company_cd  = #{COMPANY_CD, jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 창고목록 -->
+	<select id="get_toFacility_list" resultType="camelMap" parameterType="java.util.HashMap">
+        SELECT A.FACILITY_CD AS CODE 
+             , A.FACILITY_NAME ||'('||A.FACILITY_CD ||')' AS BUTTONTEXT
+          FROM MOM_FACILITY A
+             , MOM_PARAMETER B
+         WHERE A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+           AND A.COMPANY_CD = #{COMPANY_CD, jdbcType=VARCHAR}
+           AND A.DIVISION_CD = B.DIVISION_CD
+           AND A.COMPANY_CD = B.COMPANY_CD           
+           AND NVL(A.USE_YN, 'Y') = 'Y'
+          <if test = "stockType == 'WO'">
+           AND A.FACILITY_TYPE IN ('FAC300', 'FAC500')
+          </if>
+          <if test = "stockType == 'MAT'">
+           AND A.FACILITY_TYPE IN ('FAC300', 'FAC400')
+          </if>
+          <if test = "stockType == 'SO'">
+           AND A.FACILITY_TYPE IN ('FAC300', 'FAC400')
+          </if>
+          <if test = "facilityClassCd != '' and facilityClassCd != null">
+           AND A.FACILITY_CLASS_CD = #{facilityClassCd, jdbcType=VARCHAR}
+          </if>
+         ORDER BY A.FACILITY_SEQ, FACILITY_NAME
+    </select>
+	
+	<select id="getComomCodeList" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.CODE_ID AS CODE
+		     , A.CODE_NAME AS NAME
+		     , A.CODE_VALUES AS VALUE
+		     , A.CODE_ID || '(' || A.CODE_NAME || ')' AS CODE_NAME
+		     , A.CODE_NAME ||'('||A.CODE_ID ||')' AS BUTTONTEXT
+		  FROM MOM_CODE A
+		 WHERE A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{COMPANY_CD, jdbcType=VARCHAR}
+		   AND A.CODE_CLASS_ID = #{CODECLASSID, jdbcType=VARCHAR} 
+		   AND NVL(A.USE_YN, 'Y') = 'Y'
+		   <if test = "ATTRIBUTE1 != null and ATTRIBUTE1 != ''">
+		    AND A.ATTRIBUTE1 = #{ATTRIBUTE1, jdbcType=VARCHAR}
+		   </if>
+           <if test = "ATTRIBUTE2 != null and ATTRIBUTE2 != ''">
+            AND A.ATTRIBUTE2 = #{ATTRIBUTE2, jdbcType=VARCHAR}
+           </if>
+           <if test = "codeId != null and codeId != ''">
+            AND A.CODE_ID = #{codeId, jdbcType=VARCHAR}
+           </if>
+		  ORDER BY A.UI_SEQUENCE
+	</select>
+	
+	<select id="get_itemStockMove_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.ITEM_ID
+		     , B.ITEM_NAME
+		     , B.SPECIFICATION
+		     , TO_CHAR(ROUND(A.CURRENT_QTY, 4), 'FM9,999,999,999,990.00') CURRENT_QTY
+		     , TO_CHAR(A.PREV_QTY, 'FM9,999,999,999,990.00') PREV_QTY
+		     , B.UNIT
+		     , A.LOCATION_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME (A.DIVISION_CD, A.COMPANY_CD, A.LOCATION_CD) FROM DUAL) AS LOCATION_OUT_NAME
+		     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME (B.DIVISION_CD, B.COMPANY_CD, B.OUT_LOCATION_ID) FROM DUAL) AS LOCATION_IN_NAME
+		     , A.ITEM_STOCK_ID
+		     , B.ITEM_TYPE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME ( B.DIVISION_CD
+		                                               , B.COMPANY_CD
+		                                               , 'ITEM_TYPE'
+		                                               , B.ITEM_TYPE)
+		          FROM DUAL) AS ITEM_TYPE_NAME
+		     , NVL(B.FREE_OFFER_FLAG, 'N')  AS FREE_OFFER_FLAG
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'FREE_OFFER', NVL(B.FREE_OFFER_FLAG, 'N')) 
+		        FROM   DUAL ) AS FREE_OFFER_NAME
+		     , A.DESCRIPTION
+		  FROM MOM_ITEM_STOCK A
+		     , MOM_ITEM_DEFINITION B
+		 WHERE A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{COMPANY_CD, jdbcType=VARCHAR}
+		   AND A.DIVISION_CD = B.DIVISION_CD(+)
+		   AND A.COMPANY_CD = B.COMPANY_CD(+)
+		   AND A.ITEM_ID = B.ITEM_ID(+)
+		   AND A.LOCATION_CD IN (SELECT FACILITY_CD FROM MOM_FACILITY 
+		                          WHERE DIVISION_CD = A.DIVISION_CD 
+		                            AND COMPANY_CD = A.COMPANY_CD 
+		                            AND FACILITY_TYPE IN ('FAC300','FAC500')) 
+		  <if test="FROM_LOC != null and FROM_LOC != ''">
+		   AND A.LOCATION_CD = #{FROM_LOC, jdbcType=VARCHAR}
+		  </if>
+		  <if test="(SN != null and SN != '') or (CT != null and CT != '') or (PALLETID != null and PALLETID != '')">
+		   AND B.ITEM_ID IN
+		   					(
+			   					SELECT 
+								    B.ITEM_ID
+								FROM MOM_WORK_ORDER_RESULT A,
+								     MOM_WORK_ORDER B
+								WHERE A.DIVISION_CD = B.DIVISION_CD
+								AND   A.COMPANY_CD  = B.COMPANY_CD
+								AND   A.WORK_ORDER_ID = B.WORK_ORDER_ID 
+								AND   A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+								AND A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+								<if test="SN != null and SN != ''">
+								AND A.WORK_ORDER_RESULT_ID = #{SN, jdbcType=VARCHAR}
+								</if>
+								<if test="CT != null and CT != ''">
+								AND A.CT = #{CT, jdbcType=VARCHAR}
+								</if>    
+								<if test="PALLETID != null and PALLETID != ''">
+								AND A.PALLETID = #{PALLETID, jdbcType=VARCHAR}
+								</if>
+		   					)
+		  </if>
+		  <if test="ITEM_ID != null and ITEM_ID != ''">
+		   AND B.ITEM_ID = #{ITEM_ID, jdbcType=VARCHAR}
+		  </if>
+		  <if test="ITEMTYPE != null and ITEMTYPE != ''">
+		   AND B.ITEM_TYPE = #{ITEMTYPE, jdbcType=VARCHAR}
+		  </if>
+		  AND A.CURRENT_QTY != 0
+		  ORDER BY A.ITEM_ID, A.LOCATION_CD
+	</select>
+	
+	<select id="get_ganbanStockMoveQTY" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT
+		    A.ITEM_ID
+		    , B.ITEM_NAME
+		    , A.GOOD_QTY AS SCANQTY 
+		FROM MOM_POP_GANBAN A,
+		     MOM_ITEM_DEFINITION B
+		WHERE  A.DIVISION_CD = B.DIVISION_CD
+		AND    A.COMPANY_CD  = B.COMPANY_CD
+		AND    A.ITEM_ID     = B.ITEM_ID
+		AND    A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		AND    A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		AND    A.GANBAN_ID   = #{GANBAN_ID, jdbcType=VARCHAR}
+		AND    A.SLOC        = #{SLOC, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="get_ganbanStockMoveInfo" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.GANBAN_ID
+		    , A.ITEM_ID
+		    , B.ITEM_NAME
+            , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'ITEM_TYPE', B.ITEM_TYPE) FROM DUAL ) AS ITEM_TYPE_NAME
+            , TO_CHAR(ROUND(C.CURRENT_QTY, 4), 'FM9,999,999,999,990.00')  AS CURRENT_QTY  
+		    , TO_CHAR(A.QTY, 'FM9,999,999,999,990.00') AS SCANQTY
+            , TO_CHAR(A.QTY, 'FM9,999,999,999,990.00') AS EDITQTY
+            , B.UNIT
+            , B.SPECIFICATION
+            , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'FREE_OFFER', NVL(B.FREE_OFFER_FLAG, 'N')) FROM DUAL ) AS FREE_OFFER_NAME
+            , A.DESCRIPTION
+            , A.BIN_ID
+		FROM TU_GANBAN A,
+		     MOM_ITEM_DEFINITION B,
+             MOM_ITEM_STOCK C             
+		WHERE  A.DIVISION_CD = B.DIVISION_CD
+		AND    A.COMPANY_CD  = B.COMPANY_CD
+		AND    A.ITEM_ID     = B.ITEM_ID
+        AND    A.DIVISION_CD = C.DIVISION_CD
+		AND    A.COMPANY_CD  = C.COMPANY_CD
+        AND    A.LOCATION_CD  = C.LOCATION_CD
+		AND    A.ITEM_ID     = C.ITEM_ID
+		AND    A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		AND    A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		AND    A.GANBAN_ID   = #{GANBAN_ID, jdbcType=VARCHAR}
+		AND    A.LOCATION_CD = #{LOCATION_CD, jdbcType=VARCHAR}
+		AND    A.USE_YN = 'Y'
+	</select>
+	
+	<select id="get_ganban2item" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT
+		    A.ITEM_ID
+		FROM MOM_POP_GANBAN A
+		WHERE  A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		AND    A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		AND    A.GANBAN_ID   = #{GANBAN_ID, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="get_ct2item" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT
+		    B.ITEM_ID
+		FROM MOM_WORK_ORDER_RESULT A,
+		     MOM_WORK_ORDER B
+		WHERE  A.DIVISION_CD = A.DIVISION_CD
+		AND    A.COMPANY_CD  = B.COMPANY_CD
+		AND    A.WORK_ORDER_ID = B.WORK_ORDER_ID
+		AND    A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		AND    A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		AND    #{SN, jdbcType=VARCHAR}   IN (A.WORK_ORDER_RESULT_ID, A.CT, A.PALLETID)
+	</select>
+	
+	<!-- SN, CT, PALLET 품명, 수량 가져오기 ==> 공정이동 사용 -->
+	<select id="get_itemStockMove_snctptQTY" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    B.ITEM_ID
+		    , C.ITEM_NAME
+		    , SUM(A.GOOD_QTY) AS SCANQTY 
+		FROM MOM_WORK_ORDER_RESULT A,
+		     MOM_WORK_ORDER B,
+			 MOM_ITEM_DEFINITION C
+		WHERE A.DIVISION_CD = B.DIVISION_CD
+		AND   A.COMPANY_CD  = B.COMPANY_CD
+		AND   A.DIVISION_CD = C.DIVISION_CD
+		AND   A.COMPANY_CD  = C.COMPANY_CD
+		AND   A.WORK_ORDER_ID = B.WORK_ORDER_ID
+		AND   B.ITEM_ID     = C.ITEM_ID
+		AND   A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		AND   A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		<if test="SN != null and SN != ''">
+		AND   A.WORK_ORDER_RESULT_ID = #{SN, jdbcType=VARCHAR}
+		</if> 
+		<if test="CT != null and CT != ''">
+		AND   A.CT = #{CT, jdbcType=VARCHAR}
+		</if> 
+		<if test="PALLETID != null and PALLETID != ''">
+		AND   A.PALLETID = #{PALLETID, jdbcType=VARCHAR}
+		</if> 
+		<if test="FROM_LOC != null and FROM_LOC != ''">
+		AND   A.SLOC = #{FROM_LOC, jdbcType=VARCHAR}
+		</if>
+		GROUP BY B.ITEM_ID, C.ITEM_NAME
+	</select>
+	
+	<!-- GANBAN 품명, 수량 가져오기 ==> 재고이동 사용 -->
+	<select id="get_itemStockMove_ganbanQTY" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    A.ITEM_ID
+		    , B.ITEM_NAME
+		    , SUM(A.GOOD_QTY) AS SCANQTY 
+		FROM MOM_POP_GANBAN A,
+		     MOM_ITEM_DEFINITION B
+		WHERE A.DIVISION_CD = B.DIVISION_CD
+		AND   A.COMPANY_CD  = B.COMPANY_CD
+		AND   A.ITEM_ID     = B.ITEM_ID(+)
+		AND   A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		AND   A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		AND   A.GANBAN_ID   = #{GANBAN_ID, jdbcType=VARCHAR}
+	    AND   A.USE_YN      = 'Y'
+		GROUP BY A.ITEM_ID, B.ITEM_NAME
+	</select>
+	
+	<!-- 간판발행 HEAD 정보 -->
+	<select id="getGanbanHeadPackList" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    '-' AS DEPARTURE_GROUP_ID
+		    , '-' AS VENDOR_NAME
+		    , A.WORK_ORDER_ID
+		    , A.PALLETID
+		    , A.CT
+		    , A.SLOC
+		    , D.FACILITY_NAME AS SLOCNAME
+		    , B.ITEM_ID
+		    , C.ITEM_NAME
+		    , A.GOOD_QTY
+		    , C.POP_CT_QTY
+		    , DECODE(C.POP_GANBAN_LABELID, '', 'NONE', C.POP_GANBAN_LABELID) POP_GANBAN_LABELID
+		FROM MOM_WORK_ORDER_RESULT A,
+		     MOM_WORK_ORDER B,
+		     MOM_ITEM_DEFINITION C,
+		     (
+                SELECT
+                    DIVISION_CD
+                    , COMPANY_CD
+                    , FACILITY_CD
+                    , FACILITY_NAME
+                FROM MOM_FACILITY
+                WHERE DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+                AND   COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+                AND   FACILITY_CLASS_CD = 'AREA'
+             ) D
+		WHERE A.DIVISION_CD = B.DIVISION_CD
+		AND   A.COMPANY_CD  = B.COMPANY_CD
+		AND   A.DIVISION_CD = C.DIVISION_CD
+		AND   A.COMPANY_CD  = C.COMPANY_CD
+		AND   A.DIVISION_CD = D.DIVISION_CD
+        AND   A.COMPANY_CD  = D.COMPANY_CD
+		AND   A.WORK_ORDER_ID = B.WORK_ORDER_ID
+		AND   B.ITEM_ID       = C.ITEM_ID
+		AND   A.SLOC          = D.FACILITY_CD
+		AND   A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		AND   A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		<if test = "PALLETID != null and PALLETID != ''">
+		AND   A.PALLETID    = #{PALLETID, jdbcType=VARCHAR}
+		</if>
+		<if test = "CT != null and CT != ''">
+		AND   A.CT    = #{CT, jdbcType=VARCHAR}
+		</if>
+	</select>
+	
+	<!-- 대차 간판발행 HEAD 정보 -->
+	<select id="getGanbanHeadPackmove" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+            '-' AS DEPARTURE_GROUP_ID
+            , '-' AS VENDOR_NAME
+            , A.WORK_ORDER_ID
+            , A.PALLETID
+            , A.CT
+            , A.SLOC
+            , D.FACILITY_NAME AS SLOCNAME
+            , B.ITEM_ID
+            , C.ITEM_NAME
+            , A.GOOD_QTY
+            , C.POP_CT_QTY
+            , DECODE(C.POP_GANBAN_LABELID, '', 'NONE', C.POP_GANBAN_LABELID) POP_GANBAN_LABELID
+            , TO_CHAR(ROUND(E.CURRENT_QTY, 4), 'FM9,999,999,999,990.00') CURRENT_QTY
+        FROM MOM_WORK_ORDER_RESULT A,
+             MOM_WORK_ORDER B,
+             MOM_ITEM_DEFINITION C,
+             (
+                SELECT
+                    DIVISION_CD
+                    , COMPANY_CD
+                    , FACILITY_CD
+                    , FACILITY_NAME
+                FROM MOM_FACILITY
+                WHERE DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+                AND   COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+                AND   FACILITY_CLASS_CD = 'AREA'
+             ) D,
+             MOM_ITEM_STOCK E
+        WHERE A.DIVISION_CD = B.DIVISION_CD
+        AND   A.COMPANY_CD  = B.COMPANY_CD
+        AND   A.DIVISION_CD = C.DIVISION_CD
+        AND   A.COMPANY_CD  = C.COMPANY_CD
+        AND   A.DIVISION_CD = D.DIVISION_CD
+        AND   A.COMPANY_CD  = D.COMPANY_CD
+        AND   A.DIVISION_CD = E.DIVISION_CD
+        AND   A.COMPANY_CD  = E.COMPANY_CD
+        AND   A.WORK_ORDER_ID = B.WORK_ORDER_ID
+        AND   B.ITEM_ID       = C.ITEM_ID
+        AND   A.SLOC          = D.FACILITY_CD
+        AND   B.ITEM_ID       = E.ITEM_ID
+        AND   A.SLOC          = E.LOCATION_CD
+        AND   A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+        AND   A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		AND   A.SLOC    = #{SLOC, jdbcType=VARCHAR}
+		AND   A.CT      = #{CT, jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 간판발행 HEAD 정보 -->
+	<select id="getGanbanHeadGanbanList" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    A.DEPARTURE_GROUP_ID
+		    , B.VENDOR_NAME
+		    , A.WORK_ORDER_ID
+		    , A.PALLETID
+		    , A.CT
+		    , A.FROM_SLOC
+		    , A.SLOC
+		    , D.FACILITY_NAME AS SLOCNAME
+		    , TO_CHAR(A.MOVE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS MOVE_DATE
+		    , A.MOVE_BY
+		    , A.ITEM_ID
+		    , C.ITEM_NAME
+		    , A.GOOD_QTY
+		    , C.POP_CT_QTY
+		    , DECODE(C.POP_GANBAN_LABELID, '', 'NONE', C.POP_GANBAN_LABELID) POP_GANBAN_LABELID 
+		FROM MOM_POP_GANBAN A,
+		     MOM_VENDOR B,
+		     MOM_ITEM_DEFINITION C,
+		     (
+                SELECT
+                    DIVISION_CD
+                    , COMPANY_CD
+                    , FACILITY_CD
+                    , FACILITY_NAME
+                FROM MOM_FACILITY
+                WHERE DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+                AND   COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+                AND   FACILITY_CLASS_CD = 'AREA'
+             ) D
+		WHERE A.DIVISION_CD = B.DIVISION_CD(+)
+		AND   A.COMPANY_CD  = B.COMPANY_CD(+)
+		AND   A.DIVISION_CD = C.DIVISION_CD
+		AND   A.COMPANY_CD  = C.COMPANY_CD
+		AND   A.DIVISION_CD = D.DIVISION_CD
+        AND   A.COMPANY_CD  = D.COMPANY_CD
+		AND   A.VENDOR_CD   = B.VENDOR_CD(+)
+		AND   A.ITEM_ID     = C.ITEM_ID
+		AND   A.SLOC          = D.FACILITY_CD
+		AND   A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		AND   A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		AND   A.GANBAN_ID   = #{GANBAN_ID, jdbcType=VARCHAR}
+	</select>
+	
+	
+	<!-- 간판발행 HEAD 정보 -->
+	<select id="getGanbanHeadGanbanList_new" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    A.DEPARTURE_GROUP_ID
+		    , A.WORK_ORDER_ID
+		    , A.PREV_LOCATION_CD FROM_SLOC
+		    , A.LOCATION_CD SLOC
+		    , D.FACILITY_NAME AS SLOCNAME
+		    , TO_CHAR(A.MOVE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS MOVE_DATE
+		    , A.MOVE_BY
+		    , A.ITEM_ID
+		    , C.ITEM_NAME
+		    , A.QTY AS GOOD_QTY
+		    , NVL(C.POP_CT_QTY,0) AS POP_CT_QTY
+		    , DECODE(C.POP_GANBAN_LABELID, '', 'NONE', C.POP_GANBAN_LABELID) POP_GANBAN_LABELID 
+		FROM TU_GANBAN A,
+		     MOM_ITEM_DEFINITION C,
+		     (
+                SELECT
+                    DIVISION_CD
+                    , COMPANY_CD
+                    , FACILITY_CD
+                    , FACILITY_NAME
+                FROM MOM_FACILITY
+                WHERE DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+                AND   COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+                AND   FACILITY_CLASS_CD = 'AREA'
+             ) D
+		WHERE A.DIVISION_CD = C.DIVISION_CD
+		AND   A.COMPANY_CD  = C.COMPANY_CD
+		AND   A.DIVISION_CD = D.DIVISION_CD
+        AND   A.COMPANY_CD  = D.COMPANY_CD
+		AND   A.ITEM_ID     = C.ITEM_ID
+		AND   A.LOCATION_CD = D.FACILITY_CD
+		AND   A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		AND   A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		AND   A.GANBAN_ID   = #{GANBAN_ID, jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 간판발행 HEAD 정보 -->
+	<select id="getCTHeadCTList_new" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT DISTINCT B.PRODUCT_ORDER_ID
+		     , C.WORK_ORDER_ID
+		     , A.LOCATION_CD AS SLOC
+		     , E.FACILITY_NAME AS SLOCNAME
+		     , A.PREV_LOCATION_CD AS FROM_SLOC
+		     , F.FACILITY_NAME AS FROM_SLOCNAME
+		     , TO_CHAR(A.MOVE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS MOVE_DATE
+		     , A.MOVE_BY
+		     , A.ITEM_ID
+		     , D.ITEM_NAME
+		     , NVL(D.POP_CT_QTY,0) AS POP_CT_QTY
+		     , A.QTY AS GOOD_QTY
+		     , DECODE(D.POP_CT_LABELID, '', 'NONE', D.POP_CT_LABELID) POP_CT_LABELID 
+		  FROM TU_GANBAN A
+		  LEFT OUTER JOIN MOM_WORK_ORDER_RESULT B
+		    ON A.DIVISION_CD      = B.DIVISION_CD
+		   AND A.COMPANY_CD       = B.COMPANY_CD
+		   <if test = "LOTTYPE == 'BUTTON'">
+		   AND B.CT               IN (A.GANBAN_ID, A.ROOT_GANBAN_ID)
+		   </if>
+		   <if test = "LOTTYPE == 'SN'">
+		   AND A.GANBAN_ID        = B.WORK_ORDER_RESULT_ID
+		   </if>
+		   <if test = "LOTTYPE == null and LOTTYPE == ''">
+		   AND A.GANBAN_ID        = B.CT
+		   </if>
+		  LEFT OUTER JOIN MOM_WORK_ORDER C
+		    ON B.DIVISION_CD      = C.DIVISION_CD
+		   AND B.COMPANY_CD       = C.COMPANY_CD
+		   AND B.WORK_ORDER_ID    = C.WORK_ORDER_ID
+		  LEFT OUTER JOIN MOM_ITEM_DEFINITION D
+		    ON C.DIVISION_CD      = D.DIVISION_CD
+		   AND C.COMPANY_CD       = D.COMPANY_CD
+		   AND C.ITEM_ID          = D.ITEM_ID
+		  LEFT OUTER JOIN MOM_FACILITY E
+		    ON A.DIVISION_CD      = E.DIVISION_CD
+		   AND A.COMPANY_CD       = E.COMPANY_CD
+		   AND A.LOCATION_CD      = E.FACILITY_CD
+		  LEFT OUTER JOIN MOM_FACILITY F
+		    ON A.DIVISION_CD      = F.DIVISION_CD
+		   AND A.COMPANY_CD       = F.COMPANY_CD
+		   AND A.PREV_LOCATION_CD = F.FACILITY_CD
+		 WHERE A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		   AND A.GANBAN_ID   = #{CT, jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 간판발행 HEAD 정보 -->
+	<select id="getGanbanHeadDepatureList" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT
+		    A.MATERIAL_DEPARTURE_ID AS DEPARTUREGROUPID
+		    , B.MATERIAL_ORDER_ID
+		    , B.VENDOR_CD
+		    , C.VENDOR_NAME
+		    , '-' WORK_ORDER_ID
+		    , '-' AS PALLETID
+		    , '-' AS CT
+		    , '-' AS FROM_SLOC
+		    , '-' AS SLOC
+		    , '-' AS SLOCNAME
+		    , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS MOVE_DATE
+		    , A.CREATE_BY AS MOVE_BY
+		    , B.ITEM_ID
+		    , D.ITEM_NAME
+		    , A.DEPARTURE_QTY AS GOOD_QTY
+		    , NVL(D.POP_CT_QTY, A.DEPARTURE_QTY) AS POP_CT_QTY
+		    , DECODE(D.POP_GANBAN_LABELID, '', 'NONE', D.POP_GANBAN_LABELID) POP_GANBAN_LABELID
+		FROM MOM_MATERIAL_DEPARTURE A,
+		     MOM_MATERIAL_ORDER B,
+		     MOM_VENDOR C,
+		     MOM_ITEM_DEFINITION D
+		WHERE A.DIVISION_CD = B.DIVISION_CD
+		AND   A.COMPANY_CD  = B.COMPANY_CD
+		AND   A.DIVISION_CD = C.DIVISION_CD
+		AND   A.COMPANY_CD  = C.COMPANY_CD
+		AND   A.DIVISION_CD = D.DIVISION_CD
+		AND   A.COMPANY_CD  = D.COMPANY_CD
+		AND   B.ITEM_ID     = D.ITEM_ID
+		AND   B.VENDOR_CD   = C.VENDOR_CD
+		AND   A.MATERIAL_ORDER_ID = B.MATERIAL_ORDER_ID(+)
+		AND   A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		AND   A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR} 
+		AND   A.MATERIAL_DEPARTURE_ID = #{MATERIAL_DEPARTURE_ID, jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 간판발행 Body 정보 -->
+	<select id="getGanbanBodyList" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		   A.ITEM_ID
+		   , A.GANBAN_ID
+		   , A.DEPARTURE_GROUP_ID
+		   , A.GANBAN_TYPE
+		   , A.WORK_ORDER_ID
+		   , A.PREV_LOCATION_CD
+		   , A.LOCATION_CD
+		   , TO_CHAR(A.MOVE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS MOVE_DATE
+		   , A.MOVE_BY
+		   , A.QTY
+		   , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS CREATE_DATE
+		   , A.CREATE_BY
+		   , B.NAME
+		   , A.USE_YN
+		FROM TU_GANBAN A,
+		     TU_USER B
+		WHERE A.DIVISION_CD = B.DIVISION_CD
+		AND   A.COMPANY_CD  = B.COMPANY_CD
+		AND   A.CREATE_BY = B.USER_ID
+		AND   A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		AND   A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		<if test = "LOCATION_CD != null and LOCATION_CD != ''">
+		AND   A.LOCATION_CD    = #{LOCATION_CD, jdbcType=VARCHAR}
+		</if>
+		<if test = "GANBAN_TYPE != null and GANBAN_TYPE != ''">
+		AND   A.GANBAN_TYPE    = #{GANBAN_TYPE, jdbcType=VARCHAR}
+		</if>
+		<if test = "WORK_ORDER_ID != null and WORK_ORDER_ID != ''">
+		AND   A.WORK_ORDER_ID    = #{WORK_ORDER_ID, jdbcType=VARCHAR}
+		</if>
+		<if test = "GANBAN_ID != null and GANBAN_ID != ''">
+		AND   #{GANBAN_ID, jdbcType=VARCHAR} IN (A.GANBAN_ID, A.PARENT_GANBAN_ID)
+		</if>
+		<if test = "ITEM_ID != null and ITEM_ID != ''">
+		AND   A.ITEM_ID    = #{ITEM_ID, jdbcType=VARCHAR}
+		</if>
+		<!-- 자재불출 간판 스캔 -->
+		<if test = "GI_GANBAN_ID != null and GI_GANBAN_ID != ''">
+		AND   #{GI_GANBAN_ID, jdbcType=VARCHAR} IN (A.GANBAN_ID)
+		</if>
+		<if test = "DEPARTURE_GROUP_ID != null and DEPARTURE_GROUP_ID != ''">
+		AND   A.DEPARTURE_GROUP_ID    = #{DEPARTURE_GROUP_ID, jdbcType=VARCHAR}
+		</if>
+		<if test = "dateFlag != null and dateFlag != ''">
+		AND   A.CREATE_DATE  BETWEEN SYSDATE - 1 AND SYSDATE
+		</if>
+		<if test = "USE_YN != null and USE_YN != ''">
+		AND   A.USE_YN    = #{USE_YN, jdbcType=VARCHAR}
+		</if>
+		ORDER BY A.GANBAN_ID DESC
+	</select>
+	
+	<!-- CT이동시 간판라벨 발행 여부 확인 -->
+	<select id="get_ctganbancheck" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    COUNT(1) AS CTCOUNT
+		FROM  MOM_POP_GANBAN A
+		WHERE A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		AND   A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		AND   A.CT = #{CT, jdbcType=VARCHAR}
+		AND   A.USE_YN = 'Y'
+	</select>
+	
+	<!-- 재고이동/공정이동 KEY -->
+	<select id="getMoveseq" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    'M' || TO33NUMBER(TO_CHAR(SYSDATE, 'YY')) || TO33NUMBER(TO_CHAR(SYSDATE, 'MM')) || TO33NUMBER(TO_CHAR(SYSDATE, 'DD')) || LPAD(TO33NUMBER(S_MOVE_SEQ.NEXTVAL), 4, '0')
+		    AS MOVESEQ
+		FROM DUAL
+	</select>
+	
+	<!-- 이동처리 처리중 여부 -->
+	<select id="getMoveseqCheck" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    COUNT(1) 
+		    AS MOVECNT 
+		FROM MOM_POP_ITEM_MOVE_TMP A 
+		WHERE A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		AND   A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		AND   A.TRANSFER_FLAG = 'WAIT'
+	</select>
+	
+	<!-- 자재입고 처리중 여부 -->
+	<select id="getGRseqCheck" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    COUNT(1) 
+		    AS MOVECNT 
+		FROM MOM_POP_MAT_GOODS_RECEIPT_TMP A 
+		WHERE A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		AND   A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		AND   A.TRANSFER_FLAG = 'WAIT'
+	</select>
+	
+	<!-- label 발행 처리중 여부 -->
+	<select id="getGanbanCheck" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    COUNT(1) 
+		    AS LABELCNT 
+		FROM TU_GANBAN_TMP A 
+		WHERE A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		AND   A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		AND   A.IP_ADDRESS  = #{IP_ADDRESS, jdbcType=VARCHAR}
+		AND   A.PRINT_FLAG  = 'WAIT'
+	</select>
+	
+	<!-- 재고이동/공정이동 KEY -->
+	<select id="getGanbanseq" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    'M' || TO33NUMBER(TO_CHAR(SYSDATE, 'YY')) || TO33NUMBER(TO_CHAR(SYSDATE, 'MM')) || TO33NUMBER(TO_CHAR(SYSDATE, 'DD')) || LPAD(TO33NUMBER(S_MOVE_SEQ.NEXTVAL), 4, '0')
+		    AS GANBANSEQ
+		FROM DUAL
+	</select>
+	
+	<select id="get_nonPalletChk" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT COUNT(WORK_ORDER_RESULT_ID) AS CNT
+  		  FROM MOM_WORK_ORDER_RESULT
+		 WHERE DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		   AND COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		   AND WORK_ORDER_ID = #{WORK_ORDER_ID, jdbcType=VARCHAR}
+		   AND CT != 'NODATA'
+		   AND PALLETID = 'NODATA'
+	</select>
+	
+	<!-- 간판 라벨 삭제 -->
+	<insert id="deleteGanbanTmp" statementType="CALLABLE">
+        CALL SP_MOM_POP.P_GANBAN_TMP_DELETE (
+           #{p_err_code,        mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg,       mode=OUT, jdbcType=VARCHAR}
+           , #{p_runCount,      mode=OUT, jdbcType=VARCHAR}
+           , #{P_DIVISION_CD,   mode=IN,  jdbcType=VARCHAR}
+           , #{P_COMPANY_CD,    mode=IN,  jdbcType=VARCHAR}
+           , #{P_LABEL_ID,      mode=IN,  jdbcType=VARCHAR}
+        )
+    </insert>	
+	
+	<!-- 불출 처리중 여부 -->
+	<select id="getGIseqCheck" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    COUNT(1) 
+		    AS MOVECNT 
+		FROM MOM_POP_MATERIAL_REQUEST_TMP A 
+		WHERE A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		AND   A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		AND   A.TRANSFER_FLAG = 'WAIT'
+	</select>
+	
+	<select id="chk_material_departure" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.FACILITY_CD, A.FACILITY_NAME, C.DEPARTURE_STATE
+		  FROM MOM_FACILITY A
+		     , MOM_MATERIAL_ORDER B
+		     , MOM_MATERIAL_DEPARTURE C
+		 WHERE A.DIVISION_CD = B.DIVISION_CD
+		   AND A.COMPANY_CD = B.COMPANY_CD
+		   AND A.FACILITY_CD = B.LOCATION_CD
+		   AND B.DIVISION_CD = C.DIVISION_CD
+		   AND B.COMPANY_CD = C.COMPANY_CD
+		   AND B.MATERIAL_ORDER_ID = C.MATERIAL_ORDER_ID
+		   AND A.DIVISION_CD = #{P_DIVISION_CD, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{P_COMPANY_CD, jdbcType=VARCHAR}
+		   AND C.DEPARTURE_GROUP_ID = #{P_DEPARTURE_ID, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="get_materialInput" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT '0' AS SCANQTY
+		     , A.MATERIAL_ORDER_ID
+		     , A.MATERIAL_DEPARTURE_ID
+		     , A.ORDER_GROUP_ID
+		     , A.VENDOR_CD
+		     
+		     ,'N'		AS CHKYN  
+		     , (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME( A.DIVISION_CD
+		                                                , A.COMPANY_CD
+		                                                , A.VENDOR_CD) 
+		        FROM  DUAL)                             AS VENDOR_NAME  
+		     ,  A.DEPARTURE_VENDOR_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME( A.DIVISION_CD
+		                                                , A.COMPANY_CD
+		                                                , A.DEPARTURE_VENDOR_CD )
+		        FROM  DUAL)     AS DEPARTURE_VENDOR_NAME 
+		     , A.ITEM_ID
+		     , MID.ITEM_NAME
+		     , MID.SPECIFICATION
+		     , MID.UNIT  
+		     , TO_CHAR(ROUND(NVL(MID.POP_CT_QTY, A.DEPARTURE_QTY), 4), 'FM9,999,999,999,990.00') AS POPCTQTY
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( MID.DIVISION_CD
+		                                              , MID.COMPANY_CD
+		                                              , 'ITEM_UNIT'
+		                                              , MID.UNIT )
+		        FROM DUAL)                            AS UNIT_NAME 
+		     , A.IQC_FLAG     
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              , 'USE_FLAG'
+		                                              , A.IQC_FLAG )
+		        FROM DUAL)                            AS IQC_FLAG_NAME
+		     , TO_CHAR(ROUND(A.ORDER_QTY, 4), 'FM9,999,999,999,990.00') ORDER_QTY  
+		     , TO_CHAR(ROUND(A.DEPARTURE_QTY, 4), 'FM9,999,999,999,990.00') DEPARTURE_QTY
+		     , CASE WHEN A.ORDER_REMAIN_QTY = 0 THEN '0'
+                    ELSE TO_CHAR(ROUND(A.ORDER_REMAIN_QTY, 4), 'FM9,999,999,999,990.00') 
+                END AS ORDER_REMAIN_QTY
+		     , A.DELIVERY_DATE              
+		     , A.ORDER_DATE    
+		     , A.DEPARTURE_DATE             
+		     , A.DEPARTURE_STATE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              , 'MATERIAL_DEPARTURE_STATE'
+		                                              , A.DEPARTURE_STATE )
+		        FROM DUAL)                            AS DEPARTURE_STATE_NAME    
+		     , A.ORDER_STATE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              , 'MATERIAL_ORDER_STATE'
+		                                              , A.ORDER_STATE )
+		        FROM DUAL)                            AS ORDER_STATE_NAME    
+		     , A.ORDER_TYPE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              ,'SYSTEM_FLAG'
+		                                              , A.ORDER_TYPE )
+		        FROM DUAL)                            AS ORDER_TYPE_NAME    
+		     , A.CREATE_DATE 
+		     , A.CREATE_BY
+		     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( A .DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              , A.CREATE_BY) 
+		        FROM  DUAL)                            AS CREATE_BY_NAME  
+		     , A.UPDATE_DATE        
+		     , A.UPDATE_BY 
+		     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              , A.UPDATE_BY) 
+		        FROM  DUAL)                            AS UPDATE_BY_NAME
+		     , A.LOCATION_CD                          AS LOCATION_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME( A.DIVISION_CD
+		                                                  , A.COMPANY_CD
+		                                                  , A.LOCATION_CD)
+		        FROM   DUAL )     AS LOCATION_NAME 
+		     , A.MARKET_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              , 'MARKET_CODE'
+		                                              , A.MARKET_CD )
+		        FROM DUAL)                            AS MARKET_NAME       
+		     , A.CURRENCY_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              , 'CURRENCY_CODE'
+		                                              , A.CURRENCY_CD )
+		        FROM DUAL)                            AS CURRENCY_NAME
+		     , A.ORDER_SEQ
+		     , A.VENDOR_LOT
+		     , (SELECT MOM_COMMON_PKG.FN_GET_MATERIAL_PRICE( A.DIVISION_CD
+		                                                   , A.COMPANY_CD
+		                                                   , A.VENDOR_CD
+		                                                   , A.ITEM_ID
+		                                                   , A.MARKET_CD
+		                                                   , A.CURRENCY_CD
+		                                                   , TRUNC(SYSDATE) )
+		        FROM DUAL)                            AS UNIT_PRICE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CURRENT_EXCHANGE_RATE( A.DIVISION_CD
+		                                                          , A.COMPANY_CD
+		                                                          , A.CURRENCY_CD
+		                                                          , TRUNC(SYSDATE) )
+		        FROM DUAL)                            AS EX_UNIT_PRICE  
+		     , A.DEPARTURE_FLAG   
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              , 'USE_FLAG'
+		                                              , A.DEPARTURE_FLAG )
+		        FROM DUAL)                            AS DEPARTURE_FLAG_NAME  
+		     , MID.ITEM_TYPE 
+		     ,(SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              , 'ITEM_TYPE'
+		                                              , MID.ITEM_TYPE  )
+		        FROM DUAL)                            AS ITEM_TYPE_NAME   
+		     , CASE WHEN A.IQC_FLAG = 'N' AND A.DEPARTURE_FLAG = 'N' THEN  A.ORDER_REMAIN_QTY
+		       ELSE A.DEPARTURE_QTY
+		       END    AS  INPUT_QTY
+		     , MID.FREE_OFFER_FLAG
+	         , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (A.DIVISION_CD
+	                                                  , A.COMPANY_CD
+	                                                  , 'FREE_OFFER_FLAG'
+	                                                  , MID.FREE_OFFER_FLAG)
+	            FROM DUAL)							  AS FREE_OFFER_FLAG_NAME
+		     , '' AS DESCRIPTION
+		     , A.ORDER_FLAG
+		     , A.ORDER_FLAG_NAME
+		     , NVL(A.CONVERSION_UNIT_QTY, 1) AS CONVERSION_UNIT_QTY
+		     , NVL(MID.CONVERSION_UNIT_QTY, 1) AS ORIGIN_CONVERSION_UNIT_QTY
+             , MID.CONVERSION_UNIT
+             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (A.DIVISION_CD
+	                                                  , A.COMPANY_CD
+	                                                  , 'ITEM_UNIT'
+	                                                  , MID.CONVERSION_UNIT)
+	            FROM DUAL)							  AS CONVERSION_UNIT
+	         , A.TRANSACTION_SEQ
+	         , (SELECT CASE WHEN COUNT(1) = 0 THEN 'N'
+	                        ELSE 'Y' END
+	              FROM TU_GANBAN
+	             WHERE DEPARTURE_GROUP_ID = A.MATERIAL_DEPARTURE_ID)
+	             AS GANBANYN
+	         , CASE WHEN MID.POP_GANBAN_LABELID IS NULL OR MID.POP_GANBAN_LABELID = 'NONE' THEN 'N' ELSE 'Y' END AS GANBANLABELYN 
+		FROM   (SELECT MO.DIVISION_CD
+		             , MO.COMPANY_CD
+		             , MO.MATERIAL_ORDER_ID
+		             , MD.MATERIAL_DEPARTURE_ID
+		             , MO.ORDER_GROUP_ID
+		             , MO.VENDOR_CD
+		             , NVL(MO.DEPARTURE_VENDOR_CD, MO.VENDOR_CD) AS DEPARTURE_VENDOR_CD
+		             , MO.ITEM_ID
+		             , MO.IQC_FLAG     
+		             , MO.ORDER_QTY
+		             , MD.DEPARTURE_QTY
+		             , MO.ORDER_QTY - NVL(MO.CANCEL_QTY, 0) - DECODE(NVL(MD.DEPARTURE_QTY, 0), 0, MO.CLOSED_QTY, MD.DEPARTURE_QTY) AS  ORDER_REMAIN_QTY
+		             , TO_CHAR(MO.DELIVERY_DATE  , 'YYYY-MM-DD')   AS DELIVERY_DATE              
+		             , TO_CHAR(MO.ORDER_DATE , 'YYYY-MM-DD')       AS ORDER_DATE    
+		             , TO_CHAR(MD.DEPARTURE_DATE , 'YYYY-MM-DD')   AS DEPARTURE_DATE             
+		             , MD.DEPARTURE_STATE
+		             , MO.ORDER_STATE
+		             , MO.ORDER_TYPE
+		             , TO_CHAR(MO.CREATE_DATE  , 'YYYY-MM-DD')   AS CREATE_DATE 
+		             , MO.CREATE_BY
+		             , TO_CHAR(MO.UPDATE_DATE   , 'YYYY-MM-DD') AS UPDATE_DATE        
+		             , MO.UPDATE_BY 
+		             , MO.LOCATION_CD                          AS LOCATION_CD
+		             , MO.MARKET_CD
+		             , MO.CURRENCY_CD
+		             , MO.ORDER_SEQ
+		             , MD.VENDOR_LOT
+		             , MD.DEPARTURE_GROUP_ID
+		             , MO.DEPARTURE_FLAG
+		             , MO.ORDER_FLAG
+	                 , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (MO.DIVISION_CD
+	                                                          , MO.COMPANY_CD
+	                                                          , 'ORDER_FLAG'
+	                                                          , MO.ORDER_FLAG)
+	                      FROM DUAL)                            AS ORDER_FLAG_NAME
+	                 , MD.CONVERSION_UNIT_QTY
+	                 , MD.TRANSACTION_SEQ
+		        FROM   MOM_MATERIAL_ORDER MO
+		             , MOM_MATERIAL_DEPARTURE MD
+		        WHERE  MO.DIVISION_CD = MD.DIVISION_CD
+		        AND    MO.COMPANY_CD  = MD.COMPANY_CD
+		        AND    MO.MATERIAL_ORDER_ID = MD.MATERIAL_ORDER_ID
+		        AND    MO.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		        AND    MO.COMPANY_CD  =  #{companyCd, jdbcType=VARCHAR}
+		        AND    NVL(MO.DEPARTURE_FLAG, 'N') = 'Y'
+		        <if test = "shortage != null and shortage != ''">
+		        AND    MD.DEPARTURE_STATE  = DECODE(MO.IQC_FLAG, 'Y', 'CHECK_PASS', #{flag, jdbcType=VARCHAR})
+		        AND    MO.ORDER_STATE  != DECODE(MO.IQC_FLAG, 'Y', 'CHECK_PASS', 'ORDER')
+		        </if>
+		        <if test = "shortage == null or shortage == ''">
+		        AND    MD.DEPARTURE_STATE  = DECODE(MO.IQC_FLAG, 'Y', 'CHECK_PASS', 'DEPARTURE')
+		        </if>
+		        AND    MO.ORDER_DATE BETWEEN SYSDATE - 180 AND SYSDATE + 7 
+				UNION ALL
+		        SELECT MO.DIVISION_CD
+		             , MO.COMPANY_CD
+		             , MO.MATERIAL_ORDER_ID
+		             , MD.MATERIAL_DEPARTURE_ID
+		             , MO.ORDER_GROUP_ID
+		             , MO.VENDOR_CD
+		             , NVL(MO.DEPARTURE_VENDOR_CD, MO.VENDOR_CD) AS DEPARTURE_VENDOR_CD
+		             , MO.ITEM_ID
+		             , MO.IQC_FLAG     
+		             , MO.ORDER_QTY
+		             , MD.DEPARTURE_QTY
+		             , MO.ORDER_QTY - NVL(MO.CANCEL_QTY, 0) - NVL(MD.DEPARTURE_QTY, 0)  AS  ORDER_REMAIN_QTY
+		             , TO_CHAR(MO.DELIVERY_DATE, 'YYYY-MM-DD')   AS DELIVERY_DATE              
+		             , TO_CHAR(MO.ORDER_DATE, 'YYYY-MM-DD')       AS ORDER_DATE    
+		             , TO_CHAR(MD.DEPARTURE_DATE, 'YYYY-MM-DD')   AS DEPARTURE_DATE             
+		             , MD.DEPARTURE_STATE
+		             , MO.ORDER_STATE
+		             , MO.ORDER_TYPE
+		             , TO_CHAR(MO.CREATE_DATE, 'YYYY-MM-DD')   AS CREATE_DATE 
+		             , MO.CREATE_BY
+		             , TO_CHAR(MO.UPDATE_DATE, 'YYYY-MM-DD') AS UPDATE_DATE        
+		             , MO.UPDATE_BY 
+		             , MO.LOCATION_CD                          AS LOCATION_CD
+		             , MO.MARKET_CD
+		             , MO.CURRENCY_CD
+		             , MO.ORDER_SEQ
+		             , MD.VENDOR_LOT
+		             , MD.DEPARTURE_GROUP_ID
+		             , MO.DEPARTURE_FLAG
+		             , MO.ORDER_FLAG
+	                 , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (MO.DIVISION_CD
+	                                                          , MO.COMPANY_CD
+	                                                          , 'ORDER_FLAG'
+	                                                          , MO.ORDER_FLAG)
+	                      FROM DUAL)                            AS ORDER_FLAG_NAME
+	                 , MD.CONVERSION_UNIT_QTY
+	                 , MD.TRANSACTION_SEQ
+		        FROM   MOM_MATERIAL_ORDER MO
+		             , MOM_MATERIAL_DEPARTURE MD
+		        WHERE  MO.DIVISION_CD = MD.DIVISION_CD
+		        AND    MO.COMPANY_CD  = MD.COMPANY_CD
+		        AND    MO.MATERIAL_ORDER_ID = MD.MATERIAL_ORDER_ID
+		        AND    MO.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		        AND    MO.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		        AND    NVL(MO.DEPARTURE_FLAG, 'N') = 'N'
+		        AND    MD.DEPARTURE_STATE  = 'CHECK_PASS'
+		        AND    MO.ORDER_DATE BETWEEN SYSDATE - 180 AND SYSDATE + 7  
+		        UNION ALL
+		        SELECT MO.DIVISION_CD
+		             , MO.COMPANY_CD
+		             , MO.MATERIAL_ORDER_ID
+		             , ''                     AS MATERIAL_DEPARTURE_ID
+		             , MO.ORDER_GROUP_ID
+		             , MO.VENDOR_CD
+		             , NVL(MO.DEPARTURE_VENDOR_CD, MO.VENDOR_CD) AS DEPARTURE_VENDOR_CD
+		             , MO.ITEM_ID
+		             , MO.IQC_FLAG     
+		             , MO.ORDER_QTY
+		             , 0                          AS DEPARTURE_QTY
+		             , MO.ORDER_QTY - NVL(MO.CANCEL_QTY, 0) + NVL(MO.CLOSED_QTY, 0) AS  ORDER_REMAIN_QTY
+		             , TO_CHAR(MO.DELIVERY_DATE  , 'YYYY-MM-DD')   AS DELIVERY_DATE              
+		             , TO_CHAR(MO.ORDER_DATE , 'YYYY-MM-DD')       AS ORDER_DATE    
+		             , TO_CHAR(MO.DEPARTURE_DATE , 'YYYY-MM-DD')   AS DEPARTURE_DATE
+		             , ''                                          AS DEPARTURE_STATE
+		             , MO.ORDER_STATE
+		             , MO.ORDER_TYPE
+		             , TO_CHAR(MO.CREATE_DATE  , 'YYYY-MM-DD')   AS CREATE_DATE 
+		             , MO.CREATE_BY
+		             , TO_CHAR(MO.UPDATE_DATE   , 'YYYY-MM-DD') AS UPDATE_DATE        
+		             , MO.UPDATE_BY 
+		             , MO.LOCATION_CD                          AS LOCATION_CD
+		             , MO.MARKET_CD
+		             , MO.CURRENCY_CD
+		             , MO.ORDER_SEQ
+		             , ''                                      AS VENDOR_LOT
+		             , ''                                      AS DEPARTURE_GROUP_ID
+		             , MO.DEPARTURE_FLAG
+		             , MO.ORDER_FLAG
+	                 , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (MO.DIVISION_CD
+	                                                          , MO.COMPANY_CD
+	                                                          , 'ORDER_FLAG'
+	                                                          , MO.ORDER_FLAG)
+	                    FROM   DUAL)                            AS ORDER_FLAG_NAME       
+	                 , NVL((SELECT MOM_COMMON_PKG.FN_GET_CONVERSION_QTY( MO.DIVISION_CD
+                                 							  	   , MO.COMPANY_CD
+                                  								   , MO.ITEM_ID ) 
+                        FROM DUAL), 1)	* MO.ORDER_QTY					 AS ORIGIN_CONVERSION_UNIT_QTY
+                     , MO.TRANSACTION_SEQ
+		        FROM   MOM_MATERIAL_ORDER MO
+		        WHERE  MO.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR} 
+		        AND    MO.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR} 
+		        AND    NVL(MO.DEPARTURE_FLAG, 'N') = 'N'
+		        AND    MO.IQC_FLAG  = 'N'
+		        AND    MO.ORDER_STATE = 'ORDER' 
+		        AND    MO.ORDER_DATE BETWEEN SYSDATE - 180 AND SYSDATE + 7 
+		        ) A
+		      , MOM_ITEM_DEFINITION MID
+		      
+			WHERE   A.DIVISION_CD = MID.DIVISION_CD
+			AND     A.COMPANY_CD    = MID.COMPANY_CD
+			AND     A.ITEM_ID       = MID.ITEM_ID
+			
+			    <!--   AND     C.DEPARTURE_GROUP_ID= A.MATERIAL_DEPARTURE_ID -->  
+			<if test="departureGroupID != null and departureGroupID != ''">
+			AND    DEPARTURE_GROUP_ID = #{departureGroupID, jdbcType=VARCHAR} 
+		   </if>      
+		   <if test="locationCd != null and locationCd != ''">
+			AND    A.LOCATION_CD = #{locationCd, jdbcType=VARCHAR} 
+		   </if>    
+		    
+	</select>
+	
+	<select id="get_materialRelease_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT '0' AS SCANQTY
+		     , O.PRODUCT_ORDER_ID
+		     , A.WORK_ORDER_ID             
+             , A.ITEM_ID        
+             , D.ITEM_NAME      
+             , D.SPECIFICATION             
+             , D.ITEM_TYPE       
+             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+                                                    , A.COMPANY_CD
+                                                    , 'ITEM_TYPE'
+                                                    , D.ITEM_TYPE ) 
+                  FROM   DUAL ) AS ITEM_TYPE_NAME             
+             , D.ITEM_CATEGORY
+             , A.REQUEST_STATE 
+             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+                                                      , A.COMPANY_CD
+                                                      , 'MATERIAL_REQUEST_STATE'
+                                                      , A.REQUEST_STATE ) 
+                  FROM   DUAL ) AS STATE_NAME    
+             , A.REQUEST_TYPE                                            
+             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+                                                      , A.COMPANY_CD
+                                                      , 'REQUEST_TYPE'
+                                                      , A.REQUEST_TYPE ) 
+                  FROM   DUAL ) AS REQUEST_TYPE_NAME             
+             , A.REASON_CODE               
+             , TO_CHAR(A.REQUEST_DATE, 'YYYY-MM-DD')  AS REQUEST_DATE                                       
+             , A.IN_LOCATION_CD                                       
+             , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME( A.DIVISION_CD 
+                                                          , A.COMPANY_CD
+                                                          , A.IN_LOCATION_CD )
+                  FROM   DUAL ) AS IN_LOCATION_NAME  
+             , A.OUT_LOCATION_CD                                        
+             , F.FACILITY_NAME                   AS OUT_LOCATION_NAME   
+             , F.FACILITY_TYPE                    AS OUT_FACILITY_TYPE   
+             , (SELECT MOM_COMMON_PKG.FN_GET_CURRENT_STOCK(A.DIVISION_CD 
+                                                          , A.COMPANY_CD
+                                                          , A.ITEM_ID
+                                                          , A.IN_LOCATION_CD)
+                  FROM   DUAL )                          AS  CURRENT_QTY        
+             , D.STANDARD_OUT_QTY   
+             , O.CONFIRM_QTY        
+             , A.UNIT_QTY            
+             , NVL(A.ORIGIN_REQUEST_QTY, 0) ORIGIN_REQUEST_QTY     
+             , A.REQUEST_QTY                                            
+             , NVL(A.ISSUE_QTY, 0)  AS ISSUE_QTY                          
+             , NVL(A.CANCEL_QTY, 0)  AS CANCEL_QTY                       
+             , A.REQUEST_QTY - NVL(A.ISSUE_QTY, 0)- NVL(A.CANCEL_QTY, 0) AS REMAIN_QTY  
+             , A.DESCRIPTION                                            
+             , DECODE(A.REQUEST_STATE, 'R', 'Y', 'N') REQUEST_FLAG
+             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+                                                      , A.COMPANY_CD
+                                                      , 'Y_N'
+                                                      , DECODE(A.REQUEST_STATE, 'R', 'Y', 'N')) 
+                FROM   DUAL )  AS REQUEST_FLAG_NAME
+             , TO_CHAR(A.ISSUE_DATE, 'YYYY-MM-DD')  AS ISSUE_DATE                                            
+             , O.RESOURCE_CD           
+             , E.RESOURCE_NAME         
+             , DECODE(O.ORDER_FLAG, 'IN', 'N', 'Y') AS OUTSOURCING_FLAG
+             , A.MATERIAL_REQUEST_ID
+             , D.CONVERSION_UNIT
+             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (A.DIVISION_CD
+                                                      , A.COMPANY_CD
+                                                      , 'ITEM_UNIT'
+                                                      , D.CONVERSION_UNIT)
+                  FROM DUAL) AS CONVERSION_UNIT_NAME
+             , D.CONVERSION_UNIT_QTY AS ORIGIN_CONVERSION_UNIT_QTY
+             , D.CONVERSION_UNIT_QTY * (A.REQUEST_QTY - NVL (A.ISSUE_QTY, 0) - NVL (A.CANCEL_QTY, 0)) AS CONVERSION_UNIT_QTY   
+             , A.MARKET_CD
+             , A.CURRENCY_CD
+             , (SELECT  MOM_COMMON_PKG.fn_get_code_name(A.DIVISION_CD, A.CURRENCY_CD, 'MARKET_CODE', A.MARKET_CD)
+                FROM    DUAL ) AS MARKET_NAME
+             , (SELECT  MOM_COMMON_PKG.fn_get_code_name(A.DIVISION_CD, A.CURRENCY_CD, 'CURRENCY_CODE', A.CURRENCY_CD)
+                FROM    DUAL ) AS CURRENCY_NAME   
+        FROM   MOM_MATERIAL_REQUEST A
+             , MOM_WORK_ORDER O 
+             , MOM_ITEM_DEFINITION D
+             , MOM_FACILITY F
+             , MOM_RESOURCE E
+             , MOM_FACILITY FI
+        WHERE  A.DIVISION_CD   = O.DIVISION_CD 
+        AND    A.COMPANY_CD    = O.COMPANY_CD
+        AND    A.WORK_ORDER_ID = O.WORK_ORDER_ID
+        AND    A.DIVISION_CD   = D.DIVISION_CD 
+        AND    A.COMPANY_CD    = D.COMPANY_CD
+        AND    A.ITEM_ID       = D.ITEM_ID
+        AND    A.DIVISION_CD   = F.DIVISION_CD 
+        AND    A.COMPANY_CD    = F.COMPANY_CD
+        AND    A.OUT_LOCATION_CD  = F.FACILITY_CD
+        AND    A.DIVISION_CD   = E.DIVISION_CD 
+        AND    A.COMPANY_CD    = E.COMPANY_CD
+        AND    O.RESOURCE_CD   = E.RESOURCE_CD 
+        AND    A.DIVISION_CD = FI.DIVISION_CD(+)
+        AND    A.COMPANY_CD = FI.COMPANY_CD(+)
+        AND    A.IN_LOCATION_CD = FI.FACILITY_CD(+)
+        AND    A.DIVISION_CD   = #{divisionCd, jdbcType=VARCHAR}
+        AND    A.COMPANY_CD    = #{companyCd, jdbcType=VARCHAR}
+        AND    A.USE_YN        = 'Y'
+       <if test="fromDate != null and fromDate != ''">
+        AND A.REQUEST_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
+                           AND     (TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.999 / 24)
+       </if>
+       <if test="outLocationCd != null and outLocationCd != ''">
+        AND A.OUT_LOCATION_CD = #{outLocationCd, jdbcType=VARCHAR}
+       </if>
+       <if test="locationCd != null and locationCd != ''">
+        AND A.IN_LOCATION_CD = #{locationCd, jdbcType=VARCHAR}
+       </if>
+       <if test="productOrderId != null and productOrderId != ''">
+        AND O.PRODUCT_ORDER_ID = #{productOrderId, jdbcType=VARCHAR}
+       </if>
+       <if test="workOrderId != null and workOrderId != ''">
+        AND A.WORK_ORDER_ID = #{workOrderId, jdbcType=VARCHAR}
+       </if>
+        <if test="stockType != null and stockType != ''">
+            <if test='stockType == "MAT"'>
+             AND D.ITEM_TYPE IN ('RM', 'SM', 'CI', 'GI')
+             AND EXISTS
+                  (SELECT '*'
+                     FROM MOM_CODE MFF
+                    WHERE MFF.DIVISION_CD = A.DIVISION_CD
+                      AND MFF.COMPANY_CD = A.COMPANY_CD
+                      AND MFF.CODE_CLASS_ID = 'FACILITY_TYPE'
+                      AND MFF.CODE_ID = FI.FACILITY_TYPE
+                      AND MFF.USE_YN = 'Y'
+                      AND MFF.ATTRIBUTE1 = 'Y')
+            </if>
+            <if test='stockType == "WO"'>
+             AND D.ITEM_TYPE IN ('SP')
+             AND O.ORDER_FLAG = 'OUT'
+                  AND EXISTS
+                  (SELECT '*'
+                     FROM MOM_CODE MFF
+                    WHERE MFF.DIVISION_CD = A.DIVISION_CD
+                      AND MFF.COMPANY_CD = A.COMPANY_CD
+                      AND MFF.CODE_CLASS_ID = 'FACILITY_TYPE'
+                      AND MFF.CODE_ID = FI.FACILITY_TYPE
+                      AND MFF.USE_YN = 'Y'
+                      AND MFF.ATTRIBUTE3 = 'Y')
+            </if>
+        </if>
+        ORDER BY A.REQUEST_DATE, A.WORK_ORDER_ID, A.ITEM_ID 
+	</select>
+	
+	<!-- 자재불출 리스트 조회 - 2019.06.18 조아람 수정 -->
+	<select id="get_materialRelease_list2" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT '0' AS SCANQTY
+		     , O.PRODUCT_ORDER_ID
+		     , A.WORK_ORDER_ID             
+             , A.ITEM_ID        
+             , D.ITEM_NAME      
+             , D.SPECIFICATION             
+             , D.ITEM_TYPE       
+             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+                                                    , A.COMPANY_CD
+                                                    , 'ITEM_TYPE'
+                                                    , D.ITEM_TYPE ) 
+                  FROM   DUAL ) AS ITEM_TYPE_NAME             
+             , D.ITEM_CATEGORY
+             , A.REQUEST_STATE 
+             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+                                                      , A.COMPANY_CD
+                                                      , 'MATERIAL_REQUEST_STATE'
+                                                      , A.REQUEST_STATE ) 
+                  FROM   DUAL ) AS STATE_NAME    
+             , A.REQUEST_TYPE                                            
+             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+                                                      , A.COMPANY_CD
+                                                      , 'REQUEST_TYPE'
+                                                      , A.REQUEST_TYPE ) 
+                  FROM   DUAL ) AS REQUEST_TYPE_NAME             
+             , A.REASON_CODE               
+             , TO_CHAR(A.REQUEST_DATE, 'YYYY-MM-DD')  AS REQUEST_DATE                                       
+             , A.IN_LOCATION_CD                                       
+             , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME( A.DIVISION_CD 
+                                                          , A.COMPANY_CD
+                                                          , A.IN_LOCATION_CD )
+                  FROM   DUAL ) AS IN_LOCATION_NAME  
+             , A.OUT_LOCATION_CD                                        
+             , F.FACILITY_NAME                   AS OUT_LOCATION_NAME   
+             , F.FACILITY_TYPE                    AS OUT_FACILITY_TYPE   
+             , (SELECT MOM_COMMON_PKG.FN_GET_CURRENT_STOCK(A.DIVISION_CD 
+                                                          , A.COMPANY_CD
+                                                          , A.ITEM_ID
+                                                          , A.IN_LOCATION_CD)
+                  FROM   DUAL )                          AS  CURRENT_QTY        
+             , D.STANDARD_OUT_QTY   
+             , O.CONFIRM_QTY        
+             , A.UNIT_QTY            
+             , NVL(A.ORIGIN_REQUEST_QTY, 0) ORIGIN_REQUEST_QTY     
+             , A.REQUEST_QTY                                            
+             , NVL(A.ISSUE_QTY, 0)  AS ISSUE_QTY                          
+             , NVL(A.CANCEL_QTY, 0)  AS CANCEL_QTY                       
+             , A.REQUEST_QTY - NVL(A.ISSUE_QTY, 0)- NVL(A.CANCEL_QTY, 0) AS REMAIN_QTY  
+             , A.DESCRIPTION                                            
+             , DECODE(A.REQUEST_STATE, 'R', 'Y', 'N') REQUEST_FLAG
+             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+                                                      , A.COMPANY_CD
+                                                      , 'Y_N'
+                                                      , DECODE(A.REQUEST_STATE, 'R', 'Y', 'N')) 
+                FROM   DUAL )  AS REQUEST_FLAG_NAME
+             , TO_CHAR(A.ISSUE_DATE, 'YYYY-MM-DD')  AS ISSUE_DATE                                            
+             , O.RESOURCE_CD           
+             , E.RESOURCE_NAME         
+             , DECODE(O.ORDER_FLAG, 'IN', 'N', 'Y') AS OUTSOURCING_FLAG
+             , A.MATERIAL_REQUEST_ID
+             , D.CONVERSION_UNIT
+             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (A.DIVISION_CD
+                                                      , A.COMPANY_CD
+                                                      , 'ITEM_UNIT'
+                                                      , D.CONVERSION_UNIT)
+                  FROM DUAL) AS CONVERSION_UNIT_NAME
+             , D.CONVERSION_UNIT_QTY AS ORIGIN_CONVERSION_UNIT_QTY
+             , D.CONVERSION_UNIT_QTY * (A.REQUEST_QTY - NVL (A.ISSUE_QTY, 0) - NVL (A.CANCEL_QTY, 0)) AS CONVERSION_UNIT_QTY   
+             , A.MARKET_CD
+             , A.CURRENCY_CD
+             , (SELECT  MOM_COMMON_PKG.fn_get_code_name(A.DIVISION_CD, A.CURRENCY_CD, 'MARKET_CODE', A.MARKET_CD)
+                FROM    DUAL ) AS MARKET_NAME
+             , (SELECT  MOM_COMMON_PKG.fn_get_code_name(A.DIVISION_CD, A.CURRENCY_CD, 'CURRENCY_CODE', A.CURRENCY_CD)
+                FROM    DUAL ) AS CURRENCY_NAME 
+             , CASE WHEN D.POP_GANBAN_LABELID IS NULL OR D.POP_GANBAN_LABELID = 'NONE' THEN 'N' ELSE 'Y' END AS LABEL_YN
+        FROM   MOM_MATERIAL_REQUEST A
+             , MOM_WORK_ORDER O 
+             , MOM_ITEM_DEFINITION D
+             , MOM_FACILITY F
+             , MOM_RESOURCE E
+             , MOM_FACILITY FI
+        WHERE  A.DIVISION_CD   = O.DIVISION_CD 
+        AND    A.COMPANY_CD    = O.COMPANY_CD
+        AND    A.WORK_ORDER_ID = O.WORK_ORDER_ID
+        AND    A.DIVISION_CD   = D.DIVISION_CD 
+        AND    A.COMPANY_CD    = D.COMPANY_CD
+        AND    A.ITEM_ID       = D.ITEM_ID
+        AND    A.DIVISION_CD   = F.DIVISION_CD 
+        AND    A.COMPANY_CD    = F.COMPANY_CD
+        AND    A.OUT_LOCATION_CD  = F.FACILITY_CD
+        AND    A.DIVISION_CD   = E.DIVISION_CD 
+        AND    A.COMPANY_CD    = E.COMPANY_CD
+        AND    O.RESOURCE_CD   = E.RESOURCE_CD 
+        AND    A.DIVISION_CD = FI.DIVISION_CD(+)
+        AND    A.COMPANY_CD = FI.COMPANY_CD(+)
+        AND    A.IN_LOCATION_CD = FI.FACILITY_CD(+)
+        AND    A.DIVISION_CD   = #{divisionCd, jdbcType=VARCHAR}
+        AND    A.COMPANY_CD    = #{companyCd, jdbcType=VARCHAR}
+        AND    A.USE_YN        = 'Y'
+       <if test="fromDate != null and fromDate != ''">
+        <![CDATA[AND   A.REQUEST_DATE < TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24MISS') + 1]]>
+       </if>
+       <if test="outLocationCd != null and outLocationCd != ''">
+        AND A.OUT_LOCATION_CD = #{outLocationCd, jdbcType=VARCHAR}
+       </if>
+       <if test="locationCd != null and locationCd != ''">
+        AND A.IN_LOCATION_CD = #{locationCd, jdbcType=VARCHAR}
+       </if>
+       <if test="workOrderId != null and workOrderId != ''">
+        AND A.WORK_ORDER_ID IN (SELECT TRIM(REGEXP_SUBSTR(#{workOrderId, jdbcType=VARCHAR}, '[^|]+', 1, LEVEL)) 
+        						  FROM DUAL  
+        					   CONNECT BY INSTR(#{workOrderId, jdbcType=VARCHAR}, '|', 1, LEVEL - 1) > 0)
+       </if>
+        <if test="stockType != null and stockType != ''">
+            <if test='stockType == "MAT"'>
+             AND D.ITEM_TYPE IN ('RM', 'SM', 'CI', 'GI')
+             AND EXISTS
+                  (SELECT '*'
+                     FROM MOM_CODE MFF
+                    WHERE MFF.DIVISION_CD = A.DIVISION_CD
+                      AND MFF.COMPANY_CD = A.COMPANY_CD
+                      AND MFF.CODE_CLASS_ID = 'FACILITY_TYPE'
+                      AND MFF.CODE_ID = FI.FACILITY_TYPE
+                      AND MFF.USE_YN = 'Y'
+                      AND MFF.ATTRIBUTE1 = 'Y')
+            </if>
+            <if test='stockType == "WO"'>
+             AND D.ITEM_TYPE IN ('SP')
+             AND O.ORDER_FLAG = 'OUT'
+                  AND EXISTS
+                  (SELECT '*'
+                     FROM MOM_CODE MFF
+                    WHERE MFF.DIVISION_CD = A.DIVISION_CD
+                      AND MFF.COMPANY_CD = A.COMPANY_CD
+                      AND MFF.CODE_CLASS_ID = 'FACILITY_TYPE'
+                      AND MFF.CODE_ID = FI.FACILITY_TYPE
+                      AND MFF.USE_YN = 'Y'
+                      AND MFF.ATTRIBUTE3 = 'Y')
+            </if>
+        </if>
+        ORDER BY A.REQUEST_DATE, A.WORK_ORDER_ID, A.ITEM_ID 
+	</select>
+	
+	<select id="get_materialReleasePO_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT
+			A.IN_LOCATION_CD 
+			, DECODE(O.PRODUCT_ORDER_ID, '', 'NO_ORDER', O.PRODUCT_ORDER_ID) AS PRODUCT_ORDER_ID
+		FROM   MOM_MATERIAL_REQUEST A
+		     , MOM_WORK_ORDER O 
+		     , MOM_ITEM_DEFINITION D
+		     , MOM_FACILITY FI
+		WHERE  A.DIVISION_CD   = O.DIVISION_CD 
+		AND    A.COMPANY_CD    = O.COMPANY_CD
+		AND    A.WORK_ORDER_ID = O.WORK_ORDER_ID
+		AND    A.DIVISION_CD   = D.DIVISION_CD 
+		AND    A.COMPANY_CD    = D.COMPANY_CD
+		AND    A.ITEM_ID       = D.ITEM_ID
+		AND    A.DIVISION_CD = FI.DIVISION_CD(+)
+		AND    A.COMPANY_CD = FI.COMPANY_CD(+)
+		AND    A.IN_LOCATION_CD = FI.FACILITY_CD(+)
+        AND    A.DIVISION_CD   = #{divisionCd, jdbcType=VARCHAR}
+        AND    A.COMPANY_CD    = #{companyCd, jdbcType=VARCHAR}
+        AND    A.USE_YN        = 'Y'
+       <if test="fromDate != null and fromDate != ''">
+        AND A.REQUEST_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
+                           AND     (TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.999 / 24)
+       </if>
+       <if test="outLocationCd != null and outLocationCd != ''">
+        AND A.OUT_LOCATION_CD    = #{outLocationCd, jdbcType=VARCHAR}
+       </if>
+       <if test="locationCd != null and locationCd != ''">
+        AND A.IN_LOCATION_CD = #{locationCd, jdbcType=VARCHAR}
+       </if>
+        <if test="stockType != null and stockType != ''">
+            <if test='stockType == "MAT"'>
+             AND D.ITEM_TYPE IN ('RM', 'SM', 'CI', 'GI')
+             AND EXISTS
+                  (SELECT '*'
+                     FROM MOM_CODE MFF
+                    WHERE MFF.DIVISION_CD = A.DIVISION_CD
+                      AND MFF.COMPANY_CD = A.COMPANY_CD
+                      AND MFF.CODE_CLASS_ID = 'FACILITY_TYPE'
+                      AND MFF.CODE_ID = FI.FACILITY_TYPE
+                      AND MFF.USE_YN = 'Y'
+                      AND MFF.ATTRIBUTE1 = 'Y')
+            </if>
+            <if test='stockType == "WO"'>
+             AND D.ITEM_TYPE IN ('SP')
+             AND O.ORDER_FLAG = 'OUT'
+                  AND EXISTS
+                  (SELECT '*'
+                     FROM MOM_CODE MFF
+                    WHERE MFF.DIVISION_CD = A.DIVISION_CD
+                      AND MFF.COMPANY_CD = A.COMPANY_CD
+                      AND MFF.CODE_CLASS_ID = 'FACILITY_TYPE'
+                      AND MFF.CODE_ID = FI.FACILITY_TYPE
+                      AND MFF.USE_YN = 'Y'
+                      AND MFF.ATTRIBUTE3 = 'Y')
+            </if>
+        </if>
+        GROUP BY A.IN_LOCATION_CD, O.PRODUCT_ORDER_ID
+        HAVING (NVL(SUM(A.REQUEST_QTY), 0) - NVL(SUM(A.ISSUE_QTY), 0) - NVL(SUM(A.CANCEL_QTY), 0)) > 0
+		ORDER BY A.IN_LOCATION_CD, O.PRODUCT_ORDER_ID
+	</select>
+	
+	<select id="get_materialReleaseWO_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT  	A.IN_LOCATION_CD
+			, DECODE(O.PRODUCT_ORDER_ID, '', 'NO_ORDER', O.PRODUCT_ORDER_ID) AS PRODUCT_ORDER_ID
+			, O.WORK_ORDER_ID
+			, O.ITEM_ID
+            , V.VENDOR_NAME
+            , O.CUSTOMER_DUE_DATE
+			, O.CONFIRM_QTY
+			, 'N'          AS SELECT_YN
+			, A.REQUEST_DATE
+		FROM   MOM_MATERIAL_REQUEST A
+		     , MOM_WORK_ORDER O
+             , MOM_SALES_ORDER S
+             , MOM_VENDOR V 
+		     , MOM_ITEM_DEFINITION D
+		     , MOM_FACILITY FI
+		WHERE  A.DIVISION_CD   = O.DIVISION_CD 
+		AND    A.COMPANY_CD    = O.COMPANY_CD
+		AND    A.WORK_ORDER_ID = O.WORK_ORDER_ID
+		AND    A.DIVISION_CD   = D.DIVISION_CD 
+		AND    A.COMPANY_CD    = D.COMPANY_CD
+		AND    A.ITEM_ID       = D.ITEM_ID
+		AND    A.DIVISION_CD = FI.DIVISION_CD(+)
+		AND    A.COMPANY_CD = FI.COMPANY_CD(+)
+		AND    A.IN_LOCATION_CD = FI.FACILITY_CD(+)
+		AND    O.DIVISION_CD = S.DIVISION_CD(+)
+        AND    O.COMPANY_CD = S.COMPANY_CD(+)
+        AND    O.PRODUCT_ORDER_ID = S.CUSTOMER_PO_ID(+)
+        AND    S.DIVISION_CD = V.DIVISION_CD(+)
+        AND    S.COMPANY_CD = V.COMPANY_CD(+)
+        AND    S.VENDOR_CD = V.VENDOR_CD(+)
+        AND    A.DIVISION_CD   = #{divisionCd, jdbcType=VARCHAR}
+        AND    A.COMPANY_CD    = #{companyCd, jdbcType=VARCHAR}
+        AND    A.USE_YN        = 'Y'
+        <if test="requestState != null and requestState != ''">
+        AND	   A.REQUEST_STATE = #{requestState, jdbcType=VARCHAR}
+        </if>
+       <if test="fromDate != null and fromDate != ''">
+        <![CDATA[AND   A.REQUEST_DATE < TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24MISS') + 1]]>
+       </if>
+       <if test="outLocationCd != null and outLocationCd != ''">
+        AND A.OUT_LOCATION_CD    = #{outLocationCd, jdbcType=VARCHAR}
+       </if>
+       <if test="locationCd != null and locationCd != ''">
+        AND A.IN_LOCATION_CD = #{locationCd, jdbcType=VARCHAR}
+       </if>
+        <if test="stockType != null and stockType != ''">
+            <if test='stockType == "MAT"'>
+             AND D.ITEM_TYPE IN ('RM', 'SM', 'CI', 'GI')
+             AND EXISTS
+                  (SELECT '*'
+                     FROM MOM_CODE MFF
+                    WHERE MFF.DIVISION_CD = A.DIVISION_CD
+                      AND MFF.COMPANY_CD = A.COMPANY_CD
+                      AND MFF.CODE_CLASS_ID = 'FACILITY_TYPE'
+                      AND MFF.CODE_ID = FI.FACILITY_TYPE
+                      AND MFF.USE_YN = 'Y'
+                      AND MFF.ATTRIBUTE1 = 'Y')
+            </if>
+            <if test='stockType == "WO"'>
+             AND D.ITEM_TYPE IN ('SP')
+             AND O.ORDER_FLAG = 'OUT'
+                  AND EXISTS
+                  (SELECT '*'
+                     FROM MOM_CODE MFF
+                    WHERE MFF.DIVISION_CD = A.DIVISION_CD
+                      AND MFF.COMPANY_CD = A.COMPANY_CD
+                      AND MFF.CODE_CLASS_ID = 'FACILITY_TYPE'
+                      AND MFF.CODE_ID = FI.FACILITY_TYPE
+                      AND MFF.USE_YN = 'Y'
+                      AND MFF.ATTRIBUTE3 = 'Y')
+            </if>
+        </if>
+		GROUP BY A.IN_LOCATION_CD, O.PRODUCT_ORDER_ID, O.WORK_ORDER_ID, O.ITEM_ID, V.VENDOR_NAME, O.CUSTOMER_DUE_DATE, O.CONFIRM_QTY, 'N', A.REQUEST_DATE
+		ORDER BY A.REQUEST_DATE, A.IN_LOCATION_CD, V.VENDOR_NAME, O.PRODUCT_ORDER_ID, O.WORK_ORDER_ID
+	</select>
+	
+	<select id="get_itemone" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    A.ITEM_ID
+		    , A.ITEM_NAME
+		    , A.SPECIFICATION
+		FROM MOM_ITEM_DEFINITION A
+        WHERE  A.DIVISION_CD   = #{divisionCd, jdbcType=VARCHAR}
+        AND    A.COMPANY_CD    = #{companyCd, jdbcType=VARCHAR}
+        AND    A.USE_YN        = 'Y'
+        AND    A.ITEM_ID       = #{itemId, jdbcType=VARCHAR}
+	</select>
+
+	<select id="get_temprature" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    A.CODE_ID,
+		    A.CODE_VALUES
+		FROM MOM_CODE A
+		WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND   A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		AND   A.CODE_CLASS_ID = 'TEMPRATURE'
+	</select>
+
+	<select id="get_destination" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		    A.CODE_ID AS CODE
+		    , A.CODE_ID AS NAME
+                             , A.CODE_ID AS VALUE
+                              , A.CODE_ID AS CODE_NAME
+		    , A.CODE_ID AS BUTTONTEXT
+		FROM MOM_CODE A
+		WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND   A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		AND   A.CODE_CLASS_ID = 'DESTINATION'
+	</select>
+	
+	<!-- BIN 정보 조회 - 2019.06.21 조아람 추가 -->
+	<select id="get_binInfo" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT LOCATION_CD
+		     , RACK_ID
+		     , BIN_ID
+		     , X||','|| Y||','||Z   AS XYZ
+		     , WIDTH||'*'||HEIGHT   AS BIN_SIZE
+		  FROM MOM_FACILITY_BIN
+		 WHERE DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{COMPANY_CD, jdbcType=VARCHAR}
+		   AND LOCATION_CD = #{LOCATION_CD, jdbcType=VARCHAR}
+		   AND BIN_ID = #{BIN_ID, jdbcType=VARCHAR}
+		   AND USE_YN = 'Y'
+		   AND IN_DEFAULT_YN = 'N'
+		   AND OUT_DEFAULT_YN = 'N'
+	</select>
+	
+	<!-- BIN이동 대상 간판정보 -->
+	<select id="get_ganbanInfoForMove" resultType="camelMap" parameterType="java.util.HashMap">
+		 SELECT  A.GANBAN_ID
+	           , A.GANBAN_TYPE
+	           , A.ITEM_ID
+	           , B.ITEM_NAME
+			   , A.QTY
+	           , A.UNIT_ID
+	           , A.BIN_ID
+	           , A.LOCATION_CD
+	           , A.DESCRIPTION
+			FROM TU_GANBAN A,
+			     MOM_ITEM_DEFINITION B
+			WHERE A.DIVISION_CD = B.DIVISION_CD
+			AND   A.COMPANY_CD  = B.COMPANY_CD
+			AND   A.ITEM_ID = B.ITEM_ID
+			AND   A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+			AND   A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+			<if test = "LOCATION_CD != null and LOCATION_CD != ''">
+			AND   A.LOCATION_CD  = #{LOCATION_CD, jdbcType=VARCHAR}
+			</if>
+	        <if test = "BIN_ID != null and BIN_ID != ''">
+			AND   A.BIN_ID  = #{BIN_ID, jdbcType=VARCHAR}
+			</if>
+	        <if test = "GANBAN_ID != null and GANBAN_ID != ''">
+			AND   A.GANBAN_ID = #{GANBAN_ID, jdbcType=VARCHAR}
+			</if>
+	        AND A.USE_YN = 'Y'
+			ORDER BY A.GANBAN_ID DESC
+	</select>
+	
+	
+	<select id="get_cancelGanbanInfo" resultType="camelMap" parameterType="java.util.HashMap">
+		 SELECT  A.GANBAN_ID
+	           , A.GANBAN_TYPE
+	           , A.ITEM_ID
+	           , B.ITEM_NAME
+			   , A.QTY
+	           , A.UNIT_ID
+	           , A.BIN_ID
+	           , A.LOCATION_CD
+	           , A.DESCRIPTION
+	           , '' AS RE_PRINT
+			FROM TU_GANBAN A,
+			     MOM_ITEM_DEFINITION B
+			WHERE A.DIVISION_CD = B.DIVISION_CD
+			AND   A.COMPANY_CD  = B.COMPANY_CD
+			AND   A.ITEM_ID = B.ITEM_ID
+			AND   A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+			AND   A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+			<if test = "LOCATION_CD != null and LOCATION_CD != ''">
+			AND   A.LOCATION_CD  = #{LOCATION_CD, jdbcType=VARCHAR}
+			</if>
+	        <if test = "BIN_ID != null and BIN_ID != ''">
+			AND   A.BIN_ID  = #{BIN_ID, jdbcType=VARCHAR}
+			</if>
+	        <if test = "GANBAN_ID != null and GANBAN_ID != ''">
+			AND   A.GANBAN_ID = #{GANBAN_ID, jdbcType=VARCHAR}
+			<!-- Split된 간판제외 -->
+			AND   0 = (SELECT COUNT(*) FROM TU_GANBAN WHERE PARENT_GANBAN_ID = A.GANBAN_ID) 
+            <!-- 실적취소로 인한 사용불가 처리된 간판 제외 -->
+            AND   0 =  CASE WHEN A.GANBAN_TYPE = 'BUTTON'
+                            THEN (SELECT COUNT(*) 
+                                    FROM MOM_WORK_ORDER_RESULT
+                                   WHERE STATE ='C'
+                                     AND PREV_WORK_ORDER_RESULT_ID IN (SELECT WORK_ORDER_RESULT_ID 
+                                                                         FROM MOM_WORK_ORDER_RESULT
+                                                                        WHERE CT = A.GANBAN_ID))
+                            ELSE 0
+                        END
+			</if>
+	        AND A.USE_YN = 'N'
+			ORDER BY A.GANBAN_ID DESC
+	</select>
+	
+	<!-- TO LOCATION 에 대한 DEFAULT BIN 유무 체크 -->
+	<select id="getOutDefaultBin" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT BIN_ID 
+		  FROM MOM_FACILITY_BIN
+		 WHERE DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		   AND COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		   AND LOCATION_CD  = #{LOCATION_CD, jdbcType=VARCHAR}
+	       AND OUT_DEFAULT_YN = 'Y'
+	       AND USE_YN = 'Y'
+	</select>
+	
+
+	<select id="getganbanqty" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT DEPARTURE_QTY - (SELECT NVL(SUM(QTY), 0)
+		                          FROM TU_GANBAN
+		                         WHERE DIVISION_CD        = #{DIVISION_CD, jdbcType=VARCHAR}
+		                           AND COMPANY_CD         = #{COMPANY_CD, jdbcType=VARCHAR}
+		                           AND DEPARTURE_GROUP_ID = #{DEPARTURE_GROUP_ID, jdbcType=VARCHAR}
+		                           AND USE_YN = 'Y'                                                 ) AS QTY
+ 	      FROM MOM_MATERIAL_DEPARTURE
+         WHERE DIVISION_CD        = #{DIVISION_CD, jdbcType=VARCHAR}
+		   AND COMPANY_CD         = #{COMPANY_CD, jdbcType=VARCHAR}
+		   AND MATERIAL_DEPARTURE_ID = #{DEPARTURE_GROUP_ID, jdbcType=VARCHAR}
+		   
+	</select>
+	
+	<!-- TO LOCATION 에 대한 DEFAULT BIN 유무 체크 -->
+	<select id="getInDefaultBin" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT BIN_ID 
+		  FROM MOM_FACILITY_BIN
+		 WHERE DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		   AND COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+		   AND LOCATION_CD  = #{LOCATION_CD, jdbcType=VARCHAR}
+	       AND IN_DEFAULT_YN = 'Y'
+	       AND USE_YN = 'Y'
+	</select>
+	
+	<!-- 라벨이 발행되지 않은 실적 수량 조회 -->
+	<select id="get_noLabelQty" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT NVL(SUM(GOOD_QTY), 0) AS QTY
+		  FROM MOM_WORK_ORDER_RESULT
+		 WHERE DIVISION_CD   = #{DIVISION_CD, jdbcType=VARCHAR}
+		   AND COMPANY_CD    = #{COMPANY_CD, jdbcType=VARCHAR}
+		   AND WORK_ORDER_ID = #{WORK_ORDER_ID, jdbcType=VARCHAR}
+	       AND STATE NOT IN ('C')
+	       AND CT = 'NODATA'
+	</select>
+	
+	<!-- 창고 현황 : 품목별  BIN 정보 조회  -->
+	<select id="getItemBinPosition" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT G.ITEM_ID
+		     , I.ITEM_NAME
+		     , TO_CHAR(SUM(G.CURRENT_QTY),'FM9,999,999,999,990.00') AS QTY
+		     , MAX(G.UPDATE_DATE) AS UPDATE_DATE
+		  FROM MOM_ITEM_STOCK G
+     	     , MOM_ITEM_DEFINITION I
+		 WHERE G.DIVISION_CD = I.DIVISION_CD
+		   AND G.COMPANY_CD = I.COMPANY_CD
+		   AND G.ITEM_ID = I.ITEM_ID
+		   AND G.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		   AND G.COMPANY_CD = #{COMPANY_CD, jdbcType=VARCHAR}
+		   AND G.LOCATION_CD = #{LOCATION_CD, jdbcType=VARCHAR}
+		   AND G.USE_YN = 'Y'
+		   <if test = "ITEM_ID != null and ITEM_ID != ''">
+		   	AND G.ITEM_ID = #{ITEM_ID, jdbcType=VARCHAR}
+		   </if>
+		   <if test = "GANBAN_ID != null and GANBAN_ID != ''">
+		   	AND G.ITEM_ID IN (SELECT ITEM_ID 
+		   						FROM TU_GANBAN 
+		   					   WHERE DIVISION_CD = G.DIVISION_CD
+                                 AND COMPANY_CD = G.COMPANY_CD
+		   					     AND GANBAN_ID = #{GANBAN_ID, jdbcType=VARCHAR}
+                                 AND USE_YN = 'Y'
+                              )
+                                 
+		   </if>
+		 GROUP BY G.ITEM_ID
+			    , I.ITEM_NAME
+	</select>
+	
+    <!--  실적취소 대상 간판정보 -->
+	<select id="get_ganbanInfoForResultCancel" resultType="camelMap" parameterType="java.util.HashMap">
+		 SELECT  A.GANBAN_ID
+	           , A.GANBAN_TYPE
+               , A.WORK_ORDER_ID
+               , C.WORK_ORDER_RESULT_ID
+	           , A.ITEM_ID
+	           , B.ITEM_NAME
+			   , C.GOOD_QTY
+			   , C.BAD_QTY
+	           , A.UNIT_ID
+	           , A.BIN_ID
+	           , A.LOCATION_CD
+	           , A.DESCRIPTION
+			FROM TU_GANBAN A,
+			     MOM_ITEM_DEFINITION B,
+                 MOM_WORK_ORDER_RESULT C
+			WHERE A.DIVISION_CD = B.DIVISION_CD
+			AND   A.COMPANY_CD  = B.COMPANY_CD
+			AND   A.ITEM_ID = B.ITEM_ID
+            AND   A.DIVISION_CD = C.DIVISION_CD
+			AND   A.COMPANY_CD  = C.COMPANY_CD
+            AND   A.WORK_ORDER_ID = C.WORK_ORDER_ID
+			AND   A.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+			AND   A.COMPANY_CD  = #{COMPANY_CD, jdbcType=VARCHAR}
+			AND   A.GANBAN_ID IN ( C.CT, C.WORK_ORDER_RESULT_ID)
+	        AND   A.USE_YN = 'Y'
+	        <if test = "LOCATION_CD != null and LOCATION_CD != ''">
+			AND   A.LOCATION_CD  = #{LOCATION_CD, jdbcType=VARCHAR}
+			</if>
+	        <if test = "GANBAN_ID != null and GANBAN_ID != ''">
+			AND   A.GANBAN_ID = #{GANBAN_ID, jdbcType=VARCHAR}
+			</if>	
+			<if test = "RESOURCE_CD != null and RESOURCE_CD != ''">
+			AND   C.RESOURCE_CD = #{RESOURCE_CD, jdbcType=VARCHAR}
+			</if>		
+			ORDER BY A.GANBAN_ID DESC
+	</select>
+	
+	<select id="get_materialDeparture_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.MATERIAL_ORDER_ID
+		     , A.ORDER_GROUP_ID
+		     , A.VENDOR_CD
+		     , A.VENDOR_NAME
+		     , A.DEPARTURE_VENDOR_CD
+		     , A.DEPARTURE_VENDOR_NAME  
+		     , A.ITEM_ID
+		     , A.ITEM_NAME
+		     , A.SPECIFICATION
+		     , A.UNIT
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              , 'ITEM_UNIT'
+		                                              , A.UNIT ) 
+		          FROM DUAL ) AS UNIT_NAME 
+		     , A.ORDER_TYPE
+		     , A.ORDER_TYPE_NAME
+		      
+		     , TO_CHAR(ROUND(A.ORDER_QTY, 4), 'FM9,999,999,999,990.00')  AS ORDER_QTY
+		     , TO_CHAR(ROUND(A.ORDER_QTY, 4) - ROUND(A.DEPARTURE_QTY, 4)  - NVL(A.CANCEL_QTY, 0), 'FM9,999,999,999,990.00') AS DEPARTURE_QTY
+		     <!-- , A.DEPARTURE_QTY-->        
+		     , A.ORDER_DATE
+		     , CASE WHEN A.DEPARTURE_DATE IS NULL THEN TO_CHAR(SYSDATE, 'YYYY-MM-DD') 
+		     		ELSE TO_CHAR(A.DEPARTURE_DATE, 'YYYY-MM-DD') END AS DEPARTURE_DATE   
+		     , A.DESCRIPTION
+		     , A.CHECK_FLAG
+		 	 , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              , 'USE_FLAG'
+		                                              , A.CHECK_FLAG ) 
+		          FROM DUAL ) AS IQC_USE_NAME   
+		     , A.ORDER_SEQ
+		     , A.MARKET_CD
+		     , A.MARKET_NAME
+		     , A.CURRENCY_CD   
+		     , A.CURRENCY_NAME
+		     , A.CREATE_DATE 
+		     , A.CREATE_BY
+		     , A.CREATE_BY_NAME  
+		     , A.UPDATE_DATE        
+		     , A.UPDATE_BY 
+		     , A.UPDATE_BY_NAME 
+		     , A.UNIT_DP_USE_FLAG
+		     , TO_CHAR(A.ORDER_QTY - A.DEPARTURE_QTY  - NVL(A.CANCEL_QTY, 0), 'FM9,999,999,999,990.00') AS REMAIN_QTY
+		     , A.ORDER_FLAG
+		     , A.ORDER_FLAG_NAME 
+		     ,(A.CONVERSION_UNIT_QTY * A.ORDER_QTY) AS CONVERSION_UNIT_QTY
+		     , NVL(A.CONVERSION_UNIT_QTY, 1) AS ORIGIN_CONVERSION_UNIT_QTY
+             , A.CONVERSION_UNIT
+             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD
+                                                     , A.COMPANY_CD
+                                                     , 'ITEM_UNIT'
+                                                 	 , A.CONVERSION_UNIT )
+		        FROM DUAL)      AS CONVERSION_UNIT_NAME
+		     , A.TRANSACTION_SEQ
+		     , 'N'		AS CHKYN  
+		FROM (SELECT MR.MATERIAL_ORDER_ID
+		           , MR.ORDER_GROUP_ID
+		           , MR.VENDOR_CD
+		           , MV.VENDOR_NAME
+		           , MR.COMPANY_CD
+		           , MR.DIVISION_CD
+		           , NVL(MR.DEPARTURE_VENDOR_CD, MR.VENDOR_CD) AS DEPARTURE_VENDOR_CD
+		           , (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME(MR.DIVISION_CD
+		                                                     , MR.COMPANY_CD
+		                                                     , NVL(MR.DEPARTURE_VENDOR_CD, MR.VENDOR_CD) )
+		              FROM  DUAL)     AS DEPARTURE_VENDOR_NAME  
+		           , MR.ITEM_ID
+		           , MID.ITEM_NAME
+		           , MID.SPECIFICATION
+		           , MID.UNIT
+		           , MR.ORDER_TYPE
+		           , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(MR.DIVISION_CD
+		                                                   , MR.COMPANY_CD
+		                                                   , 'SYSTEM_FLAG'
+		                                                   , MR.ORDER_TYPE )
+		              FROM DUAL)      AS ORDER_TYPE_NAME  
+		           , MR.ORDER_QTY
+		           , (SELECT MOM_COMMON_PKG.FN_GET_MATERIAL_DEPARTURE_QTY(MR.DIVISION_CD
+		                                                             	, MR.COMPANY_CD
+		                                                             	, MR.MATERIAL_ORDER_ID) 
+		             FROM   DUAL )    AS DEPARTURE_QTY        
+		           , TO_CHAR(MR.ORDER_DATE, 'YYYY-MM-DD')  AS ORDER_DATE   
+		           , MID.DESCRIPTION
+		           , NVL(MID.IQC_FLAG, 'N')   AS CHECK_FLAG  
+		           , MR.ORDER_SEQ
+		           , TO_CHAR(MR.CREATE_DATE  , 'YYYY-MM-DD')  AS CREATE_DATE 
+		           , MR.CREATE_BY
+		           , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(MR.DIVISION_CD
+		                                                   , MR.COMPANY_CD
+		                                                   , MR.CREATE_BY) 
+		              FROM  DUAL)   AS CREATE_BY_NAME  
+		           , TO_CHAR(MR.UPDATE_DATE, 'YYYY-MM-DD')  AS UPDATE_DATE        
+		           , MR.UPDATE_BY 
+		           , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(MR.DIVISION_CD
+		                                                   , MR.COMPANY_CD
+		                                                   , MR.UPDATE_BY) 
+		              FROM  DUAL)   AS UPDATE_BY_NAME    
+		           , (SELECT MOM_COMMON_PKG.FN_GET_UNIT_DECIMAL_POINT_FLAG(MR.DIVISION_CD
+		                                                                 , MR.COMPANY_CD
+		                                                                 , MID.UNIT)
+		              FROM DUAL)    AS UNIT_DP_USE_FLAG      
+		              , MR.CANCEL_QTY 
+		              , MR.DEPARTURE_DATE
+		              , MR.MARKET_CD
+		              , MR.CURRENCY_CD  
+		              , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(MR.DIVISION_CD
+		                                                      , MR.COMPANY_CD
+		                                                      , 'MARKET_CODE'
+		                                                      , MR.MARKET_CD )
+		              FROM DUAL)    AS MARKET_NAME 
+		              , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(MR.DIVISION_CD
+		                                                      , MR.COMPANY_CD
+		                                                      , 'CURRENCY_CODE'
+		                                                      , MR.CURRENCY_CD )
+		              FROM DUAL)    AS CURRENCY_NAME
+		              , MR.ORDER_FLAG
+	                  , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (MR.DIVISION_CD
+	                                                           , MR.COMPANY_CD
+	                                                           , 'ORDER_FLAG'
+	                                                           , MR.ORDER_FLAG)
+	                    FROM DUAL)	AS ORDER_FLAG_NAME
+	                  , NVL(MID.CONVERSION_UNIT_QTY, 1) AS CONVERSION_UNIT_QTY
+                      , MID.CONVERSION_UNIT
+                      , MR.TRANSACTION_SEQ
+		      FROM   MOM_MATERIAL_ORDER MR
+		           , MOM_ITEM_DEFINITION MID
+		           , MOM_VENDOR MV
+		      WHERE  1 = 1 
+		      AND    MR.DIVISION_CD  	= MID.DIVISION_CD
+		      AND    MR.COMPANY_CD   	= MID.COMPANY_CD
+		      AND    MR.ITEM_ID      	= MID.ITEM_ID
+		      AND    MR.DIVISION_CD  	= MV.DIVISION_CD
+		      AND    MR.COMPANY_CD   	= MV.COMPANY_CD
+		      AND    MR.VENDOR_CD    	= MV.VENDOR_CD
+		      AND    MR.DIVISION_CD  	= #{divisionCd, jdbcType=VARCHAR}
+		      AND    MR.COMPANY_CD   	= #{companyCd, jdbcType=VARCHAR}
+		      AND    MR.ORDER_STATE  	= 'ORDER'
+		      AND	 MR.DEPARTURE_FLAG 	= 'Y'
+		     <if test="vendorCd != null and vendorCd != ''">
+		      AND	MR.VENDOR_CD = #{vendorCd, jdbcType=VARCHAR}
+		     </if>
+		     <if test="fromDate != null and fromDate != ''">
+		      AND    MR.ORDER_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
+		      AND     					   TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+		     </if>
+		    
+		       ) A
+		ORDER BY A.MATERIAL_ORDER_ID, A.TRANSACTION_SEQ
+	</select>
+	
+	<select id="get_maxDepartureGroupId" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT MAX(DEPARTURE_GROUP_ID) AS DEPARTURE_GROUP_ID
+		  FROM MOM_MATERIAL_DEPARTURE
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND DEPARTURE_STATE != 'CLOSED'	
+	</select>
+	
+	<select id="get_totalProdQtyByResource" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT NVL(SUM(GOOD_QTY),0) AS QTY
+		  FROM MOM_WORK_ORDER_RESULT 
+		 WHERE DIVISION_CD = #{P_DIVISION_CD, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{P_COMPANY_CD, jdbcType=VARCHAR}
+		   AND RESOURCE_CD = #{P_RESOURCE_CD, jdbcType=VARCHAR}
+		   AND BADCODE = 'NODATA'
+		   AND STATE != 'C'
+		   AND TO_CHAR(CREATE_DATE,'YYYY-MM-DD') = TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+		UNION ALL       
+		SELECT NVL(SUM(A.CONFIRM_QTY),0) AS QTY
+		  FROM MOM_WORK_ORDER A
+		 WHERE A.DIVISION_CD = #{P_DIVISION_CD, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{P_COMPANY_CD, jdbcType=VARCHAR}
+		   AND A.RESOURCE_CD = #{P_RESOURCE_CD, jdbcType=VARCHAR}
+		   AND TO_CHAR(A.PLAN_DATE,'YYYY-MM-DD') = TO_CHAR(SYSDATE, 'YYYY-MM-DD')
+	</select>
+	
+	<select id="get_wo_status" resultType="camelMap" parameterType="java.util.HashMap">
+		WITH TMP_WO_STATUS AS (
+			SELECT A.RESOURCE_CD
+			     , (SELECT RESOURCE_NAME
+			          FROM MOM_RESOURCE
+			          WHERE DIVISION_CD    = A.DIVISION_CD
+			            AND COMPANY_CD     = A.COMPANY_CD
+			            AND RESOURCE_CD    = A.RESOURCE_CD)      AS RESOURCE_NAME
+			     , A.WORK_ORDER_ID
+			     , A.WO_STATE
+			     , A.ITEM_ID
+			     , B.ITEM_NAME
+			     , B.SPECIFICATION
+			     , TO_CHAR(ROUND(A.CONFIRM_QTY, 4), 'FM9,999,999,999,990.00') AS CONFIRM_QTY
+			     , TO_CHAR(ROUND((A.CONFIRM_QTY - NVL(A.GOOD_QTY,0)), 4), 'FM9,999,999,999,990.00') AS REMAIN_QTY
+			     , A.PLAN_DATE
+			     , TO_CHAR(ROUND(NVL(A.GOOD_QTY,0), 4), 'FM9,999,999,999,990.00') AS GOOD_QTY
+			     , TO_CHAR(ROUND(NVL(A.BAD_QTY,0), 4), 'FM9,999,999,999,990.00')  AS BAD_QTY
+			     , (SELECT CODE_NAME
+			          FROM MOM_CODE
+			          WHERE DIVISION_CD    = A.DIVISION_CD
+			            AND COMPANY_CD     = A.COMPANY_CD
+			            AND CODE_CLASS_ID  = 'WORK_ORDER_STATE'
+			            AND CODE_ID        = A.WO_STATE)      AS WO_STATE_NAME
+			     , (SELECT MAX(END_TIME)
+			          FROM MOM_WORK_ORDER_RESULT
+			         WHERE DIVISION_CD = A.DIVISION_CD
+			           AND COMPANY_CD = A.COMPANY_CD
+			           AND WORK_ORDER_ID = A.WORK_ORDER_ID
+			           AND BADCODE = 'NODATA')  AS LAST_RESULT_TIME
+			  FROM MOM_WORK_ORDER A
+			     , MOM_ITEM_DEFINITION B
+			 WHERE A.DIVISION_CD = B.DIVISION_CD
+			   AND A.COMPANY_CD = B.COMPANY_CD
+			   AND A.ITEM_ID = B.ITEM_ID
+			   AND A.DIVISION_CD = #{P_DIVISION_CD, jdbcType=VARCHAR}
+			   AND A.COMPANY_CD = #{P_COMPANY_CD, jdbcType=VARCHAR}
+			   AND A.PLAN_DATE = #{P_PLAN_DATE, jdbcType=VARCHAR}
+			)
+			SELECT *
+			  FROM TMP_WO_STATUS
+			 ORDER BY RESOURCE_CD, WO_STATE DESC, LAST_RESULT_TIME DESC
+	</select>
+	
+	<select id="get_bomScale" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT BOM.DIVISION_CD
+		     , BOM.COMPANY_CD
+		     , CASE WHEN (LEVEL - 1) = 0
+		            THEN '-'
+		            ELSE BOM.PARENT_ITEM_ID
+		       END                                   AS PARENT_ITEM_ID
+		     , BOM.CHILD_ITEM_ID
+		     , ITM.ITEM_NAME                         AS CHILD_ITEM_NAME
+		     , ITM.ITEM_TYPE                         AS CHILD_ITEM_TYPE
+		     , MCD.CODE_NAME                         AS CHILD_ITEM_TYPE_NAME
+		     , ITM.SPECIFICATION                     AS CHILD_ITEM_SPEC
+		     , LEVEL                                 AS BOM_LEVEL
+		     , BOM.QTY                               AS CONSUME_QTY
+		     , ITM.UNIT
+		     , TO_CHAR(BOM.START_TIME, 'YYYY-MM-DD') AS START_TIME
+		     , TO_CHAR(BOM.END_TIME, 'YYYY-MM-DD')   AS END_TIME
+		     , BOM.USE_YN
+		     , TO_CHAR(BOM.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS CREATE_DATE
+		     , TO_CHAR(BOM.UPDATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS UPDATE_DATE
+		     , '0' AS SCALEVALUE
+		  FROM MOM_BOM BOM
+		       LEFT OUTER JOIN MOM_ITEM_DEFINITION ITM
+		                    ON (BOM.DIVISION_CD   = ITM.DIVISION_CD
+		                    AND BOM.COMPANY_CD    = ITM.COMPANY_CD
+		                    AND BOM.CHILD_ITEM_ID = ITM.ITEM_ID
+		                    AND ITM.USE_YN        = 'Y')
+		       LEFT OUTER JOIN MOM_CODE MCD
+		                    ON (ITM.DIVISION_CD   = MCD.DIVISION_CD
+		                    AND ITM.COMPANY_CD    = MCD.COMPANY_CD
+		                    AND ITM.ITEM_TYPE     = MCD.CODE_ID
+		                    AND MCD.CODE_CLASS_ID = 'ITEM_TYPE'
+		                    AND MCD.USE_YN        = 'Y')
+		 WHERE BOM.DIVISION_CD = #{DIVISION_CD, jdbcType=VARCHAR}
+		 AND   BOM.COMPANY_CD = #{COMPANY_CD, jdbcType=VARCHAR}
+		 AND   BOM.CHILD_ITEM_ID != UPPER(#{ITEM_ID, jdbcType=VARCHAR})
+		 START WITH BOM.CHILD_ITEM_ID = UPPER(#{ITEM_ID, jdbcType=VARCHAR})
+		   AND BOM.PARENT_ITEM_ID IN (SELECT PARENT_ITEM_ID
+		                                FROM MOM_BOM
+		                               WHERE CHILD_ITEM_ID = UPPER(#{ITEM_ID, jdbcType=VARCHAR}) 
+		                                 AND ROWNUM = 1)
+		CONNECT BY NOCYCLE PRIOR CHILD_ITEM_ID = PARENT_ITEM_ID
+		 ORDER SIBLINGS BY BOM.BOM_SEQ, BOM.CHILD_ITEM_ID
+	</select>
+	
+	<select id="get_requestScale" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.OUT_LOCATION_CD AS LOCATION_CD
+		         , A.ITEM_ID
+		         , B.ITEM_NAME
+		         , A.REQUEST_QTY AS QTY
+		         , B.UNIT
+		         , '0' AS SCALEVALUE
+		      FROM MOM_MATERIAL_REQUEST A
+		         , MOM_ITEM_DEFINITION B
+		     WHERE A.DIVISION_CD   = B.DIVISION_CD
+		       AND A.COMPANY_CD    = B.COMPANY_CD
+		       AND A.ITEM_ID       = B.ITEM_ID
+		       AND A.DIVISION_CD   = #{DIVISION_CD, jdbcType=VARCHAR}
+		       AND A.COMPANY_CD    = #{COMPANY_CD, jdbcType=VARCHAR}
+		       AND A.WORK_ORDER_ID = #{WORKORDERID, jdbcType=VARCHAR}
+		       AND A.DEDUCT_FLAG = 'Y'
+		       AND A.USE_YN = 'Y'
+		 ORDER BY A.MATERIAL_REQUEST_ID
+	</select>
+	
+	<!-- 작업지시 마감처리 -->
+	<insert id="close_workorder" statementType="CALLABLE">
+        CALL SP_MOM_POP.P_WORK_ORDER_CLOSE (
+           #{p_err_code,        mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg,       mode=OUT, jdbcType=VARCHAR}
+           , #{P_DIVISION_CD,   mode=IN,  jdbcType=VARCHAR}
+           , #{P_COMPANY_CD,    mode=IN,  jdbcType=VARCHAR}
+           , #{P_WORK_ORDER_ID, mode=IN,  jdbcType=VARCHAR}
+           , #{P_USER_ID,       mode=IN,  jdbcType=VARCHAR}
+        )
+    </insert>	
+    
+	<!-- 이동처리 item기준 temp 정보 insert -->
+	<insert id="create_itemPopMoveTmp" parameterType="java.util.HashMap">
+        INSERT INTO MOM_POP_ITEM_MOVE_TMP
+            ( DIVISION_CD  
+            , COMPANY_CD 
+            , MOVE_ID   
+            , TRANSFER_FLAG
+            , ITEM_ID      
+            , QTY     
+            , IO_TIME      
+            , FROM_LOCATION_CD       
+            , TO_LOCATION_CD      
+            , STOCK_TYPE       
+            , DESCRIPTION      
+            , CREATE_DATE  
+            , CREATE_BY    
+            )
+        VALUES
+            (  #{DIVISION_CD,      jdbcType=VARCHAR}
+             , #{COMPANY_CD,       jdbcType=VARCHAR}
+             , #{MOVE_ID,          jdbcType=VARCHAR}
+             , #{TRANSFER_FLAG,    jdbcType=VARCHAR}
+             , #{ITEM_ID,          jdbcType=VARCHAR}
+             , #{QTY,              jdbcType=NUMERIC}
+             , SYSDATE
+             , #{FROM_LOCATION_CD, jdbcType=VARCHAR}
+             , #{TO_LOCATION_CD,   jdbcType=VARCHAR}
+             , #{STOCK_TYPE,       jdbcType=VARCHAR}
+             , #{DESCRIPTION,      jdbcType=VARCHAR}
+             , SYSDATE
+             , #{CREATE_BY,        jdbcType=VARCHAR}
+            )
+    </insert>
+	
+	
+	<!-- 이동처리 라벨 기준 temp 정보 insert -->
+	<insert id="create_labelPopMoveTmp" parameterType="java.util.HashMap">
+        INSERT INTO MOM_POP_LABEL_MOVE_TMP
+            ( DIVISION_CD  
+            , COMPANY_CD 
+            , MOVE_ID
+            , TRANSFER_FLAG
+            , MOVEKEYCOL  
+            , TO_LOCATION_CD 
+            , CREATE_DATE  
+            , CREATE_BY
+            , EDIT_QTY    
+            )
+        VALUES
+            (  #{DIVISION_CD,      jdbcType=VARCHAR}
+             , #{COMPANY_CD,       jdbcType=VARCHAR}
+             , #{MOVE_ID,          jdbcType=VARCHAR}
+             , #{TRANSFER_FLAG,    jdbcType=VARCHAR}
+             , #{MOVEKEYCOL,       jdbcType=VARCHAR}
+             , #{TO_LOCATION_CD,   jdbcType=VARCHAR}
+             , SYSDATE
+             , #{CREATE_BY,        jdbcType=VARCHAR}
+             , #{EDIT_QTY,        jdbcType=VARCHAR}
+            )
+    </insert>
+	
+	<!-- 입고 간판라벨 기준 temp 정보 insert -->
+	<insert id="create_labelPopGrTmp" parameterType="java.util.HashMap">
+        INSERT INTO MOM_POP_LABEL_GR_TMP
+            ( DIVISION_CD  
+            , COMPANY_CD 
+            , MOVE_ID
+            , TRANSFER_FLAG
+            , GRKEYCOL  
+            , TO_LOCATION_CD 
+            , CREATE_DATE  
+            , CREATE_BY    
+            )
+        VALUES
+            (  #{DIVISION_CD,      jdbcType=VARCHAR}
+             , #{COMPANY_CD,       jdbcType=VARCHAR}
+             , #{MOVE_ID,          jdbcType=VARCHAR}
+             , #{TRANSFER_FLAG,    jdbcType=VARCHAR}
+             , #{GRKEYCOL,         jdbcType=VARCHAR}
+             , #{TO_LOCATION_CD,   jdbcType=VARCHAR}
+             , SYSDATE
+             , #{CREATE_BY,        jdbcType=VARCHAR}
+            )
+    </insert>
+	
+	<insert id="create_grTemp" parameterType="java.util.HashMap">
+  	 INSERT INTO MOM_POP_MAT_GOODS_RECEIPT_TMP
+					( DIVISION_CD         
+					, COMPANY_CD          
+					, MOVE_ID
+					, ITEM_ID
+					, TRANSFER_FLAG             
+					, LOCATION_CD
+					, VENDOR_CD
+					, MATERIAL_ORDER_ID
+					, MATERIAL_DEPARTURE_ID
+					, IO_TIME
+					, QTY
+					, CONVERSION_UNIT_QTY
+					, CURRENCY_CD
+					, MARKET_CD
+					, VENDOR_LOT
+					, DESCRIPTION             
+					, CREATE_DATE         
+					, CREATE_BY
+					, SEQ           
+			        )
+		VALUES
+		          ( #{divisionCd, jdbcType=VARCHAR}
+		          , #{companyCd, jdbcType=VARCHAR}
+		          , #{moveId, jdbcType=VARCHAR}
+		          , #{itemId, jdbcType=VARCHAR}
+		          , #{transferFlag, jdbcType=VARCHAR}
+		          , #{locationCd, jdbcType=VARCHAR}
+		          , #{vendorCd, jdbcType=VARCHAR}
+		          , #{materialOrderId, jdbcType=VARCHAR}
+		          , #{materialDepartureId, jdbcType=VARCHAR}
+		          , SYSDATE
+		          , #{inputQty, jdbcType=NUMERIC}
+		          , #{conversionUnitQty, jdbcType=NUMERIC}
+		          , #{currencyCd, jdbcType=VARCHAR}
+		          , #{marketCd, jdbcType=VARCHAR}
+		          , #{vendorLot, jdbcType=VARCHAR}
+		          , #{description, jdbcType=VARCHAR}
+		          , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		          , #{createBy, jdbcType=VARCHAR}
+		          , #{seq, jdbcType=VARCHAR}
+		          )
+  	</insert>
+	
+	<!-- 출고 간판라벨 기준 temp 정보 insert -->
+	<insert id="create_labelPopGiTmp" parameterType="java.util.HashMap">
+        INSERT INTO MOM_POP_LABEL_GI_TMP
+            ( DIVISION_CD  
+            , COMPANY_CD 
+            , MOVE_ID
+            , TRANSFER_FLAG
+            , GIKEYCOL  
+            , TO_LOCATION_CD 
+            , MATERIAL_REQUEST_ID
+            , CREATE_DATE  
+            , CREATE_BY    
+            )
+        VALUES
+            (  #{DIVISION_CD,      		jdbcType=VARCHAR}
+             , #{COMPANY_CD,       		jdbcType=VARCHAR}
+             , #{MOVE_ID,          		jdbcType=VARCHAR}
+             , #{TRANSFER_FLAG,    		jdbcType=VARCHAR}
+             , #{GIKEYCOL,         		jdbcType=VARCHAR}
+             , #{TO_LOCATION_CD,   		jdbcType=VARCHAR}
+             , #{MATERIAL_REQUEST_ID,   jdbcType=VARCHAR}
+             , SYSDATE
+             , #{CREATE_BY,        		jdbcType=VARCHAR}
+            )
+    </insert>
+	
+	<insert id="create_giTemp" parameterType="java.util.HashMap">
+		INSERT INTO MOM_POP_MATERIAL_REQUEST_TMP
+            ( DIVISION_CD 
+              , COMPANY_CD
+              , MOVE_ID
+              , TRANSFER_FLAG
+              , MATERIAL_REQUEST_ID
+              , WORK_ORDER_ID
+              , ITEM_ID
+              , ISSUE_QTY
+              , IN_LOCATION_CD
+              , OUT_LOCATION_CD
+              , OUTSOURCING_FLAG
+              , CREATE_DATE
+              , CREATE_BY
+              , CONVERSION_UNIT
+              , CONVERSION_UNIT_QTY
+              , ISSUE_DATE
+              , MARKET_CD
+              , CURRENCY_CD
+            ) 
+        VALUES 
+            ( 
+              #{divisionCd, jdbcType=VARCHAR}
+              , #{companyCd, jdbcType=VARCHAR}
+              , #{moveId, jdbcType=VARCHAR}
+              , #{transferFlag, jdbcType=VARCHAR}
+              , #{materialRequestId, mode=IN, jdbcType=VARCHAR} 
+              , #{workOrderId, jdbcType=VARCHAR}
+              , #{itemId, jdbcType=VARCHAR}
+              , #{remainQty, jdbcType=NUMERIC}
+              , #{inLocationCd, jdbcType=VARCHAR}
+              , #{outLocationCd, jdbcType=VARCHAR}
+              , #{outsourcingFlag, jdbcType=VARCHAR}
+              , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+              , #{createBy, jdbcType=VARCHAR}
+              , #{conversionUnit, jdbcType=VARCHAR}
+              , #{conversionUnitQty, jdbcType=NUMERIC}
+              , SYSDATE
+              , #{marketCd, jdbcType=VARCHAR}
+              , #{currencyCd, jdbcType=VARCHAR}
+            )
+  	</insert>
+	
+	<!-- 온습도 정보 insert -->
+	<insert id="create_temperature" parameterType="java.util.HashMap">
+		INSERT INTO MOM_POP_TEMPRATURE 
+		    (
+		        DIVISION_CD
+		        , COMPANY_CD
+		        , RESOURCE_CD
+		        , DATETIMEKEY
+		        , TEMPERATURE
+		        , HUMIDITY
+		        , UPPERTEMPERATURE
+		        , UNDERTENPERATURE
+		        , RESULT
+		        , CREATE_DATE
+		        , CREATE_BY
+		    ) 
+		VALUES
+		    (
+		        #{P_DIVISION_CD,        jdbcType=VARCHAR}
+		        , #{P_COMPANY_CD,       jdbcType=VARCHAR}
+		        , #{P_RESOURCE_CD,      jdbcType=VARCHAR}
+		        , #{P_RESOURCE_CD,      jdbcType=VARCHAR} || TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS')
+		        , #{P_TEMPERATURE,      jdbcType=VARCHAR}
+		        , #{P_HUMIDITY,         jdbcType=VARCHAR}
+		        , #{P_UPPERTEMPERATURE, jdbcType=VARCHAR}
+		        , #{P_UNDERTENPERATURE, jdbcType=VARCHAR}
+		        , #{P_RESULT,           jdbcType=VARCHAR}
+		        , SYSDATE
+		        , #{P_CREATE_BY,        jdbcType=VARCHAR}
+		    )
+    </insert>
+	
+	<!-- 간판 라벨 삭제 -->
+	<insert id="create_deleteGanban_proc" statementType="CALLABLE">
+        CALL SP_MOM_POP.P_GANBAN_DELETE (
+           #{p_err_code,        mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg,       mode=OUT, jdbcType=VARCHAR}
+           , #{p_runCount,      mode=OUT, jdbcType=VARCHAR}
+           , #{P_DIVISION_CD,   mode=IN,   jdbcType=VARCHAR}
+           , #{P_COMPANY_CD,    mode=IN,  jdbcType=VARCHAR}
+           , #{P_GANBAN_ID,     mode=IN,  jdbcType=VARCHAR}
+           , #{P_CREATE_BY,     mode=IN,  jdbcType=VARCHAR}
+        )
+    </insert>
+	
+	<!-- 이동처리 실행 -->
+	<insert id="create_move_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_ITEM_STOCK_MOVE_NEW (
+           #{p_err_code,        mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg,       mode=OUT, jdbcType=VARCHAR}
+           , #{P_DIVISION_CD,   mode=IN,   jdbcType=VARCHAR}
+           , #{P_COMPANY_CD,    mode=IN,  jdbcType=VARCHAR}
+           , #{P_STOCK_TYPE,    mode=IN,  jdbcType=VARCHAR}
+           , #{P_MOVE_ID,       mode=IN,  jdbcType=VARCHAR}
+           , #{P_MODIFIER,      mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<insert id="create_bcrport_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_BCR_UPSERT (
+             #{p_err_code,      mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg,       mode=OUT, jdbcType=VARCHAR}
+           , #{P_MACADDRESS,    mode=IN,  jdbcType=VARCHAR}
+           , #{P_PCNAME,        mode=IN,  jdbcType=VARCHAR}
+           , #{P_IP,            mode=IN,  jdbcType=VARCHAR}
+           , #{P_GTPRINT,       mode=IN,  jdbcType=VARCHAR}
+           , #{P_CTPRINT,       mode=IN,  jdbcType=VARCHAR}
+           , #{P_PALLETPRINT,   mode=IN,  jdbcType=VARCHAR}
+           , #{P_SLEEP,         mode=IN,  jdbcType=VARCHAR}
+           , #{P_FLAG,          mode=IN,  jdbcType=VARCHAR}
+           , #{P_CREATE_BY,     mode=IN,  jdbcType=VARCHAR}
+           , #{P_PUSHBUTTON1,   mode=IN,  jdbcType=VARCHAR}
+           , #{P_PUSHBUTTON2,   mode=IN,  jdbcType=VARCHAR}
+           , #{P_USEMANAGEMENT, mode=IN,  jdbcType=VARCHAR}
+           , #{P_GANBANPRINT,   mode=IN,  jdbcType=VARCHAR}
+           , #{P_PRINTID,       mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<insert id="create_bcrremember_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_BCR_REMEMBERVALUE (
+             #{p_err_code,      mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg,       mode=OUT, jdbcType=VARCHAR}
+           , #{P_MACADDRESS,    mode=IN,  jdbcType=VARCHAR}
+           , #{P_LOGINREMEMBER, mode=IN,  jdbcType=VARCHAR}
+           , #{P_LINEREMEMBER,  mode=IN,  jdbcType=VARCHAR}
+           , #{P_UPDATE_BY,     mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<insert id="create_labellist_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_LABELLIST_UPSERT (
+             #{p_err_code,        mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg,         mode=OUT, jdbcType=VARCHAR}
+           , #{p_runCount,        mode=OUT, jdbcType=VARCHAR}
+           , #{P_LABEL_ID,        mode=IN,  jdbcType=VARCHAR}
+           , #{P_LABEL_DESC,      mode=IN,  jdbcType=VARCHAR}
+           , #{P_PRINT_ID,        mode=IN,  jdbcType=VARCHAR}
+           , #{P_LABELSTATUS,     mode=IN,  jdbcType=VARCHAR}
+           , #{P_CREATE_BY,       mode=IN,  jdbcType=VARCHAR}
+           , #{P_WIZARD_LABEL_ID, mode=IN,  jdbcType=VARCHAR}
+           , #{P_FLAG,            mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+
+	<!-- CT 포장 -->
+	<insert id="create_popctpacking_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_CT_PACKING (
+             #{p_err_code,        mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg,         mode=OUT, jdbcType=VARCHAR}
+           , #{p_runCount,        mode=OUT, jdbcType=VARCHAR}
+           , #{p_ct,              mode=OUT, jdbcType=VARCHAR}
+           , #{P_DIVISION_CD,     mode=IN,  jdbcType=VARCHAR}
+           , #{P_COMPANY_CD,      mode=IN,  jdbcType=VARCHAR}
+           , #{P_WORK_ORDER_ID,   mode=IN,  jdbcType=VARCHAR}
+           , #{P_CREATE_BY,       mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>	
+
+	<insert id="create_labelobject_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_LABELOBJECT_UPSERT (
+              #{p_err_code,              mode=OUT, jdbcType=VARCHAR}
+            , #{p_err_msg,               mode=OUT, jdbcType=VARCHAR}
+            , #{p_runCount,              mode=OUT, jdbcType=VARCHAR}
+            , #{P_FLAG,                  mode=IN,  jdbcType=VARCHAR}
+            , #{P_LABEL_ID,              mode=IN,  jdbcType=VARCHAR}
+			, #{P_PRINT_ID,              mode=IN,  jdbcType=VARCHAR}
+			, #{P_LABEL_SEQ,             mode=IN,  jdbcType=VARCHAR}
+			, #{P_METHOD_ID,             mode=IN,  jdbcType=VARCHAR}
+			, #{P_X_POSITION_MM,         mode=IN,  jdbcType=VARCHAR}
+			, #{P_Y_POSITION_MM,         mode=IN,  jdbcType=VARCHAR}
+			, #{P_X_POSITION_PIX,        mode=IN,  jdbcType=VARCHAR}
+			, #{P_Y_POSITION_PIX,        mode=IN,  jdbcType=VARCHAR}
+			, #{P_LINE_THICKNESS,        mode=IN,  jdbcType=VARCHAR}
+			, #{P_WIDTH_AREA_MM,         mode=IN,  jdbcType=VARCHAR}
+			, #{P_HEIGHT_AREA_MM,        mode=IN,  jdbcType=VARCHAR}
+			, #{P_WIDTH_AREA_PIX,        mode=IN,  jdbcType=VARCHAR}
+			, #{P_HEIGHT_AREA_PIX,       mode=IN,  jdbcType=VARCHAR}
+			, #{P_BARCODE_MODULE_WIDTH,  mode=IN,  jdbcType=VARCHAR}
+			, #{P_BARCODE_RATIO,         mode=IN,  jdbcType=VARCHAR}
+			, #{P_LANDSCAPE,             mode=IN,  jdbcType=VARCHAR}
+			, #{P_BARCODE_HEIGHT_MM,     mode=IN,  jdbcType=VARCHAR}
+			, #{P_BARCODE_HEIGHT_PIX,    mode=IN,  jdbcType=VARCHAR}
+			, #{P_BARCODE_TEXT_UNDER_YN, mode=IN,  jdbcType=VARCHAR}
+			, #{P_BARCODE_2D_SIZE,       mode=IN,  jdbcType=VARCHAR}
+			, #{P_LABEL_VALUE,           mode=IN,  jdbcType=VARCHAR}
+			, #{P_CREATE_BY,             mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<insert id="create_labelobjectmove_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_LABELOBJECT_MOVE (
+              #{p_err_code,              mode=OUT, jdbcType=VARCHAR}
+            , #{p_err_msg,               mode=OUT, jdbcType=VARCHAR}
+            , #{p_runCount,              mode=OUT, jdbcType=VARCHAR}
+            , #{P_LABEL_ID,              mode=IN,  jdbcType=VARCHAR}
+			, #{P_PRINT_ID,              mode=IN,  jdbcType=VARCHAR}
+			, #{P_LABEL_SEQ,             mode=IN,  jdbcType=VARCHAR}
+			, #{P_X_POSITION_MM,         mode=IN,  jdbcType=VARCHAR}
+			, #{P_Y_POSITION_MM,         mode=IN,  jdbcType=VARCHAR}
+			, #{P_X_POSITION_PIX,        mode=IN,  jdbcType=VARCHAR}
+			, #{P_Y_POSITION_PIX,        mode=IN,  jdbcType=VARCHAR}
+			, #{P_CREATE_BY,             mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<insert id="create_labelobjectdel_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_LABELOBJECT_DELETE (
+              #{p_err_code,              mode=OUT, jdbcType=VARCHAR}
+            , #{p_err_msg,               mode=OUT, jdbcType=VARCHAR}
+            , #{p_runCount,              mode=OUT, jdbcType=VARCHAR}
+            , #{P_LABEL_ID,              mode=IN,  jdbcType=VARCHAR}
+			, #{P_PRINT_ID,              mode=IN,  jdbcType=VARCHAR}
+			, #{P_LABEL_SEQ,             mode=IN,  jdbcType=VARCHAR}
+			, #{P_CREATE_BY,             mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<insert id="create_popworesult_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_POP_CREATE_WO_RESULT (
+              #{p_err_code,      mode=OUT, jdbcType=VARCHAR}
+			, #{p_err_msg,       mode=OUT, jdbcType=VARCHAR}
+			, #{p_division_cd,   mode=IN,  jdbcType=VARCHAR}
+			, #{p_company_cd,    mode=IN,  jdbcType=VARCHAR}
+			, #{p_serialnumber,  mode=IN,  jdbcType=VARCHAR}
+			, #{p_scode,         mode=IN,  jdbcType=VARCHAR}
+			, #{p_ccode,         mode=IN,  jdbcType=VARCHAR}
+			, #{p_work_order_id, mode=IN,  jdbcType=VARCHAR}
+			, #{p_wo_state,      mode=IN,  jdbcType=VARCHAR}
+			, #{p_shift_cd,      mode=IN,  jdbcType=VARCHAR}
+			, #{p_work_person,   mode=IN,  jdbcType=VARCHAR}
+			, #{p_good_qty,      mode=IN,  jdbcType=VARCHAR}
+			, #{p_bad_qty,       mode=IN,  jdbcType=VARCHAR}
+			, #{p_description,   mode=IN,  jdbcType=VARCHAR}
+			, #{p_close_flag,    mode=IN,  jdbcType=VARCHAR}
+			, #{p_badcode,       mode=IN,  jdbcType=VARCHAR}
+			, #{p_update_by,     mode=IN,  jdbcType=VARCHAR}
+			, #{p_label_id,      mode=IN,  jdbcType=VARCHAR}
+			, #{p_ip_address,    mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+
+	<!-- SN생성(sn, ct, pallet) -->
+	<insert id="create_snmake_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_SNMAKE (
+             #{p_err_code,        mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg,         mode=OUT, jdbcType=VARCHAR}
+           , #{p_runCount,        mode=OUT, jdbcType=VARCHAR}
+           , #{P_FLAG,            mode=IN,  jdbcType=VARCHAR}
+           , #{P_ITEM_ID,         mode=IN,  jdbcType=VARCHAR}
+           , #{P_SCODE,           mode=IN,  jdbcType=VARCHAR}
+           , #{P_CCODE,           mode=IN,  jdbcType=VARCHAR}
+           , #{P_WORK_ORDER_ID,   mode=IN,  jdbcType=VARCHAR}
+           , #{P_CREATE_BY,       mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<!-- 파레트 구성(sn, ct, pallet) -->
+	<insert id="create_palletupsert_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_PALLET_UPSERT (
+             #{p_err_code,        mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg,         mode=OUT, jdbcType=VARCHAR}
+           , #{p_runCount,        mode=OUT, jdbcType=VARCHAR}
+           , #{p_palletid,        mode=OUT, jdbcType=VARCHAR}
+           , #{p_itemid,          mode=OUT, jdbcType=VARCHAR}
+           , #{p_palletqty,       mode=OUT, jdbcType=VARCHAR}
+           , #{p_message,         mode=OUT, jdbcType=VARCHAR}
+           , #{p_division_cd,     mode=IN,  jdbcType=VARCHAR}
+           , #{p_company_cd,      mode=IN,  jdbcType=VARCHAR}
+           , #{p_labeltype,       mode=IN,  jdbcType=VARCHAR}
+           , #{p_sn,              mode=IN,  jdbcType=VARCHAR}
+           , #{p_update_by,       mode=IN,  jdbcType=VARCHAR}
+           , #{p_pre_palletid,    mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<!-- 파레트 초기화 -->
+	<insert id="create_palletinit_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_PALLET_INIT (
+             #{p_err_code,        mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg,         mode=OUT, jdbcType=VARCHAR}
+           , #{p_runCount,        mode=OUT, jdbcType=VARCHAR}
+           , #{p_division_cd,     mode=IN,  jdbcType=VARCHAR}
+           , #{p_company_cd,      mode=IN,  jdbcType=VARCHAR}
+           , #{p_palletid,        mode=IN,  jdbcType=VARCHAR}
+           , #{p_update_by,       mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<!-- 간반구성시 SN타입 알아오기 -->
+	<insert id="create_ganbancheck_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_GANBANCHECK (
+             #{p_err_code,        mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg,         mode=OUT, jdbcType=VARCHAR}
+           , #{p_sloc,            mode=OUT, jdbcType=VARCHAR}
+           , #{p_ganbantype,      mode=OUT, jdbcType=VARCHAR}
+           , #{p_useyn,           mode=OUT, jdbcType=VARCHAR}
+           , #{P_DIVISION_CD,     mode=IN,  jdbcType=VARCHAR}
+           , #{P_COMPANY_CD,      mode=IN,  jdbcType=VARCHAR}
+           , #{P_SN,              mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<!-- 간반구성라벨 구성 -->
+	<insert id="create_ganbaninsert_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_GANBAN_INSERT (
+			  #{p_err_code,           mode=OUT, jdbcType=VARCHAR}
+			, #{p_err_msg,            mode=OUT, jdbcType=VARCHAR}
+			, #{p_runCount,           mode=OUT, jdbcType=VARCHAR}
+			, #{p_ganbanid,           mode=OUT, jdbcType=VARCHAR}
+			, #{P_DIVISION_CD,        mode=IN,  jdbcType=VARCHAR}
+			, #{P_COMPANY_CD,         mode=IN,  jdbcType=VARCHAR}
+			, #{P_ITEM_ID,            mode=IN,  jdbcType=VARCHAR}
+			, #{P_DEPARTURE_GROUP_ID, mode=IN,  jdbcType=VARCHAR}
+			, #{P_GOOD_QTY,           mode=IN,  jdbcType=VARCHAR}
+			, #{P_FROM_SLOC,          mode=IN,  jdbcType=VARCHAR}
+			, #{P_DESCRIPTION,        mode=IN,  jdbcType=VARCHAR}
+			, #{P_CREATE_BY,          mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<!-- 간반구성라벨 구성 -->
+	<insert id="create_ganbaninsert_proc_new" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_GANBAN_INSERT_NEW (
+			  #{p_err_code,           mode=OUT, jdbcType=VARCHAR}
+			, #{p_err_msg,            mode=OUT, jdbcType=VARCHAR}
+			, #{p_runCount,           mode=OUT, jdbcType=VARCHAR}
+			, #{p_ganbanid,           mode=OUT, jdbcType=VARCHAR}
+			, #{P_DIVISION_CD,        mode=IN,  jdbcType=VARCHAR}
+			, #{P_COMPANY_CD,         mode=IN,  jdbcType=VARCHAR}
+			, #{P_ITEM_ID,            mode=IN,  jdbcType=VARCHAR}
+			, #{P_DEPARTURE_GROUP_ID, mode=IN,  jdbcType=VARCHAR}
+			, #{P_WORK_ORDER_ID,      mode=IN,  jdbcType=VARCHAR}
+			, #{P_GANBANTYPE,         mode=IN,  jdbcType=VARCHAR}
+			, #{P_GOOD_QTY,           mode=IN,  jdbcType=VARCHAR}
+			, #{P_FROM_SLOC,          mode=IN,  jdbcType=VARCHAR}
+			, #{P_SLOC,               mode=IN,  jdbcType=VARCHAR}
+			, #{P_VENDOR_CD,          mode=IN,  jdbcType=VARCHAR}
+			, #{P_DESCRIPTION,        mode=IN,  jdbcType=VARCHAR}
+			, #{P_PA_GANBAN_ID,       mode=IN,  jdbcType=VARCHAR}
+			, #{P_CREATE_BY,          mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<!-- 간반라벨 TMP 구성 -->
+	<insert id="create_ganbantmpinsert_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_GANBAN_TMP_INSERT (
+			  #{p_err_code,           mode=OUT, jdbcType=VARCHAR}
+			, #{p_err_msg,            mode=OUT, jdbcType=VARCHAR}
+			, #{p_runCount,           mode=OUT, jdbcType=VARCHAR}
+			, #{p_ganbanid,           mode=OUT, jdbcType=VARCHAR}
+			, #{P_LABEL_ID,           mode=IN,  jdbcType=VARCHAR}
+			, #{P_IP_ADDRESS,         mode=IN,  jdbcType=VARCHAR}
+			, #{P_DIVISION_CD,        mode=IN,  jdbcType=VARCHAR}
+			, #{P_COMPANY_CD,         mode=IN,  jdbcType=VARCHAR}
+			, #{P_GANBAN_ID,          mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<!-- 간반구성라벨 구성 -->
+	<insert id="create_ganbaninsert_proc_new1" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_GANBAN_INSERT_NEW1 (
+			  #{p_err_code,           mode=OUT, jdbcType=VARCHAR}
+			, #{p_err_msg,            mode=OUT, jdbcType=VARCHAR}
+			, #{p_runCount,           mode=OUT, jdbcType=VARCHAR}
+			, #{p_ganbanid,           mode=OUT, jdbcType=VARCHAR}
+			, #{P_LABEL_ID,           mode=IN,  jdbcType=VARCHAR}
+			, #{P_IP_ADDRESS,         mode=IN,  jdbcType=VARCHAR}
+			, #{P_DIVISION_CD,        mode=IN,  jdbcType=VARCHAR}
+			, #{P_COMPANY_CD,         mode=IN,  jdbcType=VARCHAR}
+			, #{P_ITEM_ID,            mode=IN,  jdbcType=VARCHAR}
+			, #{P_DEPARTURE_GROUP_ID, mode=IN,  jdbcType=VARCHAR}
+			, #{P_WORK_ORDER_ID,      mode=IN,  jdbcType=VARCHAR}
+			, #{P_GANBANTYPE,         mode=IN,  jdbcType=VARCHAR}
+			, #{P_GOOD_QTY,           mode=IN,  jdbcType=VARCHAR}
+			, #{P_FROM_SLOC,          mode=IN,  jdbcType=VARCHAR}
+			, #{P_SLOC,               mode=IN,  jdbcType=VARCHAR}
+			, #{P_VENDOR_CD,          mode=IN,  jdbcType=VARCHAR}
+			, #{P_DESCRIPTION,        mode=IN,  jdbcType=VARCHAR}
+			, #{P_PA_GANBAN_ID,       mode=IN,  jdbcType=VARCHAR}
+			, #{P_CREATE_BY,          mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<!-- 간반구성라벨 구성 -->
+	<insert id="create_ganbansplit_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_GANBAN_SPLIT (
+			  #{p_err_code,           mode=OUT, jdbcType=VARCHAR}
+			, #{p_err_msg,            mode=OUT, jdbcType=VARCHAR}
+			, #{p_runCount,           mode=OUT, jdbcType=VARCHAR}
+			, #{p_ganbanid,           mode=OUT, jdbcType=VARCHAR}
+			, #{P_DIVISION_CD,        mode=IN,  jdbcType=VARCHAR}
+			, #{P_COMPANY_CD,         mode=IN,  jdbcType=VARCHAR}
+			, #{P_WORK_ORDER_ID,      mode=IN,  jdbcType=VARCHAR}
+			, #{P_GANBANTYPE,         mode=IN,  jdbcType=VARCHAR}
+			, #{P_GOOD_QTY,           mode=IN,  jdbcType=VARCHAR}
+			, #{P_DESCRIPTION,        mode=IN,  jdbcType=VARCHAR}
+			, #{P_PA_GANBAN_ID,       mode=IN,  jdbcType=VARCHAR}
+			, #{P_CREATE_BY,          mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<!-- 간반구성라벨 구성 -->
+	<insert id="create_ganbansplit_proc_new" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_GANBAN_SPLIT_NEW (
+			  #{p_err_code,           mode=OUT, jdbcType=VARCHAR}
+			, #{p_err_msg,            mode=OUT, jdbcType=VARCHAR}
+			, #{p_runCount,           mode=OUT, jdbcType=VARCHAR}
+			, #{p_ganbanid,           mode=OUT, jdbcType=VARCHAR}
+			, #{P_LABEL_ID,           mode=IN,  jdbcType=VARCHAR}
+			, #{P_IP_ADDRESS,         mode=IN,  jdbcType=VARCHAR}
+			, #{P_DIVISION_CD,        mode=IN,  jdbcType=VARCHAR}
+			, #{P_COMPANY_CD,         mode=IN,  jdbcType=VARCHAR}
+			, #{P_WORK_ORDER_ID,      mode=IN,  jdbcType=VARCHAR}
+			, #{P_GOOD_QTY,           mode=IN,  jdbcType=VARCHAR}
+			, #{P_DESCRIPTION,        mode=IN,  jdbcType=VARCHAR}
+			, #{P_PA_GANBAN_ID,       mode=IN,  jdbcType=VARCHAR}
+			, #{P_CREATE_BY,          mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<!-- 자재입고 실행 -->
+	<insert id="create_mat_gr_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_MATERIAL_GOOD_RECEIPT (
+           #{p_err_code,        mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg,       mode=OUT, jdbcType=VARCHAR}
+           , #{p_division_cd,   mode=IN,   jdbcType=VARCHAR}
+           , #{p_company_cd,    mode=IN,  jdbcType=VARCHAR}
+           , #{p_move_id,       mode=IN,  jdbcType=VARCHAR}
+           , #{p_modifier,      mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<!-- 자재입고 실행 -->
+	<insert id="create_mat_gr_proc_new" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_MATERIAL_GOOD_RECEIPT(
+           #{p_err_code,        mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg,       mode=OUT, jdbcType=VARCHAR}
+           , #{p_division_cd,   mode=IN,   jdbcType=VARCHAR}
+           , #{p_company_cd,    mode=IN,  jdbcType=VARCHAR}
+           , #{p_move_id,       mode=IN,  jdbcType=VARCHAR}
+           , #{p_modifier,      mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<!-- 불출처리 실행 -->
+	<insert id="create_mat_gi_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_MATERIAL_REQUEST_ISSUE_NEW (
+           #{p_err_code,        mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg,       mode=OUT, jdbcType=VARCHAR}
+           , #{p_division_cd,   mode=IN,   jdbcType=VARCHAR}
+           , #{p_company_cd,    mode=IN,  jdbcType=VARCHAR}
+           , #{p_move_id,       mode=IN,  jdbcType=VARCHAR}
+           , #{p_modifier,      mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<!-- 간판라벨 소진처리 -->
+	<insert id="create_ganban_use_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_GANBAN_USE_PROCESS (
+             #{p_err_code,      mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg,       mode=OUT, jdbcType=VARCHAR}
+           , #{P_DIVISION_CD,   mode=IN,  jdbcType=VARCHAR}
+           , #{P_COMPANY_CD,    mode=IN,  jdbcType=VARCHAR}
+           , #{P_LOCATION_CD,   mode=IN,  jdbcType=VARCHAR}
+           , #{P_GANBAN_ID,     mode=IN,  jdbcType=VARCHAR}
+           , #{P_USER_ID,       mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<!-- 간판라벨 소진취소 처리 -->
+	<insert id="create_ganban_use_cancel_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_GANBAN_USE_CANCEL (
+             #{p_err_code,      mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg,       mode=OUT, jdbcType=VARCHAR}
+           , #{P_DIVISION_CD,   mode=IN,  jdbcType=VARCHAR}
+           , #{P_COMPANY_CD,    mode=IN,  jdbcType=VARCHAR}
+           , #{P_LOCATION_CD,   mode=IN,  jdbcType=VARCHAR}
+           , #{P_GANBAN_ID,     mode=IN,  jdbcType=VARCHAR}
+           , #{P_USER_ID,       mode=IN,  jdbcType=VARCHAR}
+           , #{P_LABEL_ID,    	mode=IN,  jdbcType=VARCHAR}
+           , #{P_PRINT_IP,    	mode=IN,  jdbcType=VARCHAR}
+           , #{P_REPRINT_YN,    mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<insert id="create_move_bin_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_GANBAN_MOVE_BIN (
+             #{p_err_code,      mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg,       mode=OUT, jdbcType=VARCHAR}
+           , #{P_DIVISION_CD,   mode=IN,   jdbcType=VARCHAR}
+           , #{P_COMPANY_CD,    mode=IN,  jdbcType=VARCHAR}
+           , #{P_LOCATION_CD,   mode=IN,  jdbcType=VARCHAR}
+           , #{P_BIN_ID,        mode=IN,  jdbcType=VARCHAR}
+           , #{P_GANBAN_ID,     mode=IN,  jdbcType=VARCHAR}
+           , #{P_ITEM_ID,       mode=IN,  jdbcType=VARCHAR}
+           , #{P_USER_ID,       mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	
+	<insert id="create_woResult_cancel_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_POP_CREATE_WO_RESULT_CANCEL (
+             #{p_err_code,      	mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg,       	mode=OUT, jdbcType=VARCHAR}
+           , #{p_division_cd,   	mode=IN,  jdbcType=VARCHAR}
+           , #{p_company_cd,    	mode=IN,  jdbcType=VARCHAR}
+           , #{p_work_result_id,   	mode=IN,  jdbcType=VARCHAR}
+           , #{p_work_order_id,     mode=IN,  jdbcType=VARCHAR}
+           , #{p_ganban_id,     	mode=IN,  jdbcType=VARCHAR}
+           , #{p_update_by,       	mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	
+	<!-- tmp 데이터 삭제 -->
+	<insert id="del_TmpData_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_TMP_DELETE (
+             #{p_err_code,      	mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg,       	mode=OUT, jdbcType=VARCHAR}
+           , #{P_DIVISION_CD,   	mode=IN,  jdbcType=VARCHAR}
+           , #{P_COMPANY_CD,    	mode=IN,  jdbcType=VARCHAR}
+           , #{P_TMP_TYPE,   		mode=IN,  jdbcType=VARCHAR}
+           , #{P_TMP_ID,     		mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<!-- 출발처리 -->
+	<delete id="remove_materialDepartureTemp" parameterType="java.util.HashMap">
+		DELETE 
+		  FROM MOM_MATERIAL_DEPARTURE_UPLOAD
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND DEPARTURE_TYPE = #{departureType, jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="create_materialDepartureTemp" parameterType="java.util.HashMap">
+		INSERT INTO MOM_MATERIAL_DEPARTURE_UPLOAD (
+			DIVISION_CD
+		  , COMPANY_CD
+		  , MATERIAL_ORDER_ID
+		  , DEPARTURE_QTY
+		  , DEPARTURE_DATE
+		  , DESCRIPTION
+		  , DEPARTURE_TYPE
+		  , VENDOR_LOT
+		  , IQC_FLAG
+		  , CONVERSION_UNIT_QTY
+		  , SEQ
+		)
+		VALUES (
+			#{divisionCd, jdbcType=VARCHAR}
+		  , #{companyCd, jdbcType=VARCHAR}
+		  , #{materialOrderId, jdbcType=VARCHAR}
+		  , #{departureQty, jdbcType=NUMERIC}
+		  , TO_DATE(#{departureDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+		  , #{description, jdbcType=VARCHAR}
+		  , #{departureType, jdbcType=VARCHAR}
+		  , #{vendorLot, jdbcType=VARCHAR}
+		  , #{checkFlag, jdbcType=VARCHAR}
+		  , #{conversionUnitQty, jdbcType=NUMERIC}
+		  , #{seq, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="create_materialDeparture" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_CREATE_MATERIAL_DEPARTURE (
+             #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+           , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+           , #{companyCd, mode=IN, jdbcType=VARCHAR}
+           , #{departureType, mode=IN, jdbcType=VARCHAR}
+           , #{userId, mode=IN, jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<insert id="create_wo_result_pallet" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_CREATE_WO_RESULT_PALLET (
+             #{p_err_code, 		mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg, 		mode=OUT, jdbcType=VARCHAR}
+           , #{P_DIVISION_CD, 	mode=IN, jdbcType=VARCHAR}
+           , #{P_COMPANY_CD, 	mode=IN, jdbcType=VARCHAR}
+           , #{P_WORK_ORDER_ID, mode=IN, jdbcType=VARCHAR}
+           , #{P_LABEL_ID, 		mode=IN, jdbcType=VARCHAR}
+           , #{P_IP_ADDRESS, 	mode=IN, jdbcType=VARCHAR}
+           , #{P_USER_ID, 		mode=IN, jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+	<insert id="create_ganban_tmp" parameterType="java.util.HashMap">
+		INSERT INTO TU_GANBAN_TMP
+					( DIVISION_CD
+					, COMPANY_CD
+					, LABEL_ID
+					, IP_ADDRESS
+					, GANBAN_ID
+					, PRINT_FLAG
+					, GANBAN_TYPE
+					)
+					VALUES
+					( #{P_DIVISION_CD, 	mode=IN, jdbcType=VARCHAR}
+		            , #{P_COMPANY_CD, 	mode=IN, jdbcType=VARCHAR}
+		            , #{P_LABEL_ID, 	mode=IN, jdbcType=VARCHAR}
+		            , #{P_IP_ADDRESS, 	mode=IN, jdbcType=VARCHAR}
+		            , #{P_GANBAN_ID, 	mode=IN, jdbcType=VARCHAR}
+		            , 'WAIT'
+		            , #{P_GANBAN_TYPE, 	mode=IN, jdbcType=VARCHAR}
+					
+					)
+	</insert>
+	
+	<!-- 저울 측정 정보 저장 -->
+	<insert id="create_scale_proc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_POP.P_SCALE_INPUT (
+             #{p_err_code,        mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg,         mode=OUT, jdbcType=VARCHAR}
+           , #{p_runCount,        mode=OUT, jdbcType=VARCHAR}
+           , #{P_SN,              mode=IN,  jdbcType=VARCHAR}
+           , #{P_DIVISION_CD,     mode=IN,  jdbcType=VARCHAR}
+           , #{P_COMPANY_CD,      mode=IN,  jdbcType=VARCHAR}
+           , #{P_WORK_ORDER_ID,   mode=IN,  jdbcType=VARCHAR}
+           , #{P_ITEM_ID,         mode=IN,  jdbcType=VARCHAR}
+           , #{P_MEASURE,         mode=IN,  jdbcType=VARCHAR}
+           , #{P_FLAG,            mode=IN,  jdbcType=VARCHAR}
+           , #{P_CREATE_BY,       mode=IN,  jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+
+</mapper>

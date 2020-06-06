@@ -1,0 +1,108 @@
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\MetroFramework\bin\Debug\MetroFramework.dll.config
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\MetroFramework\bin\Debug\MetroFramework.dll
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\MetroFramework\bin\Debug\MetroFramework.pdb
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\MetroFramework\obj\Debug\MetroFramework.g.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\MetroFramework\obj\Debug\MetroFramework.Controls.MetroGrid.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\MetroFramework\obj\Debug\MetroFramework.Properties.Resources.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\MetroFramework\obj\Debug\MetroFramework.csproj.GenerateResource.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\MetroFramework\obj\Debug\MetroFramework.csproj.CoreCompileInputs.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\MetroFramework\obj\Debug\MetroFramework.dll
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\MetroFramework\obj\Debug\MetroFramework.pdb
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.csprojAssemblyReference.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.g.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.Controls.MetroGrid.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.Properties.Resources.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.csproj.GenerateResource.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.csproj.CoreCompileInputs.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.dll
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.pdb
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.g.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.Controls.MetroGrid.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.Properties.Resources.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.csproj.GenerateResource.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.csproj.CoreCompileInputs.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.dll
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.pdb
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.csprojAssemblyReference.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\MetroFramework\obj\Debug\MetroFramework.g.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\MetroFramework\obj\Debug\MetroFramework.Controls.MetroGrid.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\MetroFramework\obj\Debug\MetroFramework.Properties.Resources.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\MetroFramework\obj\Debug\MetroFramework.csproj.GenerateResource.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\MetroFramework\obj\Debug\MetroFramework.csproj.CoreCompileInputs.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\MetroFramework\obj\Debug\MetroFramework.dll
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\SmartMOM_POP_double\MetroFramework\obj\Debug\MetroFramework.pdb
+C:\SMARTMOM\MOM.RPT\MetroFramework.dll.config
+C:\SMARTMOM\MOM.RPT\MetroFramework.dll
+C:\SMARTMOM\MOM.RPT\MetroFramework.pdb
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.csprojAssemblyReference.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.g.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.Controls.MetroGrid.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.Properties.Resources.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.csproj.GenerateResource.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.csproj.CoreCompileInputs.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.dll
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.pdb
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\MetroFramework\obj\Debug\MetroFramework.csprojAssemblyReference.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\MetroFramework\obj\Debug\MetroFramework.g.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\MetroFramework\obj\Debug\MetroFramework.Controls.MetroGrid.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\MetroFramework\obj\Debug\MetroFramework.Properties.Resources.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\MetroFramework\obj\Debug\MetroFramework.csproj.GenerateResource.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\MetroFramework\obj\Debug\MetroFramework.csproj.CoreCompileInputs.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\MetroFramework\obj\Debug\MetroFramework.dll
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\05.AD인터내셔날\01.Source\AD_SmartPOP\MetroFramework\obj\Debug\MetroFramework.pdb
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\MetroFramework\obj\Debug\MetroFramework.g.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\MetroFramework\obj\Debug\MetroFramework.Controls.MetroGrid.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\MetroFramework\obj\Debug\MetroFramework.Properties.Resources.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\MetroFramework\obj\Debug\MetroFramework.csproj.GenerateResource.cache
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\MetroFramework\obj\Debug\MetroFramework.csproj.CoreCompileInputs.cache
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\MetroFramework\obj\Debug\MetroFramework.dll
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날\AD_SmartPOP\MetroFramework\obj\Debug\MetroFramework.pdb
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\MetroFramework\obj\Debug\MetroFramework.g.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\MetroFramework\obj\Debug\MetroFramework.Controls.MetroGrid.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\MetroFramework\obj\Debug\MetroFramework.Properties.Resources.resources
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\MetroFramework\obj\Debug\MetroFramework.csproj.GenerateResource.cache
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\MetroFramework\obj\Debug\MetroFramework.csproj.CoreCompileInputs.cache
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\MetroFramework\obj\Debug\MetroFramework.dll
+D:\998.OneDrive\OneDrive - 주식회사 티라유텍\001.Project\27. AD인터내셔날_이베스코\SmartPOP\MetroFramework\obj\Debug\MetroFramework.pdb
+D:\SMARTMOM\MOM.RPT\MetroFramework.dll.config
+D:\SMARTMOM\MOM.RPT\MetroFramework.dll
+D:\SMARTMOM\MOM.RPT\MetroFramework.pdb
+D:\WindowsProjects\SmartPOP\MetroFramework\obj\Debug\MetroFramework.g.resources
+D:\WindowsProjects\SmartPOP\MetroFramework\obj\Debug\MetroFramework.Controls.MetroGrid.resources
+D:\WindowsProjects\SmartPOP\MetroFramework\obj\Debug\MetroFramework.Properties.Resources.resources
+D:\WindowsProjects\SmartPOP\MetroFramework\obj\Debug\MetroFramework.csproj.GenerateResource.Cache
+D:\WindowsProjects\SmartPOP\MetroFramework\obj\Debug\MetroFramework.csproj.CoreCompileInputs.cache
+D:\WindowsProjects\SmartPOP\MetroFramework\obj\Debug\MetroFramework.dll
+D:\WindowsProjects\SmartPOP\MetroFramework\obj\Debug\MetroFramework.pdb
+D:\SmartPOP\MetroFramework\obj\Debug\MetroFramework.g.resources
+D:\SmartPOP\MetroFramework\obj\Debug\MetroFramework.Controls.MetroGrid.resources
+D:\SmartPOP\MetroFramework\obj\Debug\MetroFramework.Properties.Resources.resources
+D:\SmartPOP\MetroFramework\obj\Debug\MetroFramework.csproj.GenerateResource.cache
+D:\SmartPOP\MetroFramework\obj\Debug\MetroFramework.dll
+D:\SmartPOP\MetroFramework\obj\Debug\MetroFramework.pdb
+D:\SmartPOP\MetroFramework\obj\Debug\MetroFramework.csprojAssemblyReference.cache
+D:\SmartPOP\MetroFramework\obj\Debug\MetroFramework.csproj.CopyComplete
+C:\Users\USER\Desktop\SmartPOP\MetroFramework\obj\Debug\MetroFramework.csprojAssemblyReference.cache
+C:\Users\USER\Desktop\SmartPOP\MetroFramework\obj\Debug\MetroFramework.g.resources
+C:\Users\USER\Desktop\SmartPOP\MetroFramework\obj\Debug\MetroFramework.Controls.MetroGrid.resources
+C:\Users\USER\Desktop\SmartPOP\MetroFramework\obj\Debug\MetroFramework.Properties.Resources.resources
+C:\Users\USER\Desktop\SmartPOP\MetroFramework\obj\Debug\MetroFramework.csproj.GenerateResource.cache
+C:\Users\USER\Desktop\SmartPOP\MetroFramework\obj\Debug\MetroFramework.csproj.CopyComplete
+C:\Users\USER\Desktop\SmartPOP\MetroFramework\obj\Debug\MetroFramework.dll
+C:\Users\USER\Desktop\SmartPOP\MetroFramework\obj\Debug\MetroFramework.pdb
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\MetroFramework\obj\Debug\MetroFramework.csprojAssemblyReference.cache
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\MetroFramework\obj\Debug\MetroFramework.g.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\MetroFramework\obj\Debug\MetroFramework.Controls.MetroGrid.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\MetroFramework\obj\Debug\MetroFramework.Properties.Resources.resources
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\MetroFramework\obj\Debug\MetroFramework.csproj.GenerateResource.cache
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\MetroFramework\obj\Debug\MetroFramework.csproj.CopyComplete
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\MetroFramework\obj\Debug\MetroFramework.dll
+C:\Users\USER\Desktop\POP(구)\AD\SmartPOP\MetroFramework\obj\Debug\MetroFramework.pdb
+C:\Users\USER\Desktop\POP(구)\AD\PDA\SmartPOP\MetroFramework\obj\Debug\MetroFramework.csprojAssemblyReference.cache
+C:\Users\USER\Desktop\POP(구)\AD\PDA\SmartPOP\MetroFramework\obj\Debug\MetroFramework.g.resources
+C:\Users\USER\Desktop\POP(구)\AD\PDA\SmartPOP\MetroFramework\obj\Debug\MetroFramework.Controls.MetroGrid.resources
+C:\Users\USER\Desktop\POP(구)\AD\PDA\SmartPOP\MetroFramework\obj\Debug\MetroFramework.Properties.Resources.resources
+C:\Users\USER\Desktop\POP(구)\AD\PDA\SmartPOP\MetroFramework\obj\Debug\MetroFramework.csproj.GenerateResource.cache
+C:\Users\USER\Desktop\POP(구)\AD\PDA\SmartPOP\MetroFramework\obj\Debug\MetroFramework.csproj.CopyComplete
+C:\Users\USER\Desktop\POP(구)\AD\PDA\SmartPOP\MetroFramework\obj\Debug\MetroFramework.dll
+C:\Users\USER\Desktop\POP(구)\AD\PDA\SmartPOP\MetroFramework\obj\Debug\MetroFramework.pdb

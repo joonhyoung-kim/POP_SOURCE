@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.quality.processQualityCoorperationHist">
+	
+	<!-- modify_hists 
+    * XMOME27 / 20191106 / gyp / SQL 정리, TRIM 추가
+     -->
+	<select id="get_processQualityCoorperationHist_list" resultType="camelMap" parameterType="java.util.HashMap">
+		  SELECT A.ITEM_ID
+		       , B.ITEM_NAME
+		       , B.SPECIFICATION
+		       , WO.RESOURCE_CD
+		       , (SELECT MOM_COMMON_PKG.FN_GET_RESOURCE_NAME(A.DIVISION_CD, A.COMPANY_CD, WO.RESOURCE_CD) FROM DUAL) AS RESOURCE_NAME
+		       , A.DEFECT_LEVEL AS PQC_STATE
+		       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'PQC_STATE', A.DEFECT_LEVEL) FROM DUAL) AS PQC_STATE_NAME
+		       , TO_CHAR(WO.START_TIME,'YYYY-MM-DD') START_TIME
+		       , TO_CHAR(A.START_TIME, 'YYYY-MM-DD HH24:MI') AS MEASURE_START_TIME
+               , TO_CHAR(A.END_TIME, 'YYYY-MM-DD HH24:MI') AS MEASURE_END_TIME
+		       , A.MEASURE_METHOD
+		       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'MEASURE_METHOD', A.MEASURE_METHOD) FROM DUAL) AS MEASURE_METHOD_NAME
+		       , A.GAUGE_METHOD
+		       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'GAUGE_METHOD', A.GAUGE_METHOD) FROM DUAL) AS GAUGE_METHOD_NAME
+		       , MS.CHECK_METHOD 
+		       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'CHECK_METHOD', A.CHECK_METHOD) FROM DUAL) AS CHECK_METHOD_NAME
+		       , MS.MEASURE_SPEC
+		       , A.WORK_ORDER_ID
+		       , A.ITEM_VALUE1
+		       , A.ITEM_VALUE2
+		       , A.ITEM_VALUE3
+		       , A.ITEM_VALUE4
+		       , A.ITEM_VALUE5
+		       , WO.PRODUCT_ORDER_ID
+		       , WO.PLAN_QTY
+		       , WO.CONFIRM_QTY
+		       , WO.GOOD_QTY
+		       , CASE WHEN A.ITEM_VALUE1 > A.ITEM_VALUE2 AND A.ITEM_VALUE1 > A.ITEM_VALUE3 AND A.ITEM_VALUE1 > A.ITEM_VALUE4 AND A.ITEM_VALUE1 > A.ITEM_VALUE5 THEN A.ITEM_VALUE1
+		              WHEN A.ITEM_VALUE2 > A.ITEM_VALUE3 AND A.ITEM_VALUE2 > A.ITEM_VALUE4 AND A.ITEM_VALUE2 > A.ITEM_VALUE5 THEN A.ITEM_VALUE2
+		              WHEN A.ITEM_VALUE3 > A.ITEM_VALUE4 AND A.ITEM_VALUE3 > A.ITEM_VALUE5 THEN A.ITEM_VALUE3
+		              WHEN A.ITEM_VALUE4 > A.ITEM_VALUE5 THEN A.ITEM_VALUE4
+		              ELSE A.ITEM_VALUE5 
+		         END AS MAX_ITEM_VALUE
+		       , <![CDATA[
+		         CASE WHEN A.ITEM_VALUE1 < A.ITEM_VALUE2 AND A.ITEM_VALUE1 < A.ITEM_VALUE3 AND A.ITEM_VALUE1 < A.ITEM_VALUE4 AND A.ITEM_VALUE1 < A.ITEM_VALUE5 THEN A.ITEM_VALUE1
+		              WHEN A.ITEM_VALUE2 < A.ITEM_VALUE3 AND A.ITEM_VALUE2 < A.ITEM_VALUE4 AND A.ITEM_VALUE2 < A.ITEM_VALUE5 THEN A.ITEM_VALUE2
+		              WHEN A.ITEM_VALUE3 < A.ITEM_VALUE4 AND A.ITEM_VALUE3 < A.ITEM_VALUE5 THEN A.ITEM_VALUE3
+		              WHEN A.ITEM_VALUE4 < A.ITEM_VALUE5 THEN A.ITEM_VALUE4
+		              ELSE A.ITEM_VALUE5 
+		         END AS MIN_ITEM_VALUE
+		         ]]> 
+		       , A.TARGET
+		       , A.USL
+		       , A.LSL
+		       , A.JUDGMENT_ID
+		       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'PASS_FLAG', A.JUDGMENT_ID) FROM DUAL) AS JUDGEMENT_NAME
+		       , A.DESCRIPTION
+		       , A.UPDATE_BY
+		       , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(A.DIVISION_CD, A.COMPANY_CD, A.UPDATE_BY) FROM DUAL) AS UPDATE_USER_NAME
+		       , TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD') UPDATE_DATE
+		       , A.DEFECT_RESULT_ID
+		       , MS.SEQ
+		       , SO.SALES_ITEM_ID
+		       , A.CONFIRMED_BY
+		       , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(A.DIVISION_CD, A.COMPANY_CD, A.CONFIRMED_BY) FROM DUAL) AS CONFIRM_USER_NAME
+		       , TO_CHAR(A.CONFIRM_TIME, 'YYYY-MM-DD') CONFIRM_TIME
+		       , DECODE(NVL((SELECT 'Y'
+					          FROM MOM_FILE
+					         WHERE ENTITY_ID = A.DEFECT_RESULT_ID
+					           AND USE_YN = 'Y'
+					           AND DIVISION_CD = A.DIVISION_CD
+					           AND COMPANY_CD = A.COMPANY_CD
+					           AND ROWNUM = 1), 'N')
+			            , 'Y', 'Y', 'N') AS IS_FILE
+		       , DECODE(A.CONFIRMED_BY, NULL, 'N', 'Y') CON_FLAG
+		       , B.UNIT
+		       , TO_CHAR(A.STATE_TIME, 'yyyy-mm-dd') AS STATE_TIME
+		    FROM MOM_DEFECT_RESULT A
+		       , MOM_ITEM_DEFINITION B
+		       , MOM_WORK_ORDER WO
+		       , MOM_MEASURE_SPEC MS
+		       , MOM_SALES_ORDER SO
+		   WHERE A.DIVISION_CD = B.DIVISION_CD
+		     AND A.COMPANY_CD = B.COMPANY_CD
+             AND A.ITEM_ID = B.ITEM_ID
+		     AND A.DIVISION_CD = WO.DIVISION_CD(+)
+		     AND A.COMPANY_CD = WO.COMPANY_CD(+)
+             AND A.WORK_ORDER_ID = WO.WORK_ORDER_ID(+)
+		     AND WO.DIVISION_CD = SO.DIVISION_CD(+)
+		     AND WO.COMPANY_CD = SO.COMPANY_CD(+)
+		     AND WO.PRODUCT_ORDER_ID = SO.CUSTOMER_PO_ID(+)
+		     AND WO.ITEM_ID = SO.ITEM_ID(+)
+             AND A.DIVISION_CD = MS.DIVISION_CD
+             AND A.COMPANY_CD = MS.COMPANY_CD
+		     AND A.MEASURE_TYPE = MS.MEASURE_TYPE
+		     AND A.GAUGE_METHOD = MS.GAUGE_METHOD
+		     AND A.ITEM_ID = MS.ITEM_ID
+		     AND A.MEASURE_TYPE = 'PQC'
+		     AND A.DEFECT_STATE != 'SAVE'
+		     AND A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		     AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR} 
+		     <if test="dateCombo != null and dateCombo !=''">
+		     	<choose>
+		     		<when test="dateCombo == 'SCHEDULE_START_TIME'">
+		     		 AND WO.PLAN_START_TIME BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
+		     		                            AND (TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') +23.9997 / 24)
+		     		</when>
+		     		<when test="dateCombo == 'STATE_DATE'">
+		     		 AND A.STATE_TIME BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
+		     		                      AND (TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') +23.9997 / 24)
+		     		</when>
+		     	</choose>
+		     </if>       
+			<if test="itemId != null and itemId != ''">
+			 AND (A.ITEM_ID LIKE '%'|| TRIM(UPPER(#{itemId, jdbcType=VARCHAR})) || '%'
+		          OR UPPER(B.ITEM_NAME) LIKE '%'|| TRIM(UPPER(#{itemId, jdbcType=VARCHAR})) || '%')
+			</if>
+			<if test="workOrderId != null and workOrderId != ''">
+			 AND WO.WORK_ORDER_ID LIKE '%'|| TRIM(UPPER(#{workOrderId, jdbcType=VARCHAR})) || '%'
+			</if>
+			<if test="resourceCd != null and resourceCd != ''">
+			 AND WO.RESOURCE_CD = #{resourceCd, jdbcType=VARCHAR}
+			</if>
+			<if test="modelSuffix != null and modelSuffix != ''">
+			 AND SO.SALES_ITEM_ID LIKE '%'|| TRIM(UPPER(#{modelSuffix, jdbcType=VARCHAR})) || '%'
+			</if>
+			<if test="jugmentId != null and jugmentId != ''">
+			 AND A.JUDGMENT_ID = (#{jugmentId, jdbcType=VARCHAR}
+			</if>
+		   ORDER BY A.WORK_ORDER_ID,A.ITEM_ID, A.DEFECT_LEVEL, A.MEASURE_METHOD
+	</select>
+	
+	<insert id="create_processQualityCoorperationDel" statementType="CALLABLE">
+	{
+        CALL SP_MOM_QA_PKG.P_CANCEL_PQC (
+             #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+           , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+           , #{companyCd, mode=IN, jdbcType=VARCHAR}
+           , #{workOrderId, mode=IN, jdbcType=VARCHAR}
+           , #{defectResultId, mode=IN, jdbcType=VARCHAR}
+           , #{userId, mode=IN, jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+
+</mapper>

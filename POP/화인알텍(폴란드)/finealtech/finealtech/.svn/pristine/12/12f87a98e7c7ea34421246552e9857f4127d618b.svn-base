@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.reference.itemInfo.bor">
+	<select id="get_bor_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.DIVISION_CD
+	         , A.COMPANY_CD
+	         , A.ITEM_ID
+	         , C.ITEM_NAME
+	         , A.ROUTE_CD
+	         , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD , 'ROUTE_CODE', A.ROUTE_CD)
+		            FROM    DUAL) AS ROUTE_NAME
+	         , A.RESOURCE_CD
+	         , B.RESOURCE_NAME
+	         , A.TACT_TIME
+	         , A.EARLY_PRODUCING_TERM
+	         , A.EARLY_PRODUCING_TERM_UOM
+	         , A.PROD_LOT_SIZE
+	         , A.ALT_PRIORITY
+	         , A.TAT
+	         , A.YIELD
+	         , A.CYCLE_TIME
+	         , A.USE_YN
+	         , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD  
+		                                              , 'USE_FLAG'
+		                                              , A.USE_YN)
+		          FROM DUAL) AS USE_YN_NAME
+	         , A.DESCRIPTION
+	         , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS CREATE_DATE
+	         , A.CREATE_BY
+	         , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( A.DIVISION_CD
+	                                                  , A.COMPANY_CD  
+	                                                  , A.CREATE_BY)
+	              FROM DUAL) AS CREATE_USER_NAME          
+	         , TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS UPDATE_DATE          
+	         , A.UPDATE_BY
+	         , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( A.DIVISION_CD
+	                                                  , A.COMPANY_CD  
+	                                                  , A.UPDATE_BY)
+	              FROM DUAL) AS UPDATE_USER_NAME
+	         , C.SPECIFICATION
+	         , C.ITEM_TYPE
+	         , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( C.DIVISION_CD
+                                                      , C.COMPANY_CD  
+                                                      , 'ITEM_TYPE'
+                                                      , C.ITEM_TYPE)
+                  FROM DUAL) AS ITEM_TYPE_NAME
+	     FROM   MOM_BOR A
+	          , MOM_RESOURCE B
+	          , MOM_ITEM_DEFINITION C
+	     WHERE 1 = 1
+	       AND   A.DIVISION_CD = B.DIVISION_CD(+)
+	       AND   A.COMPANY_CD  = B.COMPANY_CD(+)
+	       AND   A.RESOURCE_CD = B.RESOURCE_CD(+)
+	       AND   A.DIVISION_CD = C.DIVISION_CD(+)
+	       AND   A.COMPANY_CD  = C.COMPANY_CD(+)
+	       AND   A.ITEM_ID    =  C.ITEM_ID(+)
+	       AND   A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	       AND   A.COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}
+	     <if test="itemName != null and itemName != ''">
+	       AND (UPPER(A.ITEM_ID) LIKE UPPER('%' || #{itemName, jdbcType=VARCHAR} || '%') 
+	        OR UPPER(C.ITEM_NAME) LIKE UPPER('%' || #{itemName, jdbcType=VARCHAR} || '%'))
+	      </if>
+	      <if test="routeName != null and routeName != ''">
+	       AND A.ROUTE_CD = #{routeName, jdbcType=VARCHAR} 
+	      </if>
+	      <if test="resourceName != null and resourceName != ''">
+	       AND UPPER(A.RESOURCE_CD) LIKE UPPER('%' || #{resourceName, jdbcType=VARCHAR} || '%') 
+	      </if>
+	      <if test="searchUseYn != null and searchUseYn != ''">
+	       AND A.USE_YN = #{searchUseYn, jdbcType=VARCHAR} 
+	      </if>
+	   ORDER BY A.RESOURCE_CD, A.ITEM_ID
+	</select>
+	
+	<select id="get_borHist_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.ITEM_ID
+	         , NVL (C.ITEM_NAME, '-') ITEM_NAME
+	         , A.ROUTE_CD
+	         , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'ROUTE_CODE', A.ROUTE_CD) 
+	         	  FROM DUAL) AS ROUTE_NAME
+	         , A.RESOURCE_CD
+	         , B.RESOURCE_NAME
+	         , TO_CHAR (A.TACT_TIME) TACT_TIME
+	         , A.EARLY_PRODUCING_TERM
+	         , A.PROD_LOT_SIZE
+	         , A.ALT_PRIORITY
+	         , A.USE_YN
+	         , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'USE_FLAG', A.USE_YN) 
+	         	  FROM DUAL) AS USE_YN_NAME
+	         , C.SPECIFICATION
+	         , A.TAT
+	         , A.YIELD
+	         , A.CYCLE_TIME
+	         , A.DESCRIPTION
+	         , A.UPDATE_BY
+	         , TO_CHAR (A.UPDATE_DATE, 'YYYY-MM-DD HH24:MI:SS') UPDATE_DATE
+	    FROM MOM_BOR_HIST A
+	       , MOM_RESOURCE B
+	       , (  SELECT ITEM_ID
+	                 , MAX (SPECIFICATION) SPECIFICATION
+	                 , MAX (ITEM_NAME) ITEM_NAME
+	              FROM MOM_ITEM_DEFINITION
+	             WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	          GROUP BY ITEM_ID) C
+	    WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+        AND A.RESOURCE_CD = B.RESOURCE_CD(+)
+        AND A.ITEM_ID = C.ITEM_ID(+)
+        AND A.DIVISION_CD = B.DIVISION_CD(+)
+        AND A.ITEM_ID = #{itemId, jdbcType=VARCHAR}
+        AND A.ROUTE_CD = #{routeCd, jdbcType=VARCHAR}
+        AND A.RESOURCE_CD = #{resourceCd, jdbcType=VARCHAR}
+		ORDER BY A.UPDATE_DATE DESC
+	</select>
+	
+	<select id="get_bor" resultType="camelMap" parameterType="java.util.HashMap">
+	    SELECT *
+	      FROM   MOM_BOR
+	     WHERE   DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	       AND   COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}
+	       AND 	 ITEM_ID = #{itemId, jdbcType=VARCHAR}
+	       AND 	 ROUTE_CD = #{routeCd, jdbcType=VARCHAR}
+	       AND 	 RESOURCE_CD = #{resourceCd, jdbcType=VARCHAR}
+	</select>
+	
+	<insert id="create_bor" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+		INSERT INTO MOM_BOR(
+			DIVISION_CD,
+			COMPANY_CD,
+			ITEM_ID,
+			ROUTE_CD,
+			RESOURCE_CD,
+			TACT_TIME,
+			EARLY_PRODUCING_TERM,
+			EARLY_PRODUCING_TERM_UOM,
+			PROD_LOT_SIZE,
+			ALT_PRIORITY,
+			TAT,
+			YIELD,
+			CYCLE_TIME,
+			USE_YN,
+			DESCRIPTION,
+			CREATE_DATE,
+			CREATE_BY,
+			UPDATE_DATE,
+			UPDATE_BY,
+			TID
+			)
+			VALUES(
+			#{divisionCd, jdbcType=VARCHAR},
+			#{companyCd, jdbcType=VARCHAR},
+			UPPER(TRIM(#{itemId, jdbcType=VARCHAR})),
+			UPPER(TRIM(#{routeCd, jdbcType=VARCHAR})),
+			UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR})),
+			#{tactTime, jdbcType=INTEGER},
+			#{earlyProducingTerm, jdbcType=INTEGER},
+			'DAY',
+			#{prodLotSize, jdbcType=INTEGER},
+			#{altPriority, jdbcType=INTEGER},
+			#{tat, jdbcType=INTEGER},
+			#{yield, jdbcType=INTEGER},
+			#{cycleTime, jdbcType=INTEGER},
+			NVL(#{useYn, jdbcType=VARCHAR},'Y'),
+			#{description, jdbcType=VARCHAR},
+			MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			#{createBy, jdbcType=VARCHAR},
+			MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			#{updateBy, jdbcType=VARCHAR},
+			#{tid, jdbcType=VARCHAR}
+		)
+	   ;
+	   
+		INSERT INTO MOM_BOR_HIST (
+			LAST_EVENT_SEQ,
+			DIVISION_CD,
+			COMPANY_CD,
+			ITEM_ID,
+			ROUTE_CD,
+			RESOURCE_CD,
+			TACT_TIME,
+			EARLY_PRODUCING_TERM,
+			EARLY_PRODUCING_TERM_UOM,
+			PROD_LOT_SIZE,
+			ALT_PRIORITY,
+			TAT,
+			YIELD,
+			CYCLE_TIME,
+			USE_YN,
+			DESCRIPTION,
+			CREATE_DATE,
+			CREATE_BY,
+			UPDATE_DATE,
+			UPDATE_BY,
+			TID
+		)
+		SELECT S_ORDER_SEQ.NEXTVAL,
+			   DIVISION_CD,
+			   COMPANY_CD,
+			   ITEM_ID,
+			   ROUTE_CD,
+			   RESOURCE_CD,
+			   TACT_TIME,
+			   EARLY_PRODUCING_TERM,
+			   EARLY_PRODUCING_TERM_UOM,
+			   PROD_LOT_SIZE,
+			   ALT_PRIORITY,
+			   TAT,
+			   YIELD,
+			   CYCLE_TIME,
+			   USE_YN,
+			   DESCRIPTION,
+			   CREATE_DATE,
+			   CREATE_BY,
+			   UPDATE_DATE,
+			   UPDATE_BY,
+			   TID
+		 FROM MOM_BOR
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		  AND ITEM_ID = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		  AND ROUTE_CD = UPPER(TRIM(#{routeCd, jdbcType=VARCHAR}))
+		  AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+	  ;
+	 		
+		SELECT
+			CASE 
+				WHEN COUNT(ITEM_ID) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_BOR
+		WHERE 
+			    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			AND ITEM_ID = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		    AND ROUTE_CD = UPPER(TRIM(#{routeCd, jdbcType=VARCHAR}))
+		    AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+		;
+	 END
+	}	  
+	</insert>	
+	
+	<update id="modify_bor" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+		UPDATE MOM_BOR
+		SET ALT_PRIORITY = #{altPriority, jdbcType=INTEGER},
+		EARLY_PRODUCING_TERM = #{earlyProducingTerm, jdbcType=INTEGER},
+		PROD_LOT_SIZE =  #{prodLotSize, jdbcType=INTEGER},
+		TACT_TIME = #{tactTime, jdbcType=INTEGER},
+		TAT = #{tat, jdbcType=INTEGER},
+		YIELD =  #{yield, jdbcType=INTEGER},
+		USE_YN = NVL(#{useYn, jdbcType=VARCHAR}, 'Y'),
+		UPDATE_DATE =  MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+		UPDATE_BY =  #{updateBy, jdbcType=VARCHAR},
+		CYCLE_TIME = #{cycleTime, jdbcType=INTEGER},
+		DESCRIPTION =  #{description, jdbcType=VARCHAR}
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		AND ITEM_ID = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		AND ROUTE_CD = UPPER(TRIM(#{routeCd, jdbcType=VARCHAR}))
+		AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+	   ;
+	  
+	  INSERT INTO MOM_BOR_HIST (
+			LAST_EVENT_SEQ,
+			DIVISION_CD,
+			COMPANY_CD,
+			ITEM_ID,
+			ROUTE_CD,
+			RESOURCE_CD,
+			TACT_TIME,
+			EARLY_PRODUCING_TERM,
+			EARLY_PRODUCING_TERM_UOM,
+			PROD_LOT_SIZE,
+			ALT_PRIORITY,
+			TAT,
+			YIELD,
+			CYCLE_TIME,
+			USE_YN,
+			DESCRIPTION,
+			CREATE_DATE,
+			CREATE_BY,
+			UPDATE_DATE,
+			UPDATE_BY,
+			TID
+		)
+		SELECT S_ORDER_SEQ.NEXTVAL,
+			   DIVISION_CD,
+			   COMPANY_CD,
+			   ITEM_ID,
+			   ROUTE_CD,
+			   RESOURCE_CD,
+			   TACT_TIME,
+			   EARLY_PRODUCING_TERM,
+			   EARLY_PRODUCING_TERM_UOM,
+			   PROD_LOT_SIZE,
+			   ALT_PRIORITY,
+			   TAT,
+			   YIELD,
+			   CYCLE_TIME,
+			   USE_YN,
+			   DESCRIPTION,
+			   CREATE_DATE,
+			   CREATE_BY,
+			   UPDATE_DATE,
+			   UPDATE_BY,
+			   TID
+		 FROM MOM_BOR
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		  AND ITEM_ID = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		  AND ROUTE_CD = UPPER(TRIM(#{routeCd, jdbcType=VARCHAR}))
+		  AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+	  ;
+	  	
+		SELECT
+			CASE 
+				WHEN COUNT(ITEM_ID) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_BOR
+		WHERE 
+			    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			AND ITEM_ID = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		    AND ROUTE_CD = UPPER(TRIM(#{routeCd, jdbcType=VARCHAR}))
+		    AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+		;
+	 END
+	}	
+	</update>
+	
+	<delete id="remove_bor" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+	  UPDATE MOM_BOR
+	     SET DESCRIPTION = 'Delete Data'
+	       , UPDATE_DATE = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+	  	   , UPDATE_BY = #{userId, jdbcType=VARCHAR}
+	   WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	     AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	     AND ITEM_ID = #{itemId, jdbcType=VARCHAR}
+		 AND ROUTE_CD = UPPER(#{routeCd, jdbcType=VARCHAR})
+		 AND RESOURCE_CD = UPPER(#{resourceCd, jdbcType=VARCHAR})
+	  ;
+	  
+	  INSERT INTO MOM_BOR_HIST (
+			LAST_EVENT_SEQ,
+			DIVISION_CD,
+			COMPANY_CD,
+			ITEM_ID,
+			ROUTE_CD,
+			RESOURCE_CD,
+			TACT_TIME,
+			EARLY_PRODUCING_TERM,
+			EARLY_PRODUCING_TERM_UOM,
+			PROD_LOT_SIZE,
+			ALT_PRIORITY,
+			TAT,
+			YIELD,
+			CYCLE_TIME,
+			USE_YN,
+			DESCRIPTION,
+			CREATE_DATE,
+			CREATE_BY,
+			UPDATE_DATE,
+			UPDATE_BY,
+			TID
+		)
+		SELECT S_ORDER_SEQ.NEXTVAL,
+			   DIVISION_CD,
+			   COMPANY_CD,
+			   ITEM_ID,
+			   ROUTE_CD,
+			   RESOURCE_CD,
+			   TACT_TIME,
+			   EARLY_PRODUCING_TERM,
+			   EARLY_PRODUCING_TERM_UOM,
+			   PROD_LOT_SIZE,
+			   ALT_PRIORITY,
+			   TAT,
+			   YIELD,
+			   CYCLE_TIME,
+			   USE_YN,
+			   DESCRIPTION,
+			   CREATE_DATE,
+			   CREATE_BY,
+			   UPDATE_DATE,
+			   UPDATE_BY,
+			   TID
+		 FROM MOM_BOR
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		  AND ITEM_ID = #{itemId, jdbcType=VARCHAR}
+		  AND ROUTE_CD = UPPER(#{routeCd, jdbcType=VARCHAR})
+		  AND RESOURCE_CD = UPPER(#{resourceCd, jdbcType=VARCHAR})
+	  ;
+	   
+		DELETE FROM MOM_BOR
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR} 
+	   	   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND ITEM_ID = #{itemId, jdbcType=VARCHAR}
+		   AND ROUTE_CD = UPPER(#{routeCd, jdbcType=VARCHAR})
+		   AND RESOURCE_CD = UPPER(#{resourceCd, jdbcType=VARCHAR})
+	  ;
+	  	
+		SELECT
+			CASE 
+				WHEN COUNT(ITEM_ID) = 0 THEN 'S'
+				ELSE 'E' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_BOR
+		WHERE 
+			    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			AND ITEM_ID = #{itemId, jdbcType=VARCHAR}
+		    AND ROUTE_CD = UPPER(#{routeCd, jdbcType=VARCHAR})
+		    AND RESOURCE_CD = UPPER(#{resourceCd, jdbcType=VARCHAR})
+		;
+	 END
+	}
+	</delete>
+	
+	<select id="get_route_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT * FROM(SELECT DISTINCT ROUTE_CD AS ID, ROUTE_CD AS TEXT
+	  	  FROM MOM_BOR WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR})
+	 	 GROUP BY ID
+	</select>
+	
+	<select id="get_item_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT *
+		  FROM (SELECT MAX(ID) AS ID
+		             , MAX(TEXT) AS TEXT
+		          FROM (SELECT distinct ITEM_ID AS ID
+		                              , ITEM_ID||'('||ITEM_NAME||')' AS TEXT
+		                              , DIVISION_CD
+		                  FROM MOM_ITEM_DEFINITION
+		                 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		                 AND UPPER(ITEM_ID) LIKE '%' || UPPER(#{key, jdbcType=VARCHAR}) || '%'
+		                 AND NVL(USE_YN, 'Y') = 'Y')
+		          GROUP BY ID
+		          ORDER BY ID )
+	</select>
+	
+	<select id="get_resource_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT RESOURCE_CD AS ID, RESOURCE_CD || '(' || RESOURCE_NAME || ')'  AS TEXT
+	  	  FROM MOM_RESOURCE
+	 	 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	   	   AND NVL(USE_YN, 'Y') = 'Y'
+	 	 ORDER BY ID
+	</select>
+	
+	<select id="get_priorityCheck_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT ALT_PRIORITY 
+		FROM   MOM_BOR
+		WHERE  ITEM_ID = #{itemId, jdbcType=VARCHAR}
+		AND    ROUTE_CD = #{routeCd, jdbcType=VARCHAR}
+		AND    RESOURCE_CD != #{resourceCd, jdbcType=VARCHAR}
+		AND    USE_YN = 'Y'
+	</select>
+</mapper>

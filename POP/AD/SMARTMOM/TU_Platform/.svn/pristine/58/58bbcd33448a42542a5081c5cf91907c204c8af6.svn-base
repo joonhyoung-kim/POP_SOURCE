@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.shipping.blackDeficitProductShippingClose">
+    <select id="get_blackDeficitProductShippingClose_list" resultType="camelMap" parameterType="java.util.HashMap">
+        WITH C_SHIP AS (SELECT (SELECT MOM_COMMON_PKG.FN_GET_B2BI_CUSTOMER_FLAG( I.DIVISION_CD , I.COMPANY_CD , I.VENDOR_CD)
+		                  FROM DUAL ) AS B2BI_CUSTOMER_FLAG
+		             , (SELECT TRUNC(MOM_COMMON_PKG.FN_GET_LOCAL_TIME(I.DIVISION_CD, I.COMPANY_CD))
+		                  FROM DUAL) AS LOCAL_TIME
+		             , I.LOCATION_CD
+		             , I.ITEM_STOCK_ID
+		             , I.ITEM_STOCK_INOUT_ID
+		             , I.IO_TIME
+		             , I.QTY
+		             , I.ITEM_OUTPUT_ID
+		             , I.CREATE_BY
+		             , I.CREATE_DATE
+		             , I.INOUT_PRICE
+		             , I.ITEM_DEPARTURE_ID
+		             , I.PO_NO
+		             , I.ITEM_ORDER_ID
+		             , I.DESCRIPTION
+		             , I.DIVISION_CD
+		             , I.COMPANY_CD
+		             , MID.CONVERSION_UNIT
+		             , MID.CONVERSION_UNIT_QTY
+		          FROM MOM_ITEM_STOCK_INOUT I
+		             , MOM_ITEM_DEFINITION MID
+		         WHERE I.DIVISION_CD = MID.DIVISION_CD
+		           AND I.COMPANY_CD = MID.COMPANY_CD
+		           AND I.ITEM_ID = MID.ITEM_ID
+		           AND I.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		           AND I.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		           AND I.IO_TYPE = 'I'
+		           AND I.IO_CATEGORY IN ('S001', 'S002')
+		           AND I.IO_TIME BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') AND TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.9997 / 24
+				   <if test="departureNo != null and departureNo != ''">
+				   AND UPPER(I.ITEM_DEPARTURE_ID) LIKE '%' || TRIM(UPPER(#{departureNo, jdbcType=VARCHAR})) || '%'
+				   </if>
+				   <if test="customerPoNo != null and customerPoNo != ''">
+	               AND UPPER(I.PO_NO) LIKE '%' || TRIM(UPPER(#{customerPoNo, jdbcType=VARCHAR})) || '%'
+	               </if>
+		           <if test="LocationName != null and LocationName != ''">
+			       AND I.LOCATION_CD = #{LocationName, jdbcType=VARCHAR}
+			       </if>
+		           <if test="customerName != null and customerName != ''">
+		           AND I.VENDOR_CD = #{customerName, jdbcType=VARCHAR}
+		           </if>
+		           <if test="itemName != null and itemName != ''">
+		           AND  (I.ITEM_ID LIKE '%' || TRIM(UPPER(#{itemName, jdbcType=VARCHAR})) || '%' 
+		               OR UPPER(MID.ITEM_NAME) LIKE '%' || TRIM(UPPER(#{itemName, jdbcType=VARCHAR})) || '%')
+		           </if>
+				   <if test="marketName != null and marketName != ''">
+			       AND I.MARKET_CD = #{marketName, jdbcType=VARCHAR}
+			       </if>
+			       <if test="currencyName != null and currencyName != ''">
+			       AND I.CURRENCY_CD = #{currencyName, jdbcType=VARCHAR}
+			       </if>
+		           AND NOT EXISTS (SELECT '*'
+		                  FROM MOM_ITEM_STOCK_INOUT MIC
+		                 WHERE MIC.DIVISION_CD = I.DIVISION_CD
+		                   AND MIC.COMPANY_CD = I.COMPANY_CD
+		                   AND MIC.PREV_STOCK_INOUT_ID = I.ITEM_STOCK_INOUT_ID
+		                   AND MIC.IO_TYPE = I.IO_TYPE
+		                   AND MIC.IO_CATEGORY = 'SC001')
+		           AND NOT EXISTS (SELECT '*'
+		                  FROM MOM_ITEM_STOCK_INOUT O
+		                 WHERE O.DIVISION_CD = I.DIVISION_CD
+		                   AND O.COMPANY_CD = I.COMPANY_CD
+		                   AND O.PREV_STOCK_INOUT_ID = I.ITEM_STOCK_INOUT_ID
+		                   AND O.IO_TYPE = 'O'
+		                   AND O.IO_CATEGORY IN ('S003'
+		                             , 'S004')
+		                   AND NOT EXISTS (SELECT '*'
+		                          FROM MOM_ITEM_STOCK_INOUT MIC
+		                         WHERE MIC.DIVISION_CD = O.DIVISION_CD
+		                           AND MIC.COMPANY_CD = O.COMPANY_CD
+		                           AND MIC.PREV_STOCK_INOUT_ID = O.ITEM_STOCK_INOUT_ID
+		                           AND MIC.IO_TYPE = O.IO_TYPE
+		                           AND MIC.IO_CATEGORY = 'SC003')))
+		SELECT A.CUSTOMER_PO_ID
+		     , A.SALES_ORDER_ID
+		     , A.SALES_ITEM_ID
+		     , A.ITEM_ID
+		     , A.ITEM_NAME
+		     , A.ORDER_QTY
+		     , A.SHIP_QTY
+		     , A.CANCEL_QTY
+		     , A.QTY
+		     , DECODE(A.B2BI_CUSTOMER_FLAG, 'Y', A.LOCAL_RECEIVING_AMOUNT, A.QTY * A.UNIT_PRICE) AS AMT
+		     , A.LOCATION_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME( A.DIVISION_CD , A.COMPANY_CD , A.LOCATION_CD)
+		          FROM DUAL ) AS LOCATION_NAME
+		     , A.VENDOR_CD
+		     , A.VENDOR_NAME
+		     , A.DESTINATION_CD
+		     , A.DESTINATION_NAME
+		     , A.ITEM_STOCK_ID
+		     , A.ITEM_STOCK_INOUT_ID
+		     , TO_CHAR(A.IO_TIME, 'YYYY-MM-DD HH24:MI:SS') AS IO_TIME
+		     , A.MARKET_CD
+		     , A.MARKET_NAME
+		     , A.CURRENCY_CD
+		     , A.CURRENCY_NAME
+		     , A.ITEM_OUTPUT_ID
+		     , A.CREATE_BY
+		     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( A.DIVISION_CD , A.COMPANY_CD , A.CREATE_BY)
+		          FROM DUAL) AS CREATE_BY_NAME
+		     , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD') AS CREATE_DATE
+		     , A.INOUT_PRICE
+		     , A.DIVISION_CD
+		     , A.COMPANY_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_SO_CONFIRMED_QTY( A.DIVISION_CD , A.COMPANY_CD , A.SALES_ORDER_ID)
+		          FROM DUAL ) AS CONFIRMED_QTY
+		     , A.DEFAULT_CURRENCY
+		     , A.UNIT_PRICE
+		     , A.EXCHANGE_RATE
+		     , A.ITEM_DEPARTURE_ID
+		     , A.PO_NO
+		     , A.B2BI_CUSTOMER_FLAG
+		     , A.BUSINESSID
+		     , A.RECEVING_STATS
+		     , A.RECEIVING_QUANTITY
+		     , A.DESCRIPTION
+		     , A.CONVERSION_UNIT
+		     , A.CONVERSION_UNIT_QTY
+		     , A.HS_PART_NO
+		     , A.LGE_PART_NO
+		     , A.LOCAL_TIME
+		     , A.B2BI_DESC
+		     , A.TRANSACTION_TYPE
+             , A.MPC_FLAG
+		  FROM (SELECT DISTINCT O.CUSTOMER_PO_ID
+		             , O.SALES_ORDER_ID
+		             , O.SALES_ITEM_ID
+		             , O.ITEM_ID
+		             , O.ITEM_NAME
+		             , O.ORDER_QTY
+		             , NVL(O.SHIP_QTY, 0) AS SHIP_QTY
+		             , NVL(O.CANCEL_QTY, 0) AS CANCEL_QTY
+		             , R.RECEIVING_QUANTITY AS QTY
+		             , R.LOCAL_RECEIVING_AMOUNT 
+		             , I.LOCATION_CD
+		             , O.VENDOR_CD
+		             , O.VENDOR_NAME
+		             , O.DESTINATION_CD
+		             , O.DESTINATION_NAME
+		             , I.ITEM_STOCK_ID
+		             , I.ITEM_STOCK_INOUT_ID
+		             , R.RECEIVING_DATE AS IO_TIME
+		             , O.MARKET_CD
+		             , O.MARKET_NAME
+		             , O.CURRENCY_CD
+		             , O.CURRENCY_NAME
+		             , I.ITEM_OUTPUT_ID
+		             , I.CREATE_BY
+		             , I.CREATE_DATE
+		             , I.INOUT_PRICE
+		             , O.DIVISION_CD
+		             , O.COMPANY_CD
+		             , P.CURRENCY_CD AS DEFAULT_CURRENCY
+		             , R.UNIT_PRICE
+		             , R.CURRENCY_CONVERSION_RATE AS EXCHANGE_RATE
+		             , I.ITEM_DEPARTURE_ID
+		             , O.CUSTOMER_PO_NO AS PO_NO
+		             , I.B2BI_CUSTOMER_FLAG
+		             , R.BUSINESSID
+		             , R.RECEVING_STATS
+		             , R.RECEIVING_QUANTITY
+		             , I.DESCRIPTION
+		             , I.CONVERSION_UNIT
+		             , (R.RECEIVING_QUANTITY) * NVL(I.CONVERSION_UNIT_QTY, 1) AS CONVERSION_UNIT_QTY
+		             , O.HS_PART_NO
+		             , O.LGE_PART_NO
+		             , I.LOCAL_TIME
+		             , R.DESCRIPTION AS B2BI_DESC
+		             , R.TRANSACTION_TYPE
+             		 , R.MPC_FLAG
+		          FROM C_SHIP I
+		             , MOM_SALES_ORDER_V O
+		             , MOM_PARAMETER P
+		             , MOM_B2BI_RECEIVING_V R
+		         WHERE I.DIVISION_CD = O.DIVISION_CD
+		           AND I.COMPANY_CD = O.COMPANY_CD
+		           AND I.ITEM_ORDER_ID = O.SALES_ORDER_ID
+		           AND I.DIVISION_CD = P.DIVISION_CD
+		           AND I.COMPANY_CD = P.COMPANY_CD
+		           AND I.DIVISION_CD = R.DIVISION_CD
+		           AND I.PO_NO = R.PURCHASE_ORDER_NO
+		           AND I.ITEM_DEPARTURE_ID = R.DEPARTURE_NUMBER
+		           AND I.QTY = DECODE(R.TRANSACTION_TYPE, 'RETURN TO RECEIVING', (R.RECEIVING_QUANTITY * -1), R.RECEIVING_QUANTITY)
+		           AND I.B2BI_CUSTOMER_FLAG = 'Y'
+				   <if test="customerPoId != null and customerPoId != ''">
+	               AND UPPER(O.CUSTOMER_PO_ID) LIKE '%' || TRIM(UPPER(#{customerPoId, jdbcType=VARCHAR})) || '%' 
+	               </if>
+				   <if test="destinationName != null and destinationName != ''">
+			       AND O.DESTINATION_CD = #{destinationName, jdbcType=VARCHAR}
+			       </if>
+				   <if test ="closeFlag != null and closeFlag != ''">
+						<choose>
+							<when test='closeFlag.equals("N")'>
+							 AND NVL(R.RECEIVING_QUANTITY, 0) = 0  
+							</when>
+							<otherwise>
+							 AND R.RECEIVING_QUANTITY != 0
+							</otherwise>
+						</choose>
+				   </if>           
+		         UNION ALL
+		SELECT DISTINCT O.CUSTOMER_PO_ID
+		             , O.SALES_ORDER_ID
+		             , O.SALES_ITEM_ID
+		             , O.ITEM_ID
+		             , O.ITEM_NAME
+		             , O.ORDER_QTY
+		             , NVL(O.SHIP_QTY, 0) AS SHIP_QTY
+		             , NVL(O.CANCEL_QTY, 0) AS CANCEL_QTY
+		             , I.QTY
+		             , NULL                  AS LOCAL_RECEIVING_AMOUNT
+		             , I.LOCATION_CD
+		             , O.VENDOR_CD
+		             , O.VENDOR_NAME
+		             , O.DESTINATION_CD
+		             , O.DESTINATION_NAME
+		             , I.ITEM_STOCK_ID
+		             , I.ITEM_STOCK_INOUT_ID
+		             , I.IO_TIME
+		             , O.MARKET_CD
+		             , O.MARKET_NAME
+		             , O.CURRENCY_CD
+		             , O.CURRENCY_NAME
+		             , I.ITEM_OUTPUT_ID
+		             , I.CREATE_BY
+		             , I.CREATE_DATE
+		             , I.INOUT_PRICE
+		             , O.DIVISION_CD
+		             , O.COMPANY_CD
+		             , P.CURRENCY_CD AS DEFAULT_CURRENCY
+		             , (SELECT MOM_COMMON_PKG.FN_GET_SALES_PRICE( O.DIVISION_CD , O.COMPANY_CD , O.VENDOR_CD , O.ITEM_ID , O.MARKET_CD , O.CURRENCY_CD , I.LOCAL_TIME )
+		                  FROM DUAL ) AS UNIT_PRICE
+		             ,(SELECT MOM_COMMON_PKG.FN_GET_CURRENT_EXCHANGE_RATE( O.DIVISION_CD , O.COMPANY_CD , O.CURRENCY_CD , I.LOCAL_TIME )
+		                  FROM DUAL ) AS EXCHANGE_RATE
+		             , I.ITEM_DEPARTURE_ID
+		             , O.CUSTOMER_PO_NO AS PO_NO
+		             , I.B2BI_CUSTOMER_FLAG
+		             , NULL AS BUSINESSID
+		             , NULL AS RECEVING_STATS
+		             , NULL AS RECEIVING_QUANTITY
+		             , I.DESCRIPTION
+		             , I.CONVERSION_UNIT
+		             , (I.QTY) * NVL(I.CONVERSION_UNIT_QTY, 1) AS CONVERSION_UNIT_QTY
+		             , O.HS_PART_NO
+		             , O.LGE_PART_NO
+		             , I.LOCAL_TIME
+		             , '' AS B2BI_DESC
+		             , '' AS TRANSACTION_TYPE
+             		 , '' AS MPC_FLAG
+		          FROM C_SHIP I
+		             , MOM_SALES_ORDER_V O
+		             , MOM_PARAMETER P
+		         WHERE I.DIVISION_CD = O.DIVISION_CD
+		           AND I.COMPANY_CD = O.COMPANY_CD
+		           AND I.ITEM_ORDER_ID = O.SALES_ORDER_ID
+		           AND I.DIVISION_CD = P.DIVISION_CD
+		           AND I.COMPANY_CD = P.COMPANY_CD
+		           AND I.B2BI_CUSTOMER_FLAG = 'N'
+				   <if test="customerPoId != null and customerPoId != ''">
+	               AND UPPER(O.CUSTOMER_PO_ID) LIKE '%' || TRIM(UPPER(#{customerPoId, jdbcType=VARCHAR})) || '%' 
+	               </if>
+				   <if test="destinationName != null and destinationName != ''">
+			       AND O.DESTINATION_CD = #{destinationName, jdbcType=VARCHAR}
+			       </if>
+		               ) A
+		        WHERE 1 = 1
+		        <if test="b2biCustomerFlag != '' and b2biCustomerFlag != null">
+		        AND A.B2BI_CUSTOMER_FLAG = #{b2biCustomerFlag, jdbcType=VARCHAR}
+		        </if>
+		 ORDER BY A.VENDOR_NAME, A.DESTINATION_NAME, A.CUSTOMER_PO_ID, A.SALES_ORDER_ID,A.BUSINESSID, A.ITEM_STOCK_INOUT_ID 
+    </select>
+    
+    <select id="get_blackDeficitDestination_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT DISTINCT A.DESTINATION_CD CODE
+	              	  , A.DESTINATION_CD || '(' || B.VENDOR_NAME || ')' NAME
+	  	FROM MOM_PRODUCT_CLASS_REL A
+	       , MOM_VENDOR B
+	 	WHERE A.DIVISION_CD = B.DIVISION_CD
+	   	AND A.COMPANY_CD = B.COMPANY_CD
+	   	AND A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	   	AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	   	AND NVL(A.USE_YN, 'Y') = 'Y'
+	   	AND NVL(B.USE_YN, 'Y') = 'Y'
+		ORDER BY A.DESTINATION_CD
+	</select>
+	
+	<delete id="remove_blackDeficitProductShippingCloseTemp" parameterType="java.util.HashMap">
+		DELETE FROM MOM_SHIP_RESULT_TEMP
+		 WHERE  DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+  		   AND  COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}
+  		   AND  ORDER_TYPE = #{orderType, jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="create_blackDeficitProductShippingCloseTemp" parameterType="java.util.HashMap">
+		INSERT INTO MOM_SHIP_RESULT_TEMP(
+			DIVISION_CD,
+			COMPANY_CD,
+			ORDER_TYPE,
+			SALES_ORDER_ID,
+			ITEM_ID,
+			CUSTOMER_PO_ID,
+			CUSTOMER_ID,
+			DESTINATION,
+			IO_TIME,
+			QTY,
+			FROM_LOCATION_CD,
+			TO_LOCATION_CD,
+			UNIT_PRICE,
+			MARKET_CD,
+			CURRENCY_CD,
+			SHIP_IN_FLAG,
+			ITEM_STOCK_INOUT_ID,
+			PO_NO, 
+			DEPARTURE_NUMBER, 
+			B2BI_CUSTOMER_FLAG,
+			BUSINESSID,
+			CREATE_BY,
+			CREATE_DATE,
+			CONVERSION_UNIT_QTY,
+			DESCRIPTION,
+			SHIP_AMT,
+			INTERFACE_ID,
+			TRANSACTION_TYPE,
+            MPC_FLAG
+			)
+			VALUES(
+			#{divisionCd, jdbcType=VARCHAR},
+			#{companyCd, jdbcType=VARCHAR},
+			#{orderType, jdbcType=VARCHAR},
+			#{salesOrderId, jdbcType=VARCHAR},
+			#{itemId, jdbcType=VARCHAR},
+			#{customerPoId, jdbcType=VARCHAR},
+			#{vendorCd, jdbcType=VARCHAR},
+			#{destinationCd, jdbcType=VARCHAR},
+			TO_DATE(SUBSTR(#{ioTime, jdbcType=VARCHAR}, 0, 10), 'YYYY-MM-DD'),
+			#{qty, jdbcType=INTEGER},
+			#{fromLocationCd, jdbcType=VARCHAR},
+			#{locationCd, jdbcType=VARCHAR},
+			#{unitPrice, jdbcType=INTEGER},
+			#{marketCd, jdbcType=VARCHAR},
+			#{currencyCd, jdbcType=VARCHAR},
+			#{shipInFlag, jdbcType=VARCHAR},
+			#{itemStockInoutId, jdbcType=VARCHAR},
+			#{poNo, jdbcType=VARCHAR},
+			#{itemDepartureId, jdbcType=VARCHAR},
+			#{b2biCustomerFlag, jdbcType=VARCHAR},
+			#{businessid, jdbcType=VARCHAR},
+			#{createBy, jdbcType=VARCHAR},
+			MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			#{conversionUnitQty, jdbcType=INTEGER},
+			#{description, jdbcType=VARCHAR},
+			#{shipAmt, jdbcType=INTEGER},
+			#{businessid, jdbcType=INTEGER},
+			#{transactionType, jdbcType=VARCHAR},
+			#{mpcFlag, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="modify_blackDeficitProductShippingCloseTemp" parameterType="java.util.HashMap">
+		UPDATE MOM_SHIP_RESULT_TEMP
+		SET QTY = #{shipConfirmQty, jdbcType=INTEGER}
+		  , CONVERSION_UNIT_QTY = #{conversionUnitQty, jdbcType=INTEGER}
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	    AND COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}
+	   	AND ORDER_TYPE = #{orderType, jdbcType=VARCHAR}
+	   	AND 0 = 1
+	</update>
+	
+	<insert id="create_blackDeficitProductShippingClose" statementType="CALLABLE">
+	{
+        CALL SP_MOM_SALES_ORDER_PKG.P_CREATE_SHIP_RESULT (
+        	#{p_err_code, mode=OUT, jdbcType=VARCHAR}
+           ,#{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+           ,#{divisionCd, mode=IN, jdbcType=VARCHAR}
+           ,#{companyCd, mode=IN, jdbcType=VARCHAR}
+           ,#{orderType, mode=IN, jdbcType=VARCHAR}
+        )
+    }
+    </insert>
+</mapper>

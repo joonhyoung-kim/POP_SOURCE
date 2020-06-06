@@ -1,0 +1,527 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.shipping.productShipping">
+    <!-- modify_hists 
+    * XMOMA11 / 20191104 / gyp / sql 정리
+     -->
+    <select id="get_productShipping_list" resultType="camelMap" parameterType="java.util.HashMap">
+        SELECT A.*
+          FROM (SELECT A.CUSTOMER_PO_ID
+                     , A.SALES_ORDER_ID
+                     , A.SALES_ITEM_ID
+                     , A.ITEM_ID
+                     , A.ITEM_NAME
+                     , A.ORDER_QTY
+                     , A.SHIP_QTY
+                     , A.CANCEL_QTY 
+                     , A.REMAIN_QTY
+                     , A.ORG_CODE
+                     , NVL(A.CONVERSION_UNIT_QTY, 1) AS ITEM_CONVERSION_UNIT_QTY
+                     , DECODE(A.B2BI_CUSTOMER_FLAG, 'N', A.REMAIN_QTY * NVL(A.CONVERSION_UNIT_QTY, 1), A.DEPARTURE_QTY * NVL(A.CONVERSION_UNIT_QTY, 1)) AS CONVERSION_UNIT_QTY
+                     , A.CONVERSION_UNIT
+                     , DECODE(A.B2BI_CUSTOMER_FLAG, 'N', A.REMAIN_QTY, A.DEPARTURE_QTY) AS DEPARTURE_QTY
+                     , NVL(A.DEPARTURE_QTY, A.REMAIN_QTY)  AS SHIPPING_QTY
+                     , CASE
+                         WHEN (SELECT COUNT(*)
+                                 FROM MOM_FACILITY MF
+                                WHERE FACILITY_CD = A.FROM_LOCATION_CD
+                                  AND FACILITY_TYPE IN(SELECT MC.CODE_ID
+                                                         FROM MOM_CODE MC
+                                                        WHERE MC.DIVISION_CD = MF.DIVISION_CD
+                                                          AND MC.COMPANY_CD = MF.COMPANY_CD
+                                                          AND MC.ATTRIBUTE5 = 'Y')) = 0 THEN ''
+                         ELSE A.FROM_LOCATION_CD
+                       END AS FROM_LOCATION_CD
+                     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME(A.DIVISION_CD, A.COMPANY_CD, A.FROM_LOCATION_CD)
+                        FROM   DUAL )  AS FROM_LOCATION_NAME
+                     , A.TO_LOCATION_CD
+                     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME(A.DIVISION_CD, A.COMPANY_CD, A.TO_LOCATION_CD)
+                        FROM   DUAL )  AS TO_LOCATION_NAME   
+                     , NVL(MIS.CURRENT_QTY, 0)  AS CURRENT_QTY
+                     , MIS.ITEM_STOCK_ID   
+                     , TO_CHAR(A.DUE_DATE, 'YYYY-MM-DD') AS DUE_DATE
+                     , A.VENDOR_CD
+                     , A.VENDOR_NAME
+                     , A.ORDER_STATE
+                     , A.ORDER_STATE_NAME 
+                     , A.MARKET_CD
+                     , A.MARKET_NAME   
+                     , A.CURRENCY_CD
+                     , A.CURRENCY_NAME 
+                     , DECODE(NVL(A.UNIT_PRICE, 0) , 0, #{MESSAGES30047, jdbcType=VARCHAR}, TO_CHAR(A.UNIT_PRICE)) AS UNIT_PRICE
+                     , A.SHIP_DATE
+                     , A.MIX_GROUP
+                     , A.CUSTOMER_LINE_CD
+                     , A.PRE_BUILD_TERM
+                     , A.DESTINATION_CD
+                     , A.DESTINATION_NAME
+                     , A.ORDER_GUBUN
+                     , A.ORDER_GUBUN_NAME
+                     , A.ORDER_TYPE
+                     , A.ORDER_TYPE_NAME
+                     , A.SHIP_IN_USE_FLAG
+                     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+                                                              , A.COMPANY_CD
+                                                              , 'USE_FLAG'
+                                                              , A.SHIP_IN_USE_FLAG )
+                        FROM   DUAL ) AS SHIP_IN_USE_NAME
+                     , A.ORIGIN_DUE_DATE
+                     , A.DIVISION_CD
+                     , A.COMPANY_CD
+                     , (A.SHIP_QTY  * A.UNIT_PRICE)   AS SHIP_AMT
+                     , (A.ORDER_QTY * A.UNIT_PRICE)   AS ORDER_AMT
+                     , A.DESCRIPTION
+                     , A.CUSTOMER_PO_NO
+                     , A.DEPARTURE_NUMBER
+                     , TO_CHAR(A.DEPARTURE_DATE, 'YYYY-MM-DD') AS DEPARTURE_DATE
+                     , A.B2BI_CUSTOMER_FLAG
+                     , A.TRANSACTION_ID
+                     , A.HS_PART_NO
+                     , A.LGE_PART_NO
+                     , DECODE(A.B2BI_CUSTOMER_FLAG, 'N', A.REMAIN_QTY, NVL(A.DEPARTURE_SUM_QTY, 0)) AS DEPARTURE_SUM_QTY 
+                     , A.SUBINVENTORY_DESC
+                    
+                 FROM  (SELECT A.CUSTOMER_PO_ID
+                             , A.SALES_ORDER_ID
+                             , A.SALES_ITEM_ID 
+                             , A.ITEM_ID
+                             , A.ITEM_NAME
+                             , A.ORDER_QTY
+                             , NVL(A.SHIP_QTY, 0)  AS SHIP_QTY
+                             , NVL(A.CANCEL_QTY, 0) AS CANCEL_QTY
+                             , (A.ORDER_QTY - NVL(A.RETURN_QTY, 0) - NVL(A.CANCEL_QTY, 0) - NVL(A.SHIP_QTY, 0)) AS REMAIN_QTY
+                             , (SELECT MOM_COMMON_PKG.FN_GET_SHIP_OUT_LOCATION( A.DIVISION_CD, A.COMPANY_CD, A.ITEM_ID ) FROM DUAL ) AS FROM_LOCATION_CD
+                             , (SELECT MOM_COMMON_PKG.FN_GET_CUSTOMER_LOCATION( A.DIVISION_CD, A.COMPANY_CD, A.VENDOR_CD ) FROM DUAL ) TO_LOCATION_CD
+                             , A.DUE_DATE
+                             , A.VENDOR_CD 
+                             , A.VENDOR_NAME
+                             , A.ORDER_STATE
+                             , A.ORDER_STATE_NAME
+                             , A.MARKET_CD
+                             , A.MARKET_NAME
+                             , A.CURRENCY_CD
+                             , A.CURRENCY_NAME
+                             , A.ORG_CODE
+                             , CASE WHEN (SELECT MOM_COMMON_PKG.FN_GET_B2BI_CUSTOMER_FLAG( A.DIVISION_CD
+                                                                                         , A.COMPANY_CD
+                                                                                         , A.VENDOR_CD)
+                                          FROM   DUAL ) = 'Y' THEN A.UNIT_PRICE
+                               ELSE           
+                                     (SELECT MOM_COMMON_PKG.FN_GET_SALES_PRICE( A.DIVISION_CD
+                                                                              , A.COMPANY_CD
+                                                                              , A.VENDOR_CD
+                                                                              , A.ITEM_ID
+                                                                              , A.MARKET_CD
+                                                                              , A.CURRENCY_CD
+                                                                              , NVL(DV.DEPARTURE_DATE,TRUNC(MOM_COMMON_PKG.FN_GET_LOCAL_TIME(A.DIVISION_CD, A.COMPANY_CD))))  
+                                      FROM   DUAL ) 
+                                END       AS UNIT_PRICE
+                             , NVL(TO_CHAR(DV.DEPARTURE_DATE,'YYYY-MM-DD'),TO_CHAR(MOM_COMMON_PKG.FN_GET_LOCAL_TIME(A.DIVISION_CD, A.COMPANY_CD),'YYYY-MM-DD')) AS SHIP_DATE
+                             , A.MIX_GROUP
+                             , A.CUSTOMER_LINE_CD 
+                             , A.PRE_BUILD_TERM
+                             , A.DESTINATION_CD
+                             , A.DESTINATION_NAME
+                             , A.ORDER_GUBUN
+                             , A.ORDER_GUBUN_NAME
+                             , A.ORDER_TYPE
+                             , A.ORDER_TYPE_NAME
+                             ,(SELECT MOM_COMMON_PKG.FN_GET_USER_SHIP_IN_USE_FLAG( A.DIVISION_CD
+                                                                                 , A.COMPANY_CD
+                                                                                 , A.VENDOR_CD )
+                               FROM   DUAL )   AS  SHIP_IN_USE_FLAG
+                             , A.ORIGIN_DUE_DATE
+                             , A.DIVISION_CD
+                             , A.COMPANY_CD
+                             , A.CUSTOMER_PO_NO
+                             , A.DESCRIPTION
+                             , DV.DEPARTURE_NUMBER
+                             , DV.DEPARTURE_QTY
+                             , DV.DEPARTURE_DATE
+                             , (SELECT MOM_COMMON_PKG.FN_GET_B2BI_CUSTOMER_FLAG( A.DIVISION_CD
+                                                                               , A.COMPANY_CD
+                                                                               , A.VENDOR_CD)
+                                FROM   DUAL ) AS B2BI_CUSTOMER_FLAG
+                             , DV.TRANSACTION_ID
+                             , A.HS_PART_NO
+                             , A.LGE_PART_NO
+                             , (SELECT SUM(DEPARTURE_QTY)
+                                FROM   MOM_B2BI_DEPARTURE_V MDV
+                                WHERE  MDV.DIVISION_CD = A.DIVISION_CD
+                                AND    MDV.PO_NO       = A.CUSTOMER_PO_NO
+                                GROUP BY MDV.PO_NO )   AS DEPARTURE_SUM_QTY
+                             , DV.SUBINVENTORY_DESC
+                             , D.CONVERSION_UNIT_QTY  <!-- XMOMA11 -->
+                             , D.CONVERSION_UNIT      <!-- XMOMA11 -->
+                      FROM   MOM_SALES_ORDER_V A
+                           , MOM_B2BI_DEPARTURE_V DV   
+                           , MOM_ITEM_DEFINITION D
+                      WHERE  A.DIVISION_CD      = DV.DIVISION_CD(+)
+                      AND    A.CUSTOMER_PO_NO  = DV.PO_NO(+)
+                      AND    A.DIVISION_CD = D.DIVISION_CD
+                      AND    A.COMPANY_CD  = D.COMPANY_CD
+                      AND    A.ITEM_ID     = D.ITEM_ID  
+                      AND    A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+                      AND    A.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+                      AND    NVL(D.OQC_FLAG, 'N') = 'N'
+                   <!-- start XMOMA11 -->
+                   <if test="customerPo != '' and customerPo != null">
+                      AND    UPPER(A.CUSTOMER_PO_ID) LIKE '%' || TRIM(UPPER(#{customerPo, jdbcType=VARCHAR})) || '%'
+                   </if>
+                   <if test="poNo != '' and poNo != null">
+                      AND    A.CUSTOMER_PO_NO LIKE '%' || TRIM(UPPER(#{poNo, jdbcType=VARCHAR})) || '%'
+                   </if>
+                   <if test="departureNo != '' and departureNo != null">
+                      AND    A.DEPARTURE_NUMBER LIKE '%' || TRIM(UPPER(#{departureNo, jdbcType=VARCHAR})) || '%'
+                   </if>
+                   <if test="orderState != '' and orderState != null">
+                      AND    A.ORDER_STATE = #{orderState, jdbcType=VARCHAR}
+                   </if>
+                   <if test="itemName != '' and itemName != null">
+                      AND    (A.ITEM_ID LIKE '%' || TRIM(UPPER(#{itemName, jdbcType=VARCHAR})) || '%'
+                             OR UPPER(A.ITEM_NAME) LIKE '%' || TRIM(UPPER(#{itemName, jdbcType=VARCHAR})) || '%')
+                   </if>
+                   <if test="organizationCode!= '' and organizationCode != null">
+                      AND    A.ORG_CODE = #{organizationCode, jdbcType=VARCHAR}
+                   </if>
+                   <!-- end XMOMA11 -->
+                   <if test="dateCombo != null and dateCombo != ''">
+                        <choose>
+                            <when test="dateCombo == 'PAYMENT_TIME'">
+                            AND    A.DUE_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
+                                              AND     TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.9997 / 24
+                            </when>
+                            <otherwise>
+                            AND DV.DEPARTURE_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
+                                                  AND     TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.9997 / 24
+                            </otherwise>
+                        </choose>
+                   </if>
+                   <if test ="departureFlag != null and departureFlag != ''">
+                    <choose>
+                        <when test='departureFlag.equals("N")'>
+                         AND NVL(DV.DEPARTURE_QTY, 0) = 0
+                        </when>
+                        <otherwise>
+                         AND DV.DEPARTURE_QTY > 0
+                        </otherwise>
+                    </choose>
+                   </if>
+                      UNION ALL
+                      SELECT A.CUSTOMER_PO_ID
+                             , A.SALES_ORDER_ID
+                             , A.SALES_ITEM_ID 
+                             , A.ITEM_ID
+                             , A.ITEM_NAME
+                             , A.ORDER_QTY
+                             , NVL(A.SHIP_QTY, 0)  AS SHIP_QTY
+                             , NVL(A.CANCEL_QTY, 0) AS CANCEL_QTY
+                             , (A.ORDER_QTY - NVL(A.RETURN_QTY, 0) - NVL(A.CANCEL_QTY, 0) - NVL(A.SHIP_QTY, 0)) AS REMAIN_QTY
+                             , (SELECT MOM_COMMON_PKG.FN_GET_SHIP_OUT_LOCATION( A.DIVISION_CD, A.COMPANY_CD, A.ITEM_ID ) FROM DUAL ) AS FROM_LOCATION_CD
+                             , (SELECT MOM_COMMON_PKG.FN_GET_CUSTOMER_LOCATION( A.DIVISION_CD, A.COMPANY_CD, A.VENDOR_CD ) FROM DUAL ) TO_LOCATION_CD
+                             , A.DUE_DATE
+                             , A.VENDOR_CD 
+                             , A.VENDOR_NAME
+                             , A.ORDER_STATE
+                             , A.ORDER_STATE_NAME
+                             , A.MARKET_CD
+                             , A.MARKET_NAME
+                             , A.CURRENCY_CD
+                             , A.CURRENCY_NAME
+                             , A.ORG_CODE
+                             , CASE WHEN (SELECT MOM_COMMON_PKG.FN_GET_B2BI_CUSTOMER_FLAG( A.DIVISION_CD
+                                                                                         , A.COMPANY_CD
+                                                                                         , A.VENDOR_CD)
+                                          FROM   DUAL ) = 'Y' THEN A.UNIT_PRICE
+                               ELSE           
+                                     (SELECT MOM_COMMON_PKG.FN_GET_SALES_PRICE( A.DIVISION_CD
+                                                                              , A.COMPANY_CD
+                                                                              , A.VENDOR_CD
+                                                                              , A.ITEM_ID
+                                                                              , A.MARKET_CD
+                                                                              , A.CURRENCY_CD
+                                                                              , NVL(DV.DEPARTURE_DATE,TRUNC(MOM_COMMON_PKG.FN_GET_LOCAL_TIME(A.DIVISION_CD, A.COMPANY_CD))))  
+                                      FROM   DUAL ) 
+                               END       AS UNIT_PRICE
+                             , NVL(TO_CHAR(DV.DEPARTURE_DATE,'YYYY-MM-DD'),TO_CHAR(MOM_COMMON_PKG.FN_GET_LOCAL_TIME(A.DIVISION_CD, A.COMPANY_CD),'YYYY-MM-DD')) AS SHIP_DATE
+                             , A.MIX_GROUP
+                             , A.CUSTOMER_LINE_CD 
+                             , A.PRE_BUILD_TERM
+                             , A.DESTINATION_CD
+                             , A.DESTINATION_NAME
+                             , A.ORDER_GUBUN
+                             , A.ORDER_GUBUN_NAME
+                             , A.ORDER_TYPE
+                             , A.ORDER_TYPE_NAME
+                             ,(SELECT MOM_COMMON_PKG.FN_GET_USER_SHIP_IN_USE_FLAG( A.DIVISION_CD
+                                                                                 , A.COMPANY_CD
+                                                                                 , A.VENDOR_CD )
+                               FROM   DUAL )   AS  SHIP_IN_USE_FLAG
+                             , A.ORIGIN_DUE_DATE
+                             , A.DIVISION_CD
+                             , A.COMPANY_CD
+                             , A.CUSTOMER_PO_NO
+                             , A.DESCRIPTION
+                             , DV.DEPARTURE_NUMBER
+                             , DV.DEPARTURE_QTY
+                             , DV.DEPARTURE_DATE
+                             , (SELECT MOM_COMMON_PKG.FN_GET_B2BI_CUSTOMER_FLAG( A.DIVISION_CD
+                                                                             , A.COMPANY_CD
+                                                                             , A.VENDOR_CD)
+                              FROM   DUAL ) AS B2BI_CUSTOMER_FLAG
+                             , DV.TRANSACTION_ID
+                             , A.HS_PART_NO
+                             , A.LGE_PART_NO
+                             , (SELECT SUM(DEPARTURE_QTY)
+                                FROM   MOM_B2BI_DEPARTURE_V MDV
+                                WHERE  MDV.DIVISION_CD = A.DIVISION_CD
+                                AND    MDV.PO_NO       = A.CUSTOMER_PO_NO
+                                GROUP BY MDV.PO_NO )   AS DEPARTURE_SUM_QTY
+                             , DV.SUBINVENTORY_DESC 
+                             , D.CONVERSION_UNIT_QTY      <!-- XMOMA11 -->
+                             , D.CONVERSION_UNIT          <!-- XMOMA11 -->
+                     FROM    MOM_SALES_ORDER_V A
+                           , MOM_OQC_RESULT_MST R
+                           , MOM_B2BI_DEPARTURE_V DV   
+                           , MOM_ITEM_DEFINITION D
+                    WHERE    A.DIVISION_CD = R.DIVISION_CD
+                      AND    A.COMPANY_CD  = R.COMPANY_CD
+                      AND    A.SALES_ORDER_ID = R.SALES_ORDER_ID
+                      AND    A.DIVISION_CD      = DV.DIVISION_CD(+)
+                      AND    A.CUSTOMER_PO_NO  = DV.PO_NO(+)
+                      AND    A.DIVISION_CD = D.DIVISION_CD
+                      AND    A.COMPANY_CD  = D.COMPANY_CD
+                      AND    A.ITEM_ID     = D.ITEM_ID  
+                      AND    A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+                      AND    A.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+                      AND    NVL(D.OQC_FLAG, 'N') = 'Y'
+                      AND    R.PASS_FLAG = 'Y'
+                      AND    R.OQC_STATE = 'P'
+                   <!-- start XMOMA11 -->
+                   <if test="customerPo != '' and customerPo != null">
+                      AND    UPPER(A.CUSTOMER_PO_ID) LIKE '%' || TRIM(UPPER(#{customerPo, jdbcType=VARCHAR})) || '%'
+                   </if>
+                   <if test="poNo != '' and poNo != null">
+                      AND    A.CUSTOMER_PO_NO LIKE '%' || TRIM(UPPER(#{poNo, jdbcType=VARCHAR})) || '%'
+                   </if>
+                   <if test="departureNo != '' and departureNo != null">
+                      AND    A.DEPARTURE_NUMBER LIKE '%' || TRIM(UPPER(#{departureNo, jdbcType=VARCHAR})) || '%'
+                   </if>
+                   <if test="orderState != '' and orderState != null">
+                      AND    A.ORDER_STATE = #{orderState, jdbcType=VARCHAR}
+                   </if>        
+                   <if test="itemName != '' and itemName != null">
+                      AND    (A.ITEM_ID LIKE '%' || TRIM(UPPER(#{itemName, jdbcType=VARCHAR})) || '%'
+                             OR UPPER(A.ITEM_NAME) LIKE '%' || TRIM(UPPER(#{itemName, jdbcType=VARCHAR})) || '%')
+                   </if>
+                    <if test="organizationCode!= '' and organizationCode != null">
+                      AND    A.ORG_CODE = #{organizationCode, jdbcType=VARCHAR}    
+                   </if>
+                   <!-- end XMOMA11 -->
+                   <if test="dateCombo != null and dateCombo != ''">
+                        <choose>
+                            <when test="dateCombo == 'PAYMENT_TIME'">
+                            AND    A.DUE_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
+                                              AND     TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.9997 / 24
+                            </when>
+                            <otherwise>
+                            AND DV.DEPARTURE_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
+                                                  AND     TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.9997 / 24
+                            </otherwise>
+                        </choose>
+                   </if> 
+                   <if test ="departureFlag != null and departureFlag != ''">
+                    <choose>
+                        <when test='departureFlag.equals("N")'>
+                         AND NVL(DV.DEPARTURE_QTY, 0) = 0
+                        </when>
+                        <otherwise>
+                         AND DV.DEPARTURE_QTY > 0
+                        </otherwise>
+                    </choose>
+                   </if>
+                      ) A
+                   , MOM_ITEM_STOCK MIS
+                   , MOM_FACILITY MF        
+              WHERE   A.DIVISION_CD = MIS.DIVISION_CD(+)
+                AND   A.COMPANY_CD  = MIS.COMPANY_CD(+) 
+                AND   A.ITEM_ID     = MIS.ITEM_ID(+)
+                AND   A.DIVISION_CD = MF.DIVISION_CD(+)
+                AND   A.COMPANY_CD = MF.COMPANY_CD(+)
+                AND   A.FROM_LOCATION_CD = MF.FACILITY_CD(+)
+                AND   A.FROM_LOCATION_CD = MIS.LOCATION_CD(+)  
+               <if test="fromLocation != '' and fromLocation != null">
+                AND   A.FROM_LOCATION_CD = #{fromLocation, jdbcType=VARCHAR}
+               </if>
+               <if test="unitPriceFlag != null and unitPriceFlag != ''">
+                <choose> 
+                    <when test='unitPriceFlag.equals("N")'>
+                     AND   NVL(A.UNIT_PRICE, 0) = 0
+                    </when>
+                    <otherwise>
+                     AND   A.UNIT_PRICE > 0
+                    </otherwise>
+                </choose>
+               </if>
+       ) A
+       WHERE 1 = 1
+       <if test ="compareQty != null and compareQty != ''">
+        <choose>
+            <when test="compareQty == 'BIG'">
+             <![CDATA[
+             AND A.REMAIN_QTY < A.DEPARTURE_SUM_QTY
+             ]]>
+            </when>
+            <otherwise>
+             AND A.REMAIN_QTY >= A.DEPARTURE_SUM_QTY
+            </otherwise>
+        </choose>
+       </if>
+        ORDER BY A.VENDOR_NAME
+               , A.DESTINATION_NAME
+               , A.CUSTOMER_PO_NO
+               , A.DEPARTURE_NUMBER
+               , A.DEPARTURE_DATE
+               , A.ORIGIN_DUE_DATE
+               , A.REMAIN_QTY 
+    </select>
+    
+    <insert id="create_productShippingTemp" parameterType="java.util.HashMap">
+        INSERT INTO MOM_SHIP_RESULT_TEMP(
+            DIVISION_CD,
+            COMPANY_CD,
+            ORDER_TYPE,
+            SALES_ORDER_ID,
+            ITEM_ID,
+            CUSTOMER_PO_ID,
+            CUSTOMER_ID,
+            DESTINATION,
+            IO_TIME,
+            QTY,
+            FROM_LOCATION_CD,
+            TO_LOCATION_CD,
+            UNIT_PRICE,
+            MARKET_CD,
+            CURRENCY_CD,
+            SHIP_IN_FLAG,
+            ITEM_STOCK_INOUT_ID,
+            PO_NO, 
+            DEPARTURE_NUMBER, 
+            B2BI_CUSTOMER_FLAG,
+            CREATE_BY,
+            CREATE_DATE,
+            BUSINESSID,
+            DESCRIPTION, 
+            CONVERSION_UNIT_QTY,
+            SHIP_AMT
+            
+            )
+            VALUES(
+            #{divisionCd, jdbcType=VARCHAR},
+            #{companyCd, jdbcType=VARCHAR},
+            #{orderType, jdbcType=VARCHAR},
+            #{salesOrderId, jdbcType=VARCHAR},
+            #{itemId, jdbcType=VARCHAR},
+            #{customerPoId, jdbcType=VARCHAR},
+            #{vendorCd, jdbcType=VARCHAR},
+            #{destinationCd, jdbcType=VARCHAR},
+            TO_DATE(#{shipDate, jdbcType=VARCHAR}, 'YYYY-MM-DD'),
+            #{departureQty, jdbcType=INTEGER},
+            #{fromLocationCd, jdbcType=VARCHAR},
+            #{toLocationCd, jdbcType=VARCHAR},
+            #{unitPrice, jdbcType=INTEGER},
+            #{marketCd, jdbcType=VARCHAR},
+            #{currencyCd, jdbcType=VARCHAR},
+            #{shipInUseFlag, jdbcType=VARCHAR}, <!-- XMOMG5/ 20191104 / ljw / 출하자동입고 시 파라미터 명칭 변경 -->
+            #{itemStockInoutId, jdbcType=VARCHAR},
+            #{customerPoNo, jdbcType=VARCHAR},
+            #{departureNumber, jdbcType=VARCHAR},
+            #{b2biCustomerFlag, jdbcType=VARCHAR},
+            #{createBy, jdbcType=VARCHAR},
+            MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+            #{transactionId, jdbcType=VARCHAR},
+            #{description, jdbcType=VARCHAR},
+            #{conversionUnitQty, jdbcType=INTEGER},
+            #{shipAmt, jdbcType=INTEGER}
+           
+        )
+    </insert>   
+    
+    <!-- modify_hists 
+    * XMOMA11 / 20191104 / gyp / 사용하지 않는 sql로 삭제
+     -->
+     <!-- start XMOMA11
+    <update id="modify_productShippingTemp" parameterType="java.util.HashMap">
+        UPDATE MOM_SHIP_RESULT_TEMP
+        SET QTY = #{shippingQty, jdbcType=INTEGER},
+            UNIT_PRICE = #{unitPrice, jdbcType=INTEGER},
+            CONVERSION_UNIT_QTY = #{conversionUnitQty, jdbcType=INTEGER}
+        WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+        AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+        AND ORDER_TYPE = #{orderType, jdbcType=VARCHAR}
+        AND SALES_ORDER_ID = #{salesOrderId, jdbcType=VARCHAR}
+        AND ITEM_ID = #{itemId, jdbcType=VARCHAR}
+        AND CUSTOMER_PO_ID = #{customerPoId, jdbcType=VARCHAR}
+        AND CUSTOMER_ID = #{vendorCd, jdbcType=VARCHAR}
+        AND DESTINATION = #{destinationCd, jdbcType=VARCHAR}
+        AND NVL(TO_CHAR(IO_TIME, 'YYYY-MM-DD'), '0000-00-00') = #{shipDate, jdbcType=VARCHAR}
+        AND FROM_LOCATION_CD = #{fromLocationCd, jdbcType=VARCHAR}
+        AND TO_LOCATION_CD = #{toLocationCd, jdbcType=VARCHAR}
+        AND MARKET_CD = #{marketCd, jdbcType=VARCHAR}
+        AND CURRENCY_CD = #{currencyCd, jdbcType=VARCHAR}
+        AND SHIP_IN_FLAG = #{shipInFlag, jdbcType=VARCHAR}
+        AND ITEM_STOCK_INOUT_ID = #{itemStockInoutId, jdbcType=VARCHAR}
+        AND PO_NO = #{customerPoNo, jdbcType=VARCHAR} 
+        AND DEPARTURE_NUMBER = #{departureNumber, jdbcType=VARCHAR}
+        AND BUSINESSID = #{transactionId, jdbcType=VARCHAR}
+    </update>
+     end XMOMA11 -->
+     
+    <delete id="remove_productShippingTemp" parameterType="java.util.HashMap">
+        DELETE FROM MOM_SHIP_RESULT_TEMP
+         WHERE  DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           AND  COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}
+           AND  ORDER_TYPE = #{orderType, jdbcType=VARCHAR}
+    </delete>
+    
+    <insert id="create_productShipping" statementType="CALLABLE">
+    {
+        CALL P_CREATE_SHIP_RESULT (
+            #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+           ,#{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+           ,#{divisionCd, mode=IN, jdbcType=VARCHAR}
+           ,#{companyCd, mode=IN, jdbcType=VARCHAR}
+           ,#{orderType, mode=IN, jdbcType=VARCHAR}
+        )
+    }
+    </insert>
+    
+    <insert id="create_productShippingB2BI" statementType="CALLABLE">
+    {
+        CALL MOM_B2BI.CREATE_B2BI_MOM_APPLY (
+            #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+           ,#{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+           ,#{divisionCd, mode=IN, jdbcType=VARCHAR}
+           ,#{companyCd, mode=IN, jdbcType=VARCHAR}
+           ,#{userId, mode=IN, jdbcType=VARCHAR}
+        )
+    }
+    </insert>
+    
+    <!-- modify_hists 
+    * XMOMA11 / 20191104 / gyp / 사용하지 않는 sql로 삭제
+     -->
+    <!-- start XMOMA11
+    <select id="get_facilityCheck_list" resultType="camelMap" parameterType="java.util.HashMap">
+    SELECT COUNT(*) AS COUNT
+      FROM MOM_FACILITY MF
+     WHERE FACILITY_CD = #{fromLocationCd, jdbcType=VARCHAR}
+       AND FACILITY_TYPE IN(SELECT MC.CODE_ID
+              FROM MOM_CODE MC
+             WHERE MC.DIVISION_CD = MF.DIVISION_CD
+               AND MC.COMPANY_CD = MF.COMPANY_CD
+               AND MC.ATTRIBUTE5 = 'Y')
+    </select>
+    end XMOMA11 -->
+</mapper>

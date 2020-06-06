@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.reference.worker.worker"> 
+	<select id="get_worker_list" resultType="camelMap" parameterType="java.util.HashMap">
+	   <if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+		WITH TEMP1 AS (	
+	   </if>
+			SELECT A.WORKER_CD
+				 , A.WORKER_NAME
+				 , TO_CHAR(A.JOIN_DATE,  'YYYY-MM-DD') AS JOIN_DATE
+				 , TO_CHAR(A.LEAVE_DATE, 'YYYY-MM-DD') AS LEAVE_DATE
+				 , A.WORKER_LEVEL
+				 , A.TAG_NO
+				 , A.PHONE_NO
+				 , A.ADDRESS
+				 , A.USE_YN
+				 , A.DESCRIPTION
+				 , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS CREATE_DATE
+				 , A.CREATE_BY
+				 , TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS UPDATE_DATE
+				 , A.UPDATE_BY
+			FROM MOM_WORKER_MASTER A
+			WHERE   DIVISION_CD  = #{divisionCd, jdbcType=VARCHAR}
+			AND     COMPANY_CD   = #{companyCd, jdbcType=VARCHAR}
+		    <if test="workerName != null and workerName != ''">
+		    AND (WORKER_CD LIKE '%' || UPPER(TRIM(#{workerName, jdbcType=VARCHAR})) || '%'
+		    	OR WORKER_NAME LIKE '%' || #{workerName, jdbcType=VARCHAR} || '%')
+		    </if>
+		    ORDER BY WORKER_CD
+		    <if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+				)
+	      SELECT A.*
+	           , B.ROW_COUNT
+	      FROM (SELECT A.*
+	                 , ROWNUM GRIDROW
+	              FROM TEMP1 A) A
+	         , (SELECT COUNT(*) ROW_COUNT
+	              FROM TEMP1) B 
+	      WHERE GRIDROW BETWEEN #{startPage, jdbcType=INTEGER} AND #{endPage, jdbcType=INTEGER}
+       </if>
+	</select>
+	
+	<insert id="create_worker" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+			INSERT INTO MOM_WORKER_MASTER(
+				  DIVISION_CD
+				, COMPANY_CD
+				, WORKER_CD
+				, WORKER_NAME
+				, JOIN_DATE
+				, LEAVE_DATE
+				, TAG_NO
+				, WORKER_LEVEL
+				, PHONE_NO
+				, ADDRESS
+				, USE_YN
+				, DESCRIPTION
+				, CREATE_DATE
+				, CREATE_BY
+				, UPDATE_DATE
+				, UPDATE_BY
+			)
+			VALUES (#{divisionCd, jdbcType=VARCHAR}
+				  , #{companyCd, jdbcType=VARCHAR}
+				  , UPPER(TRIM(#{workerCd, jdbcType=VARCHAR}))
+				  , #{workerName, jdbcType=VARCHAR}
+				  , TO_DATE(#{joinDate, jdbcType=VARCHAR},  'YYYY-MM-DD')
+				  , TO_DATE(#{leaveDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+				  , #{tagNo, jdbcType=VARCHAR}
+				  , #{workerLevel, jdbcType=INTEGER}
+				  , #{phoneNo, jdbcType=VARCHAR}
+				  , #{address,  jdbcType=VARCHAR}
+				  , NVL(UPPER(TRIM(#{useYn, jdbcType=VARCHAR})), 'Y')
+				  , #{description, jdbcType=VARCHAR}
+				  , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+				  , #{createBy, jdbcType=VARCHAR}
+				  , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+				  , #{updateBy, jdbcType=VARCHAR}) 	
+			;
+			
+			INSERT INTO MOM_WORKER_MASTER_HIST(
+				  LAST_EVENT_SEQ
+				, DIVISION_CD
+				, COMPANY_CD
+				, WORKER_CD
+				, WORKER_NAME
+				, JOIN_DATE
+				, LEAVE_DATE
+				, TAG_NO
+				, WORKER_LEVEL
+				, PHONE_NO
+				, ADDRESS
+				, USE_YN
+				, DESCRIPTION
+				, CREATE_DATE
+				, CREATE_BY
+				, UPDATE_DATE
+				, UPDATE_BY
+			) 
+			SELECT S_ORDER_SEQ.NEXTVAL
+				, DIVISION_CD
+				, COMPANY_CD
+				, WORKER_CD
+				, WORKER_NAME
+				, JOIN_DATE
+				, LEAVE_DATE
+				, TAG_NO
+				, WORKER_LEVEL
+				, PHONE_NO
+				, ADDRESS
+				, USE_YN
+				, DESCRIPTION
+				, CREATE_DATE
+				, CREATE_BY
+				, UPDATE_DATE
+				, UPDATE_BY
+			FROM MOM_WORKER_MASTER
+			WHERE   DIVISION_CD  = #{divisionCd, jdbcType=VARCHAR}
+			AND     COMPANY_CD   = #{companyCd, jdbcType=VARCHAR}
+			AND     WORKER_CD 	 = UPPER(TRIM(#{workerCd, jdbcType=VARCHAR}))
+		;
+		SELECT
+			CASE 
+				WHEN COUNT(WORKER_CD) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_WORKER_MASTER
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND   COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		AND   WORKER_CD   = UPPER(TRIM(#{workerCd, jdbcType=VARCHAR}))
+		;
+		END
+	}
+	</insert>
+	
+	<update id="modify_worker" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+		#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+		
+		UPDATE MOM_WORKER_MASTER
+		   SET WORKER_NAME	 = #{workerName, jdbcType=VARCHAR}
+		   	 , JOIN_DATE  	 = TO_DATE(#{joinDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+		   	 , LEAVE_DATE 	 = TO_DATE(#{leaveDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+		   	 , TAG_NO 	  	 = #{tagNo, jdbcType=VARCHAR}
+		   	 , PHONE_NO   	 = #{phoneNo, jdbcType=VARCHAR}
+		   	 , ADDRESS  	 = #{address,  jdbcType=VARCHAR}
+		   	 , USE_YN   	 = NVL(UPPER(TRIM(#{useYn, jdbcType=VARCHAR})), 'Y')
+		   	 , DESCRIPTION 	 = #{description, jdbcType=VARCHAR}
+		   	 , UPDATE_DATE	 = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		  	 , UPDATE_BY  	 = #{updateBy,jdbcType=VARCHAR}
+		WHERE DIVISION_CD 	 = #{divisionCd,jdbcType=VARCHAR}
+		AND   COMPANY_CD     = #{companyCd,jdbcType=VARCHAR}
+		AND   WORKER_CD      = UPPER(TRIM(#{workerCd, jdbcType=VARCHAR}))
+		;
+		
+		INSERT INTO MOM_WORKER_MASTER_HIST(
+				  LAST_EVENT_SEQ
+				, DIVISION_CD
+				, COMPANY_CD
+				, WORKER_CD
+				, WORKER_NAME
+				, JOIN_DATE
+				, LEAVE_DATE
+				, TAG_NO
+				, WORKER_LEVEL
+				, PHONE_NO
+				, ADDRESS
+				, USE_YN
+				, DESCRIPTION
+				, CREATE_DATE
+				, CREATE_BY
+				, UPDATE_DATE
+				, UPDATE_BY
+			) 
+			SELECT S_ORDER_SEQ.NEXTVAL
+				, DIVISION_CD
+				, COMPANY_CD
+				, WORKER_CD
+				, WORKER_NAME
+				, JOIN_DATE
+				, LEAVE_DATE
+				, TAG_NO
+				, WORKER_LEVEL
+				, PHONE_NO
+				, ADDRESS
+				, USE_YN
+				, DESCRIPTION
+				, CREATE_DATE
+				, CREATE_BY
+				, UPDATE_DATE
+				, UPDATE_BY
+			FROM MOM_WORKER_MASTER
+			WHERE   DIVISION_CD  = #{divisionCd, jdbcType=VARCHAR}
+			AND     COMPANY_CD   = #{companyCd, jdbcType=VARCHAR}
+			AND     WORKER_CD    = UPPER(TRIM(#{workerCd, jdbcType=VARCHAR}))
+		;
+		
+		SELECT
+			CASE 
+				WHEN COUNT(WORKER_CD) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_WORKER_MASTER
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND   COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		AND   WORKER_CD   = UPPER(TRIM(#{workerCd, jdbcType=VARCHAR}))
+		;
+		END
+	}
+	</update>
+	
+	<delete id="remove_worker" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+	  			
+		UPDATE MOM_WORKER_MASTER
+		   SET DESCRIPTION = 'Delete Data'
+		     , UPDATE_DATE = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		     , UPDATE_BY   = #{updateBy, jdbcType=VARCHAR}
+		WHERE DIVISION_CD  = #{divisionCd, jdbcType=VARCHAR}
+		AND   COMPANY_CD   = #{companyCd, jdbcType=VARCHAR}
+		AND   WORKER_CD    = UPPER(TRIM(#{workerCd, jdbcType=VARCHAR}))
+		;
+		   
+	  	INSERT INTO MOM_WORKER_MASTER_HIST(
+				  LAST_EVENT_SEQ
+				, DIVISION_CD
+				, COMPANY_CD
+				, WORKER_CD
+				, WORKER_NAME
+				, JOIN_DATE
+				, LEAVE_DATE
+				, TAG_NO
+				, WORKER_LEVEL
+				, PHONE_NO
+				, ADDRESS
+				, USE_YN
+				, DESCRIPTION
+				, CREATE_DATE
+				, CREATE_BY
+				, UPDATE_DATE
+				, UPDATE_BY
+			) 
+			SELECT S_ORDER_SEQ.NEXTVAL
+				, DIVISION_CD
+				, COMPANY_CD
+				, WORKER_CD
+				, WORKER_NAME
+				, JOIN_DATE
+				, LEAVE_DATE
+				, TAG_NO
+				, WORKER_LEVEL
+				, PHONE_NO
+				, ADDRESS
+				, USE_YN
+				, DESCRIPTION
+				, CREATE_DATE
+				, CREATE_BY
+				, UPDATE_DATE
+				, UPDATE_BY
+			FROM MOM_WORKER_MASTER
+			WHERE   DIVISION_CD  = #{divisionCd, jdbcType=VARCHAR}
+			AND     COMPANY_CD   = #{companyCd, jdbcType=VARCHAR}
+			AND     WORKER_CD    = UPPER(TRIM(#{workerCd, jdbcType=VARCHAR}))
+		;
+		
+		DELETE
+		FROM	MOM_WORKER_MASTER
+		WHERE   DIVISION_CD  = #{divisionCd, jdbcType=VARCHAR}
+		AND     COMPANY_CD   = #{companyCd, jdbcType=VARCHAR}
+		AND     WORKER_CD    = UPPER(TRIM(#{workerCd, jdbcType=VARCHAR})) 
+		;
+		
+		SELECT
+			CASE
+				WHEN COUNT(WORKER_CD) = 0 THEN 'S'
+				ELSE 'E' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_WORKER_MASTER
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND   COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		AND   WORKER_CD   = UPPER(TRIM(#{workerCd, jdbcType=VARCHAR}))
+		;
+	  END
+	}
+	</delete>
+</mapper>

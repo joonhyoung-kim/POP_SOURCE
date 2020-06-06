@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.quality.materialDisposalHist">
+	<select id="get_materialDisposalHist_list" resultType="camelMap" parameterType="java.util.HashMap">
+         SELECT MI.ITEM_ID
+		      , MID.ITEM_NAME
+		      , MID.SPECIFICATION
+		      , MID.ITEM_TYPE
+		      , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(MI.DIVISION_CD, MI.COMPANY_CD, 'ITEM_TYPE', MID.ITEM_TYPE)
+		         FROM   DUAL  ) AS ITEM_TYPE_NAME
+		      , MI.ITEM_STOCK_INOUT_ID
+		      , MI.ITEM_STOCK_ID
+		      , TO_CHAR(MI.IO_TIME, 'YYYY-MM-DD') AS SCRAP_DATE
+		      , MI.QTY                            AS SCRAP_QTY
+		      , MI.LOCATION_CD
+		      , (SELECT MOM_COMMON_PKG.fn_get_facility_name(MI.DIVISION_CD, MI.COMPANY_CD,MI.LOCATION_CD)
+		         FROM   DUAL )     AS LOCATION_NAME
+		      , MI.REASON_CD
+		      , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(MI.DIVISION_CD, MI.COMPANY_CD, 'MATERIAL_TERMINATE', MI.REASON_CD)
+		         FROM   DUAL  ) AS SCRAP_REASON_NAME
+		      , MI.DESCRIPTION   
+		      , TO_CHAR(MI.UPDATE_DATE, 'YYYY-MM-DD') AS UPDATE_DATE
+		      , MI.UPDATE_BY
+		      , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(MI.DIVISION_CD, MI.COMPANY_CD,MI.UPDATE_BY)
+		         FROM   DUAL )  AS UPDATE_NAME  
+		      , TO_CHAR(MIC.IO_TIME, 'YYYY-MM-DD') AS CANCEL_DATE
+		      , MIC.QTY                            AS CANCEL_QTY
+		      , MIC.REASON_CD                      AS CANCEL_REASON
+		      , MIC.DESCRIPTION                    AS CANCEL_DESC
+		      , MI.ITEM_OUTPUT_ID                  AS SCRAP_DOC_NO
+		      , MI.TRANSACTION_SEQ                 AS DOC_SEQ 
+		 FROM   MOM_ITEM_STOCK_INOUT MI
+		      , MOM_ITEM_DEFINITION MID
+		      , MOM_ITEM_STOCK_INOUT MIC
+		 WHERE  MI.DIVISION_CD  = MID.DIVISION_CD
+		 AND    MI.COMPANY_CD   = MID.COMPANY_CD
+		 AND    MI.ITEM_ID      = MID.ITEM_ID
+		 AND    MI.DIVISION_CD  = MIC.DIVISION_CD(+)
+		 AND    MI.COMPANY_CD   = MIC.COMPANY_CD(+)
+		 AND    MI.ITEM_STOCK_INOUT_ID = MIC.PREV_STOCK_INOUT_ID(+)
+		 AND    MI.DIVISION_CD  = #{divisionCd, jdbcType=VARCHAR}
+		 AND    MI.COMPANY_CD   = #{companyCd, jdbcType=VARCHAR}
+		 AND    MI.IO_TYPE      = 'O'
+		 AND    MI.IO_CATEGORY  = 'MD001'
+		<if test="fromDate != null and fromDate != ''">
+		 AND    MI.IO_TIME BETWEEN TO_DATE (#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+		                   AND     TO_DATE (#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')  
+		 
+		</if>
+		<if test = "itemName != null and itemName != ''">
+         AND (UPPER(MID.ITEM_ID) LIKE UPPER ('%' || #{itemName, jdbcType=VARCHAR} || '%')
+          OR  UPPER(MID.ITEM_NAME) LIKE UPPER ('%' || #{itemName, jdbcType=VARCHAR} || '%'))
+        </if>
+        <if test = "locationName != null and locationName != ''">
+         AND MI.LOCATION_CD = #{locationName, jdbcType=VARCHAR}
+        </if>
+        <if test = "itemType != null and itemType != ''">
+         AND MID.ITEM_TYPE = #{itemType, jdbcType=VARCHAR}
+        </if>
+        <if test = "dpsReason != null and dpsReason != ''">
+         AND MI.REASON_CD = #{dpsReason, jdbcType=VARCHAR}
+        </if>
+        <if test = "cancelFlag != null and cancelFlag != ''">
+        	<choose>
+	        	<when test = 'cancelFlag == "Y"'>
+	        	AND MIC.QTY != 0
+	        	</when>
+	        	<otherwise>
+	        	AND MIC.QTY IS NULL
+	        	</otherwise>
+        	</choose>
+         
+        </if>
+		 ORDER BY MI.ITEM_OUTPUT_ID, MI.TRANSACTION_SEQ  
+	</select>
+	
+	<insert id="create_materialDisposalCancelProc" statementType="CALLABLE">
+		{
+	        CALL SP_MOM_MATERIAL_PKG.P_CANCEL_MATERIAL_SCRAP (
+	             #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+	           , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+	           , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+	           , #{companyCd, mode=IN, jdbcType=VARCHAR}
+	           , #{itemId, mode=IN, jdbcType=VARCHAR}
+	           , #{locationCd, mode=IN, jdbcType=VARCHAR}
+	           , #{scrapQty, mode=IN, jdbcType=NUMERIC}
+	           , #{itemStockInoutId, mode=IN, jdbcType=VARCHAR}
+	           , #{description, mode=IN, jdbcType=VARCHAR}
+	           , #{createBy, mode=IN, jdbcType=VARCHAR}
+	        )
+	    }
+    </insert>
+</mapper>

@@ -1,0 +1,334 @@
+var search = location.search.replace("?","").split(',');
+//$(window).resize(function() { 
+//    if ("#cBoard"){ 
+//      AUIGrid.resize("#cBoard"); 
+//    } 
+//});
+var statusBoard_1 = {
+	index: 0,
+	datas1: [],
+	datas2: [],
+	init: function() {
+		//var index = 0;
+		var that = this;
+		Language.init(function() {
+		});
+		
+		this.event();
+		
+	},
+	event: function() {
+		var that = this;
+		var cnt = 0;		
+		$(document).on('click', '#labelType', function() {
+			if($('#performReg').val() == '') {
+				//momWidget.messageBox({type:'warning', width:'400', height: '145', html:Language.lang['MESSAGES10685']});
+				return;
+			}
+			var paNum = $("#productionStatus").jqxComboBox('getCheckedItems').length;
+			var param = '?';
+			for(var i = 0; i < paNum; i++) {
+				param +=  $("#productionStatus").jqxComboBox('getCheckedItems')[i].value;
+				if(i != paNum - 1) {
+					param += ",";
+				}
+			}
+			
+			window.open('statusBoard_1.html' + param,'win'+cnt,'width=1500,height=800,left=0,top=0');
+			cnt++;
+		});
+		
+		$(document).on('click', '#performReg', function() {
+			if($('#typeSetup1').val() == '') {
+				//momWidget.splashHide();
+				momWidget.messageBox({type: 'success', width: '400', height: '145', html: Language.lang['MESSAGES10692']});
+				return;
+			}
+			
+			var param = '?' + $('#typeSetup1').val();
+			//window.open('statusBoard_2.html'+ param,'win'+cnt,'width=1500,height=800,left=0,top=0');
+			momWidget.splashHide();
+			momWidget.messageBox({type: 'success', width: '400', height: '145', html: Language.lang['MESSAGES10692']});
+			cnt++;
+		});
+		
+		$(document).on('click', '#main2Btn', function() {
+			if($('#typeSetup2').val() == '') {
+				momWidget.messageBox({type:'warning', width:'400', height: '145', html:Language.lang['MESSAGES12081']});
+				return;
+			}
+			
+			var param = '?' + $('#typeSetup2').val();
+			window.open('statusBoard_3.html'+ param,'win'+cnt,'width=1500,height=800,left=0,top=0');
+			cnt++;
+		});
+		
+		$(document).on('click', '#main3Btn', function() {
+			if($('#typeSetup3').val() == '') {
+				momWidget.messageBox({type:'warning', width:'400', height: '145', html:Language.lang['MESSAGES12081']});
+				return;
+			}
+			
+			var param = '?' + $('#typeSetup3').val();
+			window.open('complete.html'+ param,'win'+cnt,'width=1500,height=800,left=0,top=0');
+			cnt++;
+		});
+		
+		$(document).on('click', '#actionBtn11', function() {
+			that.currentPage = {menuId : 'MOMKA001_2'};
+			that.initParam = that.currentPage;
+			that.excelParam = that.currentPage;
+			
+			$('#pop').momModal('show');
+			AUIGrid.resize(momWidget.grid[0], $(window).width() * 0.488 - 48, 320);
+			/*AUIGrid.setColumnPropByDataField(momWidget.grid[0], 'resourceCd', {style:'columnStyle'});
+			AUIGrid.setColumnPropByDataField(momWidget.grid[0], 'seq', {style:'columnStyle'});*/
+		});
+		
+		$(document).on('click', '#actionBtn21', function() {
+			that.currentPage = {menuId : 'MOMKA001_3'};
+			that.initParam = that.currentPage;
+			that.excelParam = that.currentPage;
+			
+			$('#pop').momModal('show');
+			AUIGrid.resize(momWidget.grid[0], $(window).width() * 0.488 - 48, 320);
+			/*AUIGrid.setColumnPropByDataField(momWidget.grid[0], 'resourceCd', {style:'columnStyle'});
+			AUIGrid.setColumnPropByDataField(momWidget.grid[0], 'seq', {style:'columnStyle'});*/
+		});
+		
+		/*$(document).on('click', '#excelDownBtn1', function() {
+			momWidget.procResize();
+		});
+		
+		$(document).on('click', '#excelTemplateBtn1', function() {
+			momWidget.init(1, 'MOMKA001', MOMKA001, 'reInit');
+		});*/
+		
+		$(document).on('click', '#addRowBtn', function() {
+			if($('#dashboardType').val() == '') {
+				momWidget.messageBox({type: 'warning', width: '400', height: '145', html: Language.lang['MESSAGES12081']});
+				return;
+			} else if($('#resourceCd').val() == '') {
+				momWidget.messageBox({type: 'warning', width: '400', height: '145', html: Language.lang['MESSAGES12082']});
+				return;
+			} else if($('#dashboardType').val() != '' && $('#resourceCd').val() != '') {
+				var param = that.getPopResult();
+				param.menuId = that.currentPage.menuId;
+				AUIGrid.addRow(momWidget.grid[0], param, 'last');
+			}
+		});
+		
+		$(document).on('click', '#modalCloseBtn, .bntpopclose', function() {
+			$('#pop').momModal('hide');
+			$('#dashboardType').val('');
+			$('#resourceCd').val('');
+		});
+	},
+	setting: function(search) {
+		
+		var that = this;
+		$("#resourceName").remove();
+		var resourceName = '';
+		var nowTime = get_current_date('YYYY-MM-DD HH24:MI').substring(0,16);
+		var param;
+		const resourceCd = search[that.index];
+//		if(that.datas1[that.index] == undefined) {
+//			$.ajax({
+//				url : tuCommon.contextPath() + "/mom/request/com.thirautech.mom.reference.resource.facility.facility.dummy/A",
+//				type : "GET",
+//				data : {resourceCd : resourceCd},
+//				async: false,
+//				timeout 	: 30000000,
+//				dataType 	: 'json',
+//				contentType : 'application/json; charset=UTF-8',
+//				success : function(data){
+//					if(data != null) {
+//						resourceName = data.resourceName;
+//					}
+//					
+//					
+//					that.datas1[that.index] = data.resourceName;
+//				},
+//				error: function(data){},
+//				fail : function(data){}
+//			});
+//		} else {
+//			resourceName = that.datas1[that.index];
+//		}
+		
+		
+		
+		
+//		if(that.datas2[that.index] == undefined) {
+		$.ajax({
+			url : tuCommon.contextPath() + "/mom/request/com.thirautech.mom.addition.dashboardDisplay.statusBoard1.dummy",
+			type : "GET",
+			data : {resourceCd : resourceCd},
+			async: false,
+			timeout 	: 30000000,
+			dataType 	: 'json',
+			contentType : 'application/json; charset=UTF-8',
+			success : function(data){
+				if(data.length > 0) {
+					param = {
+							partNo : data[0].partNo,
+							model : data[0].model,
+							description : data[0].description,
+							workOrder : data[0].workOrder,
+							planQty : data[0].planQty,
+							outputQty : data[0].outputQty,
+							progress : data[0].progress,
+							ng : data[0].ngRate,
+							dayPlanQty : data[0].dayPlanQty,
+							uph : data[0].currTarget,
+							dayOutput : data[0].dayOutputQty,
+							dayNg : data[0].dayNg,
+							dayProgress : data[0].dayProgress,
+							resourceName : data[0].resourceName
+					}
+					var html1 = '<div multi-lang="" class="textblock" id ="resourceName">[' + param.resourceName + ']</div>';
+					var html2 = '<div multi-lang="" class="textblock center" id="nowTime">' + nowTime + '</div>'
+					$("#titleReosurce").parent().append(html1);
+					$("#nowTime").remove();
+					$(".boardTitle_detail2").append(html2);
+					
+					/* 20200324 / pyj / 현재 불필요 조건 */
+//					if(param.uph < param.dayUph) {
+//						$("#currTarget").css({"color":"red"});
+//					} else {
+//						$("#currTarget").css({"color":"yellow"});
+//					}
+					
+					if(param.dayProgress > 100) {
+						$(".greenArea").css({"width": "100%"});
+						$(".yellowArea").css({"width": "0%"});
+					} else {
+						$(".greenArea").css({"width": Number(param.dayProgress.trim().replace("%","")) + '%'});
+						$(".yellowArea").css({"width": (100 -  Number(param.dayProgress.trim().replace("%","")))+'%'});
+					}
+					
+					$(".greenTxt").text(param.dayProgress);
+					
+					
+//					if(Number(param.dayProgress.trim().replace("%","")) < 9) {
+//						$(".greenTxt").css({"color":"black"});
+//						console.log("1" + param.dayProgress);
+//					} else {
+						$(".greenTxt").css({"color":"black"});
+//					}
+					
+					$("#partNo").text(param.partNo || "");
+					$("#model").text(param.model || "");
+					$("#description").text(param.description || "");
+					$("#workOrder").text(param.workOrder || "");
+					$("#dayNg").text(param.dayNg || "");
+					if(param.progress != '%') {
+						$("#progress").text(param.progress || "");
+					}
+					if(param.ng != '%') {
+						$("#ng").text(param.ng || "");
+					}
+					if(param.planQty != null) {
+						$("#planQty").text(param.planQty.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")  || "");
+					} else {
+						$("#planQty").text("");
+					}
+					if(param.outputQty != null) {
+						$("#outputQty").text(param.outputQty.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") || "");
+					} else {
+						$("#outputQty").text("");
+					}
+					if(param.dayPlanQty != null) {
+						$("#dayPlanQty").text(param.dayPlanQty.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") || "");
+					} else {
+						$("#dayPlanQty").text("");
+					}
+					if(param.uph != null) {
+						$("#currTarget").text(param.uph.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") || "");
+					} else {
+						$("#currTarget").text("");
+					}
+					if(param.dayOutput != null) {
+						$("#dayOutput").text(param.dayOutput.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") || "");
+					} else {
+						$("#dayOutput").text("");
+					}
+					that.datas2[that.index] = param;
+					that.index = (that.index + 1) % search.length;
+					
+				}
+			},
+			error: function(data){},
+			fail : function(data){}
+		});
+		/* 20200325 / pyj /timeout 갱신될때마다 데이터를 가지고 와야하므로 분기 삭제 */
+//		} 
+//		else {
+//			param = that.datas2[that.index];
+//			
+//			var html1 = '<div multi-lang="" class="textblock" id ="resourceName">[' + param.resourceName + ']</div>';
+//			var html2 = '<div multi-lang="" class="textblock center" id="nowTime">' + nowTime + '</div>'
+//			$("#titleReosurce").parent().append(html1);
+//			$("#nowTime").remove();
+//			$(".boardTitle_detail2").append(html2);
+//			
+//			/* 20200324 / pyj / 현재 불필요 조건 */
+////			if(param.uph < param.dayUph) {
+////				$("#currTarget").css({"color":"red"});
+////			} else {
+////				$("#currTarget").css({"color":"yellow"});
+////			}
+////			
+//			if(param.dayProgress > 100) {
+//				$(".greenArea").css({"width": "100%"});
+//				$(".yellowArea").css({"width": "0%"});
+//			} else {
+//				$(".greenArea").css({"width": Number(param.dayProgress.trim().replace("%","")) +'%'});
+//				$(".yellowArea").css({"width": (100 - Number(param.dayProgress.trim().replace("%","")))+'%'});
+//			}
+//			
+//			$(".greenTxt").text(param.dayProgress);
+//			
+//			
+////			if(Number(param.dayProgress.trim().replace("%","")) < 9) {
+////				$(".greenTxt").css({"color":"black"});
+////				console.log("1" + param.dayProgress);
+////			} else {
+//				$(".greenTxt").css({"color":"black"});
+////			}
+//			
+//			$("#partNo").text(param.partNo || "");
+//			$("#model").text(param.model || "");
+//			$("#description").text(param.description || "");
+//			$("#workOrder").text(param.workOrder || "");
+//			$("#dayNg").text(param.dayNg || "");
+//			if(param.progress != '%') {
+//				$("#progress").text(param.progress || "");
+//			}
+//			if(param.ng != '%') {
+//				$("#ng").text(param.ng || "");
+//			}
+//			if(param.planQty != null) {
+//				$("#planQty").text(param.planQty.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")  || "");
+//			}
+//			if(param.outputQty != null) {
+//				$("#outputQty").text(param.outputQty.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") || "");
+//			}
+//			if(param.dayPlanQty != null) {
+//				$("#dayPlanQty").text(param.dayPlanQty.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") || "");
+//			}
+//			if(param.uph != undefined) {
+//				$("#currTarget").text(param.uph.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") || "");
+//			}
+//			if(param.dayOutput != null) {
+//				$("#dayOutput").text(param.dayOutput.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") || "");
+//			}
+//			that.index = (that.index + 1) % search.length;
+//		}
+	}, event: function() {
+		var that = this;
+	}
+};
+$(document).ready(function(event){
+	statusBoard_1.init();
+});

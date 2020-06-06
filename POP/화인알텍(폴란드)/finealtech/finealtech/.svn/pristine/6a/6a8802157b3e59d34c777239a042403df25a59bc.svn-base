@@ -1,0 +1,78 @@
+﻿<UserControl x:Class="MOM.RPT.Modules.NavigationFrameView"
+             xmlns="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+             xmlns:dxa="http://schemas.devexpress.com/winfx/2008/xaml/accordion"
+             xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
+             xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui"
+             xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+             xmlns:dxwuin="http://schemas.devexpress.com/winfx/2008/xaml/windowsui/navigation"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:dxnav="http://schemas.devexpress.com/winfx/2008/xaml/navigation"         
+             xmlns:c="clr-namespace:TU.Core;assembly=TU.Core"
+             xmlns:l="clr-namespace:TU.Core.Translation;assembly=TU.Core"
+             xmlns:bh="clr-namespace:TU.Core.Behavior;assembly=TU.Core"             
+             xmlns:local="clr-namespace:MOM.RPT.Modules"
+>
+    <UserControl.DataContext>
+        <local:NavigationFrameViewModel />
+    </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+
+            <!-- FrameAnimationSelector  -->
+            <bh:FrameAnimationSelector x:Key="frameAnimationSelector">
+                <bh:FrameAnimationSelector.BackStoryboard>
+                    <Storyboard>
+                        <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="NewContent.(UIElement.Opacity)">
+                            <SplineDoubleKeyFrame KeyTime="00:00:00" Value="0" />
+                            <SplineDoubleKeyFrame KeyTime="00:00:00.400" Value="1" />
+                        </DoubleAnimationUsingKeyFrames>
+                        <DoubleAnimation BeginTime="00:00:00" Duration="00:00:00.500" Storyboard.TargetProperty="NewContentTranslateX" From="1" To="0">
+                            <DoubleAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut" />
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+                        <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="OldContent.(UIElement.Opacity)">
+                            <SplineDoubleKeyFrame KeyTime="00:00:00" Value="1" />
+                            <SplineDoubleKeyFrame KeyTime="00:00:00.100" Value="0" />
+                        </DoubleAnimationUsingKeyFrames>
+                    </Storyboard>
+                </bh:FrameAnimationSelector.BackStoryboard>
+                <bh:FrameAnimationSelector.ForwardStoryboard>
+                    <Storyboard>
+                        <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="NewContent.(UIElement.Opacity)">
+                            <SplineDoubleKeyFrame KeyTime="00:00:00" Value="0" />
+                            <SplineDoubleKeyFrame KeyTime="00:00:00.400" Value="1" />
+                        </DoubleAnimationUsingKeyFrames>
+                        <DoubleAnimation BeginTime="00:00:00" Duration="00:00:00.500" Storyboard.TargetProperty="NewContentTranslateX" From="-1" To="0">
+                            <DoubleAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut" />
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+                        <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="OldContent.(UIElement.Opacity)">
+                            <SplineDoubleKeyFrame KeyTime="00:00:00" Value="1" />
+                            <SplineDoubleKeyFrame KeyTime="00:00:00.100" Value="0" />
+                        </DoubleAnimationUsingKeyFrames>
+                    </Storyboard>
+                </bh:FrameAnimationSelector.ForwardStoryboard>
+            </bh:FrameAnimationSelector>
+
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <dxwui:NavigationFrame x:Name="frame" AnimationSelector="{StaticResource frameAnimationSelector}"  >
+        <dxmvvm:Interaction.Behaviors>
+            <bh:NavigationFrameBehaviour Frame="{Binding ElementName=frame}" />
+
+        </dxmvvm:Interaction.Behaviors>
+    </dxwui:NavigationFrame>
+                           
+
+</UserControl>

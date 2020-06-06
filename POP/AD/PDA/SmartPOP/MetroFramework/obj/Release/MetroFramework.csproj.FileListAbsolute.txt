@@ -1,0 +1,6 @@
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\MetroFramework\obj\Release\MetroFramework.csprojAssemblyReference.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\MetroFramework\obj\Release\MetroFramework.g.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\MetroFramework\obj\Release\MetroFramework.Controls.MetroGrid.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\MetroFramework\obj\Release\MetroFramework.Properties.Resources.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\MetroFramework\obj\Release\MetroFramework.csproj.GenerateResource.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\MetroFramework\obj\Release\MetroFramework.csproj.CoreCompileInputs.cache

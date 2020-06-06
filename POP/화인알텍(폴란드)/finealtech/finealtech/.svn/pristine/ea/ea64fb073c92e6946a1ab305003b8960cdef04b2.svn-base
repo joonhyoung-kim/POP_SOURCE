@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.purchase.materialLedger.materialRelease">
+	<select id="get_materialRelease_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.WORK_ORDER_ID             
+		     , A.ITEM_ID        
+		     , D.ITEM_NAME      
+		     , D.SPECIFICATION             
+		     , D.ITEM_TYPE       
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+                                                    , A.COMPANY_CD
+                                                    , 'ITEM_TYPE'
+                                                    , D.ITEM_TYPE ) 
+                  FROM   DUAL ) AS ITEM_TYPE_NAME             
+		     , D.ITEM_CATEGORY
+		     , A.REQUEST_STATE 
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              , 'MATERIAL_REQUEST_STATE'
+		                                              , A.REQUEST_STATE ) 
+		          FROM   DUAL ) AS STATE_NAME    
+		     , A.REQUEST_TYPE                                            
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              , 'REQUEST_TYPE'
+		                                              , A.REQUEST_TYPE ) 
+		          FROM   DUAL ) AS REQUEST_TYPE_NAME             
+		     , A.REASON_CODE               
+		     , TO_CHAR(A.REQUEST_DATE, 'YYYY-MM-DD')  AS REQUEST_DATE                                       
+		     , A.IN_LOCATION_CD                                       
+		     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME( A.DIVISION_CD 
+		                                                  , A.COMPANY_CD
+		                                                  , A.IN_LOCATION_CD )
+		          FROM   DUAL ) AS IN_LOCATION_NAME  
+		     , A.OUT_LOCATION_CD                                        
+		     , F.FACILITY_NAME                   AS OUT_LOCATION_NAME   
+		     , F.FACILITY_TYPE                    AS OUT_FACILITY_TYPE   
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CURRENT_STOCK(A.DIVISION_CD 
+		                                                  , A.COMPANY_CD
+		                                                  , A.ITEM_ID
+		                                                  , A.IN_LOCATION_CD)
+		          FROM   DUAL )                          AS  CURRENT_QTY        
+		     , D.STANDARD_OUT_QTY   
+		     , O.CONFIRM_QTY        
+		     , A.UNIT_QTY            
+		     , NVL(A.ORIGIN_REQUEST_QTY, 0) ORIGIN_REQUEST_QTY     
+		     , A.REQUEST_QTY                                            
+		     , NVL(A.ISSUE_QTY, 0)  AS ISSUE_QTY                          
+		     , NVL(A.CANCEL_QTY, 0)  AS CANCEL_QTY                       
+		     , A.REQUEST_QTY - NVL(A.ISSUE_QTY, 0)- NVL(A.CANCEL_QTY, 0) AS REMAIN_QTY  
+		     , A.DESCRIPTION                                            
+			 , DECODE(A.REQUEST_STATE, 'R', 'Y', 'N') REQUEST_FLAG
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD
+		                                              , A.COMPANY_CD
+		                                              , 'Y_N'
+		                                              , DECODE(A.REQUEST_STATE, 'R', 'Y', 'N')) 
+		        FROM   DUAL )  AS REQUEST_FLAG_NAME
+		     , TO_CHAR(A.ISSUE_DATE, 'YYYY-MM-DD')  AS ISSUE_DATE                                            
+		     , O.RESOURCE_CD           
+		     , E.RESOURCE_NAME         
+		     , DECODE(O.ORDER_FLAG, 'IN', 'N', 'Y') AS OUTSOURCING_FLAG
+		     , A.MATERIAL_REQUEST_ID
+		     , D.CONVERSION_UNIT
+	         , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (A.DIVISION_CD
+	                                                  , A.COMPANY_CD
+	                                                  , 'ITEM_UNIT'
+	                                                  , D.CONVERSION_UNIT)
+	              FROM DUAL) AS CONVERSION_UNIT_NAME
+	         , D.CONVERSION_UNIT_QTY AS ORIGIN_CONVERSION_UNIT_QTY
+	         , D.CONVERSION_UNIT_QTY * (A.REQUEST_QTY - NVL (A.ISSUE_QTY, 0) - NVL (A.CANCEL_QTY, 0)) AS CONVERSION_UNIT_QTY   
+	         , A.MARKET_CD
+             , A.CURRENCY_CD
+             , (SELECT  MOM_COMMON_PKG.fn_get_code_name(A.DIVISION_CD, A.CURRENCY_CD, 'MARKET_CODE', A.MARKET_CD)
+                FROM    DUAL ) AS MARKET_NAME
+             , (SELECT  MOM_COMMON_PKG.fn_get_code_name(A.DIVISION_CD, A.CURRENCY_CD, 'CURRENCY_CODE', A.CURRENCY_CD)
+                FROM    DUAL ) AS CURRENCY_NAME   
+<!--              , CASE WHEN DECODE(O.ORDER_FLAG, 'IN', 'N', 'Y') = 'Y' AND NVL(D.FREE_OFFER_FLAG, 'N') = 'N' THEN -->
+<!--                 MOM_COMMON_PKG.FN_GET_SALES_PRICE( A.DIVISION_CD  -->
+<!--                                                  , A.COMPANY_CD -->
+<!--                                                  , NVL(F.VENDOR_CD, F.FACILITY_CD) -->
+<!--                                                  , a.ITEM_ID -->
+<!--                                                  , A.MARKET_CD -->
+<!--                                                  , A.CURRENCY_CD -->
+<!--                                                  , TRUNC(A.REQUEST_DATE) -->
+<!--                                                  ) -->
+<!--             ELSE -->
+<!--                NULL -->
+<!--             END    AS UNIT_PRICE                     -->
+		FROM   MOM_MATERIAL_REQUEST A
+		     , MOM_WORK_ORDER O 
+		     , MOM_ITEM_DEFINITION D
+		     , MOM_FACILITY F
+		     , MOM_RESOURCE E
+		     , MOM_FACILITY FI
+		WHERE  A.DIVISION_CD   = O.DIVISION_CD 
+		AND    A.COMPANY_CD    = O.COMPANY_CD
+		AND    A.WORK_ORDER_ID = O.WORK_ORDER_ID
+		AND    A.DIVISION_CD   = D.DIVISION_CD 
+		AND    A.COMPANY_CD    = D.COMPANY_CD
+		AND    A.ITEM_ID       = D.ITEM_ID
+		AND    A.DIVISION_CD   = F.DIVISION_CD 
+		AND    A.COMPANY_CD    = F.COMPANY_CD
+		AND    A.OUT_LOCATION_CD  = F.FACILITY_CD
+		AND    A.DIVISION_CD   = E.DIVISION_CD 
+		AND    A.COMPANY_CD    = E.COMPANY_CD
+		AND    O.RESOURCE_CD   = E.RESOURCE_CD 
+		AND    A.DIVISION_CD = FI.DIVISION_CD(+)
+        AND    A.COMPANY_CD = FI.COMPANY_CD(+)
+        AND    A.IN_LOCATION_CD = FI.FACILITY_CD(+)
+		AND    A.DIVISION_CD   = #{divisionCd, jdbcType=VARCHAR}
+		AND    A.COMPANY_CD    = #{companyCd, jdbcType=VARCHAR}
+		AND    A.USE_YN        = 'Y'
+		AND    A.REQUEST_STATE != 'R' <!-- 출고완료 제외 -->
+	   <if test="category != null and category != ''">
+		AND    UPPER(D.ITEM_CATEGORY) LIKE '%' || UPPER(#{category, jdbcType=VARCHAR}) || '%'
+	   </if>
+	   <if test="itemName != null and itemName != ''">
+		AND (UPPER(A.ITEM_ID) LIKE '%' || UPPER(#{itemName, jdbcType=VARCHAR}) || '%' 
+		     OR UPPER(D.ITEM_NAME) LIKE '%' || UPPER(#{itemName, jdbcType=VARCHAR}) || '%')
+	   </if>
+	   <if test="type != null and type != ''">
+		AND D.ITEM_TYPE = #{type, jdbcType=VARCHAR}
+	   </if>
+	   <if test="resourceName != null and resourceName != ''">
+		AND O.RESOURCE_CD = #{resourceName, jdbcType=VARCHAR}
+	   </if>
+	   <if test="locationName != null and locationName != ''">
+		AND A.IN_LOCATION_CD = #{locationName, jdbcType=VARCHAR}
+	   </if>
+	   <if test="workOrder != null and workOrder != ''">
+		AND UPPER(A.WORK_ORDER_ID) LIKE '%' || UPPER(#{workOrder, jdbcType=VARCHAR}) || '%'
+	   </if>
+	   <if test="outLocationName != null and outLocationName != ''">
+		AND A.OUT_LOCATION_CD = #{outLocationName, jdbcType=VARCHAR}
+	   </if>
+	   <if test="fromDate != null and fromDate != ''">
+		AND A.REQUEST_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
+		                   AND     (TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.999 / 24)
+	   </if>
+	   <if test="orderFlag != null and orderFlag != ''" >
+	    AND O.ORDER_FLAG = #{orderFlag, jdbcType=VARCHAR}
+	   </if>
+		<if test='stockQty == "N"'>
+		AND (SELECT MOM_COMMON_PKG.FN_GET_CURRENT_STOCK(A.DIVISION_CD 
+	                                                  , A.COMPANY_CD
+	                                                  , A.ITEM_ID
+	                                                  , A.IN_LOCATION_CD)
+               FROM   DUAL ) != 0
+		</if>
+		<if test="stockType != null and stockType != ''">
+			<if test="stockType == 'MAT'">
+			 AND D.ITEM_TYPE IN ('RM', 'SM', 'CI', 'GI')
+<!-- 			 AND EXISTS -->
+<!--                   (SELECT '*' -->
+<!--                      FROM MOM_CODE MFF -->
+<!--                     WHERE MFF.DIVISION_CD = A.DIVISION_CD -->
+<!--                       AND MFF.COMPANY_CD = A.COMPANY_CD -->
+<!--                       AND MFF.CODE_CLASS_ID = 'FACILITY_TYPE' -->
+<!--                       AND MFF.CODE_ID = FI.FACILITY_TYPE -->
+<!--                       AND MFF.USE_YN = 'Y' -->
+<!--                       AND MFF.ATTRIBUTE1 = 'Y') -->
+			</if>
+			<if test="stockType == 'WO'">
+			 AND D.ITEM_TYPE IN ('SP')
+			 AND O.ORDER_FLAG = 'OUT'
+<!-- 			 AND EXISTS -->
+<!--                   (SELECT '*' -->
+<!--                      FROM MOM_CODE MFF -->
+<!--                     WHERE MFF.DIVISION_CD = A.DIVISION_CD -->
+<!--                       AND MFF.COMPANY_CD = A.COMPANY_CD -->
+<!--                       AND MFF.CODE_CLASS_ID = 'FACILITY_TYPE' -->
+<!--                       AND MFF.CODE_ID = FI.FACILITY_TYPE -->
+<!--                       AND MFF.USE_YN = 'Y' -->
+<!--                       AND MFF.ATTRIBUTE3 = 'Y') -->
+			</if>
+		</if>
+	    ORDER BY A.REQUEST_DATE, A.WORK_ORDER_ID, A.ITEM_ID 
+	</select>
+	
+	<delete id="remove_materialReleaseTmp" parameterType="java.util.HashMap">
+    DELETE MOM_MATERIAL_REQUEST_TMP
+	 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	</delete>
+	 
+	<update id="modify_materialReleaseState" parameterType="java.util.HashMap">
+	 UPDATE MOM_MATERIAL_REQUEST
+	    SET REQUEST_STATE = 'R'
+	      , UPDATE_DATE = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}) 
+	      , UPDATE_BY = #{userId, jdbcType=VARCHAR}
+	      , DESCRIPTION = #{description, jdbcType=VARCHAR} || ' - ' || #{MESSAGES30034, jdbcType=VARCHAR}
+	  WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	    AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	    AND MATERIAL_REQUEST_ID = #{materialRequestId, jdbcType=VARCHAR}
+	</update> 
+	 
+  	<insert id="create_materialReleaseTmp" parameterType="java.util.HashMap">
+  	 INSERT INTO MOM_MATERIAL_REQUEST_TMP
+					( DIVISION_CD         
+					, COMPANY_CD          
+					, MATERIAL_REQUEST_ID 
+					, WORK_ORDER_ID       
+					, ITEM_ID             
+					, ISSUE_QTY        
+					, IN_LOCATION_CD         
+					, OUT_LOCATION_CD          
+					, OUTSOURCING_FLAG              
+					, CREATE_DATE         
+					, CREATE_BY
+					, CONVERSION_UNIT
+					, CONVERSION_UNIT_QTY  
+					, ISSUE_DATE  
+					, MARKET_CD
+					, CURRENCY_CD       
+			        )
+		VALUES
+		          ( #{divisionCd, jdbcType=VARCHAR}
+		          , #{companyCd, jdbcType=VARCHAR}
+		          , #{materialRequestId, mode=IN, jdbcType=VARCHAR} 
+		          , #{workOrderId, jdbcType=VARCHAR}
+		          , #{itemId, jdbcType=VARCHAR}
+		          , #{remainQty, jdbcType=NUMERIC}
+		          , #{inLocationCd, jdbcType=VARCHAR}
+		          , #{outLocationCd, jdbcType=VARCHAR}
+		          , #{outsourcingFlag, jdbcType=VARCHAR}
+		          , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		          , #{createBy, jdbcType=VARCHAR}
+		          , #{conversionUnit, jdbcType=VARCHAR}
+		          , #{conversionUnitQty, jdbcType=NUMERIC}
+		          , TO_DATE(#{issueDate, jdbcType=VARCHAR}, 'yyyy-mm-dd')
+		          , #{marketCd, jdbcType=VARCHAR}
+		          , #{currencyCd, jdbcType=VARCHAR}
+		          )
+  	</insert>
+  	
+	<insert id="create_materialRelease" statementType="CALLABLE">
+	{
+        CALL SP_MOM_MATERIAL_PKG.P_MATERIAL_REQUEST_ISSUE (
+             #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+           , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+           , #{companyCd, mode=IN, jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+</mapper>

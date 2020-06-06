@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.equipment.emReductStatus">
+	<select id="get_emReductStatus_list" resultType="camelMap" parameterType="java.util.HashMap">
+		<if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+		 WITH TEMP1 AS (	
+	    </if>
+	     SELECT MSI.WORK_ORDER_ID 
+	     	  , MSI.ITEM_STOCK_INOUT_ID
+		      , MWO.EQM_WO_NAME
+		      , MWO.EQUIPMENT_CD
+		      , MSI.IO_CATEGORY
+		      , TO_CHAR(MSI.IO_TIME, 'YYYY-MM-DD') AS IO_TIME
+		      , (SELECT MOM_COMMON_PKG.FN_GET_EQUIPMENT_NAME(MWO.DIVISION_CD
+		                                                   , MWO.COMPANY_CD
+		                                                   , MWO.EQUIPMENT_CD)
+		           FROM   DUAL ) AS EQUIPMENT_NAME
+		      , MSI.ITEM_ID
+		      , MID.ITEM_NAME
+		      , MID.SPECIFICATION
+		      , MSI.UNIT
+		      , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (MSI.DIVISION_CD
+		                                               , MSI.COMPANY_CD
+		                                               , 'ITEM_UNIT'
+		                                               , MSI.UNIT)
+		           FROM DUAL) AS UNIT_NAME    
+		      , MSI.QTY
+		      , NVL(ABS(MIC.QTY), 0) AS CANCEL_QTY
+		      , TO_CHAR(MIC.IO_TIME, 'YYYY-MM-DD') AS CANCEL_TIME
+		      , MSI.LOCATION_CD
+		      , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME(MSI.DIVISION_CD
+		                                                  , MSI.COMPANY_CD
+		                                                  , MSI.LOCATION_CD)
+		           FROM DUAL ) AS LOCATION_NAME
+		      , TO_CHAR(MSI.CREATE_DATE , 'YYYY-MM-DD') AS CREATE_DATE
+		      , MSI.CREATE_BY  AS  CREATE_BY
+		      , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( MSI.DIVISION_CD 
+		                                               , MSI.COMPANY_CD 
+		                                               , MSI.CREATE_BY)
+		           FROM DUAL) AS  CREATE_BY_NAME
+		      , TO_CHAR(MIC.UPDATE_DATE, 'YYYY-MM-DD') AS UPDATE_DATE
+		      , MIC.UPDATE_BY AS  UPDATE_BY
+		      , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( MIC.DIVISION_CD 
+		                                               , MIC.COMPANY_CD 
+		                                               , MIC.UPDATE_BY)
+		           FROM DUAL) AS  UPDATE_BY_NAME
+		   FROM MOM_ITEM_STOCK_INOUT MSI
+		      , MOM_ITEM_DEFINITION MID
+		      , MOM_EQM_WORK_ORDER MWO
+		      , (SELECT DIVISION_CD
+	 	              , COMPANY_CD
+ 		              , ITEM_STOCK_INOUT_ID 
+		              , PREV_STOCK_INOUT_ID
+		              , QTY
+		              , IO_TIME
+		              , UPDATE_DATE
+		              , UPDATE_BY
+		           FROM MOM_ITEM_STOCK_INOUT A
+		          WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		            AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		            AND EXISTS (SELECT '*'
+		                          FROM MOM_CODE MC
+		                         WHERE MC.DIVISION_CD = A.DIVISION_CD
+		                           AND MC.COMPANY_CD = A.COMPANY_CD
+		                           AND MC.CODE_ID = A.IO_CATEGORY 
+		                           AND MC.CODE_CLASS_ID = 'IO_CATEGORY'
+		                           AND MC.USE_YN = 'Y'
+		                           AND MC.ATTRIBUTE26 = 'Y')) MIC
+		  WHERE MSI.DIVISION_CD = MID.DIVISION_CD
+		    AND MSI.COMPANY_CD  = MID.COMPANY_CD
+		    AND MSI.ITEM_ID     = MID.ITEM_ID
+		    AND MSI.DIVISION_CD = MWO.DIVISION_CD
+		    AND MSI.COMPANY_CD  = MWO.COMPANY_CD
+		    AND MSI.WORK_ORDER_ID = MWO.EQM_WO_ID
+		    AND MSI.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		    AND MSI.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		    AND MSI.IO_TIME BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR},'YYYY-MM-DD') AND TO_DATE(#{toDate, jdbcType=VARCHAR},'YYYY-MM-DD') + 23.9997 / 24
+		    AND EXISTS (SELECT '*'
+                          FROM MOM_CODE MC
+                         WHERE MC.DIVISION_CD = MSI.DIVISION_CD
+                           AND MC.COMPANY_CD = MSI.COMPANY_CD
+                           AND MC.CODE_ID = MSI.IO_CATEGORY 
+                           AND MC.CODE_CLASS_ID = 'IO_CATEGORY'
+                           AND MC.USE_YN = 'Y'
+                           AND MC.ATTRIBUTE25 = 'Y') 
+		    AND MSI.ITEM_STOCK_INOUT_ID = MIC.PREV_STOCK_INOUT_ID(+)
+           <if test="itemId != null and itemId != ''">
+            AND (MSI.ITEM_ID LIKE '%' || TRIM(UPPER(#{itemId, jdbcType=VARCHAR})) || '%'
+             OR UPPER(MID.ITEM_NAME) LIKE '%' || TRIM(UPPER(#{itemId, jdbcType=VARCHAR})) || '%')
+           </if>
+           <if test="specification != null and specification != ''">
+            AND UPPER(MID.SPECIFICATION) LIKE '%' || TRIM(UPPER(#{specification, jdbcType=VARCHAR})) || '%'
+           </if>
+           <if test="woId != null and woId != ''">
+            AND (MSI.WORK_ORDER_ID  LIKE '%' || TRIM(UPPER(#{woId, jdbcType=VARCHAR})) || '%'
+             OR UPPER(MWO.EQM_WO_NAME) LIKE '%' || TRIM(UPPER(#{woId, jdbcType=VARCHAR})) || '%')
+           </if>
+           <if test="equipmentCd != null and equipmentCd != ''">
+            AND MWO.EQUIPMENT_CD = #{equipmentCd, jdbcType=VARCHAR}
+           </if>
+		ORDER BY MSI.WORK_ORDER_ID, MSI.ITEM_STOCK_INOUT_ID
+	   <if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+				)
+	      SELECT A.*
+	           , B.ROW_COUNT
+	      FROM (SELECT A.*
+	                 , ROWNUM GRIDROW
+	              FROM TEMP1 A) A
+	         , (SELECT COUNT(*) ROW_COUNT
+	              FROM TEMP1) B 
+	      WHERE GRIDROW BETWEEN #{startPage, jdbcType=INTEGER} AND #{endPage, jdbcType=INTEGER}
+       </if>
+    </select>
+    
+    <!-- 사용수량 취소 -->
+	<insert id="create_cancelEmReductStatus" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{	
+       CALL SP_MOM_EQUIPMENT_PKG.P_CANCEL_CONFIRM_RESULT (
+       	   #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+         , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+         , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+         , #{companyCd, mode=IN, jdbcType=VARCHAR}
+         , #{workOrderId, mode=IN, jdbcType=VARCHAR}
+         , #{itemId, mode=IN, jdbcType=VARCHAR}
+         , #{locationCd, mode=IN, jdbcType=VARCHAR}
+         , #{qty, mode=IN, jdbcType=NUMERIC}
+         , #{itemStockInoutId, mode=IN, jdbcType=VARCHAR}
+         , #{userId, mode=IN, jdbcType=VARCHAR}
+       )
+    }
+	</insert>
+    
+</mapper>

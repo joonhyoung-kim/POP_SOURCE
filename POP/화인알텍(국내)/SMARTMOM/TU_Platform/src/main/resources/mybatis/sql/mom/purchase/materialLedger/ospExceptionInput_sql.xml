@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.purchase.materialLedger.ospExceptionInput">
+	<select id="get_ospExceptionInput_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.DIVISION_CD
+			 , A.COMPANY_CD
+			 , A.PART_NO
+			 , B.ITEM_NAME
+			 , B.SPECIFICATION
+			 , B.ITEM_TYPE
+			 , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( B.DIVISION_CD
+	                                                  , B.COMPANY_CD  
+	                                                  , 'ITEM_TYPE'
+	                                                  , B.ITEM_TYPE)
+	              FROM DUAL) AS ITEM_TYPE_NAME
+			 , B.UNIT 
+			 , TO_CHAR(TRANSACTION_DATE, 'YYYY-MM-DD') AS TRANSACTION_DATE
+			 , ABS(A.QTY) AS QTY
+			 , A.VENDOR_CD
+			 , (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME(A.DIVISION_CD
+			 										   , A.COMPANY_CD
+			 										   , A.VENDOR_CD)
+			 	  FROM DUAL) AS VENDOR_NAME
+			 , B.IN_LOCATION_ID
+			 , ABS(A.SALES_PRICE) AS SALES_PRICE
+			 , NVL(A.MARKET_CD, C.MARKET_CD) AS MARKET_CD
+			 , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD
+			 										 , A.COMPANY_CD
+			 										 , 'MARKET_CODE'
+			 										 , NVL(A.MARKET_CD, C.MARKET_CD))
+			      FROM DUAL) AS MARKET_NAME
+			 , (SELECT CURRENCY_CD
+			      FROM MOM_PARAMETER
+			     WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			       AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}) AS CURRENCY_CD
+			 , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD') AS CREATE_DATE
+			 , A.CREATE_BY
+			 , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(A.DIVISION_CD
+			 										 , A.COMPANY_CD
+			 										 , A.CREATE_BY) 
+			 	  FROM DUAL) AS CREATE_USER_NAME
+			 , A.APPLY_FLAG
+		  FROM MOM_LGE_B2B_OSP_ISSUE A
+		     , MOM_ITEM_DEFINITION B
+		     , MOM_PARAMETER C
+		 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND A.DIVISION_CD = B.DIVISION_CD
+		   AND A.COMPANY_CD = B.COMPANY_CD
+		   AND A.PART_NO = B.ITEM_ID
+		   AND A.DIVISION_CD = C.DIVISION_CD
+		   AND A.COMPANY_CD = C.COMPANY_CD
+		   AND A.APPLY_FLAG = 'N'
+		  <if test="fromDate != null and fromDate != '' and toDate != null and toDate != ''">
+		   AND A.CREATE_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+		   					     AND (TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.9997 / 24)
+		  </if>
+		 ORDER BY A.PART_NO
+	</select>
+	
+	<select id="get_updateUnitPrice_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.DIVISION_CD
+			 , A.COMPANY_CD
+			 , A.PART_NO
+			 , B.ITEM_NAME
+			 , B.SPECIFICATION
+			 , B.UNIT 
+			 , TO_CHAR(TRANSACTION_DATE, 'YYYY-MM-DD') AS TRANSACTION_DATE
+			 , ABS(A.QTY) AS QTY
+			 , A.VENDOR_CD
+			 , (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME(A.DIVISION_CD
+			 										   , A.COMPANY_CD
+			 										   , A.VENDOR_CD)
+			 	  FROM DUAL) AS VENDOR_NAME
+			 , B.IN_LOCATION_ID
+			 , ABS(A.SALES_PRICE) AS SALES_PRICE
+			 , NVL(A.MARKET_CD, C.MARKET_CD) AS MARKET_CD
+			 , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD
+			 										 , A.COMPANY_CD
+			 										 , 'MARKET_CODE'
+			 										 , NVL(A.MARKET_CD, C.MARKET_CD))
+			      FROM DUAL) AS MARKET_NAME
+			 , (SELECT CURRENCY_CD
+			      FROM MOM_PARAMETER
+			     WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			       AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}) AS CURRENCY_CD
+			 , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD') AS CREATE_DATE
+			 , A.CREATE_BY
+			 , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(A.DIVISION_CD
+			 										 , A.COMPANY_CD
+			 										 , A.CREATE_BY) 
+			 	  FROM DUAL) AS CREATE_USER_NAME
+			 , A.APPLY_FLAG
+			 , A.PRICE_APPLY_FLAG
+		  FROM MOM_LGE_B2B_OSP_ISSUE A
+		     , MOM_ITEM_DEFINITION B
+		     , MOM_PARAMETER C
+		 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND A.DIVISION_CD = B.DIVISION_CD
+		   AND A.COMPANY_CD = B.COMPANY_CD
+		   AND A.PART_NO = B.ITEM_ID
+		   AND A.DIVISION_CD = C.DIVISION_CD
+		   AND A.COMPANY_CD = C.COMPANY_CD
+		   AND A.APPLY_FLAG = 'Y'
+		   AND A.PRICE_APPLY_FLAG = 'N'
+		 ORDER BY A.PART_NO
+	</select>
+	
+	<delete id="remove_ospExceptionInputTemp" parameterType="java.util.HashMap">
+		DELETE FROM MOM_LG_OSP_RECEIPT_TMP
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="create_ospExceptionInputTemp" parameterType="java.util.HashMap">
+		INSERT INTO MOM_LG_OSP_RECEIPT_TMP (
+			DIVISION_CD
+		  , COMPANY_CD
+		  , ITEM_ID
+		  , LOCATION_CD
+		  , VENDOR_CD
+		  , IO_TIME
+		  , QTY
+		  , UNIT_PRICE
+		  , CURRENCY_CD
+		  , MARKET_CD
+		  , CREATE_DATE
+		  , CREATE_BY
+		)
+		VALUES (
+		    #{divisionCd, jdbcType=VARCHAR}
+		  , #{companyCd, jdbcType=VARCHAR}
+		  , #{partNo, jdbcType=VARCHAR}
+		  , #{inLocationId, jdbcType=VARCHAR}
+		  , #{vendorCd, jdbcType=VARCHAR}
+		  , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		  , #{qty, jdbcType=NUMERIC}
+		  , #{salesPrice, jdbcType=NUMERIC}
+		  , #{currencyCd, jdbcType=VARCHAR}
+		  , #{marketCd, jdbcType=VARCHAR}
+		  , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		  , #{createBy, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="create_ospExceptionInput" statementType="CALLABLE">
+	{
+		CALL SP_MOM_MATERIAL_PKG.P_LG_OSP_MATERIAL_RECEIPT ( 
+			 #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+           , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+           , #{companyCd, mode=IN, jdbcType=VARCHAR}
+		)
+	}
+	</insert>
+	
+	<insert id="create_updateApplyFlag" parameterType="java.util.HashMap">
+		UPDATE MOM_LGE_B2B_OSP_ISSUE
+		   SET APPLY_FLAG = 'D'
+         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+           AND VENDOR_CD = #{vendorCd, jdbcType=VARCHAR}
+           AND PART_NO = #{partNo, jdbcType=VARCHAR}
+           AND TRANSACTION_DATE = TO_DATE(#{transactionDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+	</insert>
+	
+	<insert id="create_updatePriceApplyFlag" parameterType="java.util.HashMap">
+		UPDATE MOM_LGE_B2B_OSP_ISSUE
+		   SET PRICE_APPLY_FLAG = 'D'
+         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+           AND VENDOR_CD = #{vendorCd, jdbcType=VARCHAR}
+           AND PART_NO = #{partNo, jdbcType=VARCHAR}
+           AND TRANSACTION_DATE = TO_DATE(#{transactionDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+	</insert>
+	
+	<insert id="create_confirmPriceApplyFlag" parameterType="java.util.HashMap">
+		UPDATE MOM_LGE_B2B_OSP_ISSUE
+		   SET PRICE_APPLY_FLAG = 'Y'
+         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+           AND VENDOR_CD = #{vendorCd, jdbcType=VARCHAR}
+           AND PART_NO = #{itemId, jdbcType=VARCHAR}
+           AND TRANSACTION_DATE = TO_DATE(#{startDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+	</insert>
+	
+</mapper>

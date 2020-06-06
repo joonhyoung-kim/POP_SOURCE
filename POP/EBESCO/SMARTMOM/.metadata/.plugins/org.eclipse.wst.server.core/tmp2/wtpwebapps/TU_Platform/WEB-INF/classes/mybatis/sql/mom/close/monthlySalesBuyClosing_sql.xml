@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.close.monthlySalesBuyClosing">
+	<select id="get_monthlySalesBuyClosing_list" resultType="camelMap" parameterType="java.util.HashMap">
+		<!-- 
+		SELECT MAGAM_MONTH
+		     , MIN(DECODE(INOUT_FLAG, 'I', END_FLAG)) IN_FLAG    
+		     , MIN(DECODE(INOUT_FLAG, 'O', END_FLAG)) OUT_FLAG   
+		     , MIN(UPDATE_USER_NAME) UPDATE_USER_NAME
+		     , MIN(UPDATE_DATE)UPDATE_DATE
+		FROM   (SELECT DISTINCT A.MAGAM_YYYYMM AS MAGAM_MONTH                 
+		             , A.INOUT_FLAG                 
+		             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD
+						                                     , 'MAGAM_IO_FLAG'
+						                                     , A.INOUT_FLAG ) 
+		                FROM DUAL ) AS INOUT_FLAG_NAME 
+		             , NVL(MLE.END_FLAG, 'N') AS END_FLAG        
+		             , MLE.UPDATE_BY
+		             , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(MLE.DIVISION_CD, MLE.COMPANY_CD, MLE.UPDATE_BY) FROM DUAL) UPDATE_USER_NAME
+		             , TO_CHAR(MLE.UPDATE_DATE, 'YYYY-MM-DD') AS UPDATE_DATE               
+		        FROM   MOM_ITEM_LAST_VNDRSUM A                  
+		             , MOM_ITEM_LAST_END MLE              
+		        WHERE  A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}       
+		        AND    A.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		        AND    A.DIVISION_CD = MLE.DIVISION_CD(+)
+		        AND    A.COMPANY_CD = MLE.COMPANY_CD(+)
+		        AND    A.INOUT_FLAG = MLE.BUY_SALE_FLAG(+)                
+		        AND    A.MAGAM_YYYYMM = MLE.YEAR_MONTH(+)      
+		        <if test= "closingYear != null and closingYear != ''">
+		        AND    SUBSTR(A.MAGAM_YYYYMM, 0,4) = #{closingYear, jdbcType=VARCHAR}  
+		        </if>          
+		        )
+		GROUP BY MAGAM_MONTH
+		ORDER BY MAGAM_MONTH DESC
+		 -->
+        SELECT MAGAM_MONTH
+             , MIN(DECODE(INOUT_FLAG, 'I', END_FLAG)) IN_FLAG    
+             , MIN(DECODE(INOUT_FLAG, 'O', END_FLAG)) OUT_FLAG   
+             , MIN(UPDATE_USER_NAME) UPDATE_USER_NAME
+             , MIN(UPDATE_DATE)UPDATE_DATE
+        FROM   (SELECT DISTINCT TO_CHAR(A.END_DATE, 'yyyy-mm') AS MAGAM_MONTH                 
+                     , A.INOUT_FLAG                 
+                     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD
+                                                             , A.COMPANY_CD
+                                                             , 'MAGAM_IO_FLAG'
+                                                             , A.INOUT_FLAG ) 
+                        FROM DUAL ) AS INOUT_FLAG_NAME 
+                     , NVL(MLE.END_FLAG, 'N') AS END_FLAG        
+                     , MLE.UPDATE_BY
+                     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( MLE.DIVISION_CD
+                                                              , MLE.COMPANY_CD
+                                                              , MLE.UPDATE_BY) 
+                          FROM DUAL) UPDATE_USER_NAME
+                     , TO_CHAR(MLE.UPDATE_DATE, 'YYYY-MM-DD') AS UPDATE_DATE               
+                FROM   MOM_ITEM_MONTH_END A                  
+                     , MOM_ITEM_LAST_END MLE              
+                WHERE  A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}       
+                AND    A.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+                AND    A.DIVISION_CD = MLE.DIVISION_CD(+)
+                AND    A.COMPANY_CD = MLE.COMPANY_CD(+)
+                AND    A.INOUT_FLAG = MLE.BUY_SALE_FLAG(+)                
+                AND    TO_CHAR(A.END_DATE, 'yyyy-mm') = MLE.YEAR_MONTH(+)
+                <if test= "closingYear != null and closingYear != ''">
+                AND    TO_CHAR(A.END_DATE, 'yyyy') = #{closingYear, jdbcType=VARCHAR}  
+                </if>          
+                )
+        GROUP BY MAGAM_MONTH
+        ORDER BY MAGAM_MONTH DESC
+	</select>
+	
+	<select id="get_monthlySalesBuyClosingDetail_list" resultType="camelMap" parameterType="java.util.HashMap">
+		<!-- 
+		SELECT A.VENDOR_CD
+		     , MAX(A.VENDOR_NAME) VENDOR_NAME
+		     , MAX(A.BUSINESS_NO) BUSINESS_NO
+		     , TRUNC(SUM(A.INOUT_PRICE)) MONTH_PRICE
+		     , MAX (A.MAGAM_SEQ) MAGAM_SEQ
+		     , DECODE (MAX(A.MAGAM_SEQ), NULL, 'N', 'Y') CLOSING_FLAG
+		     , IO_TYPE
+		     , MAX(IO_TYPE_NAME)IO_TYPE_NAME
+		 FROM (SELECT A.VENDOR_CD
+		            , MV.VENDOR_NAME
+		            , MV.BUSINESS_NO
+		            , A.ITEM_STOCK_INOUT_ID
+		            , (A.QTY * NVL (A.UNIT_PRICE, 0)) INOUT_PRICE
+		            , (SELECT MAGAM_SEQ
+		                FROM MOM_ITEM_LAST_VNDRSUM ML
+		               WHERE ML.DIVISION_CD = A.DIVISION_CD
+		                 AND ML.MAGAM_YYYYMM = TO_CHAR(A.IO_TIME, 'YYYY-MM')
+		                 AND ML.INOUT_FLAG = A.IO_TYPE
+		                 AND ML.VENDOR_CD = A.VENDOR_CD ) AS MAGAM_SEQ
+		            , A.IO_TYPE
+		            , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'MAGAM_IO_FLAG', A.IO_TYPE) FROM DUAL) IO_TYPE_NAME
+		         FROM MOM_ITEM_STOCK_INOUT A
+		            , MOM_VENDOR MV
+		        WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		          AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		          AND TO_CHAR (A.IO_TIME, 'YYYY-MM') = #{closingMonth, jdbcType=VARCHAR}
+		          AND NVL(A.MARKET_CD,'2') = '2'
+		          AND A.LOCATION_CD IN (SELECT FACILITY_CD FROM MOM_FACILITY
+		                                 WHERE DIVISION_CD = A.DIVISION_CD
+		                                   AND COMPANY_CD = A.COMPANY_CD
+		                                   AND FACILITY_TYPE IN ('FAC200', 'FAC400'))
+		          AND A.IO_CATEGORY IN (SELECT CODE_ID
+		                                  FROM MOM_CODE
+		                                 WHERE CODE_CLASS_ID = 'IO_CATEGORY'
+		                                   AND DIVISION_CD = A.DIVISION_CD
+		                                   AND COMPANY_CD = A.COMPANY_CD
+		                                   AND ATTRIBUTE6 = 'Y')
+		          AND A.VENDOR_CD = MV.VENDOR_CD
+		          AND A.DIVISION_CD = MV.DIVISION_CD
+		      ) A
+		 WHERE 1=1
+		 GROUP BY A.VENDOR_CD, IO_TYPE
+		 ORDER BY CLOSING_FLAG,IO_TYPE, TRUNC(SUM(A.INOUT_PRICE)) DESC
+		  -->
+          SELECT A.VENDOR_CD
+               , MV.VENDOR_NAME
+               , MV.BUSINESS_NO
+               , A.END_SEQ
+               , A.END_GROUP
+               , A.END_AMOUNT
+               , A.END_VAT
+               , A.END_TOTAL_AMOUNT
+               , A.END_FLAG
+               , A.TAX_FLAG
+               , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'MATERIAL_TAX', A.TAX_FLAG) FROM DUAL) TAX_FLAG_NAME
+               , A.END_TYPE
+               , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'RESULT_END_FLAG', A.END_TYPE) FROM DUAL) END_TYPE_NAME
+               , A.INOUT_FLAG
+               , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'MAGAM_IO_FLAG', A.INOUT_FLAG) FROM DUAL) IO_TYPE_NAME
+               , A.CURRENCY_CD
+               , A.DESCRIPTION
+            FROM MOM_ITEM_MONTH_END A
+               , MOM_VENDOR MV
+           WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+             AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+             AND TO_CHAR (A.END_DATE, 'YYYY-MM') = #{closingMonth, jdbcType=VARCHAR}
+             AND A.VENDOR_CD = MV.VENDOR_CD
+             AND A.DIVISION_CD = MV.DIVISION_CD
+           ORDER BY A.INOUT_FLAG, A.END_SEQ DESC 
+	</select>
+	
+	<insert id="create_monthlySalesBuyClosing" statementType="CALLABLE">
+	{
+		CALL P_MONTHLY_INOUT_CLOSE ( 
+			 #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+           , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+           , #{companyCd, mode=IN, jdbcType=VARCHAR}
+           , #{magamMonth, mode=IN, jdbcType=VARCHAR}
+           , #{cudFlag, mode=IN, jdbcType=VARCHAR}
+           , #{createBy, mode=IN, jdbcType=VARCHAR}
+		)
+	}
+	</insert>
+	
+</mapper>

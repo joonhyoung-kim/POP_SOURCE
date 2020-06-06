@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.purchase.material.materialRequest">
+	<select id="get_materialRequestUp_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT MO.DIVISION_CD
+		     , MO.COMPANY_CD
+		     , MO.WORK_ORDER_ID
+		     , MO.ITEM_ID
+		     , MD.ITEM_NAME
+		     , MD.ITEM_TYPE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( MD.DIVISION_CD
+		                                              , MD.COMPANY_CD
+		                                              , 'ITEM_TYPE'
+		                                              , MD.ITEM_TYPE ) 
+		          FROM   DUAL )  AS ITEM_TYPE_NAME
+		     , MD.UNIT
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( MD.DIVISION_CD
+		                                              , MD.COMPANY_CD
+		                                              , 'ITEM_UNIT'
+		                                              , MD.UNIT ) 
+		          FROM   DUAL )  AS UNIT_NAME     
+		     , MO.PRODUCT_ORDER_ID
+		     , MO.WO_STATE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( MO.DIVISION_CD
+		                                              , MO.COMPANY_CD
+		                                              , 'WORK_ORDER_STATE'
+		                                              , MO.WO_STATE ) 
+		          FROM   DUAL ) AS WO_STATE_NAME
+		     , MO.CONFIRM_QTY
+		     , MO.RESOURCE_CD
+		     , MR.RESOURCE_NAME
+		     , MR.LOCATION_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME( MR.DIVISION_CD 
+		                                                  , MR.COMPANY_CD
+		                                                  , MR.LOCATION_CD )
+		          FROM   DUAL ) AS LOCATION_NAME
+		     , TO_CHAR(MO.PLAN_START_TIME, 'YYYY-MM-DD') AS PLAN_START_TIME
+		     , MO.ORDER_FLAG
+	         , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (MO.DIVISION_CD
+	                                                  , MO.COMPANY_CD
+	                                                  , 'WO_FLAG'
+	                                                  , MO.ORDER_FLAG)
+	              FROM DUAL)
+	            AS ORDER_FLAG_NAME
+	         , MO.PRODUCT_ORDER_TYPE AS WO_TYPE
+             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (MO.DIVISION_CD
+	                                                  , MO.COMPANY_CD
+	                                                  , 'PRODUCT_ORDER_TYPE'
+	                                                  , MO.PRODUCT_ORDER_TYPE)
+              	  FROM DUAL) AS WO_TYPE_NAME
+		FROM   MOM_WORK_ORDER MO
+		     , MOM_ITEM_DEFINITION MD 
+		     , MOM_RESOURCE  MR
+		WHERE  MO.DIVISION_CD = MD.DIVISION_CD 
+		AND    MO.COMPANY_CD  = MD.COMPANY_CD
+		AND    MO.ITEM_ID     = MD.ITEM_ID
+		AND    MO.DIVISION_CD = MR.DIVISION_CD 
+		AND    MO.COMPANY_CD  = MR.COMPANY_CD
+		AND    MO.RESOURCE_CD = MR.RESOURCE_CD
+		AND    MO.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND    MO.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+        AND    MO.WO_STATE != 'C'
+        AND    MO.PLAN_START_TIME BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
+                                      AND (TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.9997 / 24)
+	   <if test="itemName != null and itemName != ''">
+		AND (MO.ITEM_ID LIKE '%' || TRIM(UPPER(#{itemName, jdbcType=VARCHAR})) || '%' 
+			OR UPPER(MD.ITEM_NAME) LIKE '%' || TRIM(UPPER(#{itemName, jdbcType=VARCHAR})) || '%')
+	   </if>
+	   <if test="workOrderId != null and workOrderId != ''">
+		AND MO.WORK_ORDER_ID LIKE '%' || TRIM(UPPER(#{workOrderId, jdbcType=VARCHAR})) || '%'
+	   </if>
+	   <if test="resourceName != null and resourceName != ''">
+		AND MO.RESOURCE_CD = #{resourceName, jdbcType=VARCHAR}
+	   </if>
+	   <if test="workOrderType != null and workOrderType != ''">
+		AND MO.PRODUCT_ORDER_TYPE = #{workOrderType, jdbcType=VARCHAR}
+	   </if>
+	   <if test="orderState != null and orderState != ''">
+	    AND MO.WO_STATE = #{orderState, jdbcType=VARCHAR}
+	   </if>
+		ORDER BY MO.PLAN_START_TIME DESC, MO.RESOURCE_CD, MO.WORK_ORDER_ID
+	</select>
+	
+	<select id="get_materialRequestDown_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT MR.WORK_ORDER_ID
+		     , MR.ITEM_ID
+		     , MD.ITEM_NAME
+		     , MD.ITEM_TYPE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( MD.DIVISION_CD
+		                                              , MD.COMPANY_CD
+		                                              , 'ITEM_TYPE'
+		                                              , MD.ITEM_TYPE ) 
+		          FROM   DUAL )    AS ITEM_TYPE_NAME
+		     , MD.SPECIFICATION
+		     , TO_CHAR(MR.REQUEST_DATE, 'YYYY-MM-DD')  AS REQUEST_DATE
+		     , NVL(MS.CURRENT_QTY, 0)  AS CURRENT_QTY
+		     , MR.REQUEST_QTY
+		     , NVL(MR.ISSUE_QTY, 0)  AS ISSUE_QTY
+		     , NVL(MR.CANCEL_QTY, 0) AS CANCEL_QTY
+		     , MR.REQUEST_QTY - NVL(MR.ISSUE_QTY, 0) - NVL(MR.CANCEL_QTY, 0) AS REMAIN_QTY
+		     , NVL(MR.UNIT_QTY, 0) AS UNIT_QTY
+		     , MR.IN_LOCATION_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME( MR.DIVISION_CD 
+		                                                  , MR.COMPANY_CD
+		                                                  , MR.IN_LOCATION_CD )
+		          FROM   DUAL )  AS IN_LOCATION_NAME
+		     , MR.OUT_LOCATION_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME( MR.DIVISION_CD 
+		                                                  , MR.COMPANY_CD
+		                                                  , MR.OUT_LOCATION_CD )
+		          FROM   DUAL )  AS OUT_LOCATION_NAME
+		     , MR.UPDATE_BY 
+		     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( MR.DIVISION_CD 
+		                                              , MR.COMPANY_CD
+		                                              , MR.UPDATE_BY )
+		          FROM   DUAL )   AS UPDATE_BY_NAME                                      
+		     , TO_CHAR(MR.UPDATE_DATE , 'YYYY-MM-DD')  AS UPDATE_DATE 
+		     , MR.REQUEST_TYPE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( MR.DIVISION_CD
+		                                              , MR.COMPANY_CD
+		                                              , 'REQUEST_TYPE'
+		                                              , MR.REQUEST_TYPE ) 
+		          FROM   DUAL )    AS REQUEST_TYPE_NAME
+		     , MR.REASON_CODE 
+		     , MD.STANDARD_OUT_QTY    
+		     , MR.ORIGIN_REQUEST_QTY
+		     , MR.MATERIAL_REQUEST_ID
+		     , MR.MARKET_CD
+             , MR.CURRENCY_CD
+             , (SELECT  MOM_COMMON_PKG.FN_GET_CODE_NAME(MR.DIVISION_CD
+             										  , MR.CURRENCY_CD
+             										  , 'MARKET_CODE'
+             										  , MR.MARKET_CD)
+                  FROM    DUAL ) AS MARKET_NAME
+             , (SELECT  MOM_COMMON_PKG.FN_GET_CODE_NAME(MR.DIVISION_CD
+             										  , MR.CURRENCY_CD
+             										  , 'CURRENCY_CODE'
+             										  , MR.CURRENCY_CD)
+                  FROM    DUAL ) AS CURRENCY_NAME   
+		FROM   MOM_MATERIAL_REQUEST MR
+		     , MOM_ITEM_DEFINITION MD
+		     , MOM_ITEM_STOCK MS
+		WHERE  MR.DIVISION_CD = MD.DIVISION_CD 
+		AND    MR.COMPANY_CD  = MD.COMPANY_CD
+		AND    MR.ITEM_ID = MD.ITEM_ID
+		AND    MR.DIVISION_CD = MS.DIVISION_CD(+) 
+		AND    MR.COMPANY_CD  = MS.COMPANY_CD(+)
+		AND    MR.ITEM_ID = MS.ITEM_ID(+)
+		AND    MR.IN_LOCATION_CD = MS.LOCATION_CD(+)
+		AND    MR.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND    MR.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		AND    MR.WORK_ORDER_ID = #{workOrderId, jdbcType=VARCHAR}
+	   <if test="inLocationName != null and inLocationName != ''">
+	    AND    MR.IN_LOCATION_CD = #{inLocationName, jdbcType=VARCHAR}
+	   </if>
+	   <if test="inLocationCd != null and inLocationCd != ''">
+	    AND    MR.IN_LOCATION_CD = #{inLocationCd, jdbcType=VARCHAR}
+	   </if>
+		AND    MR.REQUEST_STATE = 'W'
+		AND    MR.USE_YN = 'Y'
+		ORDER BY MR.WORK_ORDER_ID, MR.ITEM_ID  
+	</select>
+	
+	<insert id="create_materialRequestSave" statementType="CALLABLE">
+	{
+        CALL SP_MOM_MATERIAL_PKG.P_CREATE_MATERIAL_REQUEST (
+        	#{p_err_code, mode=OUT, jdbcType=VARCHAR}
+           ,#{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+           ,#{divisionCd, mode=IN, jdbcType=VARCHAR}
+           ,#{companyCd, mode=IN, jdbcType=VARCHAR}
+           ,#{materialRequestId, mode=IN, jdbcType=VARCHAR}
+           ,#{workOrderId, mode=IN, jdbcType=VARCHAR}
+           ,#{inLocationCd, mode=IN, jdbcType=VARCHAR}
+           ,#{outLocationCd, mode=IN, jdbcType=VARCHAR}
+           ,#{itemId, mode=IN, jdbcType=VARCHAR}
+           ,TO_DATE(#{requestDate, mode=IN, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+           ,#{requestQty, mode=IN, jdbcType=INTEGER}
+           ,#{reasonCode, mode=IN, jdbcType=VARCHAR}
+           ,#{unitQty, mode=IN, jdbcType=INTEGER}
+           ,#{marketCd, mode=IN, jdbcType=VARCHAR}
+           ,#{currencyCd, mode=IN, jdbcType=VARCHAR}
+           ,#{userId, mode=IN, jdbcType=VARCHAR}
+        )
+    }
+    </insert>
+    
+    <delete id="remove_materialRequest" statementType="CALLABLE" parameterType="java.util.HashMap">
+    { CALL
+	DECLARE
+	BEGIN
+		#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+		
+	   INSERT INTO MOM_MATERIAL_REQUEST_HIST (
+			LAST_EVENT_SEQ,
+			DIVISION_CD,
+			COMPANY_CD,
+			MATERIAL_REQUEST_ID,
+			WORK_ORDER_ID,
+			ITEM_ID,
+			REQUEST_DATE,
+			REQUEST_QTY,
+			ISSUE_QTY,
+			CANCEL_QTY,
+			REQUEST_STATE,
+			IN_LOCATION_CD,
+			OUT_LOCATION_CD,
+			REQUEST_TYPE,
+			ISSUE_DATE,
+			UNIT_QTY,
+			ORIGIN_REQUEST_QTY,
+			REQUEST_GROUP_ID,
+			USE_YN,
+			DESCRIPTION,
+			REASON_CODE,
+			CREATE_DATE,
+			CREATE_BY,
+			UPDATE_DATE,
+			UPDATE_BY,
+			TID
+		)
+		SELECT s_order_seq.nextval,
+			DIVISION_CD,
+			COMPANY_CD,
+			MATERIAL_REQUEST_ID,
+			WORK_ORDER_ID,
+			ITEM_ID,
+			REQUEST_DATE,
+			REQUEST_QTY,
+			ISSUE_QTY,
+			CANCEL_QTY,
+			'R',
+			IN_LOCATION_CD,
+			OUT_LOCATION_CD,
+			REQUEST_TYPE,
+			ISSUE_DATE,
+			UNIT_QTY,
+			ORIGIN_REQUEST_QTY,
+			REQUEST_GROUP_ID,
+			'N',
+			#{MESSAGES30035, jdbcType=VARCHAR} || ' - ' || #{MESSAGES30012, jdbcType=VARCHAR},
+			REASON_CODE,
+			CREATE_DATE,
+            CREATE_BY,
+			MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+            #{userId, jdbcType=VARCHAR},
+			TID
+		FROM	MOM_MATERIAL_REQUEST
+		WHERE   DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	    AND 	COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+	    AND 	WORK_ORDER_ID = #{workOrderId, jdbcType=VARCHAR}
+	    AND 	ITEM_ID = #{itemId, jdbcType=VARCHAR}
+	    AND 	REQUEST_DATE = TO_DATE(#{requestDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+        ;
+		
+		DELETE MOM_MATERIAL_REQUEST
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+           AND WORK_ORDER_ID = #{workOrderId, jdbcType=VARCHAR}
+           AND ITEM_ID = #{itemId, jdbcType=VARCHAR}
+           AND REQUEST_DATE = TO_DATE(#{requestDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+        ;
+		
+		SELECT
+			CASE 
+				WHEN count(1) = 0 THEN 'S'
+				ELSE 'E' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_MATERIAL_REQUEST
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		AND WORK_ORDER_ID = #{workOrderId, jdbcType=VARCHAR}
+		AND ITEM_ID = #{itemId, jdbcType=VARCHAR}
+		AND REQUEST_DATE = TO_DATE(#{requestDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+		;
+	END
+	}
+    </delete>
+    
+    <!-- start code_id : SC2020041946 2020.05.22 박연주 명세표출력 쿼리 변경 -->
+    <select id="get_materialRequestExcelPrint_list" resultType="camelMap" parameterType="java.util.HashMap">
+    WITH TEMP1 AS (
+    	SELECT A.WORK_ORDER_ID						 AS 작업지시번호
+    		 , TO_CHAR(A.REQUEST_DATE, 'YYYY-MM-DD') AS 요청일자
+    		 , (SELECT MOM_COMMON_PKG.FN_GET_ITEM_NAME(A.DIVISION_CD
+    		 										 , A.COMPANY_CD
+    		 										 , O.ITEM_ID)
+		        FROM DUAL)							 AS 품명
+    		 , O.CONFIRM_QTY						 AS 수량
+		     , O.ITEM_ID							 AS 품목코드
+		     , A.IN_LOCATION_CD						 AS 출고창고
+		     , A.OUT_LOCATION_CD					 AS 입고창고
+		     , A.ITEM_ID 							 AS PLIST_ITEM_ID
+		     , D.ITEM_NAME							 AS PLIST_ITEM_NAME
+		     , D.SPECIFICATION						 AS PLIST_ITEM_SPECIFICATION
+		     , D.UNIT								 AS PLIST_ITEM_UNIT
+		     , TRUNC(A.REQUEST_QTY - NVL(A.ISSUE_QTY,0) - NVL(A.CANCEL_QTY,0))  AS PLIST_REQUEST_QTY
+		     ,(SELECT MOM_COMMON_PKG.FN_GET_CURRENT_STOCK(A.DIVISION_CD
+    		 										 	, A.COMPANY_CD
+    		 										 	, A.ITEM_ID
+    		 										 	, A.IN_LOCATION_CD)
+		        FROM DUAL)							 AS PLIST_ITEM_STOCK
+		     , A.ITEM_ID
+		     , A.WORK_ORDER_ID
+		FROM   MOM_MATERIAL_REQUEST A
+		     , MOM_WORK_ORDER O 
+		     , MOM_ITEM_DEFINITION D
+		WHERE  A.DIVISION_CD   = O.DIVISION_CD 
+		AND    A.COMPANY_CD    = O.COMPANY_CD
+		AND    A.WORK_ORDER_ID = O.WORK_ORDER_ID
+		AND    A.DIVISION_CD   = D.DIVISION_CD 
+		AND    A.COMPANY_CD    = D.COMPANY_CD
+		AND    A.ITEM_ID       = D.ITEM_ID
+		AND    A.DIVISION_CD   = #{divisionCd, jdbcType=VARCHAR}
+		AND    A.COMPANY_CD    = #{companyCd, jdbcType=VARCHAR}
+		AND    A.USE_YN        = 'Y'
+		AND    A.REQUEST_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
+		                      	  AND (TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.9997 / 24)
+		AND    A.WORK_ORDER_ID IN(${workOrderIds})
+		ORDER BY A.ITEM_ID
+		)
+		SELECT A.*
+		     , CASE WHEN MOD(PLIST_CELLROW, LIST_ALLCOUNT) = 1 THEN (CEIL(PLIST_CELLROW / LIST_ALLCOUNT)) || '/' || (CEIL(GROUP_COUNT / LIST_ALLCOUNT)) 
+       		   ELSE '' END 															AS PLIST_PAGING
+		FROM (SELECT A.*
+	               , ROW_NUMBER() OVER(PARTITION BY A.WORK_ORDER_ID ORDER BY A.ITEM_ID) 	AS PLIST_CELLROW
+	  			   , COUNT(*) OVER(PARTITION BY A.WORK_ORDER_ID)						  	AS GROUP_COUNT
+			  	   , (SELECT LIST_ALLCOUNT
+			          FROM MOM_EXCEL
+			          WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			          AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+			          AND EXCEL_ID = #{excelId, jdbcType=VARCHAR}) 							AS LIST_ALLCOUNT
+		      FROM TEMP1 A
+		      ) A
+    </select>
+    
+    <!-- end code_id : SC2020041946 2020.05.22 박연주 명세표출력 쿼리 변경 -->
+
+</mapper>

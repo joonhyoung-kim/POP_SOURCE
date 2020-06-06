@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--200331/chs/입고처리상태 조회조건 추가(TRANSACTION_TYPE)-->
+<mapper namespace="com.thirautech.mom.plan.order.B2BIifrcv">
+	<select id="get_b2biIfRcv_list" resultType="camelMap" parameterType="java.util.HashMap">
+	WITH TEMP1 AS (
+	    SELECT SEND_SEQ
+			 , WORK_DATE
+			 , ORGANIZATION_ID
+			 , ORGANIZATION_CODE
+			 , VENDOR_SITE_ID
+			 , VENDOR_SITE_CODE
+			 , VENDOR_NAME
+			 , RECEIVING_DATE
+			 , ORDER_TYPE
+			 , DEPARTURE_NUMBER
+			 , PART_NO
+			 , PO_NO
+			 , SUPPLIER_REF_NO
+			 , MARKET_CODE
+			 , SUBINVENTORY_CODE
+			 , LOCATOR_CODE
+			 , RECEIVING_QUANTITY
+			 , CURRENCY_CODE
+			 , CURRENCY_CONVERSION_RATE
+			 , PO_UNIT_PRICE
+			 , RECEIVING_AMOUNT
+			 , LOCAL_RECEIVING_AMOUNT
+			 , DEPARTURE_DATE
+			 , ITEM_DESCRIPTION
+			 , ITEM_SPEC
+			 , UOM
+			 , UIT
+			 , WORK_ORDER
+			 , TRANSACTION_TYPE
+			 , PO_NUMBER
+			 , VMI_FLAG
+			 , OSP_AMOUNT
+			 , OSP_COST
+			 , MPC_FLAG
+			 , INVOICE_ISSUE_FLAG
+			 , RCV_CONFIRM_FLAG
+			 , INVOICE_NO
+			 , ENTRY_REASON
+			 , IF_ATTRIBUTE1
+			 , IF_ATTRIBUTE2 
+			 , IF_ATTRIBUTE3
+			 , IF_ATTRIBUTE4
+			 , IF_ATTRIBUTE5
+			 , IF_ATTRIBUTE6
+			 , IF_ATTRIBUTE7
+			 , IF_ATTRIBUTE8
+			 , IF_ATTRIBUTE9
+			 , IF_ATTRIBUTE10
+			 , IF_ATTRIBUTE11
+			 , IF_ATTRIBUTE12
+			 , IF_ATTRIBUTE13
+			 , IF_ATTRIBUTE14
+			 , IF_ATTRIBUTE15
+			 , IF_ATTRIBUTE16
+			 , IF_ATTRIBUTE17
+			 , IF_ATTRIBUTE18
+			 , IF_ATTRIBUTE19
+			 , IF_ATTRIBUTE20
+			 , TRANSFER_FLAG
+			 , TRANSFER_DATE
+		  FROM tu_eai.IF_LGE_SUP_RECEIVING
+		 WHERE 1=1
+      	  <if test="orderSeq == 'CREATE_DATE'">
+		   AND WORK_DATE BETWEEN TO_NUMBER(REPLACE(#{fromDate, jdbcType=VARCHAR}, '-')) AND TO_NUMBER(REPLACE(#{toDate, jdbcType=VARCHAR}, '-'))
+      	  </if>
+	      <if test="orderSeq == 'DEPARTURE_DATE'">
+           AND DEPARTURE_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') AND (TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')+ 23.9997 / 24)
+	      </if>   
+	      <if test="orderSeq == 'RECEIVING_DATE'">
+           AND RECEIVING_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') AND (TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')+ 23.9997 / 24)
+	      </if>                  
+	      <if test="poNo != null and poNo != ''">
+           AND UPPER(PO_NUMBER) LIKE '%' || TRIM(UPPER(#{poNo, jdbcType=VARCHAR})) || '%'
+	      </if>  
+	      <if test="departureNum != null and departureNum != ''">
+           AND UPPER(DEPARTURE_NUMBER) LIKE '%' || TRIM(UPPER(#{departureNum, jdbcType=VARCHAR})) || '%'
+	      </if>                   
+	      <if test="partNo != null and partNo != ''">
+           AND UPPER(PART_NO) LIKE '%' || TRIM(UPPER(#{partNo, jdbcType=VARCHAR})) || '%'
+	      </if>
+	      <if test="organizationCode != null and organizationCode != ''">
+	       AND ORGANIZATION_CODE = #{organizationCode, jdbcType=VARCHAR}
+	      </if>
+	      <if test="transferFlag != null and transferFlag != ''">
+	      AND TRANSFER_FLAG = #{transferFlag, jdbcType=VARCHAR}
+	      </if>
+	      <if test="transactionType != null and transactionType != ''">
+	      AND TRANSACTION_TYPE = #{transactionType, jdbcType=VARCHAR}
+	      </if>                                                
+	       AND VENDOR_SITE_CODE = (SELECT P.B2BI_VENDOR_CD 
+                                   FROM   MOM_PARAMETER P
+                                   WHERE  P.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR})
+         ORDER BY SEND_SEQ DESC, VENDOR_SITE_CODE, PART_NO, DEPARTURE_NUMBER)
+      SELECT A.*
+           , B.ROW_COUNT
+      FROM (SELECT A.*
+                 , ROWNUM GRIDROW
+              FROM TEMP1 A) A
+         , (SELECT COUNT(*) ROW_COUNT
+              FROM TEMP1) B 
+        <if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+		 WHERE GRIDROW BETWEEN #{startPage, jdbcType=INTEGER} AND #{endPage, jdbcType=INTEGER}
+	    </if>
+	</select>
+	
+<!-- 	<select id="get_b2biIfRcvCount_list" resultType="camelMap" parameterType="java.util.HashMap"> -->
+<!-- 	    SELECT count(*) AS ROW_COUNT -->
+<!-- 		  FROM tu_eai.IF_LGE_SUP_RECEIVING -->
+<!-- 		 WHERE 1=1 -->
+<!--       	  <if test="orderSeq == 'CREATE_DATE'"> -->
+<!--            AND WORK_DATE BETWEEN TO_NUMBER(REPLACE(#{fromDate, jdbcType=VARCHAR}, '-')) AND TO_NUMBER(REPLACE(#{toDate, jdbcType=VARCHAR}, '-')) -->
+<!--       	  </if> -->
+<!-- 	      <if test="orderSeq == 'DEPARTURE_DATE'"> -->
+<!--            AND DEPARTURE_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') AND (TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')+ 23.999 / 24) -->
+<!-- 	      </if>    -->
+<!-- 	      <if test="orderSeq == 'RECEIVING_DATE'"> -->
+<!--            AND RECEIVING_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') AND (TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')+ 23.999 / 24) -->
+<!-- 	      </if>                   -->
+<!-- 	      <if test="poNo != null and poNo != ''"> -->
+<!--            AND UPPER(PO_NUMBER) LIKE '%' || UPPER(#{poNo, jdbcType=VARCHAR}) || '%' -->
+<!-- 	      </if>   -->
+<!-- 	      <if test="departureNum != null and departureNum != ''"> -->
+<!--            AND UPPER(DEPARTURE_NUMBER) LIKE UPPER('%' || #{departureNum, jdbcType=VARCHAR} || '%') -->
+<!-- 	      </if>                    -->
+<!-- 	      <if test="partNo != null and partNo != ''"> -->
+<!--            AND UPPER(PART_NO) LIKE UPPER('%' || #{partNo, jdbcType=VARCHAR} || '%') -->
+<!-- 	      </if> -->
+<!-- 	      <if test="organizationCode != null and organizationCode != ''"> -->
+<!-- 	       AND ORGANIZATION_CODE = #{organizationCode, jdbcType=VARCHAR} -->
+<!-- 	      </if> -->
+<!-- 	       AND VENDOR_SITE_CODE = (SELECT P.B2BI_VENDOR_CD -->
+<!-- 	                                 FROM MOM_PARAMETER P -->
+<!-- 	                                WHERE P.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR})                                                 -->
+<!-- 	</select> -->
+	
+<!-- 	<select id="get_b2biIfRcvGrid_list" resultType="camelMap" parameterType="java.util.HashMap"> -->
+<!-- 		SELECT COL_ID, -->
+<!-- 		       COL_NAME, -->
+<!-- 		       SUBSTR(COL_VALUE, INSTR(COL_VALUE, 'width:') + 6, INSTR(SUBSTR(COL_VALUE, INSTR(COL_VALUE, 'width:') + 6), ',') -1) WIDTH  -->
+<!-- 		FROM MOM_MENU_HEADER -->
+<!-- 		WHERE MENU_ID = #{menuId, jdbcType=VARCHAR} -->
+<!-- 		  AND GRID_ID = #{gridId, jdbcType=VARCHAR}     -->
+<!-- 		ORDER BY COL_SEQ  -->
+<!-- 	</select> -->
+	
+	<insert id="create_b2biIfRcv" statementType="CALLABLE">
+	{
+        CALL MOM_B2BI.CREATE_B2BI_MOM_APPLY (
+             #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+           , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+           , #{companyCd, mode=IN, jdbcType=VARCHAR}
+           , #{userId, mode=IN, jdbcType=VARCHAR}
+        )
+    }
+    </insert>
+    
+    <insert id="create_departureInfo" statementType="CALLABLE">
+	{
+        CALL MOM_B2BI.CREATE_B2BI_MOM_DEPARTURE  (
+             #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+           , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+           , #{companyCd, mode=IN, jdbcType=VARCHAR}
+           , #{poNumber, mode=IN, jdbcType=VARCHAR}
+           , #{departureNumber, mode=IN, jdbcType=VARCHAR}
+           , #{userId, mode=IN, jdbcType=VARCHAR}
+        )
+    }
+    </insert>
+
+</mapper>

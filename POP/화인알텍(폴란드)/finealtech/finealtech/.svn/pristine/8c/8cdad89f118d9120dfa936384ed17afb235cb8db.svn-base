@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.purchase.stock.othersInOutFinishedStatus">
+	<select id="get_othersInOutFinishedStatus_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.ITEM_ID
+		     , B.ITEM_NAME
+		     , A.REASON_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'MATERIAL_LOT_STATE', A.REASON_CD) FROM DUAL) AS REASON
+		     , TO_CHAR(A.IO_TIME, 'YYYY-MM-DD') AS IO_TIME
+		     , NVL(A.STOCK_QTY,0)+ NVL(QTY,0) ORIGINAL_QTY
+		     , NVL(A.STOCK_QTY, 0) TOTAL_QTY
+		     , NVL(A.QTY,0) * (-1) AS MINUS_QTY
+		     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME (A.DIVISION_CD, A.COMPANY_CD, A.LOCATION_CD) FROM DUAL) AS LOCATION_IN_NAME
+		     , TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS UPDATE_DATE
+		     , NVL((SELECT MOM_COMMON_PKG.FN_GET_USER_NAME (A.DIVISION_CD, A.COMPANY_CD, A.UPDATE_BY) FROM DUAL), A.UPDATE_BY) UPDATE_USER_NAME
+		     , A.DESCRIPTION
+		     , B.SPECIFICATION
+		  FROM MOM_ITEM_STOCK_INOUT A
+		     , MOM_ITEM_DEFINITION B
+		 WHERE 1 = 1
+		   AND A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND A.DIVISION_CD = B.DIVISION_CD(+)
+		   AND A.COMPANY_CD = B.COMPANY_CD(+)
+		   AND A.ITEM_ID = B.ITEM_ID(+)
+           AND A.IO_TYPE = 'O'
+           AND A.IO_CATEGORY = 'U001'
+		  <if test="dateCombo != null and dateCombo != '' and dateCombo == 'REVISIONDATE'">
+		   AND A.IO_TIME BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') AND (TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')+23.999/24)
+		  </if>
+		  <if test="dateCombo != null and dateCombo != '' and dateCombo == 'UPDATEDATE'">
+		   AND A.UPDATE_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') AND (TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')+23.999/24)
+		  </if>
+		  <if test="itemName != null and itemName != ''">
+		   AND (UPPER(A.ITEM_ID) LIKE UPPER('%' || #{itemName, jdbcType=VARCHAR} || '%')
+		    OR UPPER(B.ITEM_NAME) LIKE UPPER('%' || #{itemName, jdbcType=VARCHAR} || '%')
+		    OR UPPER(B.SPECIFICATION) LIKE UPPER('%' || #{itemName, jdbcType=VARCHAR} || '%'))
+		  </if>
+		  <if test="locationName != null and locationName != ''">
+		   AND A.LOCATION_CD = #{locationName, jdbcType=VARCHAR}
+		  </if>
+		  <if test="userName != null and userName != ''">
+		   AND NVL(A.UPDATE_BY,'-') LIKE ('%' || #{userName, jdbcType=VARCHAR} || '%')
+		  </if>
+		  <if test="materialLotState != null and materialLotState != ''">
+		   AND A.REASON_CD = #{materialLotState, jdbcType=VARCHAR}
+		  </if>
+		 ORDER BY A.UPDATE_DATE DESC
+	</select>
+	
+</mapper>

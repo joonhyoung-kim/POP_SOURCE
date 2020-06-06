@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item value="false" key="isRegEx"/>
+		<item value="프레리" key="selection"/>
+		<item value="false" key="casesensitive"/>
+		<item value="false" key="incremental"/>
+		<item value="true" key="wrap"/>
+		<item value="false" key="wholeword"/>
+		<list key="findhistory">
+			<item value="프레리"/>
+			<item value="temp"/>
+			<item value="엑셀"/>
+			<item value="excel"/>
+			<item value="EXCEL"/>
+			<item value="module"/>
+			<item value="delete"/>
+			<item value="P_LABELOBJECT_UPSERT"/>
+			<item value="trim"/>
+			<item value="create_labelo"/>
+			<item value="remove"/>
+			<item value="create_labelobjectdel_proc"/>
+			<item value="CREATE_LABEL"/>
+			<item value="get_Labe"/>
+			<item value="getLabe"/>
+		</list>
+		<list key="replacehistory">
+			<item value="main_details6"/>
+			<item value="txtopt10"/>
+			<item value="details_title1"/>
+			<item value="details_title21"/>
+			<item value="textblock center2"/>
+			<item value="txtOpt7"/>
+			<item value="txtopt7"/>
+			<item value="main_details1"/>
+			<item value="txtOpt5"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item value="288" key="DIALOG_WIDTH"/>
+		<item value="1|맑은 고딕|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|맑은 고딕" key="DIALOG_FONT_NAME"/>
+		<item value="391" key="DIALOG_HEIGHT"/>
+		<item value="1379" key="DIALOG_X_ORIGIN"/>
+		<item value="197" key="DIALOG_Y_ORIGIN"/>
+	</section>
+</section>

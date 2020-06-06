@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.reference.itemInfo.exceptionCustomerModel">
+	<select id="get_exceptionCustomerModel_list" resultType="camelMap" parameterType="java.util.HashMap">
+    WITH TEMP1 AS (
+		SELECT A.PRODUCT_CLASS_ID
+		     , A.USE_YN
+		     , (SELECT MOM_COMMON_PKG. FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'USE_FLAG', A.USE_YN)
+		          FROM DUAL)  AS USE_YN_NAME
+		     , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS CREATE_DATE
+		     , A.CREATE_BY
+             , (SELECT MOM_COMMON_PKG. FN_GET_USER_NAME(A.DIVISION_CD, A.COMPANY_CD, A.CREATE_BY)
+		          FROM DUAL)  AS CREATE_BY_NAME
+		     , TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS UPDATE_DATE
+		     , A.UPDATE_BY
+             , (SELECT MOM_COMMON_PKG. FN_GET_USER_NAME(A.DIVISION_CD, A.COMPANY_CD, A.UPDATE_BY)
+		          FROM DUAL)  AS UPDATE_BY_NAME
+		  FROM MOM_PRODUCT_CLASS_REL_EXPT A
+		 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   <if test = "modelSuffix != null and modelSuffix != ''">
+		   AND UPPER(A.PRODUCT_CLASS_ID) LIKE '%' || TRIM(UPPER(#{modelSuffix, jdbcType=VARCHAR})) || '%'
+		   </if>
+		    <if test = "useYn != null and useYn != ''">
+		   AND A.USE_YN = #{useYn, jdbcType=VARCHAR}
+		   </if>
+	  ORDER BY PRODUCT_CLASS_ID )
+     SELECT A.*
+          , B.ROW_COUNT
+     FROM (SELECT A.*
+                , ROWNUM GRIDROW
+             FROM TEMP1 A) A
+        , (SELECT COUNT(*) ROW_COUNT
+             FROM TEMP1) B 
+    <if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+     WHERE GRIDROW BETWEEN #{startPage, jdbcType=INTEGER} AND #{endPage, jdbcType=INTEGER}
+    </if>
+	</select>
+	
+	<update id="modify_exceptionCustomerModel" statementType="CALLABLE" parameterType="java.util.HashMap">
+	UPDATE MOM_PRODUCT_CLASS_REL_EXPT
+	SET    USE_YN = #{useYn, jdbcType=VARCHAR}
+		 , UPDATE_DATE = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		 , UPDATE_BY = #{userId, jdbcType=VARCHAR}
+	WHERE  DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	AND    COMPANY_CD = #{companyCd, jdbcType=VARCHAR} 
+	AND    PRODUCT_CLASS_ID =  UPPER(TRIM(#{productClassId, jdbcType=VARCHAR}))
+	</update>
+	
+	<insert id="create_exceptionCustomerModel" parameterType="java.util.HashMap">
+		INSERT INTO MOM_PRODUCT_CLASS_REL_EXPT (
+	    	DIVISION_CD
+		  , COMPANY_CD
+		  , PRODUCT_CLASS_ID
+		  , USE_YN
+		  , CREATE_DATE
+		  , CREATE_BY
+		  , UPDATE_DATE
+		  , UPDATE_BY
+		  , TID
+		)
+		VALUES (
+			#{divisionCd, jdbcType=VARCHAR}
+		  , #{companyCd, jdbcType=VARCHAR}
+		  , UPPER(TRIM(#{productClassId, jdbcType=VARCHAR}))
+		  , NVL(UPPER(TRIM(#{useYn, jdbcType=VARCHAR})), 'Y')
+		  , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		  , #{userId, jdbcType=VARCHAR}
+		  , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		  , #{userId, jdbcType=VARCHAR}
+		  , ''
+		)
+	</insert>
+	
+	 <delete id="remove_exceptionCustomerModel" parameterType="java.util.HashMap">
+	 	DELETE 
+	 	FROM   MOM_PRODUCT_CLASS_REL_EXPT
+		WHERE  DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND    COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		AND	   PRODUCT_CLASS_ID = UPPER(TRIM(#{productClassId, jdbcType=VARCHAR}))
+	 </delete>
+</mapper>

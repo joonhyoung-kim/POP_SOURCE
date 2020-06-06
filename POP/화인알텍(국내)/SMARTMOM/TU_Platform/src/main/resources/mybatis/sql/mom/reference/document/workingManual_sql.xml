@@ -1,0 +1,818 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.reference.document.workingManual">
+	<select id="get_borByMonitor_list" resultType="camelMap" parameterType="java.util.HashMap">
+	    SELECT A.RESOURCE_CD
+	         , (SELECT MOM_COMMON_PKG.FN_GET_RESOURCE_NAME(A.DIVISION_CD
+	         											 , A.COMPANY_CD
+	         											 , A.RESOURCE_CD) 
+	              FROM DUAL) AS RESOURCE_NAME
+	    	 , A.RESOURCE_MONITOR_CD
+		     , A.UI_SEQUENCE
+		     , A.USE_YN
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD
+		     										 , A.COMPANY_CD
+		     										 , 'USE_FLAG'
+		     										 , A.USE_YN)
+		   		  FROM DUAL) AS USE_YN_NAME
+		  FROM MOM_RESOURCE_MONITOR A
+		 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		 
+		   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND A.RESOURCE_CD = #{resourceCd, jdbcType=VARCHAR}
+		   AND NVL(A.USE_YN, 'N') = 'Y'
+		 ORDER BY A.UI_SEQUENCE
+	</select>
+	
+	<resultMap id="workingManualListMap" type="HashMap">
+		<result property="resourceMonitorCd"  column="RESOURCE_MONITOR_CD" />
+		<result property="resourceCd"  column="RESOURCE_CD" />
+		<result property="resourceName"  column="RESOURCE_NAME" />
+		<result property="attachName"  column="ATTACH_NAME" />
+		<result property="originalFileName"  column="ORIGINAL_FILE_NAME" />
+		<result property="attachSeq"  column="ATTACH_SEQ" />
+		<result property="attach"  column="ATTACH" />
+		<result property="attachType"  column="ATTACH_TYPE" />
+		<result property="itemId"  column="ITEM_ID" />
+		<result property="itemName"  column="ITEM_NAME" />
+		<result property="specification"  column="SPECIFICATION" />
+		<result property="createDate"  column="CREATE_DATE" />
+		<result property="createUserName"  column="CREATE_USER_NAME" />
+		<result property="updateDate"  column="UPDATE_DATE" />
+		<result property="updateUserName"  column="UPDATE_USER_NAME" />
+	</resultMap>
+
+	<select id="get_workingManual_list" resultMap="workingManualListMap" parameterType="java.util.HashMap">
+	    SELECT B.RESOURCE_MONITOR_CD
+	    	 , A.RESOURCE_CD
+	    	 , (SELECT MOM_COMMON_PKG.FN_GET_RESOURCE_NAME(A.DIVISION_CD
+	    	 											 , A.COMPANY_CD
+	    	 											 , A.RESOURCE_CD) 
+	    		  FROM DUAL) AS RESOURCE_NAME
+		     , A.ATTACH_NAME
+		     , A.ORIGINAL_FILE_NAME
+		     , A.ATTACH_SEQ
+			 , TO_CHAR(DBMS_LOB.SUBSTR(A.ATTACH, 20)) AS ATTACH
+       		 , A.ATTACH_TYPE
+       		 , A.ITEM_ID
+		     , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD') AS CREATE_DATE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(A.DIVISION_CD
+		     										 , A.COMPANY_CD
+		     										 , A.CREATE_BY) 
+		     	  FROM DUAL) AS CREATE_USER_NAME
+		  FROM MOM_WORKING_MANUAL A
+		     , MOM_RESOURCE_MONITOR B
+		 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND A.RESOURCE_CD = #{resourceCd, jdbcType=VARCHAR}
+		   AND A.ITEM_ID = #{itemId, jdbcType=VARCHAR}
+		   AND A.RESOURCE_MONITOR_CD = #{resourceMonitorCd, jdbcType=VARCHAR}
+		   AND A.DIVISION_CD = B.DIVISION_CD
+		   AND A.COMPANY_CD = B.COMPANY_CD
+		   AND A.RESOURCE_CD = B.RESOURCE_CD
+		   AND A.RESOURCE_MONITOR_CD = B.RESOURCE_MONITOR_CD
+		 ORDER BY A.ATTACH_SEQ
+	</select>
+	
+	<insert id="create_workingManual" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+		INSERT INTO MOM_WORKING_MANUAL (
+   	  		DIVISION_CD
+		  , COMPANY_CD
+		  , RESOURCE_CD
+		  , RESOURCE_MONITOR_CD
+		  , ITEM_ID
+		  , ATTACH_SEQ
+		  , ATTACH_NAME
+		  , ORIGINAL_FILE_NAME
+		  , ATTACH_TYPE
+		  , CREATE_DATE
+		  , CREATE_BY
+		  , UPDATE_DATE
+		  , UPDATE_BY         
+		)
+		VALUES (
+		 	#{divisionCd, jdbcType=VARCHAR},
+		 	#{companyCd, jdbcType=VARCHAR},
+		 	#{resourceCd, jdbcType=VARCHAR},
+		 	#{resourceMonitorCd, jdbcType=VARCHAR},
+		 	#{itemId, jdbcType=VARCHAR},
+		 	#{attachSeq, jdbcType=NUMERIC},
+		 	#{attachName, jdbcType=VARCHAR},
+		 	#{originalFileName, jdbcType=VARCHAR},
+		 	#{attachType, jdbcType=VARCHAR},
+		 	MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+		 	#{createBy, jdbcType=VARCHAR},
+		 	MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+		 	#{updateBy, jdbcType=VARCHAR}
+		)
+		;
+		
+	    INSERT INTO MOM_WORKING_MANUAL_HIST (
+  		    LAST_EVENT_SEQ
+  		  , DIVISION_CD
+		  , COMPANY_CD
+		  , CUD_FLAG
+		  , RESOURCE_CD
+		  , RESOURCE_MONITOR_CD
+		  , ITEM_ID
+		  , ATTACH_SEQ
+		  , ATTACH_NAME
+		  , ORIGINAL_FILE_NAME
+		  , ATTACH_TYPE
+		  , CREATE_DATE
+		  , CREATE_BY
+		  , UPDATE_DATE
+		  , UPDATE_BY     
+	    )
+	    SELECT S_ORDER_SEQ.NEXTVAL
+	   		 , DIVISION_CD
+  		     , COMPANY_CD
+  		     , 'C'
+		  	 , RESOURCE_CD
+			 , RESOURCE_MONITOR_CD
+			 , ITEM_ID
+			 , ATTACH_SEQ
+			 , ATTACH_NAME
+			 , ORIGINAL_FILE_NAME
+			 , ATTACH_TYPE
+		     , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		 	 , #{createBy, jdbcType=VARCHAR}
+		  	 , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		 	 , #{updateBy, jdbcType=VARCHAR}
+		  FROM MOM_WORKING_MANUAL
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		   AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+		   AND RESOURCE_MONITOR_CD = #{resourceMonitorCd, jdbcType=VARCHAR}
+		   AND ITEM_ID = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		   AND ATTACH_SEQ = #{attachSeq, jdbcType=NUMERIC}
+		;
+       
+        SELECT
+			CASE 
+				WHEN COUNT(*) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		  FROM MOM_WORKING_MANUAL
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		   AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+		   AND RESOURCE_MONITOR_CD = #{resourceMonitorCd, jdbcType=VARCHAR}
+		   AND ITEM_ID = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		   AND ATTACH_SEQ = #{attachSeq, jdbcType=NUMERIC}
+		;
+       
+	 END
+	}
+	</insert>
+	
+	<update id="modify_workingManual" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+		UPDATE MOM_WORKING_MANUAL
+		   SET ATTACH_SEQ = #{attachSeq, jdbcType=NUMERIC}
+		   	 , ATTACH_NAME = #{attachName, jdbcType=VARCHAR}
+		   	 , ORIGINAL_FILE_NAME = #{originalFileName, jdbcType=VARCHAR}
+		   	 , ATTACH_TYPE = #{attachType, jdbcType=VARCHAR}
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		   AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+		   AND RESOURCE_MONITOR_CD = #{resourceMonitorCd, jdbcType=VARCHAR}
+		   AND ITEM_ID = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		   AND ATTACH_SEQ = #{attachSeq, jdbcType=NUMERIC}
+		;
+		
+		INSERT INTO MOM_WORKING_MANUAL_HIST (
+  		    LAST_EVENT_SEQ
+  		  , DIVISION_CD
+		  , COMPANY_CD
+		  , CUD_FLAG
+		  , RESOURCE_CD
+		  , RESOURCE_MONITOR_CD
+		  , ITEM_ID
+		  , ATTACH_SEQ
+		  , ATTACH_NAME
+		  , ORIGINAL_FILE_NAME
+		  , ATTACH_TYPE
+		  , CREATE_DATE
+		  , CREATE_BY
+		  , UPDATE_DATE
+		  , UPDATE_BY     
+	    )
+	    SELECT S_ORDER_SEQ.NEXTVAL
+	   		 , DIVISION_CD
+  		     , COMPANY_CD
+  		     , 'U'
+		  	 , RESOURCE_CD
+			 , RESOURCE_MONITOR_CD
+			 , ITEM_ID
+			 , ATTACH_SEQ
+			 , ATTACH_NAME
+			 , ORIGINAL_FILE_NAME
+			 , ATTACH_TYPE
+		     , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		 	 , #{createBy, jdbcType=VARCHAR}
+		  	 , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		 	 , #{updateBy, jdbcType=VARCHAR}
+		  FROM MOM_WORKING_MANUAL
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		   AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+		   AND RESOURCE_MONITOR_CD = #{resourceMonitorCd, jdbcType=VARCHAR}
+		   AND ITEM_ID = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		   AND ATTACH_SEQ = #{attachSeq, jdbcType=NUMERIC}
+		;
+       
+        SELECT
+			CASE 
+				WHEN COUNT(*) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		  FROM MOM_WORKING_MANUAL
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		   AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+		   AND RESOURCE_MONITOR_CD = #{resourceMonitorCd, jdbcType=VARCHAR}
+		   AND ITEM_ID = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		   AND ATTACH_SEQ = #{attachSeq, jdbcType=NUMERIC}
+		;
+       
+	 END
+	}
+	</update>
+	
+	<delete id="remove_workingManual" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+	  	INSERT INTO MOM_WORKING_MANUAL_HIST (
+  		    LAST_EVENT_SEQ
+  		  , DIVISION_CD
+		  , COMPANY_CD
+		  , CUD_FLAG
+		  , RESOURCE_CD
+		  , RESOURCE_MONITOR_CD
+		  , ITEM_ID
+		  , ATTACH_SEQ
+		  , ATTACH_NAME
+		  , ORIGINAL_FILE_NAME
+		  , ATTACH_TYPE
+		  , CREATE_DATE
+		  , CREATE_BY
+		  , UPDATE_DATE
+		  , UPDATE_BY     
+	    )
+	    SELECT S_ORDER_SEQ.NEXTVAL
+	   		 , DIVISION_CD
+  		     , COMPANY_CD
+  		     , 'D'
+		  	 , RESOURCE_CD
+			 , RESOURCE_MONITOR_CD
+			 , ITEM_ID
+			 , ATTACH_SEQ
+			 , ATTACH_NAME
+			 , ORIGINAL_FILE_NAME
+			 , ATTACH_TYPE
+		     , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		 	 , #{createBy, jdbcType=VARCHAR}
+		  	 , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		 	 , #{updateBy, jdbcType=VARCHAR}
+		  FROM MOM_WORKING_MANUAL
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		   AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+		   AND RESOURCE_MONITOR_CD = #{resourceMonitorCd, jdbcType=VARCHAR}
+		   AND ITEM_ID = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		   AND ATTACH_SEQ = #{attachSeq, jdbcType=NUMERIC}
+		;
+	  	
+		DELETE FROM MOM_WORKING_MANUAL
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		   AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+		   AND RESOURCE_MONITOR_CD = #{resourceMonitorCd, jdbcType=VARCHAR}
+		   AND ITEM_ID = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		   AND ATTACH_SEQ = #{attachSeq, jdbcType=NUMERIC}
+		;
+		
+        SELECT
+			CASE 
+				WHEN COUNT(*) > 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		  FROM MOM_WORKING_MANUAL
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		   AND RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+		   AND ITEM_ID = UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		   AND ATTACH_SEQ = #{attachSeq, jdbcType=NUMERIC}
+		   AND ATTACH_NAME = #{attachName, jdbcType=VARCHAR}
+		;
+       
+	 END
+	}   
+	</delete>
+	
+	<insert id="create_workingManualFile" parameterType="java.util.HashMap">
+		INSERT INTO MOM_WORKING_MANUAL (
+			DIVISION_CD, 
+			COMPANY_CD,
+			RESOURCE_CD,
+			RESOURCE_MONITOR_CD,
+			ITEM_ID,
+			ATTACH_SEQ,
+			ATTACH_NAME,
+			ORIGINAL_FILE_NAME,
+			ATTACH_TYPE,
+			CREATE_DATE,
+			CREATE_BY,
+			UPDATE_DATE,
+			UPDATE_BY
+		)
+		VALUES (
+			#{divisionCd, jdbcType=VARCHAR}
+		  , #{companyCd, jdbcType=VARCHAR}
+		  , UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+		  , UPPER(TRIM(#{resourceMonitorCd, jdbcType=VARCHAR}))
+		  , UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+		  , #{attachSeq, jdbcType=NUMERIC}
+		  , #{attachName, jdbcType=VARCHAR}
+		  , #{originalFileName, jdbcType=VARCHAR}
+		  , #{attachType, jdbcType=VARCHAR}
+		  , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+	 	  , #{createBy, jdbcType=VARCHAR}
+	  	  , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+	 	  , #{updateBy, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="modify_workingManualFile" parameterType="java.util.HashMap">
+		UPDATE MOM_WORKING_MANUAL
+		   SET ATTACH = #{value, jdbcType=BLOB}
+		     , ATTACH_NAME = #{attachName, jdbcType=VARCHAR}
+		     , ORIGINAL_FILE_NAME = #{originalFileName, jdbcType=VARCHAR}
+		     , ATTACH_TYPE = #{attachType, jdbcType=VARCHAR}
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND RESOURCE_CD = #{resourceCd, jdbcType=VARCHAR}
+		   AND ITEM_ID = #{itemId, jdbcType=VARCHAR}
+           AND RESOURCE_MONITOR_CD = #{resourceMonitorCd, jdbcType=VARCHAR}
+		   AND ATTACH_SEQ = #{attachSeq, jdbcType=NUMERIC}
+		   AND ATTACH_NAME = #{attachName, jdbcType=VARCHAR}
+	</update>
+	
+	<resultMap 	type="HashMap" 			id="attachImageMap">
+		<result property="attach"		column="ATTACH"			jdbcType="CLOB"		javaType="java.lang.String" />
+		<result property="attachName" 	column="ATTACH_NAME" 	jdbcType="VARCHAR"	javaType="java.lang.String" />
+		<result property="attachType" 	column="ATTACH_TYPE" 	jdbcType="VARCHAR"	javaType="java.lang.String" />
+		<result property="resourceCd"   column="RESOURCE_CD"    jdbcType="VARCHAR"  javaType="java.lang.String" />
+		<result property="itemId"       column="ITEM_ID"        jdbcType="VARCHAR"  javaType="java.lang.String" />
+	</resultMap>
+	<select id="get_workingManualFile_list" resultMap="attachImageMap" parameterType="java.util.HashMap">
+<!-- 		SELECT ATTACH -->
+<!-- 			 , ATTACH_NAME -->
+<!-- 			 , ATTACH_TYPE -->
+<!-- 		  FROM MOM_WORKING_MANUAL A -->
+<!-- 		     , MOM_WORK_ORDER B -->
+<!-- 		 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR} -->
+<!-- 	       AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR} -->
+<!-- 	       AND A.DIVISION_CD = B.DIVISION_CD -->
+<!-- 	       AND A.COMPANY_CD = B.COMPANY_CD -->
+<!-- 	       AND A.RESOURCE_CD = B.RESOURCE_CD -->
+<!-- 	       AND A.ITEM_ID = B.ITEM_ID -->
+<!-- 	       AND B.WO_STATE = 'R' -->
+<!-- 	       AND B.PLAN_START_TIME = (SELECT MOM_COMMON_PKG.FN_GET_CURRENT_DATE(A.DIVISION_CD, A.COMPANY_CD)  -->
+<!--                               		  FROM DUAL) -->
+<!-- 		   AND A.RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR})) -->
+<!-- 		   AND A.RESOURCE_MONITOR_CD = #{resourceMonitorCd, jdbcType=VARCHAR} -->
+<!-- 		   AND A.ITEM_ID = UPPER(TRIM(#{itemId, jdbcType=VARCHAR})) -->
+<!-- 		  <if test="attachSeq != null and attachSeq != ''"> -->
+<!-- 		   AND A.ATTACH_SEQ = #{attachSeq, jdbcType=NUMERIC} -->
+<!-- 		  </if> -->
+<!-- 		  <if test="attachName != null and attachName != ''"> -->
+<!-- 		   AND A.ATTACH_NAME = #{attachName, jdbcType=VARCHAR} -->
+<!-- 		  </if> -->
+<!-- 		 ORDER BY A.ATTACH_SEQ -->
+		SELECT A.ATTACH
+             , A.ATTACH_NAME
+             , A.ATTACH_TYPE
+             , DBMS_LOB.SUBSTR(A.ATTACH, 20) AS CONTENTS
+             , B.RESOURCE_CD
+          FROM (SELECT * 
+	              FROM MOM_WORKING_MANUAL 
+	             WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	               AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	               AND RESOURCE_MONITOR_CD = #{resourceMonitorCd, jdbcType=VARCHAR}) A
+            , (SELECT DIVISION_CD
+                    , COMPANY_CD
+                    , RESOURCE_CD
+                    , MAX(ITEM_ID) AS ITEM_ID
+                    , MAX(START_TIME) AS START_TIME
+                 FROM MOM_WORK_ORDER 
+                WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+                  AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+                  AND WO_STATE = 'R'
+<!--                   AND PLAN_START_TIME = (SELECT MOM_COMMON_PKG.FN_GET_CURRENT_DATE(DIVISION_CD, COMPANY_CD)  -->
+<!--                                            FROM DUAL) -->
+                GROUP BY DIVISION_CD, COMPANY_CD, RESOURCE_CD) B 
+           WHERE 1=1
+             AND B.DIVISION_CD = A.DIVISION_CD(+)
+             AND B.COMPANY_CD = A.COMPANY_CD(+)
+             AND B.RESOURCE_CD = A.RESOURCE_CD(+)
+             AND B.ITEM_ID = A.ITEM_ID(+)
+             AND B.RESOURCE_CD IN ( SELECT RESOURCE_CD 
+		                              FROM MOM_RESOURCE_MONITOR 
+		                             WHERE DIVISION_CD = B.DIVISION_CD 
+		                               AND COMPANY_CD = B.COMPANY_CD 
+		                               AND RESOURCE_MONITOR_CD = #{resourceMonitorCd, jdbcType=VARCHAR})
+            <if test="resourceCd != null and resourceCd != ''">
+             AND A.RESOURCE_CD = #{resourceCd, jdbcType=VARCHAR}
+            </if>
+            <if test="itemId != null and itemId != ''"> 
+             AND A.ITEM_ID = #{itemId, jdbcType=VARCHAR}
+            </if>
+            <if test="attachSeq != null and attachSeq != ''">
+             AND A.ATTACH_SEQ = #{attachSeq, jdbcType=NUMERIC}
+            </if>
+            <if test="attachName != null and attachName != ''">
+             AND A.ATTACH_NAME = #{attachName, jdbcType=VARCHAR}
+            </if>
+         ORDER BY A.ATTACH_SEQ
+	</select>
+	
+	<select id="get_preViewWorkingManual_list" resultMap="attachImageMap" parameterType="java.util.HashMap">
+        SELECT A.ATTACH
+             , A.ATTACH_NAME
+             , A.ATTACH_TYPE
+             , DBMS_LOB.SUBSTR(A.ATTACH, 20) AS CONTENTS
+          FROM MOM_WORKING_MANUAL A
+         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+           AND RESOURCE_MONITOR_CD = #{resourceMonitorCd, jdbcType=VARCHAR}
+          <if test="resourceCd != null and resourceCd != ''">
+           AND A.RESOURCE_CD = #{resourceCd, jdbcType=VARCHAR}
+          </if>
+          <if test="itemId != null and itemId != ''"> 
+           AND A.ITEM_ID = #{itemId, jdbcType=VARCHAR}
+          </if>
+          <if test="attachSeq != null and attachSeq != ''">
+           AND A.ATTACH_SEQ = #{attachSeq, jdbcType=NUMERIC}
+          </if>
+       ORDER BY A.ATTACH_SEQ
+    </select>
+	
+	<select id="get_checkWorkingManual_list" resultMap="attachImageMap" parameterType="java.util.HashMap">
+        SELECT A.ATTACH_NAME
+             , A.ATTACH_TYPE
+             , B.RESOURCE_CD
+             , B.ITEM_ID
+          FROM (SELECT * 
+                  FROM MOM_WORKING_MANUAL 
+                 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+                   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+                   AND RESOURCE_MONITOR_CD = #{resourceMonitorCd, jdbcType=VARCHAR}) A
+            , (SELECT DIVISION_CD
+                    , COMPANY_CD
+                    , RESOURCE_CD
+                    , MAX(ITEM_ID) AS ITEM_ID
+                    , MAX(START_TIME) AS START_TIME
+                 FROM MOM_WORK_ORDER 
+                WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+                  AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+                  AND WO_STATE = 'R'
+<!--                   AND PLAN_START_TIME = (SELECT MOM_COMMON_PKG.FN_GET_CURRENT_DATE(DIVISION_CD, COMPANY_CD)  -->
+<!--                                            FROM DUAL) -->
+                GROUP BY DIVISION_CD, COMPANY_CD, RESOURCE_CD) B 
+           WHERE 1=1
+             AND B.DIVISION_CD = A.DIVISION_CD(+)
+             AND B.COMPANY_CD = A.COMPANY_CD(+)
+             AND B.RESOURCE_CD = A.RESOURCE_CD(+)
+             AND B.ITEM_ID = A.ITEM_ID(+)
+             AND B.RESOURCE_CD IN ( SELECT RESOURCE_CD 
+                                      FROM MOM_RESOURCE_MONITOR 
+                                     WHERE DIVISION_CD = B.DIVISION_CD 
+                                       AND COMPANY_CD = B.COMPANY_CD 
+                                       AND RESOURCE_MONITOR_CD = #{resourceMonitorCd, jdbcType=VARCHAR})
+         ORDER BY A.ATTACH_SEQ
+    </select>
+    
+    <insert id="create_copyWorkingManual" statementType="CALLABLE" parameterType="java.util.HashMap">
+    { CALL
+	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+	  	INSERT INTO MOM_WORKING_MANUAL_HIST (
+		  	   LAST_EVENT_SEQ
+			 , DIVISION_CD
+			 , COMPANY_CD
+			 , CUD_FLAG
+			 , RESOURCE_CD
+			 , RESOURCE_MONITOR_CD
+			 , ITEM_ID
+			 , ATTACH_SEQ
+			 , ATTACH_NAME
+			 , ORIGINAL_FILE_NAME
+			 , ATTACH_TYPE
+			 , CREATE_DATE
+			 , CREATE_BY
+			 , UPDATE_DATE
+			 , UPDATE_BY
+	  	)
+	  	SELECT S_ORDER_SEQ.NEXTVAL
+	  		 , DIVISION_CD
+		     , COMPANY_CD
+		     , 'C'
+			 , RESOURCE_CD
+			 , #{toMonitorCd, jdbcType=VARCHAR}
+			 , ITEM_ID
+			 , ATTACH_SEQ
+			 , ATTACH_NAME
+			 , ORIGINAL_FILE_NAME
+			 , ATTACH_TYPE
+			 , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+	 	  	 , #{createBy, jdbcType=VARCHAR}
+			 , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+	 	  	 , #{updateBy, jdbcType=VARCHAR}
+	 	  FROM MOM_WORKING_MANUAL
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND RESOURCE_MONITOR_CD = #{fromMonitorCd, jdbcType=VARCHAR}
+	  	;
+	  	
+		INSERT INTO MOM_WORKING_MANUAL (
+			DIVISION_CD, 
+			COMPANY_CD,
+			RESOURCE_CD,
+			RESOURCE_MONITOR_CD,
+			ITEM_ID,
+			ATTACH_SEQ,
+			ATTACH,
+			ATTACH_NAME,
+			ORIGINAL_FILE_NAME,
+			ATTACH_TYPE,
+			CREATE_DATE,
+			CREATE_BY,
+			UPDATE_DATE,
+			UPDATE_BY
+		)
+		SELECT DIVISION_CD
+			 , COMPANY_CD
+			 , RESOURCE_CD
+			 , #{toMonitorCd, jdbcType=VARCHAR}
+			 , ITEM_ID
+			 , ATTACH_SEQ
+			 , ATTACH
+			 , ATTACH_NAME
+			 , ORIGINAL_FILE_NAME
+			 , ATTACH_TYPE
+			 , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+	 	  	 , #{createBy, jdbcType=VARCHAR}
+			 , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+	 	  	 , #{updateBy, jdbcType=VARCHAR}
+		  FROM MOM_WORKING_MANUAL
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND RESOURCE_MONITOR_CD = #{fromMonitorCd, jdbcType=VARCHAR}
+		;
+		   
+	  SELECT
+		  CASE WHEN COUNT(*) = 0 THEN 'E'
+			   ELSE 'S' 
+		  END  
+		  INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_WORKING_MANUAL
+	   WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		 AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		 AND RESOURCE_MONITOR_CD = #{toMonitorCd, jdbcType=VARCHAR}
+	  ;
+	  END
+	}
+	</insert>
+	
+<!-- 	<insert id="create_copyBor" statementType="CALLABLE" parameterType="java.util.HashMap"> -->
+<!--     { CALL -->
+<!-- 	  DECLARE -->
+<!-- 	  BEGIN -->
+<!-- 	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E'; -->
+	  	
+<!-- 	  	INSERT INTO MOM_BOR_HIST ( -->
+<!--   	    	LAST_EVENT_SEQ -->
+<!-- 		  , DIVISION_CD -->
+<!-- 		  , COMPANY_CD -->
+<!-- 		  , ITEM_ID -->
+<!-- 		  , ROUTE_CD -->
+<!-- 		  , RESOURCE_CD -->
+<!-- 		  , TACT_TIME -->
+<!-- 		  , EARLY_PRODUCING_TERM -->
+<!-- 		  , EARLY_PRODUCING_TERM_UOM -->
+<!-- 		  , PROD_LOT_SIZE -->
+<!-- 		  , ALT_PRIORITY -->
+<!-- 		  , TAT -->
+<!-- 		  , YIELD -->
+<!-- 		  , CYCLE_TIME -->
+<!-- 		  , USE_YN -->
+<!-- 		  , DESCRIPTION -->
+<!-- 		  , CREATE_DATE -->
+<!-- 		  , CREATE_BY -->
+<!-- 		  , UPDATE_DATE -->
+<!-- 		  , UPDATE_BY -->
+<!-- 		  , TID -->
+<!-- 		  , NORMAL_IN_PERSON_CNT -->
+<!-- 		  , NORMAL_DR_PERSON_CNT -->
+<!-- 	  	) -->
+<!-- 	  	SELECT S_ORDER_SEQ.NEXTVAL -->
+<!-- 	  		 , DIVISION_CD -->
+<!-- 			 , COMPANY_CD -->
+<!-- 			 , #{toItemId, jdbcType=VARCHAR} -->
+<!-- 			 , ROUTE_CD -->
+<!-- 			 , RESOURCE_CD -->
+<!-- 			 , TACT_TIME -->
+<!-- 			 , EARLY_PRODUCING_TERM -->
+<!-- 			 , EARLY_PRODUCING_TERM_UOM -->
+<!-- 			 , PROD_LOT_SIZE -->
+<!-- 			 , ALT_PRIORITY -->
+<!-- 			 , TAT -->
+<!-- 			 , YIELD -->
+<!-- 			 , CYCLE_TIME -->
+<!-- 			 , USE_YN -->
+<!-- 			 , DESCRIPTION -->
+<!-- 			 , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}) -->
+<!-- 	 	  	 , #{createBy, jdbcType=VARCHAR} -->
+<!-- 			 , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}) -->
+<!-- 	 	  	 , #{updateBy, jdbcType=VARCHAR} -->
+<!-- 	 	  	 , TID -->
+<!-- 			 , NORMAL_IN_PERSON_CNT -->
+<!-- 			 , NORMAL_DR_PERSON_CNT -->
+<!-- 	 	  FROM MOM_BOR -->
+<!-- 		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR} -->
+<!-- 		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR} -->
+<!-- 		   AND ITEM_ID = #{fromItemId, jdbcType=VARCHAR} -->
+<!-- 		   AND ROUTE_CD = #{routeCd, jdbcType=VARCHAR} -->
+<!-- 		   AND RESOURCE_CD = #{resourceCd, jdbcType=VARCHAR} -->
+<!-- 	  	; -->
+	  	
+<!-- 		INSERT INTO MOM_BOR ( -->
+<!-- 			DIVISION_CD -->
+<!-- 		  , COMPANY_CD -->
+<!-- 		  , ITEM_ID -->
+<!-- 		  , ROUTE_CD -->
+<!-- 		  , RESOURCE_CD -->
+<!-- 		  , TACT_TIME -->
+<!-- 		  , EARLY_PRODUCING_TERM -->
+<!-- 		  , EARLY_PRODUCING_TERM_UOM -->
+<!-- 		  , PROD_LOT_SIZE -->
+<!-- 		  , ALT_PRIORITY -->
+<!-- 		  , TAT -->
+<!-- 		  , YIELD -->
+<!-- 		  , CYCLE_TIME -->
+<!-- 		  , USE_YN -->
+<!-- 		  , DESCRIPTION -->
+<!-- 		  , CREATE_DATE -->
+<!-- 		  , CREATE_BY -->
+<!-- 		  , UPDATE_DATE -->
+<!-- 		  , UPDATE_BY -->
+<!-- 		  , TID -->
+<!-- 		  , NORMAL_IN_PERSON_CNT -->
+<!-- 		  , NORMAL_DR_PERSON_CNT -->
+<!-- 		) -->
+<!-- 		SELECT DIVISION_CD -->
+<!-- 			 , COMPANY_CD -->
+<!-- 			 , #{toItemId, jdbcType=VARCHAR} -->
+<!-- 			 , ROUTE_CD -->
+<!-- 			 , RESOURCE_CD -->
+<!-- 			 , TACT_TIME -->
+<!-- 			 , EARLY_PRODUCING_TERM -->
+<!-- 			 , EARLY_PRODUCING_TERM_UOM -->
+<!-- 			 , PROD_LOT_SIZE -->
+<!-- 			 , ALT_PRIORITY -->
+<!-- 			 , TAT -->
+<!-- 			 , YIELD -->
+<!-- 			 , CYCLE_TIME -->
+<!-- 			 , USE_YN -->
+<!-- 			 , DESCRIPTION -->
+<!-- 			 , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}) -->
+<!-- 	 	  	 , #{createBy, jdbcType=VARCHAR} -->
+<!-- 			 , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}) -->
+<!-- 	 	  	 , #{updateBy, jdbcType=VARCHAR} -->
+<!-- 			 , TID -->
+<!-- 			 , NORMAL_IN_PERSON_CNT -->
+<!-- 			 , NORMAL_DR_PERSON_CNT -->
+<!-- 		  FROM MOM_BOR -->
+<!-- 		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR} -->
+<!-- 		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR} -->
+<!-- 		   AND ITEM_ID = #{fromItemId, jdbcType=VARCHAR} -->
+<!-- 		   AND ROUTE_CD = #{routeCd, jdbcType=VARCHAR} -->
+<!-- 		   AND RESOURCE_CD = #{resourceCd, jdbcType=VARCHAR} -->
+<!-- 		; -->
+		   
+<!-- 	  SELECT -->
+<!-- 		  CASE WHEN COUNT(*) = 0 THEN 'E' -->
+<!-- 			   ELSE 'S'  -->
+<!-- 		  END   -->
+<!-- 		  INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} -->
+<!-- 		FROM MOM_BOR -->
+<!-- 	   WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR} -->
+<!-- 		 AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR} -->
+<!-- 		 AND ITEM_ID = #{toItemId, jdbcType=VARCHAR} -->
+<!-- 		 AND ROUTE_CD = #{routeCd, jdbcType=VARCHAR} -->
+<!-- 		 AND RESOURCE_CD = #{resourceCd, jdbcType=VARCHAR} -->
+<!-- 	  ; -->
+<!-- 	  END -->
+<!-- 	} -->
+<!-- 	</insert> -->
+	
+	<insert id="create_copyWorkingManualByItem" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{
+       CALL P_COPY_WORKING_MANUAL (
+       	   #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+         , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+         , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+         , #{companyCd, mode=IN, jdbcType=VARCHAR}
+         , #{resourceCd, mode=IN, jdbcType=VARCHAR}
+         , #{fromItemId, mode=IN, jdbcType=VARCHAR}
+         , #{toItemId, mode=IN, jdbcType=VARCHAR}
+         , #{userId, mode=IN, jdbcType=VARCHAR}
+       )
+    }
+	</insert>
+	
+	<select id="get_workingManualImage_list" resultMap="workingManualListMap" parameterType="java.util.HashMap">
+		<if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+		WITH TEMP1 AS (	
+	    </if>
+	    SELECT A.RESOURCE_CD
+	    	 , (SELECT MOM_COMMON_PKG.FN_GET_RESOURCE_NAME(A.DIVISION_CD
+	    	 											 , A.COMPANY_CD
+	    	 											 , A.RESOURCE_CD) 
+	    		  FROM DUAL) AS RESOURCE_NAME
+	    	 , A.ITEM_ID
+		     , B.ITEM_NAME
+		     , B.SPECIFICATION
+             , A.RESOURCE_MONITOR_CD
+			 <!-- , TO_CHAR(DBMS_LOB.SUBSTR(A.ATTACH, 20)) AS ATTACH -->
+		     , A.ORIGINAL_FILE_NAME
+		     , A.ATTACH_SEQ
+		     , A.ATTACH_NAME
+       		 , A.ATTACH_TYPE
+       		 , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(A.DIVISION_CD
+		     										 , A.COMPANY_CD
+		     										 , A.UPDATE_BY) 
+		     	  FROM DUAL) AS UPDATE_USER_NAME
+       		 , TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD') AS UPDATE_DATE
+		  FROM MOM_WORKING_MANUAL A
+		     , MOM_ITEM_DEFINITION B
+		 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND A.DIVISION_CD = B.DIVISION_CD
+		   AND A.COMPANY_CD = B.COMPANY_CD
+		   AND A.ITEM_ID = B.ITEM_ID
+	       <if test="resource != null and resource != ''">
+	        AND A.RESOURCE_CD = #{resource, jdbcType=VARCHAR}
+	       </if>
+	       <if test="resourceMonitorCd != null and resourceMonitorCd != ''">
+	       AND A.RESOURCE_MONITOR_CD = #{resourceMonitorCd, jdbcType=VARCHAR}
+	       </if>
+	       <if test="itemName != null and itemName != ''">
+	       AND (UPPER(A.ITEM_ID) LIKE '%' || TRIM(UPPER(#{itemName, jdbcType=VARCHAR})) || '%' 
+	           OR UPPER(B.ITEM_NAME) LIKE '%' || TRIM(UPPER(#{itemName, jdbcType=VARCHAR})) || '%')
+	       </if>
+	       <if test="searchFileYn != null and searchFileYn != ''">
+	       AND  
+	       		CASE
+	       			WHEN ATTACH_NAME IS NOT NULL THEN 'Y'
+	       			ELSE 'N'
+	       		END
+	       		= #{searchFileYn, jdbcType=VARCHAR}
+	       </if>
+		   ORDER BY A.RESOURCE_CD, A.ITEM_ID, A.RESOURCE_MONITOR_CD, A.ATTACH_SEQ
+		 
+		 <if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+				)
+	      SELECT A.*
+	           , B.ROW_COUNT
+	      FROM (SELECT A.*
+	                 , ROWNUM GRIDROW
+	              FROM TEMP1 A) A
+	         , (SELECT COUNT(*) ROW_COUNT
+	              FROM TEMP1) B 
+	      WHERE GRIDROW BETWEEN #{startPage, jdbcType=INTEGER} AND #{endPage, jdbcType=INTEGER}
+       	  </if>
+	</select>
+	
+	
+</mapper>

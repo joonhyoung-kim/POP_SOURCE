@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.admin.demandConfig">
+	<select id="get_demandConfig_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+		       MOM_DEMAND_COL_SEQ
+		     , MOM_DEMAND_COL_ID
+		     , PROMPT_NAME
+		     , COL_TYPE
+		     , UPLOAD_DEMAND_SEQ
+		     , BUFFER_DEMAND_USE_FLAG
+		     , MOM_DEMAND_USE_FLAG
+		     , UPLOAD_TYPE
+		FROM   MOM_DEMAND_CONFIG
+		WHERE  DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND    COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		<if test= "uploadType != null and uploadType != ''">
+		AND    UPLOAD_TYPE = #{uploadType, jdbcType=VARCHAR}
+		</if>
+		ORDER BY UPLOAD_TYPE, MOM_DEMAND_COL_SEQ ASC
+	</select>
+	
+	<insert id="create_demandConfig" parameterType="java.util.HashMap">
+		INSERT INTO MOM_DEMAND_CONFIG (
+			  DIVISION_CD
+			, COMPANY_CD
+			, MOM_DEMAND_COL_SEQ
+			, MOM_DEMAND_COL_ID
+			, PROMPT_NAME
+			, UPLOAD_DEMAND_SEQ
+			, BUFFER_DEMAND_USE_FLAG
+			, COL_TYPE
+			, UPLOAD_TYPE
+			, MOM_DEMAND_USE_FLAG
+		)
+		VALUES (
+			  #{divisionCd, jdbcType=VARCHAR}
+			, #{companyCd, jdbcType=VARCHAR}
+			, #{momDemandColSeq, jdbcType=NUMERIC}
+			, #{momDemandColId, jdbcType=VARCHAR}
+			, #{promptName, jdbcType= VARCHAR}
+			, #{uploadDemandSeq, jdbcType= NUMERIC}
+			, #{bufferDemandUseFlag, jdbcType=VARCHAR}
+			, #{colType, jdbcType=VARCHAR}
+			, #{uploadType, jdbcType=VARCHAR}
+			, #{momDemandUseFlag, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="modify_demandConfig" parameterType="java.util.HashMap">
+		UPDATE MOM_DEMAND_CONFIG
+		SET    PROMPT_NAME = #{promptName, jdbcType= VARCHAR}
+			 , UPLOAD_DEMAND_SEQ = #{uploadDemandSeq, jdbcType= NUMERIC}
+			 , BUFFER_DEMAND_USE_FLAG = #{bufferDemandUseFlag, jdbcType= VARCHAR}
+			 , MOM_DEMAND_USE_FLAG = #{momDemandUseFlag, jdbcType= VARCHAR}
+		WHERE  DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND    COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		AND    MOM_DEMAND_COL_SEQ = #{momDemandColSeq, jdbcType=NUMERIC}
+		AND    UPLOAD_TYPE = #{uploadType, jdbcType=VARCHAR}
+	</update>
+</mapper>

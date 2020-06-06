@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<head>
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <meta name='generator' content='Mica' />
+    <meta http-equiv='CACHE-CONTROL' content='NO-CACHE' />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+    <link rel='stylesheet' type='text/css' href='/TU_Platform/Content/css/site.css' />
+    <link rel='stylesheet' type='text/css' href='/TU_Platform/Content/jqwidgets/styles/jqx.base.css' />
+    <link rel='stylesheet' type='text/css' href='/TU_Platform/Content/theme/css/datetimepicker/jquery.datetimepicker.css' />
+    <link rel="stylesheet" type="text/css" href="/TU_Platform/TU_MOM.css"/>
+
+    <script src='/TU_Platform/Content/js/jquery.min-1.11.1.js'></script>
+    <script src='/TU_Platform/Content/js/jquery-ui.min.js'></script>
+    <script src='/TU_Platform/Content/js/normalize.js'></script>
+    <script src='/TU_Platform/Content/amcharts/amcharts.js'></script>
+    <script src='/TU_Platform/Content/amcharts/serial.js'></script>
+    <script src='/TU_Platform/Content/theme/js/plugins/jqGrid/jquery.jqGrid.min.js'></script>
+    <script src='/TU_Platform/Content/theme/js/plugins/jqGrid/i18n/grid.locale-en.js'></script>
+    <script src='/TU_Platform/Content/theme/js/plugins/bootstrap/bootstrap.min.js'></script>
+    <script src='/TU_Platform/Content/theme/js/plugins/select2/select2.min.js'></script>
+    <script src="/TU_Platform/Content/theme/js/plugins/datetimepicker/jquery.datetimepicker.full.js"></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxcore.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxlistbox.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxcombobox.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxexpander.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxsplitter.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxbuttons.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxscrollbar.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxdata.js'></script>
+    <script src="/TU_Platform/Content/jqwidgets/jqxmenu.js"></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxtree.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxpanel.js'></script>
+    <script src="/TU_Platform/Content/jqwidgets/jqxnotification.js"></script>
+    
+    <!-- auiGrid -->
+	<link href="/TU_Platform/Content/AUIGrid/AUIGrid_style.css" rel="stylesheet" type="text/css">
+	<script src="/TU_Platform/Content/AUIGrid/AUIGridLicense.js"></script>
+	<script src="/TU_Platform/Content/AUIGrid/AUIGrid.js"></script>
+   	<link href="/TU_Platform/Content/css/auigridEditor.css" rel="stylesheet">
+	<!--  auiGrid Excel Export -->
+	<script src="/TU_Platform/Content/AUIGrid/FileSaver.min.js"></script>
+	<!-- echart -->
+	<script src="/TU_Platform/Content/PopUp/EChart/js/echarts/echarts.min.js"></script>
+	
+	<!-- new Common -->
+	<script src="/TU_Platform/Content/resources/js/common.js" type="text/javascript" ></script> 
+	
+    <!-- �떎援��뼱 -->
+    <script src="/TU_Platform/Content/js/regional.js"></script>
+	<script type="text/javascript" src="/TU_Platform/TU_MOM.lang.js"></script>
+    <script type="text/javascript" src="/TU_Platform/TU_MOM.common.js"></script> 
+    <script type="text/javascript" src="/TU_Platform/TU_MOM.widget.js"></script> 
+    
+    <!-- Zebra Print -->
+<script	src="/TU_Platform/Content/BrowserPrint-3.0.216.min.js"></script>
+<script type="text/javascript">
+var selected_device;
+var devices = [];
+function setup()
+{
+	//Get the default device from the application as a first step. Discovery takes longer to complete.
+	BrowserPrint.getDefaultDevice("printer", function(device)
+			{
+		
+				//Add device to list of devices and to html select element
+				selected_device = device;
+				devices.push(device);
+				var html_select = document.getElementById("selected_device");
+				var option = document.createElement("option");
+				option.text = device.name;
+				html_select.add(option);
+				
+				//Discover any other devices available to the application
+				BrowserPrint.getLocalDevices(function(device_list){
+					for(var i = 0; i < device_list.length; i++)
+					{
+						//Add device to list of devices and to html select element
+						var device = device_list[i];
+						if(!selected_device || device.uid != selected_device.uid)
+						{
+							devices.push(device);
+							var option = document.createElement("option");
+							option.text = device.name;
+							option.value = device.uid;
+							html_select.add(option);
+						}
+					}
+					
+				}, function(){alert("Error getting local devices")},"printer");
+				
+			}, function(error){
+				alert(error);
+			})
+}
+function getConfig(){
+	BrowserPrint.getApplicationConfiguration(function(config){
+		alert(JSON.stringify(config))
+	}, function(error){
+		alert(JSON.stringify(new BrowserPrint.ApplicationConfiguration()));
+	})
+}
+function writeToSelectedPrinter(dataToWrite)
+{
+	selected_device.send(dataToWrite, undefined, errorCallback);
+}
+var readCallback = function(readData) {
+	if(readData === undefined || readData === null || readData === "")
+	{
+		alert("No Response from Device");
+	}
+	else
+	{
+		alert(readData);
+	}
+	
+}
+var errorCallback = function(errorMessage){
+	alert("Error: " + errorMessage);	
+}
+function readFromSelectedPrinter()
+{
+
+	selected_device.read(readCallback, errorCallback);
+	
+}
+function getDeviceCallback(deviceList)
+{
+	alert("Devices: \n" + JSON.stringify(deviceList, null, 4))
+}
+
+function sendImage(imageUrl)
+{
+	url = window.location.href.substring(0, window.location.href.lastIndexOf("/"));
+	url = url + "/" + imageUrl;
+	selected_device.convertAndSendFile(url, undefined, errorCallback)
+}
+function sendFile(fileUrl){
+    url = window.location.href.substring(0, window.location.href.lastIndexOf("/"));
+    url = url + "/" + fileUrl;
+    selected_device.sendFile(url, undefined, errorCallback)
+}
+function onDeviceSelected(selected)
+{
+	for(var i = 0; i < devices.length; ++i){
+		if(selected.value == devices[i].uid)
+		{
+			selected_device = devices[i];
+			return;
+		}
+	}
+}
+window.onload = setup;
+</script>
+</head>
+<body style="overflow:auto;">
+	<div class="w-clearfix tabcontentarea">
+		<div class="card wcalc10 w320">
+			<div class="w-clearfix cardheard">
+				<div tmpTabId="six" class="w-icon fa fa-align-justify icon r5"></div>
+				<div multi-lang="" style="display:none;" class="textblock">라벨 리스트</div>
+				<a id="excelUpBtn1" href="#" class="w-inline-block btntool floatr">
+						<div tmpTabId="one" class="w-icon fa fa-cloud-upload icon"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10027</div>
+				</a>
+				<a id="excelTemplateBtn1" href="#" class="w-inline-block btntool floatr">
+						<div tmpTabId="five" class="w-icon fa fa-cloud-download icon"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10830</div>
+				</a>
+				<a id="copyBtn1" href="#" class="w-inline-block btntool floatr">
+					<div tmpTabId="four" class="w-icon fa fa-copy icon"></div>
+					<div multi-lang="" style="display:none;" class="textblock">MESSAGES10490</div>
+				</a>
+				<a id="delActBtn1" href="#" class="w-inline-block btntool floatr">
+					<div tmpTabId="five" class="w-icon fa fa-trash-o icon"></div>
+					<div multi-lang="" style="display:none;" class="textblock">MESSAGES10577</div>
+				</a>
+				<a id="createBtn1" href="#" class="w-inline-block btntool floatr">
+					<div tmpTabId="three" class="w-icon fa fa-pencil icon"></div>
+					<div multi-lang="" style="display:none;" class="textblock">MESSAGES10337</div>
+				</a>
+				<a id="labelPrintBtn1" href="#" class="w-inline-block btntool floatr">
+						<div tmpTabId="four" class="w-icon fa fa-print icon"></div>
+						<div multi-lang="" style="display:none;" class="textblock">라벨발행</div>
+				</a>
+				<div style="text-align: center; font-size: xx-large;">
+				<select id="selected_device" onchange=onDeviceSelected(this);></select>  <br/><br/>
+				<input type="text" name="write_text" id="write_text"><input type="button" value="Write"><br/><br/>
+				</div>
+			</div>
+			<div class="cardcontent">
+				<div id="grid1" class="w-widget w-dyn-list w-unbound grid w-widget-auigrid"></div>
+			</div>
+		</div>
+		<div class="card h50per">
+			<div class="w-clearfix cardheard">
+				<div tmpTabId="six" class="w-icon fa fa-align-justify icon r5"></div>
+				<div multi-lang="" style="display:none;" class="textblock">라벨 디자인</div>
+				<a id="excelUpBtn1" href="#" class="w-inline-block btntool floatr">
+						<div tmpTabId="one" class="w-icon fa fa-cloud-upload icon"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10027</div>
+				</a>
+				<a id="excelTemplateBtn1" href="#" class="w-inline-block btntool floatr">
+						<div tmpTabId="five" class="w-icon fa fa-cloud-download icon"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10830</div>
+				</a>
+				<a id="copyBtn2" href="#" class="w-inline-block btntool floatr">
+					<div tmpTabId="four" class="w-icon fa fa-copy icon"></div>
+					<div multi-lang="" style="display:none;" class="textblock">MESSAGES10490</div>
+				</a>
+				<a id="delBtn2" href="#" class="w-inline-block btntool floatr">
+					<div tmpTabId="five" class="w-icon fa fa-trash-o icon"></div>
+					<div multi-lang="" style="display:none;" class="textblock">MESSAGES10577</div>
+				</a>
+				<a id="createBtn2" href="#" class="w-inline-block btntool floatr">
+					<div tmpTabId="two" class="w-icon fa fa-pencil icon"></div>
+					<div multi-lang="" style="display:none;" class="textblock">MESSAGES10337</div>
+				</a>
+			</div>
+			<div class="cardcontent">
+				<div id="grid2" class="w-widget w-dyn-list w-unbound grid w-widget-auigrid"></div>
+			</div>
+		</div>
+	</div>
+	<div id="excelPop1" class="modal">
+		<div id="panel" class="panel messagebox w400">
+			<div data-panelHeader="n" panelHeader="n" class="panel-heading hide">
+				<h5>Panel</h5>
+			</div>
+			<div data-panelToolbar="n" panelToolbar="n" class="panel-toolbar hide"></div>
+			<div class="panel-body panel-body">
+				<div class="panelbody">
+					<div class="w-clearfix panelheader panel-heading">
+						<div tmpTabId="two" class="w-icon fa fa-edit icon r5"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10840</div>
+						<a href="#" class="w-inline-block bntpopclose"></a>
+					</div>
+					<div class="searcharea pop">
+						<div class="w-form">
+							<form name="form" id="form" class="form-inline" data-name="Form"></form>
+						</div>
+					</div>
+				</div>
+				<div class="panelfooter">
+					<a id="saveBtnEX1" href="#" class="w-inline-block btnpop">
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES11192</div>
+					</a>
+					<a id="cancelBtnEX1" href="#" class="w-inline-block btnpop grey">
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES11457</div>
+					</a>
+				</div>
+			</div>
+			<div panelFooter="n" class="panel-footer hide" data-panelFooter="n"></div>
+		</div>
+	</div>
+</body>
+	<script type="text/javascript" src="./MOMAA002.js"></script>
+</html>

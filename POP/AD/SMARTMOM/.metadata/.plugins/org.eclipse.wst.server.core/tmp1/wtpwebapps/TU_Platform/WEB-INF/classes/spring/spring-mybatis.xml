@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+		xmlns:aop="http://www.springframework.org/schema/aop"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xmlns:batch="http://www.springframework.org/schema/batch"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans
+							http://www.springframework.org/schema/beans/spring-beans.xsd
+							http://mybatis.org/schema/mybatis-spring
+							http://mybatis.org/schema/mybatis-spring.xsd
+							http://www.springframework.org/schema/tx
+							http://www.springframework.org/schema/tx/spring-tx.xsd
+							http://www.springframework.org/schema/aop
+							http://www.springframework.org/schema/aop/spring-aop.xsd
+							http://www.springframework.org/schema/tx 
+							http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+<tx:annotation-driven proxy-target-class="true"/>
+	
+	<!-- mybatis sqlSessionFactoryBean 설정 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="typeAliases">
+			<list>
+				<value>com.thirautech.framework.common.alias.CamelMap</value>
+			</list>
+		</property>
+		<property name="configuration">
+			<bean class="org.apache.ibatis.session.Configuration">
+				<property name="mapUnderscoreToCamelCase" value="true" />
+				<property name="callSettersOnNulls" value="true" />
+			</bean>
+		</property>
+		<!-- hyjeong append begin -->
+		<property name="mapperLocations" value="classpath*:mybatis/sql/mom/**/*_sql.xml" />
+		<!-- hyjeong append end -->
+	</bean>
+	
+	<!-- sqlSession 설정 -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+		<!-- <constructor-arg index="1" value="BATCH" /> -->
+	</bean>
+		
+	<!-- hyjeong append begin -->
+	<bean id="momService" class="com.thirautech.mom.serviceimpl.MomServiceImpl" />
+    <bean id="momDao"     class="com.thirautech.mom.dao.MomDao" />    
+    <!-- hyjeong append end -->
+	
+	<!-- mapper scan 설정 -->
+	<mybatis:scan base-package="com.thirautech.**.mapper, com.thirautech.**.repository"/>
+	<!--  annotation="com.thirautech.framework.persistent.mybatis.annotation.Mybatis"  -->
+	
+	<!-- Database Transaction -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="*" rollback-for="Exception" />
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- Access Of Pointcut -->
+	<aop:config>
+		<aop:pointcut id="txPointcut" expression="execution (public * com.thirautech..service.impl.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut" />
+	</aop:config>
+	
+	<aop:aspectj-autoproxy />	
+</beans>

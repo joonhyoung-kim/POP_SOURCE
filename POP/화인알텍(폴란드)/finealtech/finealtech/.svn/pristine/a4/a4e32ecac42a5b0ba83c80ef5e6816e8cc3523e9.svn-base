@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.admin.b2biOrgSetup">
+	<select id="get_b2biOrgSetupLeft_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT R.DIVISION_CD
+		     , R.COMPANY_CD
+		     , R.ORGANIZATION_CODE
+		     , R.VENDOR_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME(R.DIVISION_CD, R.COMPANY_CD, R.VENDOR_CD)
+		        FROM   DUAL ) AS VENDOR_NAME
+		     , R.USE_YN
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(R.DIVISION_CD, R.COMPANY_CD, 'USE_FLAG', R.USE_YN)
+		        FROM   DUAL ) AS USE_NAME 
+		     , R.CREATE_DATE
+		     , R.CREATE_BY
+		     , R.UPDATE_DATE
+		     , R.UPDATE_BY
+		FROM   MOM_VENDOR_MAPPING R
+		WHERE  R.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND    R.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		
+	</select>
+	
+	<select id="get_b2biOrgSetupRight_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT R.SCHEDULE_GROUP_CD
+		     , R.SCHEDULE_GROUP_NAME
+		     , R.ORGANIZATION_CODE
+		     , R.USE_YN
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(R.DIVISION_CD, R.COMPANY_CD, 'USE_FLAG', R.USE_YN)
+		        FROM   DUAL ) AS USE_NAME 
+		     , R.CREATE_DATE
+		     , R.CREATE_BY
+		     , R.UPDATE_DATE
+		     , R.UPDATE_BY
+		FROM   MOM_VENDOR_SCHEDULE_GROUP R
+		WHERE  R.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND    R.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		AND    R.ORGANIZATION_CODE = #{organizationCode, jdbcType=VARCHAR}
+	</select>
+	
+	<insert id="create_b2biOrgSetupLeft" statementType="CALLABLE" parameterType="java.util.HashMap">
+		INSERT INTO MOM_VENDOR_MAPPING(
+			DIVISION_CD,
+			COMPANY_CD,
+			ORGANIZATION_CODE,
+			VENDOR_CD,
+			USE_YN,
+			CREATE_DATE,
+			CREATE_BY,
+			UPDATE_DATE,
+			UPDATE_BY
+			)
+			VALUES(
+			#{divisionCd, jdbcType=VARCHAR},
+			#{companyCd, jdbcType=VARCHAR},
+			#{organizationCode, jdbcType=VARCHAR},
+			UPPER(#{vendorCd, jdbcType=VARCHAR}),
+			NVL(#{useYn, jdbcType=VARCHAR}, 'Y'),
+			MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			#{createBy, jdbcType=VARCHAR},
+			MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			#{updateBy, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="modify_b2biOrgSetupLeft" statementType="CALLABLE" parameterType="java.util.HashMap">
+		UPDATE MOM_VENDOR_MAPPING
+		SET    VENDOR_CD     = UPPER(#{vendorCd, jdbcType=VARCHAR}),
+			   USE_YN        = NVL(#{useYn, jdbcType=VARCHAR}, 'Y'),
+			   UPDATE_DATE 	 = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			   UPDATE_BY 		 = #{updateBy, jdbcType=VARCHAR}
+		WHERE  DIVISION_CD 	 = #{divisionCd, jdbcType=VARCHAR}     
+  		AND    COMPANY_CD 		 = #{companyCd,jdbcType=VARCHAR}       
+  		AND    ORGANIZATION_CODE     = #{organizationCode, jdbcType=VARCHAR}
+  	 </update>
+  	 
+  	 <delete id="remove_b2biOrgSetupLeft" statementType="CALLABLE" parameterType="java.util.HashMap">
+  	 	DELETE 
+  	 	FROM 	MOM_VENDOR_MAPPING
+  	 	WHERE	DIVISION_CD 	 = #{divisionCd, jdbcType=VARCHAR}     
+  		AND     COMPANY_CD 		 = #{companyCd,jdbcType=VARCHAR}       
+  		AND     ORGANIZATION_CODE     = #{organizationCode, jdbcType=VARCHAR} 
+  	 </delete>
+  	 
+  	 <insert id="create_b2biOrgSetupRight" statementType="CALLABLE" parameterType="java.util.HashMap">
+		INSERT INTO MOM_VENDOR_SCHEDULE_GROUP(
+			DIVISION_CD,
+			COMPANY_CD,
+			ORGANIZATION_CODE,
+			SCHEDULE_GROUP_CD,
+			SCHEDULE_GROUP_NAME,
+			USE_YN,
+			CREATE_DATE,
+			CREATE_BY,
+			UPDATE_DATE,
+			UPDATE_BY
+			)
+			VALUES(
+			#{divisionCd, jdbcType=VARCHAR},
+			#{companyCd, jdbcType=VARCHAR},
+			#{organizationCode, jdbcType=VARCHAR},
+			#{scheduleGroupCd, jdbcType=VARCHAR},
+			#{scheduleGroupName, jdbcType=VARCHAR},
+			NVL(#{useYn, jdbcType=VARCHAR}, 'Y'),
+			MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			#{createBy, jdbcType=VARCHAR},
+			MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			#{updateBy, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="modify_b2biOrgSetupRight" statementType="CALLABLE" parameterType="java.util.HashMap">
+		UPDATE MOM_VENDOR_SCHEDULE_GROUP
+		SET    SCHEDULE_GROUP_NAME     = #{scheduleGroupName, jdbcType=VARCHAR},
+			   USE_YN        = NVL(#{useYn, jdbcType=VARCHAR}, 'Y'),
+			   UPDATE_DATE 	 = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			   UPDATE_BY 		 = #{updateBy, jdbcType=VARCHAR}
+		WHERE  DIVISION_CD 	 = #{divisionCd, jdbcType=VARCHAR}     
+  		AND    COMPANY_CD 		 = #{companyCd,jdbcType=VARCHAR}       
+  		AND    ORGANIZATION_CODE     = #{organizationCode, jdbcType=VARCHAR}
+  		AND    SCHEDULE_GROUP_CD = #{scheduleGroupCd, jdbcType=VARCHAR}
+  	  </update>
+  	  
+  	  <delete id="remove_b2biOrgSetupRight" statementType="CALLABLE" parameterType="java.util.HashMap">
+  	 	DELETE 
+  	 	FROM 	MOM_VENDOR_SCHEDULE_GROUP
+  	 	WHERE   DIVISION_CD 	 = #{divisionCd, jdbcType=VARCHAR}     
+  		AND     COMPANY_CD 		 = #{companyCd,jdbcType=VARCHAR}       
+  		AND     ORGANIZATION_CODE     = #{organizationCode, jdbcType=VARCHAR}
+  		<if test = "scheduleGroupCd != null and scheduleGroupCd != ''">
+  		AND     SCHEDULE_GROUP_CD = #{scheduleGroupCd, jdbcType=VARCHAR}
+  		</if>
+  	 </delete>
+  	 
+  	 <update id="modify_b2biOrgSetupRightUpdate" parameterType="java.util.HashMap">
+		UPDATE MOM_VENDOR_SCHEDULE_GROUP
+		SET    USE_YN = #{useYn,jdbcType=VARCHAR}
+		WHERE  DIVISION_CD = #{divisionCd,jdbcType=VARCHAR}
+		AND    COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}
+		AND    ORGANIZATION_CODE = #{organizationCode,jdbcType=VARCHAR}
+	 </update>
+</mapper>

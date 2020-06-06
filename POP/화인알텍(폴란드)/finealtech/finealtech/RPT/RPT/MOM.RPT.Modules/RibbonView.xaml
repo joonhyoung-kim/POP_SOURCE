@@ -1,0 +1,98 @@
+﻿<UserControl x:Class="MOM.RPT.Modules.RibbonView"
+             xmlns="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+             xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/core"              
+             xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:dxn="http://schemas.devexpress.com/winfx/2008/xaml/navbar"
+             xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
+             xmlns:dxwui="http://schemas.devexpress.com/winfx/2008/xaml/windowsui"
+             xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+             xmlns:dxwuin="http://schemas.devexpress.com/winfx/2008/xaml/windowsui/navigation"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:dxnav="http://schemas.devexpress.com/winfx/2008/xaml/navigation"         
+             xmlns:c="clr-namespace:TU.Core;assembly=TU.Core"
+             xmlns:l="clr-namespace:TU.Core.Translation;assembly=TU.Core"
+             xmlns:bh="clr-namespace:TU.Core.Behavior;assembly=TU.Core"             
+             xmlns:conv="clr-namespace:TU.Core.Converters;assembly=TU.Core"
+             xmlns:local="clr-namespace:MOM.RPT.Modules"
+             x:Name="ribbon"
+>
+    <UserControl.DataContext>
+        <local:RibbonViewModel />
+    </UserControl.DataContext>
+
+    <dxmvvm:Interaction.Behaviors>
+        <local:RibbonViewService />
+
+    </dxmvvm:Interaction.Behaviors>
+    
+    <UserControl.Resources>
+        <ResourceDictionary>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes/Common.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+
+    </UserControl.Resources>
+
+    <Grid x:Name="LayoutRoot">
+
+        <dxmvvm:Interaction.Behaviors>
+            <bh:FlyoutBehaviour x:Name="flyout" />
+
+        </dxmvvm:Interaction.Behaviors>
+
+        <DockPanel>
+            <dxr:RibbonControl x:Name="RibbonControl" DockPanel.Dock="Top" RibbonStyle="OfficeSlim" >
+                <dxmvvm:Interaction.Behaviors>
+                    <bh:RibbonControlBehaviour CategoryVisible="True" />
+                </dxmvvm:Interaction.Behaviors>
+
+                <dxr:RibbonControl.PageHeaderItems>
+                    <dxb:BarEditItem x:Name="eRibbonStyle" EditWidth="150" ClosePopupOnChangingEditValue="True" EditValue="{Binding RibbonStyle, ElementName=RibbonControl}">
+                        <dxb:BarEditItem.EditSettings>
+                            <dxe:ComboBoxEditSettings IsTextEditable="False" PopupMaxHeight="250" 
+                                                      ItemsSource="{dxe:EnumItemsSource EnumType={x:Type dxr:RibbonStyle}}" 
+                            />
+                        </dxb:BarEditItem.EditSettings>
+                    </dxb:BarEditItem>
+                    <dxb:BarButtonItem Content="About" 
+                                       Glyph="{dxc:DXImage Image=Info_16x16.png}" 
+                                       LargeGlyph="{dxc:DXImage Image=Info_32x32.png}"                                        
+                    />
+                </dxr:RibbonControl.PageHeaderItems>
+            </dxr:RibbonControl>
+
+            <dxdo:DockLayoutManager >
+                <dxmvvm:Interaction.Behaviors>
+                    <bh:DockLayoutManagerBehaviour AllowFloatting="False" />
+                </dxmvvm:Interaction.Behaviors>
+                
+                <dxdo:LayoutGroup Orientation="Vertical" ItemHeight="*"   >
+                    <!-- Document -->
+                    <dxdo:LayoutGroup Orientation="Horizontal">
+                        <dxdo:DocumentGroup x:Name="documentGroup" DestroyOnClosingChildren="True" ShowTabHeaders="True"  >
+                            <dxmvvm:Interaction.Behaviors>
+                                <dxdo:TabbedDocumentUIService x:Name="tabbedDocumentService"  DocumentGroup="{Binding ElementName=documentGroup}"  />
+                            </dxmvvm:Interaction.Behaviors>
+                        </dxdo:DocumentGroup>
+
+                    </dxdo:LayoutGroup>
+
+                </dxdo:LayoutGroup>
+
+            </dxdo:DockLayoutManager>
+
+
+        </DockPanel>
+
+    </Grid>
+
+</UserControl>

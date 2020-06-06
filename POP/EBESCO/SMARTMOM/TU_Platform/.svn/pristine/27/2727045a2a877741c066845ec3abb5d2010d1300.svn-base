@@ -1,0 +1,141 @@
+var locale = sessionStorage.getItem("locale");
+var divisionCd = sessionStorage.getItem("divisionCd");
+var companyCd = sessionStorage.getItem("companyCd");
+var empAuthority = sessionStorage.getItem("empAuthority");
+
+var MOMJA092_1 = {
+	initMessage		: undefined,
+	initParam		: undefined,
+	
+	codeId	: undefined,
+	menuId	: undefined,
+	authId  : undefined,
+	
+	init: function() {
+		var that = this;
+		var param = {empAuthority : empAuthority};
+		Language.init(function() {
+		
+		});
+		
+//		this.event();
+//		$(".w-clearfix.h100per").prepend('<div id="split-left"></div>');
+//		$("#split-left").append($(".card.wcalc10.w400px, .card.wcalc750.h100p"));
+//		momWidget.splitter("#split-left", "vertical", "35%");
+//		momWidget.splitter(".w-clearfix.h100per", "vertical", "70%");
+		
+	}, retrieveCallInit: function(index, param, callBackParam, indexInfo) {
+		index = (indexInfo != undefined && indexInfo['newIndex'] != undefined && indexInfo['newIndex'] != indexInfo['index']) ? indexInfo['newIndex'] : index;
+		this.initParam = {empAuthority : empAuthority};
+//		if(index == 1) {
+//			this.initParam = AUIGrid.getSelectedItems(momWidget.grid[0])[0].item;
+//
+//		} 
+//		if(index == 2){
+//			this.initParam =  AUIGrid.getSelectedItems(momWidget.grid[0])[0].item;
+//			
+//		} 
+		
+	}, retrieveCallBack: function(result, data, param, callBackParam, indexInfo) {
+		var that = this;
+		var index = (indexInfo != undefined
+				&& indexInfo['newIndex'] != undefined && indexInfo['newIndex'] != indexInfo['index']) ? indexInfo['newIndex']
+				: indexInfo['index'];
+		
+		if(result != 'SUCCESS') {
+			if(index == 1) {
+				this.initParam = undefined;
+			}         
+			
+			momWidget.splashHide();
+			return;
+		}
+		
+		AUIGrid.setGridData(momWidget.grid[index], data);
+		
+		if(indexInfo != undefined && indexInfo['op'] == 'CC1') {
+			var menuList = [];
+			for(var i = 0; i < data.length; i++) {
+				if(data[i].authFlag == 'Y') {
+					menuList[i] = data[i].id;
+				}
+			}
+			var data1 = momWidget.parentIdHierarchy(data, 'parentId', 'children');
+			AUIGrid.setGroupBy(momWidget.grid[1],  ['name'], {
+				excepts: ['name']
+			});
+			AUIGrid.setGridData(momWidget.grid[1], data1);
+			AUIGrid.setCheckedRowsByValue(momWidget.grid[1], 'id', menuList);
+			AUIGrid.setGridData(momWidget.grid[2], []);
+			that.authId = param.codeId;
+			
+		}
+		
+		if(index == 2) {
+			this.initParam = {authId : that.authId};
+		}
+		
+//		AUIGrid.setGridData(momWidget.grid[index], data);
+		
+		momWidget.splashHide();
+		
+	}, cellClickCallBack: function(index, e) {
+		if(index == 0) {
+			var item = AUIGrid.getGridData(momWidget.grid[0])[e.rowIndex];
+			this.codeId = item['codeId'];
+		}
+	}, saveCallInit : function(index, param, callBackParam, indexInfo) {
+	
+	}, event: function() {
+//		if(indexInfo != undefined && indexInfo['op'] == 'upBtn3' && indexInfo['sequence'] == 2) {
+//			var id = $(this).attr("id");
+//			id = id.replace("up", "").replace("Btn", "");
+//			var index = AUIGrid.getSelectedIndex("grid" + id)[0];
+//
+//			var item = AUIGrid.getItemByRowIndex("grid" + id, index - 1);
+//			if(item == null) {
+//				return;
+//			} AUIGrid.moveRowsToUp("grid" + id);
+//		}
+//	
+//		if(indexInfo != undefined && indexInfo['op'] == 'downBtn3' && indexInfo['sequence'] == 2) {
+//			var id = $(this).attr("id");
+//			id = id.replace("down", "").replace("Btn", "");
+//			var index = AUIGrid.getSelectedIndex("grid" + id)[0];
+//			var item = AUIGrid.getItemByRowIndex("grid" + id, index + 1);
+//				if(item == null) {
+//					return;
+//			} AUIGrid.moveRowsToDown("grid" + id)
+//		}
+//		
+		
+		$(document).on("click", "#up2Btn, #up3Btn", function() {
+			var id = $(this).attr("id");
+			id = id.replace("up", "").replace("Btn", "");
+			var index = AUIGrid.getSelectedIndex("grid" + id)[0];
+			if(index)
+			var item = AUIGrid.getItemByRowIndex("grid" + id, index - 1);
+			if(item == null) {
+				return;
+			}
+			AUIGrid.moveRowsToUp("grid" + id);
+		});
+		$(document).on("click", "#down2Btn, #down3Btn", function() {
+			var id = $(this).attr("id");
+			id = id.replace("down", "").replace("Btn", "");
+			var index = AUIGrid.getSelectedIndex("grid" + id)[0];
+			var item = AUIGrid.getItemByRowIndex("grid" + id, index + 1);
+			if(item == null) {
+				return;
+			}
+			AUIGrid.moveRowsToDown("grid" + id);
+		});
+	},
+};
+
+$(document).ready(function(event){
+	momWidget.init(1, 'MOMJA092_1', MOMJA092_1);
+	momWidget.init(2, 'MOMJA092_1', MOMJA092_1);
+	momWidget.init(3, 'MOMJA092_1', MOMJA092_1);
+	MOMJA092_1.init();
+});

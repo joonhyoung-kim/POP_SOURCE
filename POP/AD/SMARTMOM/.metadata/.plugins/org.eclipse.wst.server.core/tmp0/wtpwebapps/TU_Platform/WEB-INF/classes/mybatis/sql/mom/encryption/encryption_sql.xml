@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.encryption">
+	<select id="get_encryption_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT 
+			  PAGE
+			, ENCRYPTION
+		FROM 
+			MOM_ENCRYPTION
+		WHERE 
+			    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		    AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			<if test="page != '' and page != null">
+			AND PAGE = #{page, jdbcType=VARCHAR}
+			</if>
+		ORDER BY PAGE, ENCRYPTION ASC
+	</select>
+	
+	<insert id="create_encryption" parameterType="java.util.HashMap">
+        INSERT INTO MOM_ENCRYPTION(
+        	  DIVISION_CD
+        	, COMPANY_CD
+        	, PAGE
+			, ENCRYPTION
+			, UPDATE_BY
+        )
+        VALUES (
+        	  #{divisionCd, jdbcType=VARCHAR}
+        	, #{companyCd, jdbcType=VARCHAR}
+        	, #{page, jdbcType=VARCHAR}
+        	, #{encryption, jdbcType=VARCHAR}
+        	, #{userId, jdbcType=VARCHAR}
+        )
+    </insert>
+    
+    <update id="modify_encryption" parameterType="java.util.HashMap">
+    	UPDATE 
+    		MOM_ENCRYPTION
+    	SET
+    		ENCRYPTION = #{encryption, jdbcType=VARCHAR}
+    	WHERE 
+    		    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+    		AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+    		AND PAGE = #{page, jdbcType=VARCHAR}
+    </update>
+    
+    <!-- <select id="get_query_list" resultType="camelMap" parameterType="java.util.HashMap">
+    	SELECT 
+		      QUERY_ID
+		    , ENCRYPTION
+		    , BINDING
+		FROM 
+		    MOM_ENCODING_BINDING
+		WHERE
+		    QUERY_ID = #{queryId, jdbcType=VARCHAR}
+		    AND BINDING = 'empty'
+    </select> -->
+</mapper>

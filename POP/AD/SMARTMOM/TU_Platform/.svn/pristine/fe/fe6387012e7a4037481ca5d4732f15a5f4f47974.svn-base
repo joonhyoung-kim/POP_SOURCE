@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.purchase.material.workOrderRelease">
+	<select id="get_workOrderRelease_list" resultType="camelMap" parameterType="java.util.HashMap">
+	 	SELECT A.WORK_ORDER_ID
+		     , A.ITEM_ID
+		     , B.ITEM_NAME
+		     , A.WO_STATE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'WORK_ORDER_STATE', A.WO_STATE) FROM DUAL) AS STATE_NAME
+		     , (SELECT MOM_COMMON_PKG.FN_GET_RESOURCE_NAME (A.DIVISION_CD, A.COMPANY_CD, A.RESOURCE_CD) FROM DUAL) AS RESOURCE_NAME
+		     , NVL(A.CONFIRM_QTY, 0) CONFIRM_QTY
+		     , NVL(A.GOOD_QTY, 0) GOOD_QTY
+		     , TO_CHAR(A.PLAN_START_TIME, 'YYYY-MM-DD') AS PLAN_START_TIME
+		     , A.DESCRIPTION
+		     , B.SPECIFICATION
+	     FROM MOM_WORK_ORDER A
+	        , MOM_ITEM_DEFINITION B
+	    WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	      AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	      AND A.DIVISION_CD = B.DIVISION_CD(+)
+	      AND A.COMPANY_CD = B.COMPANY_CD(+)
+	      AND A.ITEM_ID = B.ITEM_ID(+)
+	      AND A.WO_STATE NOT IN ('T','C')
+	      AND TRUNC(A.PLAN_START_TIME) BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') AND (TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD'))
+	     <if test="itemId != null and itemId != ''">
+	      AND (A.ITEM_ID LIKE UPPER('%' || #{itemId, jdbcType=VARCHAR} || '%')
+	       OR B.ITEM_NAME LIKE UPPER('%' || #{itemId, jdbcType=VARCHAR} || '%')
+	       OR B.SPECIFICATION LIKE UPPER('%' || #{itemId, jdbcType=VARCHAR} || '%'))
+	     </if>
+	     <if test="resourceCd != null and resourceCd != ''">
+	      AND A.RESOURCE_CD = #{resourceCd, jdbcType=VARCHAR}
+	     </if>
+	    ORDER BY A.PLAN_START_TIME DESC, A.WORK_ORDER_ID
+	</select>
+	
+	<select id="get_workOrderReleaseRequest_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT AA.*
+	     	 , CASE WHEN AA.CURRENT_QTY > AA.REMAIN_QTY THEN AA.REMAIN_QTY
+	           	    WHEN AA.CURRENT_QTY <![CDATA[<]]> 0 THEN 0
+	           ELSE AA.CURRENT_QTY
+	       END RELEASE_QTY
+	  	  FROM
+	           ( SELECT A.WORK_ORDER_ID
+	                  , A.ITEM_ID
+	                  , A.REQUEST_STATE
+	                  , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'MATERIAL_REQUEST_STATE', A.REQUEST_STATE) FROM DUAL) AS STATE_NAME
+	                  , NVL(D.MOM, 0) MOM
+	                  , A.REQUEST_TYPE
+	                  , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'REQUEST_TYPE', A.REQUEST_TYPE) FROM DUAL) AS REQUEST_TYPE_NAME
+	                  , A.REASON_CODE
+	                  , A.REQUEST_DATE
+	                  , NVL(B.CURRENT_QTY, 0) CURRENT_QTY  
+	                  , A.OUT_LOCATION_CD
+	                  , H.FACILITY_NAME OUT_LOCATION_NAME
+	                  , H.FACILITY_TYPE OUT_FACILITY_TYPE
+	                  , A.IN_LOCATION_CD
+	                  , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME(A.DIVISION_CD, A.COMPANY_CD, A.IN_LOCATION_CD) FROM DUAL) AS IN_LOCATION_NAME
+	                  , NVL(A.REQUEST_QTY, 0) REQUEST_QTY
+	                  , NVL(A.ISSUE_QTY, 0) ISSUE_QTY
+	                  , NVL(A.CANCEL_QTY, 0) CANCEL_QTY
+	                  , NVL(A.REQUEST_QTY, 0) - NVL(A.ISSUE_QTY, 0) - NVL(A.CANCEL_QTY, 0) REMAIN_QTY
+	                  , A.DESCRIPTION
+	                  , DECODE(A.REQUEST_STATE, 'R', 'Y', 'N') REQUEST_FLAG
+	                  , D.ITEM_TYPE
+	                  , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(D.DIVISION_CD, D.COMPANY_CD, 'ITEM_TYPE', D.ITEM_TYPE) FROM DUAL) AS ITEM_TYPE_NAME
+	                  , DECODE(H.FACILITY_TYPE, 'FAC500', 'V', 'F') AS VENDOR_FLAG
+	                  , NVL(MOPV.UNIT_PRICE, 0) UNIT_PRICE
+	               FROM MOM_MATERIAL_REQUEST A
+	                  , MOM_ITEM_STOCK B
+	                  , MOM_ITEM_DEFINITION D  
+	                  , MOM_FACILITY H
+	                  , MOM_ITEM_OUT_PRICE_V MOPV
+	              WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	                AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	                AND A.DIVISION_CD = B.DIVISION_CD(+)
+	                AND A.COMPANY_CD = B.COMPANY_CD(+)
+	                AND A.DIVISION_CD = D.DIVISION_CD(+)
+	                AND A.COMPANY_CD = D.COMPANY_CD(+)
+	                AND A.DIVISION_CD = H.DIVISION_CD(+)
+	                AND A.COMPANY_CD = H.COMPANY_CD(+)
+	                AND A.DIVISION_CD = MOPV.DIVISION_CD(+)
+	                AND A.COMPANY_CD = MOPV.COMPANY_CD(+)
+	                AND A.ITEM_ID = MOPV.ITEM_ID(+)
+	                AND A.USE_YN = 'Y'
+	                AND MOPV.MARKET_CD(+) = '2'
+	                AND MOPV.CURRENCY_CD(+) = (MOM_COMMON_PKG.FN_GET_CODE_VALUES(A.DIVISION_CD, A.COMPANY_CD, 'SITE_SETUP', 'CURRENCY_CD'))
+	                AND A.OUT_LOCATION_CD = MOPV.VENDOR_CD(+)
+	                AND TRUNC (MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})) BETWEEN MOPV.START_DATE(+) AND MOPV.END_DATE(+)
+	                AND A.ITEM_ID = B.ITEM_ID(+)
+	                AND A.IN_LOCATION_CD = B.LOCATION_CD(+)
+	                AND A.ITEM_ID = D.ITEM_ID(+)
+	                AND A.OUT_LOCATION_CD= H.FACILITY_CD(+)    
+	                AND A.WORK_ORDER_ID = #{workOrderId, jdbcType=VARCHAR}
+	               <if test="inItemType != null and inItemType != ''">
+	                AND D.ITEM_TYPE IN (${inItemType}) 
+	               </if>
+	              ORDER BY A.ITEM_ID DESC ) AA
+	 	  WHERE 1 = 1
+	
+	</select>
+</mapper>

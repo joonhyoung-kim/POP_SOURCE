@@ -1,0 +1,133 @@
+﻿<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon"
+    xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+    xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+    xmlns:sys="clr-namespace:System.Collections;assembly=mscorlib"
+    >
+
+    <!-- Control FontSize -->
+    <Style x:Key="SmallFontStyle" TargetType="Control">
+        <Setter Property="FontSize" Value="15" />
+    </Style>
+
+    <Style x:Key="SmallFontStyle_BLACK_BOLD" TargetType="Control">
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="Black" />
+    </Style>
+
+    <Style x:Key="MediumFontStyle" TargetType="Control">
+        <Setter Property="FontSize" Value="20" />
+    </Style>
+
+    <Style x:Key="MediumFontStyle_BLACK_BOLD" TargetType="Control">
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="Black" />
+    </Style>
+
+    <Style x:Key="LargeFontStyle" TargetType="Control">
+        <Setter Property="FontSize" Value="30" />
+    </Style>
+
+    <Style x:Key="LargeFontStyle_BLACK_BOLD" TargetType="Control">
+        <Setter Property="FontSize" Value="30" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="Black" />
+    </Style>
+
+    <Style x:Key="btnBackgroundGray" TargetType="Control">
+        <Setter Property="Background" Value="Gray" />
+        <Setter Property="FontSize" Value="20" />
+    </Style>
+
+    <Style x:Key="BorderStyle" TargetType="Border">
+        <Setter Property="Background" Value="LightGray" />
+        <Setter Property="Margin" Value="5" />
+        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="BorderBrush" Value="Black" />
+    </Style>
+
+
+    <!-- DevExpress Scrollbar Setting -->
+    <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource {x:Type ScrollBar}}">
+        <Style.Triggers>
+            <Trigger Property="Orientation" Value="Vertical">
+                <Setter Property="Width" Value="30"/>
+                <Setter Property="MinWidth" Value="30"/>
+                <Setter Property="Height" Value="Auto"/>
+                <Setter Property="MinHeight" Value="0"/>
+            </Trigger>
+            <Trigger Property="Orientation" Value="Horizontal">
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="MinHeight" Value="30"/>
+                <Setter Property="Width" Value="Auto"/>
+                <Setter Property="MinWidth" Value="0"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <DataTemplate x:Key="waitIndicator">
+        <dx:WaitIndicator DeferedVisibility="True"/>
+    </DataTemplate>
+    <DataTemplate x:Key="silentWaitIndicator">
+        <dx:WaitIndicator DeferedVisibility="True" Name="waitIndicator">
+            <dx:WaitIndicator.Triggers>
+                <EventTrigger RoutedEvent="FrameworkElement.Unloaded">
+                    <BeginStoryboard>
+                        <Storyboard x:Name="board">
+                            <DoubleAnimation Storyboard.TargetName="waitIndicator" Storyboard.TargetProperty="Opacity" From="1.0" To="0" Duration="0:0:1.5" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </dx:WaitIndicator.Triggers>
+        </dx:WaitIndicator>
+    </DataTemplate>
+    <Style TargetType="Button" x:Key="BitmapButton">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <ControlTemplate.Resources>
+                        <dxmvvm:ObjectToObjectConverter x:Key="ObjectToVisibilityConverter" DefaultTarget="Visible">
+                            <dxmvvm:MapItem Source="{x:Null}" Target="Collapsed"/>
+                        </dxmvvm:ObjectToObjectConverter>
+                    </ControlTemplate.Resources>
+                    <StackPanel Orientation="Vertical">
+                        <Image Stretch="None" Source="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding Path=(AutomationProperties.Name), RelativeSource={RelativeSource TemplatedParent}}" HorizontalAlignment="Center"
+                                   Visibility="{Binding Path=(AutomationProperties.Name), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource ObjectToVisibilityConverter}}"/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- NotificationTemplate -->
+    <DataTemplate x:Key="CustomNotificationTemplate">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <!--<Border Background="#FF3D3D3D" CornerRadius="10,0,0,10">
+                <Image Source="COMPANY_LOGO.ico" Stretch="None" Width="100" Height="100" />
+            </Border>-->
+            <Border Grid.Column="1" CornerRadius="0,10,10,0" Background="{Binding Background}">
+                <StackPanel Margin="10">
+                    <TextBlock FontSize="18" Foreground="White" Text="Lorem ipsum dolor sit amet" FontWeight="SemiBold" Margin="0,0,0,5" />
+                    <TextBlock FontSize="14"
+                                   Foreground="Black"
+                                   TextWrapping="Wrap"
+                                   Text="In ornare ante magna, eget volutpat mi bibendum a. Nam ut ullamcorper libero." />
+                </StackPanel>
+            </Border>
+        </Grid>
+    </DataTemplate>
+
+
+
+</ResourceDictionary>

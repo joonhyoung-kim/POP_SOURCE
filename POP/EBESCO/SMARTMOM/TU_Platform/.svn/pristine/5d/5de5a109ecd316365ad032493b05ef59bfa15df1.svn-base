@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.admin">
+	<!-- 미카 메뉴 -->
+	<select id="get_micaWidgets_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT ID, NAME, DATASET_ID, WIDGET_TYPE, DESCRIPTION, DIVISION_CD, COMPANY_CD FROM MICA_WIDGET
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		ORDER BY NAME
+	</select>
+	
+</mapper>

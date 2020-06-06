@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.close.daylyStockConfirmStatus">
+	<select id="get_daylyStockConfirmStatus_list" resultType="camelMap" parameterType="java.util.HashMap">
+	WITH TEMP1 AS (
+		SELECT TO_CHAR(A.IO_TIME, 'yyyy-mm-dd') IO_TIME
+             , A.LOCATION_CD
+             , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME(A.DIVISION_CD, A.COMPANY_CD, A.LOCATION_CD) FROM DUAL) LOCATION_NAME
+             , A.ITEM_ID
+             , B.ITEM_NAME
+             , B.SPECIFICATION
+             , B.ITEM_TYPE
+             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'ITEM_TYPE', B.ITEM_TYPE) FROM DUAL) ITEM_TYPE_NAME
+             , A.BASIS_QTY
+             , A.BASIS_AMOUNT
+             , A.INPUT_QTY
+             , A.OUTPUT_QTY
+             , A.STOCK_QTY
+             , A.STOCK_AMOUNT
+             , TO_CHAR(A.CREATE_DATE,'yyyy-mm-dd hh24:mi:ss') AS CREATE_DATE
+	         , A.CREATE_BY
+	         , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(A.DIVISION_CD, A.COMPANY_CD, A.CREATE_BY) FROM DUAL) AS CREATE_BY_NAME
+	         , (SELECT MOM_COMMON_PKG.FN_GET_STANDARD_PRICE( A.DIVISION_CD
+		                                                   , A.COMPANY_CD
+		                                                   , A.ITEM_ID
+		                                                   , A.IO_TIME) 
+		          FROM DUAL) AS ST_PRICE
+             , B.CONVERSION_UNIT_QTY
+		  FROM MOM_ITEM_STOCK_CONFIRM_MST A
+		     , MOM_ITEM_DEFINITION B
+		 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		  <if test = "fromDate != null and fromDate != ''">
+		   AND A.IO_TIME BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR},'yyyy-mm-dd') 
+		                     AND TO_DATE(#{toDate, jdbcType=VARCHAR},'yyyy-mm-dd')
+		  </if>
+		   AND A.ITEM_ID != '-'
+		   AND A.DIVISION_CD = B.DIVISION_CD(+)
+		   AND A.COMPANY_CD = B.COMPANY_CD(+)
+		   AND A.ITEM_ID = B.ITEM_ID(+)
+		  <if test = "facilityType != null and facilityType != ''">
+		   AND A.LOCATION_CD IN(SELECT FACILITY_CD 
+		   						  FROM MOM_FACILITY 
+		   						 WHERE DIVISION_CD = A.DIVISION_CD 
+		   						   AND COMPANY_CD = A.COMPANY_CD
+		   						   AND NVL(USE_YN, 'N') = 'Y' 
+		   						   AND FACILITY_TYPE = #{facilityType, jdbcType=VARCHAR})
+		  </if>
+		  <if test = "location != null and location != ''">
+		   AND A.LOCATION_CD = #{location, jdbcType=VARCHAR}
+		  </if>
+		  <if test = "itemName != null and itemName != ''">
+		   AND (A.ITEM_ID LIKE '%' || TRIM(UPPER(#{itemName, jdbcType=VARCHAR})) || '%'
+		       OR UPPER(B.ITEM_NAME) LIKE '%' || TRIM(UPPER(#{itemName, jdbcType=VARCHAR})) || '%')
+		  </if>
+		  <if test = "groupLarge != null and groupLarge != ''">
+		   AND B.ITEM_GROUP_LARGE = #{groupLarge, jdbcType=VARCHAR}
+		  </if>
+		  <if test = "groupMedium != null and groupMedium != ''">
+		   AND B.ITEM_GROUP_MEDIUM = #{groupMedium, jdbcType=VARCHAR}
+		  </if>
+		  <if test = "itemType != null and itemType != ''">
+		   AND B.ITEM_TYPE = #{itemType, jdbcType=VARCHAR}
+		  </if>
+         ORDER BY A.LOCATION_CD, A.ITEM_ID, A.IO_TIME DESC)
+     SELECT A.*
+          , B.ROW_COUNT
+     FROM (SELECT A.*
+                , ROWNUM GRIDROW
+             FROM TEMP1 A) A
+        , (SELECT COUNT(*) ROW_COUNT
+             FROM TEMP1) B 
+    <if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+     WHERE GRIDROW BETWEEN #{startPage, jdbcType=INTEGER} AND #{endPage, jdbcType=INTEGER}
+    </if>
+	</select>
+	
+</mapper>

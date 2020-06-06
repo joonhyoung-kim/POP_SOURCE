@@ -1,0 +1,667 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.equipment.equipmentWoResult">
+	<select id="get_equipmentWoResult_list" resultType="camelMap" parameterType="java.util.HashMap">
+		<if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+		WITH TEMP1 AS (	
+	    </if>
+	    SELECT A.EQM_TYPE
+			 , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (A.DIVISION_CD
+			 										  , A.COMPANY_CD
+			 										  , 'EQ_WO_TYPE'
+			 										  , A.EQM_TYPE)
+			 	  FROM DUAL) AS EQM_TYPE_NAME
+			                   
+			 , A.EQM_WO_ID
+			 , A.EQM_WO_NAME
+			 , A.EQUIPMENT_CD
+			 , (SELECT MOM_COMMON_PKG.FN_GET_EQUIPMENT_NAME( A.DIVISION_CD
+			 											   , A.COMPANY_CD
+			 											   , A.EQUIPMENT_CD)
+			 	  FROM DUAL) AS EQUIPMENT_NAME
+			 , A.STATUS
+			 , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (A.DIVISION_CD
+			 										  , A.COMPANY_CD
+			 										  , 'EQM_WORK_ORDER_STATUS'
+			 										  , A.STATUS)
+		          FROM DUAL) AS STATUS_NAME
+			 , A.EQM_QTY
+			 , A.RESULT_QTY
+			 , A.CANCEL_QTY
+			 , TO_CHAR(A.PLAN_START_DATE, 'YYYY-MM-DD') AS PLAN_START_DATE
+			 , TO_CHAR(A.PLAN_END_DATE, 'YYYY-MM-DD') AS PLAN_END_DATE
+			 , TO_CHAR(A.START_DATE, 'YYYY-MM-DD') AS START_DATE
+			 , TO_CHAR(A.END_DATE, 'YYYY-MM-DD') AS END_DATE
+             , TO_CHAR(A.START_DATE, 'HH24:MI:SS') AS START_TIME
+			 , TO_CHAR(A.END_DATE, 'HH24:MI:SS') AS END_TIME
+			 , A.PRIORITY
+			 , A.REASON_CODE
+			 , A.DESCRIPTION
+			 , TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD') AS CANCEL_DATE
+			 , CANCEL_REASON
+			 , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS CREATE_DATE
+			 , A.CREATE_BY
+			 , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( A.DIVISION_CD
+	                                                  , A.COMPANY_CD  
+	                                                  , A.CREATE_BY)
+	              FROM DUAL) AS CREATE_BY_NAME 
+			 , TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS UPDATE_DATE
+			 , A.UPDATE_BY
+			 , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( A.DIVISION_CD
+	                                                  , A.COMPANY_CD  
+	                                                  , A.UPDATE_BY)
+	              FROM DUAL) AS UPDATE_BY_NAME 
+		  FROM MOM_EQM_WORK_ORDER A
+		 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND A.PLAN_START_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR},'YYYY-MM-DD') AND TO_DATE(#{toDate, jdbcType=VARCHAR},'YYYY-MM-DD') + 23.9997 / 24
+		   <if test="equipmentCd != null and equipmentCd != ''">
+           AND A.EQUIPMENT_CD = #{equipmentCd, jdbcType=VARCHAR}
+           </if>
+           <if test="woType != null and woType != ''">
+           AND A.EQM_TYPE = #{woType, jdbcType=VARCHAR}
+           </if>
+           <if test="woId != null and woId != ''">
+           AND (A.EQM_WO_ID LIKE '%' || TRIM(UPPER(#{woId, jdbcType=VARCHAR})) || '%'
+             OR UPPER(A.EQM_WO_NAME) LIKE '%' || TRIM(UPPER(#{woId, jdbcType=VARCHAR})) || '%')
+           </if>
+           <if test="state != null and state != ''">
+           AND A.STATUS = #{state, jdbcType=VARCHAR}
+           </if>
+	   <if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+				)
+	      SELECT A.*
+	           , B.ROW_COUNT
+	      FROM (SELECT A.*
+	                 , ROWNUM GRIDROW
+	              FROM TEMP1 A) A
+	         , (SELECT COUNT(*) ROW_COUNT
+	              FROM TEMP1) B 
+	      WHERE GRIDROW BETWEEN #{startPage, jdbcType=INTEGER} AND #{endPage, jdbcType=INTEGER}
+       </if>
+    </select>
+    
+    <select id="get_equipmentWoRequest_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT MER.DIVISION_CD
+		     , MER.COMPANY_CD
+		     , MER.EQM_WO_ID
+		     , MER.ITEM_ID
+		     , MID.ITEM_NAME
+		     , MID.SPECIFICATION
+		     , MER.IN_LOCATION_CD
+             , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME( MER.DIVISION_CD 
+                                                          , MER.COMPANY_CD
+                                                          , MER.IN_LOCATION_CD )
+                  FROM   DUAL )  AS IN_LOCATION_NAME
+		     , MER.OUT_LOCATION_CD
+             , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME( MER.DIVISION_CD 
+                                                          , MER.COMPANY_CD
+                                                          , MER.OUT_LOCATION_CD )
+                  FROM   DUAL )  AS OUT_LOCATION_NAME
+		     , MER.REQUEST_QTY
+		     , MER.ISSUE_QTY
+		     , MER.CANCEL_QTY
+		     , NVL( (SELECT SUM(A.QTY)
+			           FROM MOM_ITEM_STOCK_INOUT A
+			          WHERE A.DIVISION_CD   = MER.DIVISION_CD
+			            AND A.COMPANY_CD    = MER.COMPANY_CD
+			            AND A.WORK_ORDER_ID = MER.EQM_WO_ID
+			            AND A.ITEM_ID       = MER.ITEM_ID
+						AND EXISTS (SELECT '*'
+                                      FROM MOM_CODE MC
+                                     WHERE MC.DIVISION_CD = A.DIVISION_CD
+                                       AND MC.COMPANY_CD = A.COMPANY_CD
+                                       AND MC.CODE_ID = A.IO_CATEGORY  
+                                       AND MC.CODE_CLASS_ID = 'IO_CATEGORY'
+                                       AND MC.USE_YN = 'Y'
+                                       AND MC.ATTRIBUTE25 = 'Y') 
+                        AND NOT EXISTS ( SELECT '*' 
+                                           FROM MOM_ITEM_STOCK_INOUT
+                                          WHERE DIVISION_CD = A.DIVISION_CD
+                                            AND COMPANY_CD = A.COMPANY_CD
+                                            AND PREV_STOCK_INOUT_ID = A.ITEM_STOCK_INOUT_ID
+                                            AND IO_TYPE = A.IO_TYPE )
+                      ), 0)  AS DEDUCT_QTY
+		  FROM MOM_EQM_ISSUE_REQUEST MER
+		     , MOM_ITEM_DEFINITION MID
+		 WHERE MER.DIVISION_CD = MID.DIVISION_CD
+		   AND MER.COMPANY_CD = MID.COMPANY_CD
+		   AND MER.ITEM_ID = MID.ITEM_ID
+		   AND MER.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND MER.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND MER.EQM_WO_ID = #{eqmWoId, jdbcType=VARCHAR} 
+		 ORDER BY MER.EQM_WO_ID, MER.ITEM_ID
+    </select>
+    
+    <insert id="create_createEquipmentWoResult" statementType="CALLABLE">
+	{
+        CALL SP_MOM_EQUIPMENT_PKG.P_CREATE_WORK_ORDER_RESULT ( 
+             #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+           , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+           , #{companyCd, mode=IN, jdbcType=VARCHAR}
+           , #{eqmWoId, mode=IN, jdbcType=VARCHAR}
+           , #{startDate, mode=IN, jdbcType=VARCHAR} 
+           , #{startDate, mode=IN, jdbcType=VARCHAR} || #{startTime, mode=IN, jdbcType=VARCHAR}
+           , #{endDate, mode=IN, jdbcType=VARCHAR} || #{endTime, mode=IN, jdbcType=VARCHAR}
+           , #{eqmQty, mode=IN, jdbcType=NUMERIC}
+           , #{badQty, mode=IN, jdbcType=NUMERIC}
+           , #{description, mode=IN, jdbcType=VARCHAR}
+           , #{createBy, mode=IN, jdbcType=VARCHAR}
+        )
+    }
+    </insert>
+    
+    <insert id="create_equipmentWo" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL 
+  	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	    
+	    INSERT INTO MOM_EQM_WO_RESULT (
+	    	DIVISION_CD
+		  , COMPANY_CD
+		  , WO_RESULT_ID
+		  , PREV_WO_RESULT_ID
+		  , WORK_ORDER_ID
+		  , EQUIPMENT_CD
+		  , WORK_DAY
+		  , START_TIME
+		  , END_TIME
+		  , STATE
+		  , RESULT_QTY
+		  , BAD_QTY
+		  , DESCRIPTION
+		  , CREATE_DATE
+		  , CREATE_BY
+		  , UPDATE_DATE
+		  , UPDATE_BY
+		  , TID
+	    )
+	    VALUES (
+	    	#{divisionCd, jdbcType=VARCHAR}
+	      , #{companyCd, jdbcType=VARCHAR}
+	      , s_order_seq.nextval
+	      , #{prevWoResultId, jdbcType=VARCHAR}
+	      , #{workOrderId, jdbcType=VARCHAR}
+	      , #{equipmentCd, jdbcType=VARCHAR}
+	      , #{workDay, jdbcType=VARCHAR}
+	      , TO_DATE(#{startTime, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS')
+	      , TO_DATE(#{endTime, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS')
+	      , #{state, jdbcType=VARCHAR}
+	      , 0
+	      , 0
+	      , #{description, jdbcType=VARCHAR}
+	      , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		  , #{createBy, jdbcType=VARCHAR}
+		  , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		  , #{createBy, jdbcType=VARCHAR}
+		  , #{tid, jdbcType=VARCHAR}
+	    )
+	    ;
+	    
+	    UPDATE MOM_EQM_WORK_ORDER
+	       SET STATUS = #{status, jdbcType=VARCHAR}
+	     WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	       AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	       AND EQM_WO_ID = #{workOrderId, jdbcType=VARCHAR}
+		;	       
+	    
+		SELECT
+			CASE 
+				WHEN COUNT(*) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_EQM_WO_RESULT
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	    AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	    AND WORK_ORDER_ID = #{workOrderId, jdbcType=VARCHAR}
+	    ;
+      END
+    }
+	</insert>
+	
+	<delete id="remove_equipmentWo" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL 
+  	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+		DELETE FROM MOM_EQM_WO_RESULT
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	       AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	       AND WO_RESULT_ID = #{woResultId, jdbcType=VARCHAR}
+	    ;
+	    
+	    UPDATE MOM_EQM_WORK_ORDER
+	       SET STATUS = #{status, jdbcType=VARCHAR}
+	     WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	       AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	       AND EQM_WO_ID = #{workOrderId, jdbcType=VARCHAR}
+		;	       
+	    
+		SELECT
+			CASE 
+				WHEN COUNT(*) > 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_EQM_WO_RESULT
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	    AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	    AND WO_RESULT_ID = #{woResultId, jdbcType=VARCHAR}
+	    ;
+      END
+    }
+	</delete>
+	
+	<select id="get_equipmentWo_list" resultType="camelMap" parameterType="java.util.HashMap">
+	    SELECT DIVISION_CD
+			 , COMPANY_CD
+			 , WO_RESULT_ID
+			 , PREV_WO_RESULT_ID
+			 , WORK_ORDER_ID
+			 , TO_CHAR(WORK_DAY, 'YYYY-MM-DD') AS WORK_DAY
+			 , TO_CHAR(START_TIME, 'YYYY-MM-DD HH24:MI:SS') AS START_TIME
+             , TO_CHAR(END_TIME, 'YYYY-MM-DD HH24:MI:SS') AS END_TIME
+			 , STATE
+			 , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(DIVISION_CD
+			 										 , COMPANY_CD
+			 										 , 'EQM_WORK_ORDER_STATUS'
+			 										 , STATE) 
+			 	  FROM DUAL) AS STATE_NAME
+			 , DESCRIPTION
+			 , TO_CHAR(CREATE_DATE, 'YYYY-MM-DD') AS CREATE_DATE
+			 , CREATE_BY
+			 , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(DIVISION_CD
+			 										 , COMPANY_CD
+			 										 , CREATE_BY) 
+			 	  FROM DUAL) AS CREATE_USER_NAME
+			 , TO_CHAR(UPDATE_DATE, 'YYYY-MM-DD') AS UPDATE_DATE
+			 , UPDATE_BY
+			 , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(DIVISION_CD
+			 										 , COMPANY_CD
+			 										 , UPDATE_BY) 
+			 	  FROM DUAL) AS UPDATE_USER_NAME
+	      FROM MOM_EQM_WO_RESULT
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND WORK_ORDER_ID = #{workOrderId, jdbcType=VARCHAR}
+	 ORDER BY TO_NUMBER(WO_RESULT_ID)
+    </select>
+    
+    <select id="get_equipmentWoId_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT SP_MOM_EQUIPMENT_PKG.FN_GET_EQM_WO_REQUEST_ID(#{divisionCd, jdbcType=VARCHAR}
+											  , #{companyCd, jdbcType=VARCHAR}
+											  , #{eqmType, jdbcType=VARCHAR}
+											  , TO_DATE(#{planStartDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') ) AS EQM_WO_ID 
+		  FROM DUAL
+	</select>
+    
+    <insert id="create_equipmentWoResult" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL 
+  	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	    
+	    INSERT INTO MOM_EQM_WORK_ORDER (
+	    	DIVISION_CD
+		  , COMPANY_CD
+		  , EQM_TYPE
+		  , EQM_WO_ID
+		  , EQM_WO_NAME
+		  , EQUIPMENT_CD
+		  , EQM_QTY
+		  , PLAN_START_DATE
+		  , PLAN_END_DATE
+		  , STATUS
+		  , DESCRIPTION
+		  , CREATE_DATE
+		  , CREATE_BY
+		  , UPDATE_DATE
+		  , UPDATE_BY
+		  , TID
+	    )
+	    VALUES (
+	    	#{divisionCd, jdbcType=VARCHAR}
+	      , #{companyCd, jdbcType=VARCHAR}
+	      , #{eqmType, jdbcType=VARCHAR}
+	      , #{eqmWoId, jdbcType=VARCHAR}
+	      , #{eqmWoName, jdbcType=VARCHAR}
+	      , #{equipmentCd, jdbcType=VARCHAR}
+	      , 0
+	      , TO_DATE(#{planStartDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+	      , TO_DATE(#{planEndDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+	      , 'A'
+	      , #{description, jdbcType=VARCHAR}
+	      , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		  , #{createBy, jdbcType=VARCHAR}
+		  , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		  , #{updateBy, jdbcType=VARCHAR}
+		  , #{tid, jdbcType=VARCHAR}
+	    )
+	    ;
+	    
+	    INSERT INTO MOM_EQM_WORK_ORDER_HIST (
+	    	LAST_EVENT_SEQ
+		  , DIVISION_CD
+		  , COMPANY_CD
+		  , EQM_TYPE
+		  , EQM_WO_ID
+		  , EQM_WO_NAME
+		  , EQUIPMENT_CD
+		  , EQM_QTY
+	 	  , PLAN_START_DATE
+		  , PLAN_END_DATE
+		  , STATUS
+		  , DESCRIPTION
+		  , CREATE_DATE
+		  , CREATE_BY
+		  , UPDATE_DATE
+		  , UPDATE_BY
+		  , TID
+	    )
+	    SELECT S_ORDER_SEQ.NEXTVAL
+		     , DIVISION_CD
+			 , COMPANY_CD
+			 , EQM_TYPE
+			 , EQM_WO_ID
+			 , EQM_WO_NAME
+			 , EQUIPMENT_CD
+			 , EQM_QTY
+		 	 , PLAN_START_DATE
+			 , PLAN_END_DATE
+			 , STATUS
+			 , DESCRIPTION
+			 , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			 , #{createBy, jdbcType=VARCHAR}
+			 , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			 , #{updateBy, jdbcType=VARCHAR}
+			 , TID
+	      FROM MOM_EQM_WORK_ORDER
+	     WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	       AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	       AND EQM_WO_ID = #{eqmWoId, jdbcType=VARCHAR}
+	    ;
+	    
+		SELECT
+			CASE 
+				WHEN COUNT(*) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_EQM_WORK_ORDER
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	    AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	    AND EQM_WO_ID = #{eqmWoId, jdbcType=VARCHAR}
+	    ;
+      END
+    }
+	</insert>
+	
+	<delete id="remove_equipmentWoResult" parameterType="java.util.HashMap">
+		DELETE FROM MOM_EQM_WORK_ORDER
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	       AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	       AND EQM_WO_ID = #{eqmWoId, jdbcType=VARCHAR}
+	</delete>
+	
+	<!-- 사용수량 등록-->
+	<insert id="create_emRequestConfirmQty" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{
+       CALL SP_MOM_EQUIPMENT_PKG.P_REQUEST_CONFIRM_RESULT (
+       	   #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+         , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+         , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+         , #{companyCd, mode=IN, jdbcType=VARCHAR}
+         , #{eqmWoId, mode=IN, jdbcType=VARCHAR}
+         , #{itemId, mode=IN, jdbcType=VARCHAR}
+         , #{inLocationCd, mode=IN, jdbcType=VARCHAR}
+         , #{confirmQty, mode=IN, jdbcType=NUMERIC}
+         , TO_DATE(#{confirmDate, mode=IN, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+         , #{userId, mode=IN, jdbcType=VARCHAR}
+       )
+    }
+	</insert>
+	
+	<!-- 반품수량 등록 -->
+	<insert id="create_emRequestReturnQty" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{
+       CALL SP_MOM_EQUIPMENT_PKG.P_REQUEST_RETURN_RESULT (
+       	   #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+         , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+         , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+         , #{companyCd, mode=IN, jdbcType=VARCHAR}
+         , #{eqmWoId, mode=IN, jdbcType=VARCHAR}
+         , #{itemId, mode=IN, jdbcType=VARCHAR}
+         , #{inLocationCd, mode=IN, jdbcType=VARCHAR}
+         , #{outLocationCd, mode=IN, jdbcType=VARCHAR}
+         , #{returnQty, mode=IN, jdbcType=NUMERIC}
+         , TO_DATE(#{returnDate, mode=IN, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+         , #{userId, mode=IN, jdbcType=VARCHAR}
+       )
+    }
+	</insert>
+	
+	<select id="get_equipmentWoResultChange_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT STATUS
+		  FROM MOM_EQM_WORK_ORDER
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND EQM_WO_ID = #{eqmWoId, jdbcType=VARCHAR}
+	</select>
+	
+	<insert id="create_emIssueRequest" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL 
+  	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+	  	INSERT INTO MOM_EQM_ISSUE_REQUEST (
+				DIVISION_CD
+			  , COMPANY_CD
+			  , EQM_WO_ID
+			  , ITEM_ID
+			  , REQUEST_QTY
+			  , REQUEST_DATE
+			  , ISSUE_QTY
+			  , CANCEL_QTY
+			  , IN_LOCATION_CD
+			  , OUT_LOCATION_CD
+			  , REQUEST_TYPE
+			  , DESCRIPTION
+			  , CREATE_DATE
+			  , CREATE_BY
+			  , UPDATE_DATE
+			  , UPDATE_BY
+			  , TID
+			  , ISSUE_REQUEST_ID
+			  , REQUEST_GROUP_ID
+			  , UNIT_QTY
+			  , REQUEST_STATE
+			  , ISSUE_DATE
+			)
+			VALUES (
+			    #{divisionCd, jdbcType=VARCHAR}
+			  , #{companyCd, jdbcType=VARCHAR}
+			  , #{eqmWoId, jdbcType=VARCHAR}
+			  , #{itemId, jdbcType=VARCHAR}
+			  , #{requestQty, jdbcType=NUMERIC}
+			  , TRUNC(MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}))
+			  , 0
+			  , 0
+			  , #{inLocationCd, jdbcType=VARCHAR}
+			  , #{outLocationCd, jdbcType=VARCHAR}
+			  , 'MANUAL'
+			  , #{description, jdbcType=VARCHAR}
+			  , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			  , #{createBy, jdbcType=VARCHAR}
+			  , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			  , #{updateBy, jdbcType=VARCHAR}
+			  , #{tid, jdbcType=VARCHAR}
+			  , s_order_seq.nextval
+			  , #{requestGroupId, jdbcType=VARCHAR}
+			  , #{unitQty, jdbcType=NUMERIC}
+			  , 'R'
+			  , #{issueDate, jdbcType=VARCHAR}
+			)
+			;
+			
+		INSERT INTO MOM_EQM_ISSUE_REQUEST_HIST (
+			LAST_EVENT_SEQ
+		  , DIVISION_CD
+		  , COMPANY_CD
+		  , EQM_WO_ID
+		  , ITEM_ID
+		  , REQUEST_QTY
+		  , REQUEST_DATE
+		  , ISSUE_QTY
+		  , CANCEL_QTY
+		  , IN_LOCATION_CD
+		  , OUT_LOCATION_CD
+		  , REQUEST_TYPE
+		  , DESCRIPTION
+		  , CREATE_DATE
+		  , CREATE_BY
+		  , UPDATE_DATE
+		  , UPDATE_BY
+		  , TID
+		  , ISSUE_REQUEST_ID
+		  , REQUEST_GROUP_ID
+		  , UNIT_QTY
+		  , REQUEST_STATE
+		  , ISSUE_DATE
+		)
+		SELECT s_order_seq.nextval
+			 , DIVISION_CD
+			 , COMPANY_CD
+			 , EQM_WO_ID
+			 , ITEM_ID
+			 , REQUEST_QTY
+			 , REQUEST_DATE
+			 , ISSUE_QTY
+			 , CANCEL_QTY
+			 , IN_LOCATION_CD
+			 , OUT_LOCATION_CD
+			 , REQUEST_TYPE
+			 , DESCRIPTION
+			 , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			 , #{createBy, jdbcType=VARCHAR}
+			 , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			 , #{updateBy, jdbcType=VARCHAR}
+			 , TID
+			 , ISSUE_REQUEST_ID
+			 , REQUEST_GROUP_ID
+			 , UNIT_QTY
+			 , REQUEST_STATE
+			 , ISSUE_DATE
+		  FROM MOM_EQM_ISSUE_REQUEST
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND EQM_WO_ID = #{eqmWoId, jdbcType=VARCHAR}
+		   AND ITEM_ID = #{itemId, jdbcType=VARCHAR}
+		;
+	  	
+		SELECT
+			CASE 
+				WHEN COUNT(*) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_EQM_ISSUE_REQUEST
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	    AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	    AND EQM_WO_ID = #{eqmWoId, jdbcType=VARCHAR}
+	    AND ITEM_ID = #{itemId, jdbcType=VARCHAR}
+	    ;
+      END
+    }
+	</insert>
+	
+	<delete id="remove_equipmentWoRequest" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL 
+  	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+	  	DELETE FROM MOM_EQM_ISSUE_REQUEST
+	  	 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	  	   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	  	   AND EQM_WO_ID = #{eqmWoId, jdbcType=VARCHAR} 
+	  	   AND ITEM_ID = #{itemId, jdbcType=VARCHAR}
+	  	;
+	  	
+	  	INSERT INTO MOM_EQM_ISSUE_REQUEST_HIST (
+			LAST_EVENT_SEQ
+		  , DIVISION_CD
+		  , COMPANY_CD
+		  , EQM_WO_ID
+		  , ITEM_ID
+		  , REQUEST_QTY
+		  , REQUEST_DATE
+		  , ISSUE_QTY
+		  , CANCEL_QTY
+		  , IN_LOCATION_CD
+		  , OUT_LOCATION_CD
+		  , REQUEST_TYPE
+		  , DESCRIPTION
+		  , CREATE_DATE
+		  , CREATE_BY
+		  , UPDATE_DATE
+		  , UPDATE_BY
+		  , TID
+		  , ISSUE_REQUEST_ID
+		  , REQUEST_GROUP_ID
+		  , UNIT_QTY
+		  , REQUEST_STATE
+		  , ISSUE_DATE
+		)
+		SELECT s_order_seq.nextval
+			 , DIVISION_CD
+		     , COMPANY_CD
+		     , EQM_WO_ID
+		     , ITEM_ID
+		     , REQUEST_QTY
+		     , REQUEST_DATE
+		     , ISSUE_QTY
+		     , CANCEL_QTY
+		     , IN_LOCATION_CD
+		     , OUT_LOCATION_CD
+		     , REQUEST_TYPE
+		     , DESCRIPTION
+		     , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			 , #{createBy, jdbcType=VARCHAR}
+			 , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			 , #{updateBy, jdbcType=VARCHAR}
+		     , TID
+		     , ISSUE_REQUEST_ID
+		     , REQUEST_GROUP_ID
+		     , UNIT_QTY
+		     , REQUEST_STATE
+		     , ISSUE_DATE
+		  FROM MOM_EQM_ISSUE_REQUEST
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND EQM_WO_ID = #{eqmWoId, jdbcType=VARCHAR} 
+	  	   AND ITEM_ID = #{itemId, jdbcType=VARCHAR}
+	  	;
+	  	
+		SELECT
+			CASE 
+				WHEN COUNT(*) > 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_EQM_ISSUE_REQUEST
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	    AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	    AND EQM_WO_ID = #{eqmWoId, jdbcType=VARCHAR}
+	    AND ITEM_ID = #{itemId, jdbcType=VARCHAR}
+	    ;
+      END
+    }
+	</delete>
+	
+</mapper>

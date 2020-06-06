@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.plan.plan.verificationPlanDetail"> 
+	<select id="get_verificationPlanDetail_list" resultType="camelMap"  parameterType="java.util.HashMap">
+
+SELECT A.MASTER_ID
+     , A.PLAN_ID
+     , A.PROBLEM_TYPE
+     , A.DEMAND_ID
+     , DECODE(A.PROBLEM_TYPE, 'WEEKLATE', A.ITEM_ID || '_S', B.SALES_MODEL_ID) AS SALES_MODEL_ID
+     , DECODE(A.PROBLEM_TYPE, 'WEEKLATE', TO_CHAR(A.DUE_DATE, 'yyyy-mm-dd'), TO_CHAR(B.DUE_DATE, 'yyyy-mm-dd')) AS DUE_DATE
+     , DECODE(A.PROBLEM_TYPE, 'WEEKLATE', A.PROBLEM_QTY, B.QTY) AS QTY
+     , DECODE(A.PROBLEM_TYPE, 'WEEKLATE', '', B.BOM_LEVEL) AS BOM_LEVEL
+     , DECODE(A.PROBLEM_TYPE, 'WEEKLATE', A.ITEM_ID, B.ITEM_ID) AS ITEM_ID
+     , ( SELECT MOM_COMMON_PKG.FN_GET_ITEM_NAME( #{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}, B.ITEM_ID)  
+         FROM   DUAL ) AS ITEM_NAME
+     , DECODE(A.PROBLEM_TYPE, 'WEEKLATE'
+             ,DECODE(C.ITEM_TYPE, 'FP', 'FP', 'SP', 'SP', 'RM')
+             ,B.ITEM_TYPE) AS ITEM_TYPE
+     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(  #{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}, 'ITEM_TYPE'
+                                              , DECODE(A.PROBLEM_TYPE, 'WEEKLATE', C.ITEM_TYPE, B.ITEM_TYPE) )
+        FROM   DUAL ) AS ITEM_TYPE_NAME      , B.RESOURCE_ID
+     , ( SELECT MOM_COMMON_PKG.FN_GET_RESOURCE_NAME( #{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}, B.RESOURCE_ID)  
+         FROM   DUAL ) AS RESOURCE_NAME 
+     , B.PROBLEM_DESCR
+FROM   TH_EXP_PROBLEMREPORT A
+     , TH_EXP_PROBLEMREPORT_DETAIL B
+     , MOM_ITEM_DEFINITION C
+WHERE  A.MASTER_ID = B.MASTER_ID
+AND    A.PLAN_ID   = B.PLAN_ID
+AND    A.DEMAND_ID = B.DEMAND_ID     
+AND    A.MASTER_ID = C.DIVISION_CD
+AND    A.ITEM_ID   = C.ITEM_ID
+AND    A.PROBLEM_TYPE = 'UNPLAN'
+AND    A.MASTER_ID = #{divisionCd, jdbcType=VARCHAR}
+<if test="planId != null and planId != ''">
+AND    A.PLAN_ID   =  #{planId, jdbcType=VARCHAR} 
+</if>
+<if test="fromDate != null and fromDate != ''">
+AND    B.DUE_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') AND TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+</if>
+ <if test="problemType != null and problemType != ''">
+AND    A.PROBLEM_TYPE   =  #{problemType, jdbcType=VARCHAR} 
+</if>
+<if test="itemName != null and itemName != ''">
+AND A.ITEM_ID = #{itemName, jdbcType=VARCHAR}
+</if>
+<if test="itemType != null and itemType != ''">
+AND    B.ITEM_TYPE  =  #{itemType, jdbcType=VARCHAR} 
+</if>
+ORDER BY A.DEMAND_ID, NVL(A.DUE_DATE, B.DUE_DATE)
+    
+</select>
+
+</mapper>

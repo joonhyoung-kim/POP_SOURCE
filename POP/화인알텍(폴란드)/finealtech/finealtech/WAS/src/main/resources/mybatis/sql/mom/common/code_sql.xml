@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.common">
+	<select id="get_comCodeClass_list" resultType="camelMap" parameterType="java.util.HashMap">
+	  SELECT ROWNUM JQGRIDROW
+	       , CODE_CLASS_ID
+	       , CODE_CLASS_NAME
+	       , DESCRIPTION
+	       , IS_SYSTEM
+	       , USE_YN
+	       , UPDATE_BY
+	       , TO_CHAR(UPDATE_DATE, 'yyyy-mm-dd') AS UPDATE_DATE
+	       , CODE_TYPE
+	       , CODE_CLASS_GROUP
+	    FROM MOM_CODE_CLASS
+	   WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	     AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	    <if test = "codeClassId != '' and codeClassId != null">
+	     AND (UPPER(CODE_CLASS_ID) LIKE '%'||UPPER(#{codeClassId, jdbcType=VARCHAR})||'%'
+	      OR UPPER(CODE_CLASS_NAME) LIKE '%'||UPPER(#{codeClassId, jdbcType=VARCHAR})||'%')
+	    </if>
+	   ORDER BY CODE_CLASS_ID ASC
+	</select>	
+
+	<select id="get_comCodeDetail_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT ROWNUM JQGRIDROW
+		     , A.*
+		  FROM (SELECT B.CODE_CLASS_ID 
+		             , A.CODE_CLASS_GROUP
+		             , A.CODE_TYPE
+		             , B.CODE_ID
+		             , B.CODE_NAME
+		             , B.CODE_VALUES
+		             , B.PARENT_ID
+		             , B.DESCRIPTION
+		             , B.UI_SEQUENCE
+		             , B.USE_YN
+		             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(B.DIVISION_CD, B.COMPANY_CD, 'USE_FLAG', B.USE_YN) FROM DUAL) USE_YN_NAME
+		             , B.IS_SYSTEM
+		             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(B.DIVISION_CD, B.COMPANY_CD, 'USE_FLAG', B.IS_SYSTEM) FROM DUAL) IS_SYSTEM_NAME
+		             , B.UPDATE_BY
+		             , TO_CHAR(B.UPDATE_DATE,'YYYY-MM-DD') AS UPDATE_DATE
+		             , B.ATTRIBUTE1
+		             , DECODE(B.ATTRIBUTE1, 'Y', #{MESSAGES30001, jdbcType=VARCHAR}, 'N', #{MESSAGES30000, jdbcType=VARCHAR}, B.ATTRIBUTE1) AS ATTRIBUTE1_NAME
+		             , B.ATTRIBUTE2
+		             , DECODE(B.ATTRIBUTE2, 'Y', #{MESSAGES30001, jdbcType=VARCHAR}, 'N', #{MESSAGES30000, jdbcType=VARCHAR}, B.ATTRIBUTE2) AS ATTRIBUTE2_NAME
+		             , B.ATTRIBUTE3
+		             , DECODE(B.ATTRIBUTE3, 'Y', #{MESSAGES30001, jdbcType=VARCHAR}, 'N', #{MESSAGES30000, jdbcType=VARCHAR}, B.ATTRIBUTE3) AS ATTRIBUTE3_NAME
+		             , B.ATTRIBUTE4
+		             , DECODE(B.ATTRIBUTE4, 'Y', #{MESSAGES30001, jdbcType=VARCHAR}, 'N', #{MESSAGES30000, jdbcType=VARCHAR}, B.ATTRIBUTE4) AS ATTRIBUTE4_NAME
+		             , B.ATTRIBUTE5
+		             , DECODE(B.ATTRIBUTE5, 'Y', #{MESSAGES30001, jdbcType=VARCHAR}, 'N', #{MESSAGES30000, jdbcType=VARCHAR}, B.ATTRIBUTE5) AS ATTRIBUTE5_NAME
+		             , B.ATTRIBUTE6
+		             , DECODE(B.ATTRIBUTE6, 'Y', #{MESSAGES30001, jdbcType=VARCHAR}, 'N', #{MESSAGES30000, jdbcType=VARCHAR}, B.ATTRIBUTE6) AS ATTRIBUTE6_NAME
+		             , B.ATTRIBUTE7
+		             , DECODE(B.ATTRIBUTE7, 'Y', #{MESSAGES30001, jdbcType=VARCHAR}, 'N', #{MESSAGES30000, jdbcType=VARCHAR}, B.ATTRIBUTE7) AS ATTRIBUTE7_NAME
+		             , B.ATTRIBUTE8
+		             , DECODE(B.ATTRIBUTE8, 'Y', #{MESSAGES30001, jdbcType=VARCHAR}, 'N', #{MESSAGES30000, jdbcType=VARCHAR}, B.ATTRIBUTE8) AS ATTRIBUTE8_NAME
+		             , B.ATTRIBUTE9
+		             , DECODE(B.ATTRIBUTE9, 'Y', #{MESSAGES30001, jdbcType=VARCHAR}, 'N', #{MESSAGES30000, jdbcType=VARCHAR}, B.ATTRIBUTE9) AS ATTRIBUTE9_NAME
+		             , B.ATTRIBUTE10
+		             , DECODE(B.ATTRIBUTE10, 'Y', #{MESSAGES30001, jdbcType=VARCHAR}, 'N', #{MESSAGES30000, jdbcType=VARCHAR}, B.ATTRIBUTE10) AS ATTRIBUTE10_NAME
+		             , B.ATTRIBUTE11
+		             , DECODE(B.ATTRIBUTE11, 'Y', #{MESSAGES30001, jdbcType=VARCHAR}, 'N', #{MESSAGES30000, jdbcType=VARCHAR}, B.ATTRIBUTE11) AS ATTRIBUTE11_NAME
+		             , B.ATTRIBUTE12
+		             , DECODE(B.ATTRIBUTE12, 'Y', #{MESSAGES30001, jdbcType=VARCHAR}, 'N', #{MESSAGES30000, jdbcType=VARCHAR}, B.ATTRIBUTE12) AS ATTRIBUTE12_NAME
+		             , B.ATTRIBUTE13
+		             , DECODE(B.ATTRIBUTE13, 'Y', #{MESSAGES30001, jdbcType=VARCHAR}, 'N', #{MESSAGES30000, jdbcType=VARCHAR}, B.ATTRIBUTE13) AS ATTRIBUTE13_NAME
+		             , B.ATTRIBUTE14
+		             , DECODE(B.ATTRIBUTE14, 'Y', #{MESSAGES30001, jdbcType=VARCHAR}, 'N', #{MESSAGES30000, jdbcType=VARCHAR}, B.ATTRIBUTE14) AS ATTRIBUTE14_NAME
+		             , B.ATTRIBUTE15
+		             , DECODE(B.ATTRIBUTE15, 'Y', #{MESSAGES30001, jdbcType=VARCHAR}, 'N', #{MESSAGES30000, jdbcType=VARCHAR}, B.ATTRIBUTE15) AS ATTRIBUTE15_NAME
+		             , B.ATTRIBUTE16
+		             , DECODE(B.ATTRIBUTE16, 'Y', #{MESSAGES30001, jdbcType=VARCHAR}, 'N', #{MESSAGES30000, jdbcType=VARCHAR}, B.ATTRIBUTE16) AS ATTRIBUTE16_NAME
+		             , B.ATTRIBUTE17
+		             , DECODE(B.ATTRIBUTE17, 'Y', #{MESSAGES30001, jdbcType=VARCHAR}, 'N', #{MESSAGES30000, jdbcType=VARCHAR}, B.ATTRIBUTE17) AS ATTRIBUTE17_NAME
+		             , B.ATTRIBUTE18
+		             , DECODE(B.ATTRIBUTE18, 'Y', #{MESSAGES30001, jdbcType=VARCHAR}, 'N', #{MESSAGES30000, jdbcType=VARCHAR}, B.ATTRIBUTE18) AS ATTRIBUTE18_NAME
+		             , B.ATTRIBUTE19
+		             , DECODE(B.ATTRIBUTE19, 'Y', #{MESSAGES30001, jdbcType=VARCHAR}, 'N', #{MESSAGES30000, jdbcType=VARCHAR}, B.ATTRIBUTE19) AS ATTRIBUTE19_NAME
+		             , B.ATTRIBUTE20
+		             , DECODE(B.ATTRIBUTE20, 'Y', #{MESSAGES30001, jdbcType=VARCHAR}, 'N', #{MESSAGES30000, jdbcType=VARCHAR}, B.ATTRIBUTE20) AS ATTRIBUTE20_NAME
+		          FROM MOM_CODE_CLASS A
+		             , MOM_CODE B
+		         WHERE B.CODE_CLASS_ID = A.CODE_CLASS_ID(+)
+		           AND B.CODE_CLASS_ID = #{codeClassId, jdbcType=VARCHAR}
+		           AND B.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		           AND B.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		           AND B.DIVISION_CD = A.DIVISION_CD (+)
+		           AND B.COMPANY_CD = A.COMPANY_CD (+)
+		           ORDER BY B.CODE_CLASS_ID, B.UI_SEQUENCE, B.CODE_ID ) A
+	</select>	
+
+    <insert id="create_codeGroup" parameterType="java.util.HashMap">
+        INSERT INTO MOM_CODE_CLASS
+		            ( DIVISION_CD       
+					, COMPANY_CD        
+					, CODE_CLASS_ID     
+					, CODE_CLASS_NAME   
+					, CODE_TYPE         
+					, CODE_CLASS_GROUP  
+					, UI_SEQUENCE       
+					, USE_YN            
+					, IS_SYSTEM         
+					, DESCRIPTION       
+					, CREATE_DATE       
+					, CREATE_BY         
+					, UPDATE_DATE       
+					, UPDATE_BY         
+		            )
+        VALUES
+	              ( #{divisionCd, jdbcType=VARCHAR}
+	              , #{companyCd, jdbcType=VARCHAR}
+	              , UPPER(#{codeClassId, jdbcType=VARCHAR})
+	              , #{codeClassName, jdbcType=VARCHAR}
+	              , #{codeType, jdbcType=VARCHAR}
+	              , #{codeClassGroup, jdbcType=VARCHAR}
+	              , 0
+	              , #{useYn, jdbcType=VARCHAR}
+	              , 'N'
+	              , #{description, jdbcType=VARCHAR}
+	              , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+	              , #{updateBy,jdbcType=VARCHAR}
+	              , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+	              , #{updateBy,jdbcType=VARCHAR}
+	              )
+    </insert>
+    
+    <update id="modify_codeGroup" parameterType="java.util.HashMap">
+        UPDATE MOM_CODE_CLASS
+           SET CODE_CLASS_NAME  = #{codeClassName, jdbcType=VARCHAR}
+             , CODE_TYPE        = #{codeType, jdbcType=VARCHAR}
+             , USE_YN           = #{useYn, jdbcType=VARCHAR}
+             , DESCRIPTION      = #{description, jdbcType=VARCHAR}
+             , UPDATE_DATE      = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+             , UPDATE_BY        = #{updateBy, jdbcType=VARCHAR}
+         WHERE DIVISION_CD      = #{divisionCd, jdbcType=VARCHAR}
+           AND COMPANY_CD       = #{companyCd, jdbcType=VARCHAR}
+           AND CODE_CLASS_ID    = #{codeClassId, jdbcType=VARCHAR}
+    </update>
+    
+    <delete id="remove_codeGroup" parameterType="java.util.HashMap">
+        DELETE 
+          FROM MOM_CODE_CLASS
+         WHERE DIVISION_CD = #{divisionCd,jdbcType=VARCHAR}
+          AND COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}
+          AND CODE_CLASS_ID = #{codeClassId,jdbcType=VARCHAR}
+    </delete>
+    
+    <insert id="create_codeDetail" parameterType="java.util.HashMap">
+        INSERT INTO MOM_CODE
+				( DIVISION_CD    
+				, COMPANY_CD     
+				, CODE_CLASS_ID  
+				, CODE_ID        
+				, CODE_NAME      
+				, CODE_VALUES    
+				, PARENT_ID      
+				, IS_SYSTEM      
+				, UI_SEQUENCE    
+				, USE_YN         
+				, DESCRIPTION    
+				, CREATE_DATE    
+				, CREATE_BY      
+				, UPDATE_DATE    
+				, UPDATE_BY      
+				, ATTRIBUTE1     
+				, ATTRIBUTE2     
+				, ATTRIBUTE3     
+				, ATTRIBUTE4     
+				, ATTRIBUTE5     
+				, ATTRIBUTE6     
+				, ATTRIBUTE7     
+				, ATTRIBUTE8     
+				, ATTRIBUTE9     
+				, ATTRIBUTE10
+				, ATTRIBUTE11
+				, ATTRIBUTE12
+				, ATTRIBUTE13
+				, ATTRIBUTE14
+				, ATTRIBUTE15
+				, ATTRIBUTE16
+				, ATTRIBUTE17
+				, ATTRIBUTE18
+				, ATTRIBUTE19
+				, ATTRIBUTE20
+				)
+        VALUES
+                ( #{divisionCd, jdbcType=VARCHAR}
+                , #{companyCd, jdbcType=VARCHAR}
+                , #{codeClassId, jdbcType=VARCHAR}
+                , UPPER(#{codeId, jdbcType=VARCHAR})
+                , #{codeName, jdbcType=VARCHAR}
+                , #{codeValues, jdbcType=VARCHAR}
+                , UPPER(#{parentId, jdbcType=VARCHAR})
+                , 'N'
+                , #{uiSequence, jdbcType=NUMERIC}
+                , #{useYn, jdbcType=VARCHAR}
+                , #{description, jdbcType=VARCHAR}
+                , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+                , #{updateBy,jdbcType=VARCHAR}
+                , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+                , #{updateBy,jdbcType=VARCHAR}
+                , UPPER(#{attribute1,jdbcType=VARCHAR})
+                , UPPER(#{attribute2,jdbcType=VARCHAR})
+                , UPPER(#{attribute3,jdbcType=VARCHAR})
+                , UPPER(#{attribute4,jdbcType=VARCHAR})
+                , UPPER(#{attribute5,jdbcType=VARCHAR})
+                , UPPER(#{attribute6,jdbcType=VARCHAR})
+                , UPPER(#{attribute7,jdbcType=VARCHAR})
+                , UPPER(#{attribute8,jdbcType=VARCHAR})
+                , UPPER(#{attribute9,jdbcType=VARCHAR})
+                , UPPER(#{attribute10,jdbcType=VARCHAR})
+                , UPPER(#{attribute11,jdbcType=VARCHAR})
+                , UPPER(#{attribute12,jdbcType=VARCHAR})
+                , UPPER(#{attribute13,jdbcType=VARCHAR})
+                , UPPER(#{attribute14,jdbcType=VARCHAR})
+                , UPPER(#{attribute15,jdbcType=VARCHAR})
+                , UPPER(#{attribute16,jdbcType=VARCHAR})
+                , UPPER(#{attribute17,jdbcType=VARCHAR})
+                , UPPER(#{attribute18,jdbcType=VARCHAR})
+                , UPPER(#{attribute19,jdbcType=VARCHAR})
+                , UPPER(#{attribute20,jdbcType=VARCHAR})
+                )
+    </insert>
+    
+    <update id="modify_codeDetail" parameterType="java.util.HashMap">
+        UPDATE MOM_CODE
+           SET CODE_NAME        = #{codeName, jdbcType=VARCHAR}
+             , CODE_VALUES      = #{codeValues, jdbcType=VARCHAR}
+             , PARENT_ID        = UPPER(#{parentId, jdbcType=VARCHAR})
+             , USE_YN           = #{useYn, jdbcType=VARCHAR}
+             , UI_SEQUENCE      = #{uiSequence, jdbcType=NUMERIC}
+             , DESCRIPTION      = #{description, jdbcType=VARCHAR}
+             , ATTRIBUTE1       = UPPER(#{attribute1, jdbcType=VARCHAR})
+             , ATTRIBUTE2       = UPPER(#{attribute2, jdbcType=VARCHAR})
+             , ATTRIBUTE3       = UPPER(#{attribute3, jdbcType=VARCHAR})
+             , ATTRIBUTE4       = UPPER(#{attribute4, jdbcType=VARCHAR})
+             , ATTRIBUTE5       = UPPER(#{attribute5, jdbcType=VARCHAR})
+             , ATTRIBUTE6       = UPPER(#{attribute6, jdbcType=VARCHAR})
+             , ATTRIBUTE7       = UPPER(#{attribute7, jdbcType=VARCHAR})
+             , ATTRIBUTE8       = UPPER(#{attribute8, jdbcType=VARCHAR})
+             , ATTRIBUTE9       = UPPER(#{attribute9, jdbcType=VARCHAR})
+             , ATTRIBUTE10      = UPPER(#{attribute10, jdbcType=VARCHAR})
+             , ATTRIBUTE11      = UPPER(#{attribute11, jdbcType=VARCHAR})
+             , ATTRIBUTE12      = UPPER(#{attribute12, jdbcType=VARCHAR})
+             , ATTRIBUTE13      = UPPER(#{attribute13, jdbcType=VARCHAR})
+             , ATTRIBUTE14      = UPPER(#{attribute14, jdbcType=VARCHAR})
+             , ATTRIBUTE15      = UPPER(#{attribute15, jdbcType=VARCHAR})
+             , ATTRIBUTE16      = UPPER(#{attribute16, jdbcType=VARCHAR})
+             , ATTRIBUTE17      = UPPER(#{attribute17, jdbcType=VARCHAR})
+             , ATTRIBUTE18      = UPPER(#{attribute18, jdbcType=VARCHAR})
+             , ATTRIBUTE19      = UPPER(#{attribute19, jdbcType=VARCHAR})
+             , ATTRIBUTE20      = UPPER(#{attribute20, jdbcType=VARCHAR})
+             , UPDATE_DATE      = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+             , UPDATE_BY        = #{updateBy, jdbcType=VARCHAR}
+         WHERE DIVISION_CD      = #{divisionCd, jdbcType=VARCHAR}
+           AND COMPANY_CD       = #{companyCd, jdbcType=VARCHAR}
+           AND CODE_CLASS_ID    = #{codeClassId, jdbcType=VARCHAR}
+           AND CODE_ID          = #{codeId, jdbcType=VARCHAR}
+    </update>
+    
+    <delete id="remove_codeDetail" parameterType="java.util.HashMap">
+        DELETE 
+          FROM MOM_CODE
+         WHERE DIVISION_CD      = #{divisionCd,jdbcType=VARCHAR}
+           AND COMPANY_CD       = #{companyCd,jdbcType=VARCHAR}
+           AND CODE_CLASS_ID    = #{codeClassId,jdbcType=VARCHAR}
+           AND CODE_ID          = #{codeId, jdbcType=VARCHAR}
+    </delete>
+	
+</mapper>

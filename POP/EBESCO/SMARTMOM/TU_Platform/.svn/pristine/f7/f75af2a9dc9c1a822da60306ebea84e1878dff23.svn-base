@@ -1,0 +1,669 @@
+
+<!DOCTYPE html>
+<html project-id="P201804111903105551018ozUvjWVkVGo" data-site="TU_MOM" data-page="MOMJA001" page-id="PG201808071119060911004l01W05SwTnk" data-language="ko" contextPath="/TU_Platform" class=' w-mod-js w-mod-no-touch w-mod-video w-mod-no-ios'>
+<head>
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <meta name='generator' content='Mica' />
+    <meta http-equiv='CACHE-CONTROL' content='NO-CACHE' />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+    <link rel='stylesheet' type='text/css' href='/TU_Platform/Content/css/site.css' />
+    <link rel='stylesheet' type='text/css' href='/TU_Platform/Content/jqwidgets/styles/jqx.base.css' />
+    <link rel='stylesheet' type='text/css' href='/TU_Platform/Content/theme/css/datetimepicker/jquery.datetimepicker.css' />
+    <link rel="stylesheet" type="text/css" href="/TU_Platform/TU_MOM.css"/>
+
+    <script src='/TU_Platform/Content/js/jquery.min-1.11.1.js'></script>
+    <script src='/TU_Platform/Content/js/jquery-ui.min.js'></script>
+    <script src='/TU_Platform/Content/js/normalize.js'></script>
+    <script src='/TU_Platform/Content/amcharts/amcharts.js'></script>
+    <script src='/TU_Platform/Content/amcharts/serial.js'></script>
+    <script src='/TU_Platform/Content/theme/js/plugins/jqGrid/jquery.jqGrid.min.js'></script>
+    <script src='/TU_Platform/Content/theme/js/plugins/jqGrid/i18n/grid.locale-en.js'></script>
+    <script src='/TU_Platform/Content/theme/js/plugins/bootstrap/bootstrap.min.js'></script>
+    <script src='/TU_Platform/Content/theme/js/plugins/select2/select2.min.js'></script>
+    <script src="/TU_Platform/Content/theme/js/plugins/datetimepicker/jquery.datetimepicker.full.js"></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxcore.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxlistbox.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxcombobox.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxexpander.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxsplitter.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxbuttons.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxscrollbar.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxdata.js'></script>
+    <script src="/TU_Platform/Content/jqwidgets/jqxmenu.js"></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxtree.js'></script>
+    <script src='/TU_Platform/Content/jqwidgets/jqxpanel.js'></script>
+    <script src="/TU_Platform/Content/jqwidgets/jqxnotification.js"></script>
+
+    <!-- MICA -->
+    <script src="/TU_Platform/Content/js/common.js"></script>
+    <script src='/TU_Platform/Content/js/mica.js'></script>
+    <script src="/TU_Platform/Content/js/mica/export.js"></script>
+    <script src="/TU_Platform/Content/js/mica/mica.common.js"></script>
+    
+    <!-- auiGrid -->
+	<link href="/TU_Platform/Content/AUIGrid/AUIGrid_style.css" rel="stylesheet" type="text/css">
+	<script src="/TU_Platform/Content/AUIGrid/AUIGridLicense.js"></script>
+	<script src="/TU_Platform/Content/AUIGrid/AUIGrid.js"></script>
+   	<link href="/TU_Platform/Content/css/auigridEditor.css" rel="stylesheet">
+	<!--  auiGrid Excel Export -->
+	<script src="/TU_Platform/Content/AUIGrid/FileSaver.min.js"></script>
+	<!-- echart -->
+	<script src="/TU_Platform/Content/PopUp/EChart/js/echarts/echarts.min.js"></script>
+	
+	<!-- new Common -->
+	<script src="/TU_Platform/Content/resources/js/common.js" type="text/javascript" ></script> 
+	
+    <!-- �떎援��뼱 -->
+    <script src="/TU_Platform/Content/js/regional.js"></script>
+	<script type="text/javascript" src="/TU_Platform/TU_MOM.lang.js"></script>
+    <script type="text/javascript" src="/TU_Platform/TU_MOM.common.js"></script> 
+</head>
+<body style="overflow:auto;">
+	<div class="tabcontentarea">
+		<div class="searcharea h01">
+			<div class="w-form formwrapper">
+				<form id="node" class="form-inline">
+					<ul id="ul" class="w-list-unstyled w-clearfix">
+						<li class="w32p">
+							<div class="w-clearfix listitem">
+								<div class="labelbox w120">
+									<div class="circle"></div>
+									<div multi-lang="" style="display:none;" class="textblock">MESSAGES10240</div>
+								</div>
+								<input maxlength="256" name="field" id="searchClassCode" input-type="text" type="text" class="w-input fieldbox w200" date-format="date"></input>
+							</div>
+						</li>
+						<li class="w32p">
+							<div class="listitem"></div>
+						</li>
+						<li class="w36p">
+							<div class="w-clearfix listitem">
+								<a btnSearch="btnSearch" widgetId="W201804171937587591000dvUxX5NEG7n" name="findBtn" id="findBtn" href="#" targetGrid="auigrid" class="w-inline-block searchbutton" data-name="findBtn">
+									<div tmpTabId="four" class="w-icon fa fa-search icon"></div>
+									<div multi-lang="" style="display:none;" class="textblock">MESSAGES11233</div>
+								</a>
+							</div>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+		<div class="w-clearfix h01-h">
+			<div class="card wcalc10 w400px">
+				<div class="w-clearfix cardheard">
+					<div tmpTabId="six" class="w-icon fa fa-align-justify icon r5"></div>
+					<div multi-lang="" style="display:none;" class="textblock">MESSAGES11507</div>
+					<a id="mCopyBtn" href="#" class="w-inline-block btntool floatr">
+						<div tmpTabId="four" class="w-icon fa fa-copy icon"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10490</div>
+					</a>
+					<a id="mDelBtn" href="#" class="w-inline-block btntool floatr">
+						<div tmpTabId="five" class="w-icon fa fa-trash-o icon"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10577</div>
+					</a>
+					<a id="mCreateBtn" href="#" class="w-inline-block btntool floatr">
+						<div tmpTabId="two" class="w-icon fa fa-pencil icon"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10337</div>
+					</a>
+				</div>
+				<div class="cardcontent">
+					<div id="grid1" class="w-widget w-dyn-list w-unbound grid w-widget-auigrid"></div>
+				</div>
+			</div>
+			<div class="card h100per wcalc400">
+				<div class="cardheard">
+					<div tmpTabId="six" class="w-icon fa fa-align-justify icon r5"></div>
+					<div multi-lang="" style="display:none;" class="textblock">MESSAGES10591</div>
+					<a id="dExcelDownBtn" href="#" class="w-inline-block btntool floatr">
+						<div tmpTabId="four" class="w-icon fa fa-copy icon"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10863</div>
+					</a>
+					<a id="dCopyBtn" href="#" class="w-inline-block btntool floatr">
+						<div tmpTabId="four" class="w-icon fa fa-copy icon"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10490</div>
+					</a>
+					<a id="dDelBtn" href="#" class="w-inline-block btntool floatr">
+						<div tmpTabId="five" class="w-icon fa fa-trash-o icon"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10577</div>
+					</a>
+					<a id="dCreateBtn" href="#" class="w-inline-block btntool floatr">
+						<div tmpTabId="two" class="w-icon fa fa-pencil icon"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10337</div>
+					</a>
+				</div>
+				<div class="cardcontent">
+					<div id="grid2" class="w-widget w-dyn-list w-unbound grid w-widget-auigrid"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="passwordPop" class="modal">
+		<div id="panel" class="panel messagebox w340">
+			<div data-panelHeader="n" panelHeader="n" class="panel-heading hide">
+				<h5>Panel</h5>
+			</div>
+			<div data-panelToolbar="n" panelToolbar="n" class="panel-toolbar hide"></div>
+			<div class="panel-body panel-body">
+				<div class="panelbody">
+					<div class="w-clearfix panelheader panel-heading">
+						<div tmpTabId="one" class="w-icon fa fa-code icon r5"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10237</div>
+						<a href="#" class="w-inline-block bntpopclose"></a>
+					</div>
+					<div class="searcharea pop">
+						<div class="w-form">
+							<form name="form" id="form" class="form-inline" data-name="Form">
+								<ul id="ul" class="w-list-unstyled b5">
+									<li>
+										<div class="w-clearfix listitem">
+											<div class="labelbox w90">
+												<div class="circle bg-orange"></div>
+												<div multi-lang="" style="display:none;" class="textblock orange">MESSAGES10238</div>
+											</div>
+											<input maxlength="256" id="codeClassId" input-type="text" type="text" class="w-input fieldbox w190" date-format="date"></input>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled b5">
+									<li>
+										<div class="w-clearfix listitem">
+											<div class="labelbox w90">
+												<div class="circle bg-orange"></div>
+												<div multi-lang="" style="display:none;" class="textblock orange">MESSAGES10242</div>
+											</div>
+											<input maxlength="256" id="codeClassName" input-type="text" type="text" class="w-input fieldbox w190" date-format="date"></input>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled b5">
+									<li>
+										<div class="w-clearfix listitem">
+											<div class="labelbox w90">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES11508</div>
+											</div>
+											<select id="codeType" class="w-select fieldbox w190"></select>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled b5">
+									<li>
+										<div class="w-clearfix listitem">
+											<div class="labelbox w90">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10593</div>
+											</div>
+											<input maxlength="256" id="codeClassGroup" input-type="text" type="text" class="w-input fieldbox w190" date-format="date"></input>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled b5">
+									<li>
+										<div class="w-clearfix listitem">
+											<div class="labelbox w90">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10561</div>
+											</div>
+											<select id="isUsableG" class="w-select fieldbox w190"></select>
+										</div>
+									</li>
+								</ul>
+								<ul id="ul" class="w-list-unstyled">
+									<li>
+										<div class="w-clearfix">
+											<div class="labelbox w90">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10545</div>
+											</div>
+											<textarea maxlength="5000" name="field-39" resize="none" id="description" type="text" class="w-input textbox w190"></textarea>
+										</div>
+									</li>
+								</ul>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="panelfooter">
+					<a id="pSaveBtn" href="#" class="w-inline-block btnpop">
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10337</div>
+					</a>
+					<a id="pCancelBtn" href="#" class="w-inline-block btnpop grey">
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES11457</div>
+					</a>
+				</div>
+			</div>
+			<div panelFooter="n" class="panel-footer hide" data-panelFooter="n"></div>
+		</div>
+	</div>
+	<div id="dpPop" class="modal">
+		<div id="panel" class="panel messagebox w900">
+			<div data-panelHeader="n" panelHeader="n" class="panel-heading hide">
+				<h5>Panel</h5>
+			</div>
+			<div data-panelToolbar="n" panelToolbar="n" class="panel-toolbar hide"></div>
+			<div class="panel-body panel-body">
+				<div class="panelbody">
+					<div class="w-clearfix panelheader panel-heading">
+						<div tmpTabId="six" class="w-icon fa fa-code icon r5"></div>
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10591</div>
+						<a href="#" class="w-inline-block bntpopclose"></a>
+					</div>
+					<div class="searcharea pop">
+						<div class="w-form">
+							<form name="form" id="form" class="form-inline" data-name="Form">
+								<div class="b5">
+									<div class="w-row">
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle bg-orange"></div>
+													<div multi-lang="" style="display:none;" class="textblock orange">MESSAGES10238</div>
+												</div>
+												<input maxlength="256" name="field-32" id="codeClassIds" input-type="text" type="text" class="w-input fieldbox w200" date-format="date" data-name="Field 32"></input>
+											</div>
+										</div>
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle bg-orange"></div>
+													<div multi-lang="" style="display:none;" class="textblock orange">MESSAGES11497</div>
+												</div>
+												<input maxlength="256" name="field-26" id="codeId" type="text" class="w-input fieldbox w200" date-format="date" data-name="Field 26"></input>
+											</div>
+										</div>
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle bg-orange"></div>
+													<div multi-lang="" style="display:none;" class="textblock orange">MESSAGES11504</div>
+												</div>
+												<input maxlength="256" name="field-40" id="codeName" input-type="text" type="text" class="w-input fieldbox wcalc80" date-format="date" data-name="Field 40"></input>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="b5">
+									<div class="w-row">
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle"></div>
+													<div multi-lang="" style="display:none;" class="textblock">MESSAGES10599</div>
+												</div>
+												<input maxlength="256" name="field-16" id="parentId" input-type="text" type="text" class="w-input fieldbox w200" date-format="date"></input>
+											</div>
+										</div>
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle"></div>
+													<div multi-lang="" style="display:none;" class="textblock">MESSAGES10561</div>
+												</div>
+												<select name="field-15" id="isUsableC" class="w-select fieldbox w200" data-name="Field 15"></select>
+											</div>
+										</div>
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle"></div>
+													<div multi-lang="" style="display:none;" class="textblock">MESSAGES11500</div>
+												</div>
+												<input maxlength="256" name="field-26" id="codeValues" input-type="text" type="text" class="w-input fieldbox wcalc80" date-format="date" data-name="Field 26"></input>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="b5">
+									<div class="w-row">
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle"></div>
+													<div multi-lang="" style="display:none;" class="textblock">MESSAGES11022</div>
+												</div>
+												<input maxlength="256" name="field-32" id="uiSequence" input-type="text" type="text" class="w-input fieldbox w200" date-format="date" data-name="Field 32"></input>
+											</div>
+										</div>
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle"></div>
+													<div class="textblock">ATTR1</div>
+												</div>
+												<input maxlength="256" name="field-26" id="attribute1" input-type="text" type="text" class="w-input fieldbox w200" date-format="date" data-name="Field 26"></input>
+											</div>
+										</div>
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle"></div>
+													<div class="textblock">ATTR2</div>
+												</div>
+												<input maxlength="256" name="field-32" id="attribute2" input-type="text" type="text" class="w-input fieldbox wcalc80" date-format="date" data-name="Field 32"></input>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="b5">
+									<div class="w-row">
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle"></div>
+													<div class="textblock">ATTR3</div>
+												</div>
+												<input maxlength="256" name="field-26" id="attribute3" input-type="text" type="text" class="w-input fieldbox w200" date-format="date" data-name="Field 26"></input>
+											</div>
+										</div>
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle"></div>
+													<div class="textblock">ATTR4</div>
+												</div>
+												<input maxlength="256" name="field-32" id="attribute4" input-type="text" type="text" class="w-input fieldbox w200" date-format="date" data-name="Field 32"></input>
+											</div>
+										</div>
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle"></div>
+													<div class="textblock">ATTR5</div>
+												</div>
+												<input maxlength="256" name="field-26" id="attribute5" input-type="text" type="text" class="w-input fieldbox wcalc80" date-format="date" data-name="Field 26"></input>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="b5">
+									<div class="w-row">
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle"></div>
+													<div class="textblock">ATTR6</div>
+												</div>
+												<input maxlength="256" name="field-32" id="attribute6" input-type="text" type="text" class="w-input fieldbox w200" date-format="date" data-name="Field 32"></input>
+											</div>
+										</div>
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle"></div>
+													<div class="textblock">ATTR7</div>
+												</div>
+												<input maxlength="256" name="field-26" id="attribute7" input-type="text" type="text" class="w-input fieldbox w200" date-format="date" data-name="Field 26"></input>
+											</div>
+										</div>
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle"></div>
+													<div class="textblock">ATTR8</div>
+												</div>
+												<input maxlength="256" name="field-32" id="attribute8" input-type="text" type="text" class="w-input fieldbox wcalc80" date-format="date" data-name="Field 32"></input>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="b5">
+									<div class="w-row">
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle"></div>
+													<div class="textblock">ATTR9</div>
+												</div>
+												<input maxlength="256" name="field-26" id="attribute9" input-type="text" type="text" class="w-input fieldbox w200" date-format="date" data-name="Field 26"></input>
+											</div>
+										</div>
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle"></div>
+													<div class="textblock">ATTR10</div>
+												</div>
+												<input maxlength="256" name="field-32" id="attribute10" input-type="text" type="text" class="w-input fieldbox w200" date-format="date" data-name="Field 32"></input>
+											</div>
+										</div>
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle"></div>
+													<div class="textblock">ATTR11</div>
+												</div>
+												<input maxlength="256" name="field-26" id="attribute11" input-type="text" type="text" class="w-input fieldbox wcalc80" date-format="date" data-name="Field 26" required></input>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="b5">
+									<div class="w-row">
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle"></div>
+													<div class="textblock">ATTR12</div>
+												</div>
+												<input maxlength="256" name="field-32" id="attribute12" input-type="text" type="text" class="w-input fieldbox w200" date-format="date" data-name="Field 32"></input>
+											</div>
+										</div>
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle"></div>
+													<div class="textblock">ATTR13</div>
+												</div>
+												<input maxlength="256" name="field-26" id="attribute13" input-type="text" type="text" class="w-input fieldbox w200" date-format="date" data-name="Field 26" required></input>
+											</div>
+										</div>
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle"></div>
+													<div class="textblock">ATTR14</div>
+												</div>
+												<input maxlength="256" name="field-32" id="attribute14" input-type="text" type="text" class="w-input fieldbox wcalc80" date-format="date" data-name="Field 32"></input>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="b5">
+									<div class="w-row">
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle"></div>
+													<div class="textblock">ATTR15</div>
+												</div>
+												<input maxlength="256" name="field-26" id="attribute15" input-type="text" type="text" class="w-input fieldbox w200" date-format="date" data-name="Field 26" required></input>
+											</div>
+										</div>
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle"></div>
+													<div class="textblock">ATTR16</div>
+												</div>
+												<input maxlength="256" name="field-26" id="attribute16" input-type="text" type="text" class="w-input fieldbox w200" date-format="date" data-name="Field 26" required></input>
+											</div>
+										</div>
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle"></div>
+													<div class="textblock">ATTR17</div>
+												</div>
+												<input maxlength="256" name="field-26" id="attribute17" input-type="text" type="text" class="w-input fieldbox wcalc80" date-format="date" data-name="Field 26" required></input>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="b5">
+									<div class="w-row">
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle"></div>
+													<div class="textblock">ATTR18</div>
+												</div>
+												<input maxlength="256" name="field-26" id="attribute18" input-type="text" type="text" class="w-input fieldbox w200" date-format="date" data-name="Field 26" required></input>
+											</div>
+										</div>
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle"></div>
+													<div class="textblock">ATTR19</div>
+												</div>
+												<input maxlength="256" name="field-26" id="attribute19" input-type="text" type="text" class="w-input fieldbox w200" date-format="date" data-name="Field 26" required></input>
+											</div>
+										</div>
+										<div class="w-col w-col-4">
+											<div class="w-clearfix listitem">
+												<div class="labelbox">
+													<div class="circle"></div>
+													<div class="textblock">ATTR20</div>
+												</div>
+												<input maxlength="256" name="field-26" id="attribute20" input-type="text" type="text" class="w-input fieldbox wcalc80" date-format="date" data-name="Field 26" required></input>
+											</div>
+										</div>
+									</div>
+                                </div>
+								<div class="b5">
+                                    <div class="w-row">
+                                        <div class="w-col w-col-4">
+                                            <div class="w-clearfix listitem">
+                                                <div class="labelbox">
+                                                    <div class="circle"></div>
+                                                    <div class="textblock">ATTR21</div>
+                                                </div>
+                                                <input maxlength="256" name="field-26" id="attribute21" input-type="text" type="text" class="w-input fieldbox w200" date-format="date" data-name="Field 26"></input>
+                                            </div>
+                                        </div>
+                                        <div class="w-col w-col-4">
+                                            <div class="w-clearfix listitem">
+                                                <div class="labelbox">
+                                                    <div class="circle"></div>
+                                                    <div class="textblock">ATTR22</div>
+                                                </div>
+                                                <input maxlength="256" name="field-32" id="attribute22" input-type="text" type="text" class="w-input fieldbox w200" date-format="date" data-name="Field 32"></input>
+                                            </div>
+                                        </div>
+                                        <div class="w-col w-col-4">
+                                            <div class="w-clearfix listitem">
+                                                <div class="labelbox">
+                                                    <div class="circle"></div>
+                                                    <div class="textblock">ATTR23</div>
+                                                </div>
+                                                <input maxlength="256" name="field-26" id="attribute23" input-type="text" type="text" class="w-input fieldbox wcalc80" date-format="date" data-name="Field 26" required></input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="b5">
+                                    <div class="w-row">
+                                        <div class="w-col w-col-4">
+                                            <div class="w-clearfix listitem">
+                                                <div class="labelbox">
+                                                    <div class="circle"></div>
+                                                    <div class="textblock">ATTR24</div>
+                                                </div>
+                                                <input maxlength="256" name="field-26" id="attribute24" input-type="text" type="text" class="w-input fieldbox w200" date-format="date" data-name="Field 26"></input>
+                                            </div>
+                                        </div>
+                                        <div class="w-col w-col-4">
+                                            <div class="w-clearfix listitem">
+                                                <div class="labelbox">
+                                                    <div class="circle"></div>
+                                                    <div class="textblock">ATTR25</div>
+                                                </div>
+                                                <input maxlength="256" name="field-32" id="attribute25" input-type="text" type="text" class="w-input fieldbox w200" date-format="date" data-name="Field 32"></input>
+                                            </div>
+                                        </div>
+                                        <div class="w-col w-col-4">
+                                            <div class="w-clearfix listitem">
+                                                <div class="labelbox">
+                                                    <div class="circle"></div>
+                                                    <div class="textblock">ATTR26</div>
+                                                </div>
+                                                <input maxlength="256" name="field-26" id="attribute26" input-type="text" type="text" class="w-input fieldbox wcalc80" date-format="date" data-name="Field 26" required></input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="b5">
+                                    <div class="w-row">
+                                        <div class="w-col w-col-4">
+                                            <div class="w-clearfix listitem">
+                                                <div class="labelbox">
+                                                    <div class="circle"></div>
+                                                    <div class="textblock">ATTR27</div>
+                                                </div>
+                                                <input maxlength="256" name="field-26" id="attribute27" input-type="text" type="text" class="w-input fieldbox w200" date-format="date" data-name="Field 26"></input>
+                                            </div>
+                                        </div>
+                                        <div class="w-col w-col-4">
+                                            <div class="w-clearfix listitem">
+                                                <div class="labelbox">
+                                                    <div class="circle"></div>
+                                                    <div class="textblock">ATTR28</div>
+                                                </div>
+                                                <input maxlength="256" name="field-32" id="attribute28" input-type="text" type="text" class="w-input fieldbox w200" date-format="date" data-name="Field 32"></input>
+                                            </div>
+                                        </div>
+                                        <div class="w-col w-col-4">
+                                            <div class="w-clearfix listitem">
+                                                <div class="labelbox">
+                                                    <div class="circle"></div>
+                                                    <div class="textblock">ATTR29</div>
+                                                </div>
+                                                <input maxlength="256" name="field-26" id="attribute29" input-type="text" type="text" class="w-input fieldbox wcalc80" date-format="date" data-name="Field 26" required></input>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+								<div class="b5">
+									<div class="w-row">
+                                        <div class="w-col w-col-4">
+                                            <div class="w-clearfix listitem">
+                                                <div class="labelbox">
+                                                    <div class="circle"></div>
+                                                    <div class="textblock">ATTR30</div>
+                                                </div>
+                                                <input maxlength="256" name="field-26" id="attribute30" input-type="text" type="text" class="w-input fieldbox w200" date-format="date" data-name="Field 26" required></input>
+                                            </div>
+                                        </div>
+									</div>
+								</div>
+								<ul id="ul" class="w-list-unstyled">
+									<li>
+										<div class="w-clearfix">
+											<div class="labelbox">
+												<div class="circle"></div>
+												<div multi-lang="" style="display:none;" class="textblock">MESSAGES10545</div>
+											</div>
+											<textarea maxlength="5000" name="field-39" resize="none" id="dpDescription" type="text" class="w-input textbox wcalc80"></textarea>
+										</div>
+									</li>
+								</ul>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="panelfooter">
+					<a id="dpSaveBtn" href="#" class="w-inline-block btnpop">
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES10337</div>
+					</a>
+					<a id="dpCancelBtn" href="#" class="w-inline-block btnpop grey">
+						<div multi-lang="" style="display:none;" class="textblock">MESSAGES11457</div>
+					</a>
+				</div>
+			</div>
+			<div panelFooter="n" class="panel-footer hide" data-panelFooter="n"></div>
+		</div>
+	</div>
+</body>
+	<script type="text/javascript" src="./MOMJA001.js"></script>
+</html>

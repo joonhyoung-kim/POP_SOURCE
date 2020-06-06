@@ -1,0 +1,10 @@
+C:\Mosp\finealtech\SmartMOM_POP\MetroFramework\bin\Debug\MetroFramework.dll.config
+C:\Mosp\finealtech\SmartMOM_POP\MetroFramework\bin\Debug\MetroFramework.dll
+C:\Mosp\finealtech\SmartMOM_POP\MetroFramework\bin\Debug\MetroFramework.pdb
+C:\Mosp\finealtech\SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.g.resources
+C:\Mosp\finealtech\SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.Controls.MetroGrid.resources
+C:\Mosp\finealtech\SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.Properties.Resources.resources
+C:\Mosp\finealtech\SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.csproj.GenerateResource.cache
+C:\Mosp\finealtech\SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.csproj.CoreCompileInputs.cache
+C:\Mosp\finealtech\SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.dll
+C:\Mosp\finealtech\SmartMOM_POP\MetroFramework\obj\Debug\MetroFramework.pdb

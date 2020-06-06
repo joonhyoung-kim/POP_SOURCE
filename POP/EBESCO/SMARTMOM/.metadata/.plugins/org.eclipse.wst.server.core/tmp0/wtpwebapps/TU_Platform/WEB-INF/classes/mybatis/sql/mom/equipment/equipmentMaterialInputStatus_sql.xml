@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.equipment.equipmentMaterialInputStatus">
+	<select id="get_equipmentMaterialInputStatus_list" resultType="camelMap" parameterType="java.util.HashMap">
+		<if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+		WITH TEMP1 AS (	
+	    </if>
+	    	SELECT MO.EQUIPMENT_ORDER_ID        
+			     , MO.EQM_REQUEST_ID           
+			     , MIS.ITEM_INPUT_ID           
+			     , MIS.ITEM_STOCK_INOUT_ID     
+			     , TO_CHAR(MIS.IO_TIME, 'yyyy-mm-dd') AS IO_TIME
+			     , MIS.LOCATION_CD                                
+			     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME (MO.DIVISION_CD
+			                                                  , MO.COMPANY_CD
+			                                                  , MO.LOCATION_CD) 
+			          FROM DUAL) AS LOCATION_NAME       
+			     , MO.VENDOR_CD                        
+			     , (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME (MO.DIVISION_CD
+			                                                , MO.COMPANY_CD
+			                                                , MO.VENDOR_CD) 
+			          FROM DUAL) AS VENDOR_NAME         
+			     , MO.DEPARTURE_VENDOR_CD              
+			     , (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME (MO.DIVISION_CD
+			                                                , MO.COMPANY_CD
+			                                                , MO.DEPARTURE_VENDOR_CD) 
+			          FROM DUAL) AS DEPARTURE_VENDOR_NAME  
+			     , MO.ITEM_ID                               
+			     , MI.ITEM_NAME                            
+			     , MI.SPECIFICATION                        
+			     , MI.UNIT                                  
+			     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (MI.DIVISION_CD
+			                                              , MI.COMPANY_CD
+			                                              , 'ITEM_UNIT'
+			                                              , MI.UNIT)
+			          FROM DUAL) AS UNIT_NAME               
+			     , MO.ORDER_QTY                             
+			     , MIS.QTY AS INPUT_QTY                    
+			     , MIC.CANCEL_QTY AS CANCEL_QTY            
+			     , MO.ORDER_QTY - NVL(MO.CLOSED_QTY, 0) - NVL(MO.CANCEL_QTY, 0) AS REMAIN_QTY  
+			     , MIS.UNIT_PRICE                          
+			     , MIS.MARKET_CD                           
+			     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (MIS.DIVISION_CD
+			                                              , MIS.COMPANY_CD
+			                                              , 'MARKET_CODE'
+			                                              , MIS.MARKET_CD)
+			          FROM DUAL) AS MARKET_NAME            
+			     , MIS.CURRENCY_CD                        
+			     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (MIS.DIVISION_CD
+			                                              , MIS.COMPANY_CD
+			                                              , 'CURRENCY_CODE'
+			                                              , MIS.CURRENCY_CD)
+			          FROM DUAL) AS CURRENCY_NAME          
+			     , MIS.DESCRIPTION                          
+			     , TO_CHAR (MIS.CREATE_DATE, 'yyyy-mm-dd') AS CREATE_DATE  
+			     , MIS.CREATE_BY                          
+			     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME (MIS.DIVISION_CD
+			                                              , MIS.COMPANY_CD
+			                                              , MIS.CREATE_BY)
+			          FROM DUAL) AS CREATE_BY_NAME          
+			     , MIS.CONVERSION_UNIT_QTY                  
+			     , TO_CHAR(MIC.CANCEL_DATE, 'yyyy-mm-dd') AS CANCEL_DATE   
+			     , MO.ORDER_GROUP_ID 
+			  FROM MOM_EQM_ITEM_ORDER MO
+			     , (SELECT * FROM MOM_ITEM_STOCK_INOUT A
+			         WHERE IO_TYPE = 'I' 
+			           AND DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+			           AND IO_CATEGORY IN (SELECT CODE_ID 
+			                                 FROM MOM_CODE 
+			                                WHERE DIVISION_CD = A.DIVISION_CD 
+			                                  AND COMPANY_CD = A.COMPANY_CD 
+			                                  AND CODE_CLASS_ID = 'IO_CATEGORY' 
+			                                  AND ATTRIBUTE23 = 'Y'
+			                                  AND CODE_VALUES IS NULL
+			                                  AND USE_YN = 'Y')
+			           <if test="dateCombo == 'STATE_TIME'">                        
+			           AND IO_TIME BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR},'yyyy-mm-dd') AND TO_DATE(#{toDate, jdbcType=VARCHAR},'yyyy-mm-dd') + 23.9997/24
+			       	   </if>
+			       	   <if test="dateCombo == 'CREATE_TIME'">    
+			       	   AND CREATE_TIME BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR},'yyyy-mm-dd') AND TO_DATE(#{toDate, jdbcType=VARCHAR},'yyyy-mm-dd') + 23.9997/24
+			       	   </if>
+			       	   <if test="toLocation != null and toLocation !=''">
+			       	   AND LOCATION_CD = #{toLocation, jdbcType=VARCHAR}
+			       	   </if>
+			       	    <if test="inputNo != null and inputNo !=''">
+			       	    AND ITEM_INPUT_ID LIKE '%' || TRIM(UPPER(#{inputNo, jdbcType=VARCHAR}))|| '%'
+			       	    </if>
+			       ) MIS
+			     , MOM_ITEM_DEFINITION MI
+			     , (SELECT PREV_STOCK_INOUT_ID
+			             , IO_TYPE
+			             , QTY AS CANCEL_QTY
+			             , IO_TIME AS CANCEL_DATE 
+			          FROM MOM_ITEM_STOCK_INOUT A
+			         WHERE IO_TYPE = 'I' 
+			           AND DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+			           AND IO_CATEGORY IN (SELECT CODE_ID 
+			                                 FROM MOM_CODE 
+			                                WHERE DIVISION_CD = A.DIVISION_CD 
+			                                  AND COMPANY_CD = A.COMPANY_CD 
+			                                  AND CODE_CLASS_ID = 'IO_CATEGORY' 
+			                                  AND ATTRIBUTE23 = 'Y'
+			                                  AND CODE_VALUES IS NOT NULL
+			                                  AND USE_YN = 'Y')
+			         )MIC
+			 WHERE MO.DIVISION_CD = MI.DIVISION_CD 
+			   AND MO.COMPANY_CD = MI.COMPANY_CD 
+			   AND MO.ITEM_ID = MI.ITEM_ID 
+			   AND MI.USE_YN = 'Y' 
+			   AND MO.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			   AND MO.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+			   AND MO.EQUIPMENT_ORDER_ID = MIS.ITEM_ORDER_ID
+			   AND MIS.ITEM_STOCK_INOUT_ID = MIC.PREV_STOCK_INOUT_ID(+)
+			   AND MIS.IO_TYPE = MIC.IO_TYPE(+)
+			   <if test="vendor != null and vendor != ''">
+			   AND MO.VENDOR_CD = #{vendor, jdbcType=VARCHAR}
+			   </if>
+			   <if test="departureVendor != null and departureVendor != ''">
+               AND MO.DEPARTURE_VENDOR_CD = #{departureVendor, jdbcType=VARCHAR}
+               </if>
+               <if test="item != null and item != ''">
+               AND (MO.ITEM_ID LIKE '%' || TRIM(UPPER(#{item, jdbcType=VARCHAR}))|| '%'
+                 OR UPPER(MI.ITEM_NAME) LIKE '%' || TRIM(UPPER(#{item, jdbcType=VARCHAR}))|| '%' )
+               </if>
+               <if test="specification != null and specification != ''">
+               AND MI.SPECIFICATION LIKE '%' || TRIM(UPPER(#{specification, jdbcType=VARCHAR}))|| '%'
+               </if>
+               <if test="cancelFlag != null and cancelFlag != ''">
+	               <if test='cancelFlag == "Y"'>
+	               AND MIC.CANCEL_QTY > 0
+	               </if>
+	               <if test='cancelFlag == "N"'>
+	               AND (MIC.CANCEL_QTY IS NULL OR MIC.CANCEL_QTY = 0)
+	               </if>
+               </if>
+                <if test="orderNo != null and orderNo != ''">
+               AND MO.EQUIPMENT_ORDER_ID LIKE '%' || TRIM(UPPER(#{orderNo, jdbcType=VARCHAR}))|| '%'
+               </if>
+			 ORDER BY MIS.ITEM_INPUT_ID, MIS.ITEM_STOCK_INOUT_ID 
+	   <if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+				)
+	      SELECT A.*
+	           , B.ROW_COUNT
+	      FROM (SELECT A.*
+	                 , ROWNUM GRIDROW
+	              FROM TEMP1 A) A
+	         , (SELECT COUNT(*) ROW_COUNT
+	              FROM TEMP1) B 
+	      WHERE GRIDROW BETWEEN #{startPage, jdbcType=INTEGER} AND #{endPage, jdbcType=INTEGER}
+       </if>
+    </select>
+    
+    <insert id="create_cancelEmOrderProc" statementType="CALLABLE">
+		{
+	        CALL SP_MOM_EQUIPMENT_PKG.P_CANCEL_EQM_GOODS_RECEIPT (
+	             #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+	           , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+	           , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+	           , #{companyCd, mode=IN, jdbcType=VARCHAR}
+	           , #{menuId, mode=IN, jdbcType=VARCHAR}
+	           , #{tableId, mode=IN, jdbcType=VARCHAR}
+	           , #{createBy, mode=IN, jdbcType=VARCHAR}
+	        )
+	    }
+	</insert>
+	
+	<select id="get_emInputExcelPrint_list" resultType="camelMap" parameterType="java.util.HashMap">
+		WITH TEMP1
+		     AS ( SELECT A.VENDOR_CD AS 업체코드
+					   , (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME (A.DIVISION_CD, A.COMPANY_CD, A.VENDOR_CD)
+                      		FROM DUAL) AS 업체명
+		               , TO_CHAR (A.IO_TIME, 'YYYY-MM-DD') AS 입고일
+		               , A.ITEM_INPUT_ID AS 입고번호
+		               , '*' || A.ITEM_INPUT_ID || '*' AS 입고번호_BAR128
+		               , NVL (V.VENDOR_NAME, '-') AS 상호
+		               , NVL (V.MANAGER_NAME, '-') AS 담당자
+		               , NVL (V.TEL_NO, '-') AS TEL
+		               , NVL (V.FAX_NO, '-') AS FAX
+		               , NVL (V.BUSINESS_NO, '-') AS 등록번호
+		               , NVL (V.ADDRESS, '-') AS 주소
+		               , NVL (V.CEO_NAME, '-') AS 대표
+		               , NVL (MV.MANAGER_NAME, '-') AS 납품업체_담당자
+                	   , NVL (MV.TEL_NO, '-') AS 납품업체_TEL
+		               , A.ITEM_ID AS PLIST_ITEM_ID
+		               , D.ITEM_NAME AS PLIST_ITEM_NAME
+		               , A.QTY AS PLIST_INPUT_QTY
+					   , (A.QTY + NVL ( (SELECT SUM (QTY)
+		                                   FROM MOM_ITEM_STOCK_INOUT IC
+		                                  WHERE IC.DIVISION_CD = A.DIVISION_CD
+		                                    AND IC.COMPANY_CD = A.COMPANY_CD
+		                                    AND IC.IO_CATEGORY = 'EQC001'
+		                                    AND IC.PREV_STOCK_INOUT_ID = A.ITEM_STOCK_INOUT_ID
+		                                  GROUP BY IC.PREV_STOCK_INOUT_ID), 0) ) AS PLIST_REMAIN_QTY
+		               , NVL (A.CONVERSION_UNIT_QTY, 1) AS PLIST_CONVERSION_UNIT_QTY
+		               , D.UNIT AS PLIST_UNIT
+		               , A.DESCRIPTION AS PLIST_DESCRIPTION
+		               , A.DIVISION_CD
+		               , A.COMPANY_CD
+		               , A.ITEM_INPUT_ID
+		               , A.CREATE_DATE
+		               , A.ITEM_STOCK_INOUT_ID
+		               , A.TRANSACTION_SEQ
+		            FROM MOM_ITEM_STOCK_INOUT A
+		               , MOM_EQM_ITEM_ORDER O
+		               , MOM_ITEM_DEFINITION D
+		               , MOM_VENDOR V
+		               , MOM_VENDOR MV 
+		           WHERE 1 = 1
+		             AND A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		             AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		             AND A.IO_TYPE = 'I'
+				     AND A.ITEM_INPUT_ID IN (${itemInputIds})
+		             AND A.WORK_ORDER_ID IS NULL
+		             AND A.ITEM_STOCK_TYPE IS NULL
+		             AND A.IO_CATEGORY IN
+		                    (SELECT C.CODE_ID
+		                       FROM MOM_CODE C
+		                      WHERE C.DIVISION_CD = A.DIVISION_CD
+	                            AND C.COMPANY_CD = A.COMPANY_CD
+	                            AND C.CODE_CLASS_ID = 'IO_CATEGORY'
+	                            AND C.USE_YN = 'Y'
+	                            AND C.ATTRIBUTE23 = 'Y'
+                                AND C.CODE_VALUES IS NULL)
+		             AND NOT EXISTS (SELECT '*'
+                                       FROM MOM_ITEM_STOCK_INOUT MIC
+                                      WHERE MIC.DIVISION_CD = A.DIVISION_CD
+                                        AND MIC.COMPANY_CD = A.COMPANY_CD
+                                        AND MIC.IO_TYPE = 'I'
+                                        AND MIC.PREV_STOCK_INOUT_ID = A.ITEM_STOCK_INOUT_ID)
+		             AND A.DIVISION_CD = O.DIVISION_CD(+)
+		             AND A.COMPANY_CD = O.COMPANY_CD(+)
+		             AND A.ITEM_ORDER_ID = O.EQUIPMENT_ORDER_ID(+)
+		             AND A.DIVISION_CD = D.DIVISION_CD(+)
+		             AND A.COMPANY_CD = D.COMPANY_CD(+)
+		             AND A.ITEM_ID = D.ITEM_ID
+		             AND A.DIVISION_CD = V.DIVISION_CD(+)
+		             AND A.COMPANY_CD = V.COMPANY_CD(+)
+					 AND A.DIVISION_CD = V.VENDOR_CD(+)
+					 AND A.DIVISION_CD = MV.DIVISION_CD(+)
+                  	 AND A.COMPANY_CD = MV.COMPANY_CD(+)
+                  	 AND A.VENDOR_CD = MV.VENDOR_CD(+)
+		           )
+		SELECT A.*
+		     , CASE
+		          WHEN MOD (PLIST_CELLROW, LIST_ALLCOUNT) = 1
+		          THEN
+		             (CEIL (PLIST_CELLROW / LIST_ALLCOUNT)) || '/' || (CEIL (GROUP_COUNT / LIST_ALLCOUNT))
+		          ELSE
+		             ''
+		       END
+		          AS PLIST_PAGING
+		  FROM (SELECT A.*
+		             , ROW_NUMBER() OVER(PARTITION BY A.ITEM_INPUT_ID ORDER BY A.CREATE_DATE, A.ITEM_STOCK_INOUT_ID, A.TRANSACTION_SEQ) PLIST_CELLROW
+		  			 , COUNT(*) OVER(PARTITION BY A.ITEM_INPUT_ID) AS GROUP_COUNT
+		  			 , (SELECT LIST_ALLCOUNT
+			              FROM MOM_EXCEL
+			             WHERE DIVISION_CD = A.DIVISION_CD
+			               AND COMPANY_CD = A.COMPANY_CD
+			               AND EXCEL_ID = #{excelId, jdbcType=VARCHAR}) AS LIST_ALLCOUNT
+		          FROM TEMP1 A
+		       ) A
+	</select>
+    
+    
+</mapper>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.siteMenu">
+	<!-- 미카 메뉴 -->
+	<select id="get_siteMenu_list" resultType="camelMap" parameterType="java.util.HashMap">
+		<if test="menuFlag != null and menuFlag != ''">
+			<if test='menuFlag == "Y"'>
+			   SELECT NVL(B.ID, A.ID) AS ID
+				    , NVL(B.PARENT_ID, A.PARENT_ID) AS PARENT_ID
+				    , (SELECT MOM_COMMON_PKG.FN_GET_MULTI_LANG ( #{divisionCd, jdbcType=VARCHAR}
+		                                                       , #{companyCd, jdbcType=VARCHAR}
+		                                                       , NVL(B.NAME, A.NAME)
+		                                                       , 'MENU'
+		                                                       , #{locale, jdbcType=VARCHAR}) 
+		                 FROM DUAL) AS NAME
+				    , A.URL
+				    , A.USE_FLAG
+				    , B.DISPLAY_ORDER
+					, DECODE(B.SITE_MENU_FLAG, 'Y', 'Y','N') AS SITE_MENU_FLAG
+					  FROM MICA_MENU A
+					     , (
+			</if>
+		</if>
+			     SELECT A.DIVISION_CD
+			             , A.COMPANY_CD
+			             , A.ID
+			             , A.PARENT_ID
+			             , A.DISPLAY_ORDER
+			             , B.USE_FLAG
+			             , A.NAME
+		<if test="menuFlag != null and menuFlag != ''">
+			<if test='menuFlag == "Y"'>
+			             , 'Y' AS SITE_MENU_FLAG
+			</if>
+		</if>
+			          FROM MOM_SITE_MENU A
+			             , MICA_MENU B
+			         WHERE A.DIVISION_CD = #{siteMenuDivisionCd, jdbcType=VARCHAR}
+			           AND A.COMPANY_CD = #{siteMenuCompanyCd, jdbcType=VARCHAR}
+			           AND A.ID = B.ID
+			           AND B.USE_FLAG = 'Y'
+			           AND B.LOCALE = 'KR'
+			           <if test="menuFlag != null and menuFlag != ''">
+							<if test='menuFlag == "Y"'>
+				           ) B
+				 WHERE 1 = 1
+				   AND A.USE_FLAG = 'Y'
+				   AND A.LOCALE = 'KR'
+				   AND A.ID = B.ID(+)
+				 ORDER BY B.DISPLAY_ORDER 
+							</if>
+						</if>
+	</select>
+	
+	<insert id="create_siteMenu" parameterType="java.util.HashMap">
+		INSERT INTO MOM_SITE_MENU ( 
+					DIVISION_CD,
+					COMPANY_CD,
+					ID,
+					PARENT_ID,
+					NAME,
+<!-- 					URL, -->
+<!-- 					ICON, -->
+<!-- 					MENU_GROUP, -->
+					DISPLAY_ORDER
+<!-- 					PARAM -->
+					)
+			   VALUES ( #{siteMenuDivisionCd, jdbcType=VARCHAR},
+			            #{siteMenuCompanyCd, jdbcType=VARCHAR},
+			            #{id, jdbcType=VARCHAR},
+						#{parentId, jdbcType=VARCHAR},
+						#{name, jdbcType=VARCHAR},
+<!-- 						#{url, jdbcType=VARCHAR}, -->
+<!-- 						#{icon, jdbcType=VARCHAR}, -->
+<!-- 						#{menuGroup, jdbcType=VARCHAR}, -->
+						#{displayOrder, jdbcType=INTEGER}
+<!-- 						#{param, jdbcType=VARCHAR} -->
+)
+	</insert>
+	
+	<update id="modify_siteMenu" parameterType="java.util.HashMap">
+		UPDATE MOM_SITE_MENU
+		SET DISPLAY_ORDER = #{displayOrder, jdbcType=INTEGER}
+		, PARENT_ID = #{parentId, jdbcType=VARCHAR}
+		, NAME = #{name, jdbcType=VARCHAR}
+		WHERE DIVISION_CD = #{siteMenuDivisionCd, jdbcType=VARCHAR}
+          AND COMPANY_CD = #{siteMenuCompanyCd, jdbcType=VARCHAR}
+          AND ID = #{id, jdbcType=VARCHAR}
+	</update>
+	
+    <delete id="remove_siteMenu" parameterType="java.util.HashMap">
+		DELETE FROM MOM_SITE_MENU
+		 WHERE DIVISION_CD = #{siteMenuDivisionCd, jdbcType=VARCHAR}
+           AND COMPANY_CD = #{siteMenuCompanyCd, jdbcType=VARCHAR}
+           AND ID = #{id, jdbcType=VARCHAR}
+	</delete>
+	
+	<update id="modify_authSiteMenu" parameterType="java.util.HashMap">
+	UPDATE MICA_AUTH_GROUP
+   	SET    MENU_LIST = REPLACE(MENU_LIST, ',"' || #{id, jdbcType=VARCHAR} || '"','')
+   	WHERE  DIVISION_CD = #{siteMenuDivisionCd, jdbcType=VARCHAR}
+    AND	   COMPANY_CD = #{siteMenuCompanyCd, jdbcType=VARCHAR}
+	</update>
+	
+	<select id="get_maxDisplayOrder_list" resultType="camelMap" parameterType="java.util.HashMap">
+	SELECT MAX(DISPLAY_ORDER) AS MAX_DISPLAY_ORDER
+	FROM   MOM_SITE_MENU
+	WHERE  1 = 1
+	<if test="parentId != null and parentId != ''">
+	AND	   PARENT_ID = #{parentId, jdbcType=VARCHAR}
+	</if>
+	AND	   DIVISION_CD = #{siteMenuDivisionCd, jdbcType=VARCHAR}
+    AND	   COMPANY_CD = #{siteMenuCompanyCd, jdbcType=VARCHAR} 
+	</select>
+	
+	<select id="get_getParentIds_list" resultType="camelMap" parameterType="java.util.HashMap">
+	SELECT DISTINCT PARENT_ID FROM MOM_SITE_MENU
+	WHERE DIVISION_CD = #{siteMenuDivisionCd, jdbcType=VARCHAR}
+	AND COMPANY_CD = #{siteMenuCompanyCd, jdbcType=VARCHAR} 
+	ORDER BY PARENT_ID 
+	</select>
+</mapper>

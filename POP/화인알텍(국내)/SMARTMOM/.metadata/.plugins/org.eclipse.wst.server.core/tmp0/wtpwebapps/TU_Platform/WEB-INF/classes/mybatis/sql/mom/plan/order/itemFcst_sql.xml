@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.plan.order.itemFcst">
+	<select id="get_itemFcst_list" resultType="camelMap" parameterType="java.util.HashMap">
+	WITH TEMP1 AS (
+			SELECT R.ORGANIZATION_CODE
+		     , R.ITEM_NO
+		     , R.SUPPLIER_CODE
+		     , R.CATEGORY
+		     , R.W1_QTY
+		     , R.W2_QTY
+		     , R.W3_QTY
+		     , R.W4_QTY
+		     , R.W5_QTY
+		     , R.W6_QTY  
+		     , R.W7_QTY
+		     , R.W8_QTY
+		     , R.W9_QTY
+		     , R.W10_QTY
+		     , R.W11_QTY
+		     , R.W12_QTY
+		     , R.W13_QTY
+		     , R.W14_QTY
+		     , R.W15_QTY
+		     , R.W16_QTY
+		     , R.W17_QTY
+		     , R.W18_QTY
+		     , R.W19_QTY
+		     , R.W20_QTY
+		     , R.W21_QTY
+		     , R.W22_QTY
+		     , R.W23_QTY
+		     , R.W24_QTY
+		     , R.W25_QTY
+		     , R.W26_QTY
+		     , R.W27_QTY
+		     , R.W28_QTY
+		     , R.W29_QTY
+		     , R.W30_QTY
+		     , R.W31_QTY
+		     , R.W32_QTY
+		     , R.M1_QTY
+		     , R.M2_QTY
+		     , R.M3_QTY
+		     , R.M4_QTY
+		     , R.M5_QTY
+		     , R.M6_QTY
+		FROM   TU_EAI.IF_LGE_SUP_SUPPLIER_REQ R 
+		WHERE  SUPPLIER_CODE = (SELECT P.B2BI_VENDOR_CD
+		                          FROM   MOM_PARAMETER P
+		                          WHERE  P.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		                          AND    P.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR})
+		<if test="fromDate != null and fromDate != ''">
+		AND    R.WORK_YYYYMMDD = #{fromDate, jdbcType=VARCHAR}
+		</if>
+		AND    R.CATEGORY != 'CALENDAR'
+		<if test="orgCode != null and orgCode != ''">
+		AND    R.ORGANIZATION_CODE = #{orgCode, jdbcType=VARCHAR}
+		</if>
+		<if test="itemNo != null and itemNo != ''">
+		AND    R.ITEM_NO LIKE '%'|| TRIM(UPPER(#{itemNo, jdbcType=VARCHAR})) ||'%'
+		</if>
+	    )
+      SELECT A.*
+           , B.ROW_COUNT
+        FROM (SELECT A.*
+                 , ROWNUM GRIDROW
+              FROM TEMP1 A) A
+         , (SELECT COUNT(*) ROW_COUNT
+              FROM TEMP1) B 
+        <if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+		 WHERE GRIDROW BETWEEN #{startPage, jdbcType=INTEGER} AND #{endPage, jdbcType=INTEGER}
+	    </if>        
+	</select>
+	
+	<select id="get_itemFcstDate_list" resultType="camelMap" parameterType="java.util.HashMap">
+	SELECT R.W1_QTY 
+	     , R.W2_QTY
+	     , R.W3_QTY
+	     , R.W4_QTY
+	     , R.W5_QTY
+	     , R.W6_QTY  
+	     , R.W7_QTY
+	     , R.W8_QTY
+	     , R.W9_QTY
+	     , R.W10_QTY
+	     , R.W11_QTY
+	     , R.W12_QTY
+	     , R.W13_QTY
+	     , R.W14_QTY
+	     , R.W15_QTY
+	     , R.W16_QTY
+	     , R.W17_QTY
+	     , R.W18_QTY
+	     , R.W19_QTY
+	     , R.W20_QTY
+	     , R.W21_QTY
+	     , R.W22_QTY
+	     , R.W23_QTY
+	     , R.W24_QTY
+	     , R.W25_QTY
+	     , R.W26_QTY
+	     , R.W27_QTY
+	     , R.W28_QTY
+	     , R.W29_QTY
+	     , R.W30_QTY
+	     , R.W31_QTY
+	     , R.W32_QTY
+	     , R.M1_QTY
+	     , R.M2_QTY
+	     , R.M3_QTY
+	     , R.M4_QTY
+	     , R.M5_QTY
+	     , R.M6_QTY
+	FROM   TU_EAI.IF_LGE_SUP_SUPPLIER_REQ R 
+	WHERE  SUPPLIER_CODE =  (SELECT P.B2BI_VENDOR_CD
+	                          FROM   MOM_PARAMETER P
+	                          WHERE  P.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	                          AND    P.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR})
+	AND    R.WORK_YYYYMMDD = #{fromDate, jdbcType=VARCHAR}
+	AND    R.ITEM_NO = 'CALENDAR' 
+	AND    ROWNUM = 1
+	
+	</select>
+
+	<select id="get_itemFcstSearchDate_list" resultType="camelMap" parameterType="java.util.HashMap">
+	SELECT MAX(R.WORK_YYYYMMDD) AS CODE, MAX(R.WORK_YYYYMMDD) AS NAME
+	FROM   TU_EAI.IF_LGE_SUP_SUPPLIER_REQ R 
+	WHERE  R.SUPPLIER_CODE = (SELECT P.B2BI_VENDOR_CD
+		                          FROM   MOM_PARAMETER P
+		                          WHERE  P.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	                          	  AND    P.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR})
+	
+	</select>
+	
+	<select id="get_itemFcstSearchOrg_list" resultType="camelMap" parameterType="java.util.HashMap">
+	SELECT DISTINCT R.ORGANIZATION_CODE AS CODE, R.ORGANIZATION_CODE AS NAME 
+	FROM   TU_EAI.IF_LGE_SUP_SUPPLIER_REQ R 
+	WHERE  R.SUPPLIER_CODE = (SELECT P.B2BI_VENDOR_CD
+	                          FROM   MOM_PARAMETER P
+	                          WHERE  P.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+                          	  AND    P.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR})
+	AND    R.WORK_YYYYMMDD = #{fromDate, jdbcType=VARCHAR}
+	ORDER BY R.ORGANIZATION_CODE 
+	
+	</select>
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.monitor">
+	<insert id="create_monitor" parameterType="java.util.HashMap">
+		INSERT INTO MOM_MONITOR (
+			  DIVISION_CD
+			, COMPANY_CD
+			, ACTION_ID
+			, CRUD_CD
+			, DESCRIPTION
+			, START_TIME
+			, UPDATE_BY
+		)
+		VALUES (
+			  #{divisionCd	, jdbcType=VARCHAR}
+			, #{companyCd	, jdbcType=VARCHAR}
+			, #{queryId		, jdbcType=VARCHAR}
+			, #{crudCd		, jdbcType=VARCHAR}
+			, #{description	, jdbcType=VARCHAR}
+			, MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			, #{userId		, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="modify_monitor" parameterType="java.util.HashMap">
+		UPDATE 
+			MOM_MONITOR
+		SET 
+			  CPU_USAGE 	= #{cpuUsage	, jdbcType=VARCHAR}
+			, PROCESS_TIME	= #{processTime	, jdbcType=VARCHAR}
+			, IS_SUCCESS 	= #{isSuccess	, jdbcType=VARCHAR}
+			, END_TIME 		= SYSDATE
+		WHERE
+			    DIVISION_CD = #{divisionCd	, jdbcType=VARCHAR}
+			AND COMPANY_CD 	= #{companyCd	, jdbcType=VARCHAR}
+			AND ACTION_ID 	= #{queryId		, jdbcType=VARCHAR}
+			AND UPDATE_BY	= #{userId		, jdbcType=VARCHAR}
+			AND IS_SUCCESS IS NULL
+	</update>
+</mapper>

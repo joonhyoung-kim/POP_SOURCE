@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.reference.resource.facilityBin"> 
+	<select id="get_facilityBin_list" resultType="camelMap" parameterType="java.util.HashMap">
+	WITH TEMP1 AS (
+		SELECT A.DIVISION_CD
+		     , A.COMPANY_CD
+		     , A.BIN_ID
+		     , A.RACK_ID
+		     , A.LOCATION_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME( A.DIVISION_CD 
+		                                                  , A.COMPANY_CD 
+		                                                  , A.LOCATION_CD )
+		          FROM DUAL ) AS LOCATION_NAME
+		     , A.X
+		     , A.Y
+		     , A.Z
+		     , A.WIDTH
+		     , A.HEIGHT
+		     , A.ACTIVITY
+		     , A.PREV_ACTIVITY
+		     , A.CUSTOM_ACTIVITY
+		     , A.PREV_CUSTOM_ACTIVITY
+		     , A.USE_YN
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD 
+		                                              , A.COMPANY_CD 
+		                                              , 'USE_FLAG' 
+		                                              , A.USE_YN )
+		          FROM DUAL ) AS USE_YN_NAME
+		     , A.COMMENTS
+		     , A.IN_DEFAULT_YN       
+			 , A.OUT_DEFAULT_YN  
+		     , A.CREATE_BY
+		     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( A.DIVISION_CD 
+		                                              , A.COMPANY_CD 
+		                                              , A.CREATE_BY )
+		          FROM DUAL ) AS CREATE_BY_NAME
+		     , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD') AS CREATE_DATE
+		     , A.UPDATE_BY
+		     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME( A.DIVISION_CD 
+		                                              , A.COMPANY_CD 
+		                                              , A.UPDATE_BY )
+		          FROM DUAL ) AS UPDATE_BY_NAME
+		     , TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD') AS UPDATE_DATE
+		     , A.DESCRIPTION
+		     FROM MOM_FACILITY_BIN A
+		 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   <if test="binId != null and binId != ''">
+		   AND UPPER(A.BIN_ID) LIKE '%' || TRIM(UPPER(#{binId, jdbcType=VARCHAR})) || '%'
+		   </if>
+		   <if test="rackId != null and rackId != ''">
+           AND UPPER(A.RACK_ID) LIKE '%' || TRIM(UPPER(#{rackId, jdbcType=VARCHAR})) || '%'
+           </if>
+           <if test="locationCd != null and locationCd != ''">
+           AND A.LOCATION_CD = #{locationCd, jdbcType=VARCHAR}
+           </if>
+		 ORDER BY A.BIN_ID)
+     SELECT A.*
+          , B.ROW_COUNT
+     FROM (SELECT A.*
+                , ROWNUM GRIDROW
+             FROM TEMP1 A) A
+        , (SELECT COUNT(*) ROW_COUNT
+             FROM TEMP1) B 
+    <if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+     WHERE GRIDROW BETWEEN #{startPage, jdbcType=INTEGER} AND #{endPage, jdbcType=INTEGER}
+    </if>
+	</select>
+	
+	<select id="get_facilityBin" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT *
+		  FROM MOM_FACILITY_BIN
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND BIN_ID = #{binId, jdbcType=VARCHAR}
+	</select>
+	
+	<insert id="create_facilityBin" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+		INSERT INTO MOM_FACILITY_BIN( 
+		      DIVISION_CD         
+			, COMPANY_CD          
+			, BIN_ID              
+			, RACK_ID             
+			, LOCATION_CD         
+			, X                   
+			, Y                   
+			, Z                   
+			, WIDTH               
+			, HEIGHT              
+			, ACTIVITY            
+			, PREV_ACTIVITY       
+			, CUSTOM_ACTIVITY     
+			, PREV_CUSTOM_ACTIVITY
+			, USE_YN              
+			, COMMENTS            
+			, DESCRIPTION         
+			, CREATE_BY           
+			, CREATE_DATE         
+			, UPDATE_BY           
+			, UPDATE_DATE         
+			, TID                 
+			, IN_DEFAULT_YN       
+			, OUT_DEFAULT_YN      
+
+		)
+		 VALUES (
+			#{divisionCd, jdbcType=VARCHAR},
+			#{companyCd, jdbcType=VARCHAR},
+			TRIM(#{binId, jdbcType=VARCHAR}),
+			TRIM(#{rackId, jdbcType=VARCHAR}),
+			TRIM(UPPER(#{locationCd, jdbcType=VARCHAR})),
+			#{x, jdbcType=INTEGER},
+			#{y, jdbcType=INTEGER},
+			#{z, jdbcType=INTEGER},
+			#{width, jdbcType=INTEGER},
+			#{height, jdbcType=INTEGER},
+			#{activity, jdbcType=VARCHAR},
+			#{prevActivity, jdbcType=VARCHAR},
+			#{customActivity, jdbcType=VARCHAR},
+			#{prevCustomActivity, jdbcType=VARCHAR},
+			NVL(TRIM(UPPER(#{useYn, jdbcType=VARCHAR})), 'Y'),
+			#{comments, jdbcType=VARCHAR},
+			#{description, jdbcType=VARCHAR},
+			#{createBy, jdbcType=VARCHAR},
+			MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			#{createBy, jdbcType=VARCHAR},
+			MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			#{tid, jdbcType=VARCHAR},
+			TRIM(UPPER(#{inDefaultYn, jdbcType=VARCHAR})),
+			TRIM(UPPER(#{outDefaultYn, jdbcType=VARCHAR}))
+		);
+			   
+		INSERT INTO MOM_FACILITY_BIN_HIST (
+			LAST_EVENT_SEQ,
+			DIVISION_CD,
+			COMPANY_CD,
+			BIN_ID,
+			RACK_ID,
+			LOCATION_CD,
+			X,
+			Y,
+			Z,
+			WIDTH,
+			HEIGHT,
+			ACTIVITY,
+			PREV_ACTIVITY,
+			CUSTOM_ACTIVITY,
+			PREV_CUSTOM_ACTIVITY,
+			USE_YN,
+			COMMENTS,
+			DESCRIPTION,
+			CREATE_BY,
+			CREATE_DATE,
+			UPDATE_BY,
+			UPDATE_DATE,
+			TID
+
+		)
+		 SELECT S_ORDER_SEQ.NEXTVAL,
+				DIVISION_CD,
+				COMPANY_CD,
+				BIN_ID,
+				RACK_ID,
+				LOCATION_CD,
+				X,
+				Y,
+				Z,
+				WIDTH,
+				HEIGHT,
+				ACTIVITY,
+				PREV_ACTIVITY,
+				CUSTOM_ACTIVITY,
+				PREV_CUSTOM_ACTIVITY,
+				USE_YN,
+				COMMENTS,
+				DESCRIPTION,
+				CREATE_BY,
+				CREATE_DATE,
+				UPDATE_BY,
+				UPDATE_DATE,
+				TID
+		  FROM MOM_FACILITY_BIN
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		   AND BIN_ID = TRIM(#{binId, jdbcType=VARCHAR})
+		 ;
+		 
+		SELECT
+			CASE 
+				WHEN COUNT(BIN_ID) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_FACILITY_BIN
+		WHERE 
+			    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			AND BIN_ID = TRIM(#{binId, jdbcType=VARCHAR})
+		;
+      END
+    }
+	</insert>
+	
+	<update id="modify_facilityBin" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{ CALL
+		  DECLARE
+		  BEGIN
+		  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+		  	
+			UPDATE MOM_FACILITY_BIN
+			SET    RACK_ID =  #{rackId, jdbcType=VARCHAR} 
+				 , LOCATION_CD = TRIM(UPPER(#{locationCd, jdbcType=VARCHAR})) 
+				 , X = #{x, jdbcType=NUMERIC} 
+				 , Y = #{y, jdbcType=NUMERIC} 
+				 , Z = #{z, jdbcType=NUMERIC} 
+				 , WIDTH = #{width, jdbcType=NUMERIC} 
+				 , HEIGHT = #{height, jdbcType=NUMERIC} 
+			     , UPDATE_DATE         = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			     , UPDATE_BY           = #{updateBy, jdbcType=VARCHAR}  
+			     , USE_YN              = NVL(TRIM(UPPER(#{useYn, jdbcType=VARCHAR})), 'Y')
+			     , DESCRIPTION		   = #{description, jdbcType=VARCHAR}
+			     , IN_DEFAULT_YN       = TRIM(UPPER(#{inDefaultYn, jdbcType=VARCHAR}))
+				 , OUT_DEFAULT_YN      = TRIM(UPPER(#{outDefaultYn, jdbcType=VARCHAR}))
+			 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			   AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			   AND BIN_ID = TRIM(#{binId, jdbcType=VARCHAR})
+			;
+			
+			INSERT INTO MOM_FACILITY_BIN_HIST
+					( LAST_EVENT_SEQ,
+					  DIVISION_CD,
+					  COMPANY_CD,
+					  BIN_ID,
+					  RACK_ID,
+					  LOCATION_CD,
+					  X,
+					  Y,
+					  Z,
+					  WIDTH,
+					  HEIGHT,
+					  ACTIVITY,
+					  PREV_ACTIVITY,
+					  CUSTOM_ACTIVITY,
+					  PREV_CUSTOM_ACTIVITY,
+					  USE_YN,
+					  COMMENTS,
+					  DESCRIPTION,
+					  CREATE_BY,
+					  CREATE_DATE,
+					  UPDATE_BY,
+					  UPDATE_DATE,
+					  TID
+					)
+			SELECT S_ORDER_SEQ.NEXTVAL,
+			       DIVISION_CD,
+			 	   COMPANY_CD,
+			 	   BIN_ID,
+			 	   RACK_ID,
+			 	   LOCATION_CD,
+				   X,
+				   Y,
+				   Z,
+				   WIDTH,
+				   HEIGHT,
+				   ACTIVITY,
+				   PREV_ACTIVITY,
+				   CUSTOM_ACTIVITY,
+				   PREV_CUSTOM_ACTIVITY,
+				   USE_YN,            
+				   COMMENTS,
+				   DESCRIPTION,
+				   CREATE_BY,
+				   CREATE_DATE,
+				   UPDATE_BY,
+				   UPDATE_DATE,
+				   TID
+			  FROM MOM_FACILITY_BIN A 
+			 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+               AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+               AND BIN_ID = TRIM(#{binId, jdbcType=VARCHAR})
+            ;
+			
+		SELECT
+			CASE 
+				WHEN COUNT(BIN_ID) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_FACILITY_BIN
+		WHERE 
+			    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			AND BIN_ID = TRIM(#{binId, jdbcType=VARCHAR})
+		;
+		END
+		}
+	</update>
+	
+	<delete id="remove_facilityBin" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+		  INSERT INTO MOM_FACILITY_BIN_HIST
+				( LAST_EVENT_SEQ,
+				 DIVISION_CD,
+				 COMPANY_CD,
+				 BIN_ID,
+				 RACK_ID,
+				 LOCATION_CD,
+				 X,
+				 Y,
+				 Z,
+				 WIDTH,
+				 HEIGHT,
+				 ACTIVITY,
+				 PREV_ACTIVITY,
+				 CUSTOM_ACTIVITY,
+				 PREV_CUSTOM_ACTIVITY,
+				 USE_YN,            
+				 COMMENTS,
+				 DESCRIPTION,
+				 CREATE_BY,
+				 CREATE_DATE,
+				 UPDATE_BY,
+				 UPDATE_DATE,
+				 TID
+				)
+		SELECT S_ORDER_SEQ.NEXTVAL,
+		      	DIVISION_CD,
+				COMPANY_CD,
+				BIN_ID,
+				RACK_ID,
+				LOCATION_CD,
+				X,
+				Y,
+				Z,
+				WIDTH,
+				HEIGHT,
+				ACTIVITY,
+				PREV_ACTIVITY,
+				CUSTOM_ACTIVITY,
+				PREV_CUSTOM_ACTIVITY,
+				USE_YN,            
+				COMMENTS,
+				'Delete Data',
+				CREATE_BY,
+				MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+				UPDATE_BY,
+				MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+				TID
+		  FROM MOM_FACILITY_BIN
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+           AND BIN_ID = TRIM(#{binId, jdbcType=VARCHAR})
+	     ;
+            
+		DELETE 
+		FROM   MOM_FACILITY_BIN
+		WHERE  DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		  AND  COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		  AND  BIN_ID = TRIM(#{binId, jdbcType=VARCHAR})
+		;
+		
+		SELECT
+			CASE 
+				WHEN COUNT(BIN_ID) = 0 THEN 'S'
+				ELSE 'E' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_FACILITY_BIN
+		WHERE 
+			    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			AND BIN_ID = TRIM(#{binId, jdbcType=VARCHAR})
+		;
+	  END
+	}
+	</delete>
+	
+	<select id="get_binDefaultValid_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT COUNT(*) AS COUNT
+		FROM MOM_FACILITY_BIN
+		WHERE 1 = 1
+		<if test="locationCd != null and locationCd != ''">
+		AND LOCATION_CD = #{locationCd, jdbcType=VARCHAR}
+		</if>
+		<if test='inDefaultYn == "Y"'>
+		AND IN_DEFAULT_YN = 'Y'
+		</if>
+		<if test='outDefaultYn == "Y"'>
+		AND OUT_DEFAULT_YN = 'Y'
+		</if>
+		
+	</select>
+</mapper>

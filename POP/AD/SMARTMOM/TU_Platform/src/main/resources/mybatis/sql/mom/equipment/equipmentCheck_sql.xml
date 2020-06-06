@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.equipment.equipmentCheck">
+	<select id="get_equipmentCheck_list" resultType="camelMap" parameterType="java.util.HashMap">
+	<if test='saveFlag == "N"'>
+		SELECT A.EQUIPMENT_TYPE
+		    , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD
+		                                             , A.COMPANY_CD
+		                                             , 'EQUIPMENT_TYPE'
+		                                             , A.EQUIPMENT_TYPE) 
+		          FROM DUAL) AS EQUIPMENT_TYPE_NAME
+		     , A.CHECK_TYPE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD
+		                                             , A.COMPANY_CD
+		                                             , 'EQM_CHECK_TYPE'
+		                                             , A.CHECK_TYPE) 
+		          FROM DUAL) AS CHECK_TYPE_NAME
+		     , A.CHECK_METHOD
+		     , A.CYCLE_TYPE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD
+		                                             , A.COMPANY_CD
+		                                             , 'EQM_INSPEC_INTERVAL'
+		                                             , A.CYCLE_TYPE) 
+		          FROM DUAL) AS CYCLE_TYPE_NAME
+		     , A.CHECK_SEQ
+		     , A.PRIORITY
+		     , B.D1
+		     , B.D2
+		     , B.D3
+		     , B.D4
+		     , B.D5
+		     , B.D6
+		     , B.D7
+		     , B.D8
+		     , B.D9
+		     , B.D10
+		     , B.D11
+		     , B.D12
+		     , B.D13
+		     , B.D14
+		     , B.D15
+		     , B.D16
+		     , B.D17
+		     , B.D18
+		     , B.D19
+		     , B.D20
+		     , B.D21
+		     , B.D22
+		     , B.D23
+		     , B.D24
+		     , B.D25
+		     , B.D26
+		     , B.D27
+		     , B.D28
+		     , B.D29
+		     , B.D30
+		     , B.D31
+		     , B.DESCRIPTION
+		  FROM MOM_EQM_CHECK A
+		     , (SELECT * FROM MOM_EQM_CHECK_RESULT 
+		         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		           AND YYYYMM = #{yyyymm, jdbcType=VARCHAR}
+		           AND EQUIPMENT_CD = #{equipmentCd, jdbcType=VARCHAR}
+		       ) B
+		 WHERE A.DIVISION_CD = B.DIVISION_CD(+)
+		   AND A.COMPANY_CD = B.COMPANY_CD(+)
+		   AND A.CHECK_SEQ = B.CHECK_SEQ(+)
+		   AND A.EQUIPMENT_TYPE = B.EQUIPMENT_TYPE(+)
+		   AND A.EQUIPMENT_TYPE = (SELECT ME.EQUIPMENT_TYPE FROM MOM_EQUIPMENT ME
+		                            WHERE ME.DIVISION_CD = A.DIVISION_CD
+		                              AND ME.COMPANY_CD = A.COMPANY_CD
+		                              AND ME.EQUIPMENT_CD = #{equipmentCd, jdbcType=VARCHAR}
+		                           )
+		   AND A.USE_YN = 'Y'
+		 ORDER BY A.PRIORITY
+	</if>
+	<if test='saveFlag == "Y"'>
+		SELECT A.EQUIPMENT_TYPE
+			    , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD
+			                                             , A.COMPANY_CD
+			                                             , 'EQUIPMENT_TYPE'
+			                                             , A.EQUIPMENT_TYPE) 
+			          FROM DUAL) AS EQUIPMENT_TYPE_NAME
+			     , A.CHECK_TYPE
+			     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD
+			                                             , A.COMPANY_CD
+			                                             , 'EQM_CHECK_TYPE'
+			                                             , A.CHECK_TYPE) 
+			          FROM DUAL) AS CHECK_TYPE_NAME
+			     , A.CHECK_METHOD
+			     , A.CYCLE_TYPE
+			     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD
+			                                             , A.COMPANY_CD
+			                                             , 'EQM_INSPEC_INTERVAL'
+			                                             , A.CYCLE_TYPE) 
+			          FROM DUAL) AS CYCLE_TYPE_NAME
+			     , A.CHECK_SEQ
+	             , A.PRIORITY
+			     , A.D1
+			     , A.D2
+			     , A.D3
+			     , A.D4
+			     , A.D5
+			     , A.D6
+			     , A.D7
+			     , A.D8
+			     , A.D9
+			     , A.D10
+			     , A.D11
+			     , A.D12
+			     , A.D13
+			     , A.D14
+			     , A.D15
+			     , A.D16
+			     , A.D17
+			     , A.D18
+			     , A.D19
+			     , A.D20
+			     , A.D21
+			     , A.D22
+			     , A.D23
+			     , A.D24
+			     , A.D25
+			     , A.D26
+			     , A.D27
+			     , A.D28
+			     , A.D29
+			     , A.D30
+			     , A.D31
+			     , A.CONTROL_NUMBER
+				 , A.DEPARTMENT
+				 , A.CHECKER
+				 , A.DESCRIPTION
+			  FROM MOM_EQM_CHECK_RESULT A
+			 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+			   AND A.YYYYMM = #{yyyymm, jdbcType=VARCHAR}
+			   AND A.EQUIPMENT_CD = #{equipmentCd, jdbcType=VARCHAR}
+		  ORDER BY A.PRIORITY
+	</if>
+		
+	</select>
+	
+	<insert id="create_equipmentCheck" parameterType="java.util.HashMap">
+		INSERT INTO MOM_EQM_CHECK_RESULT
+            (     DIVISION_CD
+				, COMPANY_CD
+				, CHECK_SEQ
+				, YYYYMM
+				, EQUIPMENT_TYPE
+				, EQUIPMENT_CD
+				, CHECK_TYPE
+				, CHECK_METHOD
+				, CYCLE_TYPE
+				, CONTROL_NUMBER
+				, DEPARTMENT
+				, CHECKER
+				, D1
+				, D2
+				, D3
+				, D4
+				, D5
+				, D6
+				, D7
+				, D8
+				, D9
+				, D10
+				, D11
+				, D12
+				, D13
+				, D14
+				, D15
+				, D16
+				, D17
+				, D18
+				, D19
+				, D20
+				, D21
+				, D22
+				, D23
+				, D24
+				, D25
+				, D26
+				, D27
+				, D28
+				, D29
+				, D30
+				, D31
+				, PRIORITY
+				, CREATE_DATE
+				, CREATE_BY
+				, UPDATE_DATE
+				, UPDATE_BY
+				, DESCRIPTION
+			 )
+        VALUES      
+            ( #{divisionCd, jdbcType=VARCHAR}
+			, #{companyCd, jdbcType=VARCHAR}
+			, #{checkSeq, jdbcType=VARCHAR}
+			, #{yyyymm, jdbcType=VARCHAR}
+			, #{equipmentType, jdbcType=VARCHAR}
+			, #{equipmentCd, jdbcType=VARCHAR}
+			, #{checkType, jdbcType=VARCHAR}
+			, #{checkMethod, jdbcType=VARCHAR}
+			, #{cycleType, jdbcType=VARCHAR}
+			, #{controlNumber, jdbcType=VARCHAR}
+			, #{department, jdbcType=VARCHAR}
+			, #{userId, jdbcType=VARCHAR}
+			, #{d1, jdbcType=VARCHAR}
+			, #{d2, jdbcType=VARCHAR}
+			, #{d3, jdbcType=VARCHAR}
+			, #{d4, jdbcType=VARCHAR}
+			, #{d5, jdbcType=VARCHAR}
+			, #{d6, jdbcType=VARCHAR}
+			, #{d7, jdbcType=VARCHAR}
+			, #{d8, jdbcType=VARCHAR}
+			, #{d9, jdbcType=VARCHAR}
+			, #{d10, jdbcType=VARCHAR}
+			, #{d11, jdbcType=VARCHAR}
+			, #{d12, jdbcType=VARCHAR}
+			, #{d13, jdbcType=VARCHAR}
+			, #{d14, jdbcType=VARCHAR}
+			, #{d15, jdbcType=VARCHAR}
+			, #{d16, jdbcType=VARCHAR}
+			, #{d17, jdbcType=VARCHAR}
+			, #{d18, jdbcType=VARCHAR}
+			, #{d19, jdbcType=VARCHAR}
+			, #{d20, jdbcType=VARCHAR}
+			, #{d21, jdbcType=VARCHAR}
+			, #{d22, jdbcType=VARCHAR}
+			, #{d23, jdbcType=VARCHAR}
+			, #{d24, jdbcType=VARCHAR}
+			, #{d25, jdbcType=VARCHAR}
+			, #{d26, jdbcType=VARCHAR}
+			, #{d27, jdbcType=VARCHAR}
+			, #{d28, jdbcType=VARCHAR}
+			, #{d29, jdbcType=VARCHAR}
+			, #{d30, jdbcType=VARCHAR}
+			, #{d31, jdbcType=VARCHAR}
+			, #{priority, jdbcType=VARCHAR}
+			, MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			, #{userId, jdbcType=VARCHAR}
+			, MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			, #{userId, jdbcType=VARCHAR}
+			, #{description, jdbcType=VARCHAR}
+			)
+	</insert>
+	
+	<update id="modify_equipmentCheck" statementType="CALLABLE" parameterType="java.util.HashMap">
+		UPDATE MOM_EQM_CHECK_RESULT
+		   SET D1 = #{d1, jdbcType=VARCHAR}
+			 , D2 = #{d2, jdbcType=VARCHAR}
+			 , D3 = #{d3, jdbcType=VARCHAR}
+			 , D4 = #{d4, jdbcType=VARCHAR}
+			 , D5 = #{d5, jdbcType=VARCHAR}
+			 , D6 = #{d6, jdbcType=VARCHAR}
+			 , D7 = #{d7, jdbcType=VARCHAR}
+			 , D8 = #{d8, jdbcType=VARCHAR}
+			 , D9 = #{d9, jdbcType=VARCHAR}
+			 , D10 = #{d10, jdbcType=VARCHAR}
+			 , D11 = #{d11, jdbcType=VARCHAR}
+			 , D12 = #{d12, jdbcType=VARCHAR}
+			 , D13 = #{d13, jdbcType=VARCHAR}
+			 , D14 = #{d14, jdbcType=VARCHAR}
+			 , D15 = #{d15, jdbcType=VARCHAR}
+			 , D16 = #{d16, jdbcType=VARCHAR}
+			 , D17 = #{d17, jdbcType=VARCHAR}
+			 , D18 = #{d18, jdbcType=VARCHAR}
+			 , D19 = #{d19, jdbcType=VARCHAR}
+			 , D20 = #{d20, jdbcType=VARCHAR}
+			 , D21 = #{d21, jdbcType=VARCHAR}
+			 , D22 = #{d22, jdbcType=VARCHAR}
+			 , D23 = #{d23, jdbcType=VARCHAR}
+			 , D24 = #{d24, jdbcType=VARCHAR}
+			 , D25 = #{d25, jdbcType=VARCHAR}
+			 , D26 = #{d26, jdbcType=VARCHAR}
+			 , D27 = #{d27, jdbcType=VARCHAR}
+			 , D28 = #{d28, jdbcType=VARCHAR}
+			 , D29 = #{d29, jdbcType=VARCHAR}
+			 , D30 = #{d30, jdbcType=VARCHAR}
+			 , D31 = #{d31, jdbcType=VARCHAR}
+		     , UPDATE_DATE = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		     , UPDATE_BY = #{userId, jdbcType=VARCHAR}
+		     , CONTROL_NUMBER = #{controlNumber, jdbcType=VARCHAR}
+		     , DEPARTMENT = #{department, jdbcType=VARCHAR}
+		     , CHECKER = #{userId, jdbcType=VARCHAR}
+		     , DESCRIPTION = #{description, jdbcType=VARCHAR}
+		 WHERE 
+		       DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND CHECK_SEQ = #{checkSeq, jdbcType=VARCHAR}
+		   AND YYYYMM = #{yyyymm, jdbcType=VARCHAR}
+		
+	</update>
+
+	<select id="get_equipmentCheckCnt_list" resultType="camelMap" parameterType="java.util.HashMap">
+	SELECT COUNT(*) AS COUNT 
+	  FROM MOM_EQM_CHECK_RESULT
+	 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+       AND YYYYMM = #{yyyymm, jdbcType=VARCHAR}
+       AND EQUIPMENT_CD = #{equipmentCd, jdbcType=VARCHAR}
+	</select>
+	
+	<select id="get_user_list" resultType="camelMap" parameterType="java.util.HashMap">
+	SELECT USER_ID
+	     , NAME
+	     , DEPT_CD
+	     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(DIVISION_CD, COMPANY_CD, 'DEPT_CD', DEPT_CD)
+	          FROM DUAL) AS DEPT_NAME
+	  FROM TU_USER
+	 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	   AND EMP_NO = #{checker, jdbcType=VARCHAR}
+	</select>
+</mapper>

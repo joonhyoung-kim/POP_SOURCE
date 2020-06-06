@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.addition.dailySalesTotal">
+	<select id="get_dailySalesTotal_list" resultType="camelMap" parameterType="java.util.HashMap">
+		WITH TEMP1
+		     AS (  SELECT A.VENDOR_CD
+	
+		                , SUM (QTY) SUM_QTY
+		                , SUM (INOUT_PRICE) SUM_AMT
+		                , A.DIVISION_CD
+		                , A.COMPANY_CD
+		             FROM MOM_ITEM_STOCK_INOUT A, MOM_ITEM_DEFINITION MD
+		            WHERE A.DIVISION_CD = MD.DIVISION_CD
+		              AND A.COMPANY_CD = MD.COMPANY_CD
+		              AND A.ITEM_ID = MD.ITEM_ID
+		              AND A.DIVISION_CD = #{divisionCd	,jdbcType=VARCHAR}
+		              AND A.COMPANY_CD = #{companyCd,jdbcType=VARCHAR}
+		              AND A.IO_TYPE = 'I'
+		               
+		              AND TO_CHAR (IO_TIME, 'YYYY-MM') = SUBSTR(#{fromDate,jdbcType=VARCHAR}, 0, 7)
+		               
+		              AND A.IO_CATEGORY IN (SELECT MC.CODE_ID
+		                                      FROM MOM_CODE MC
+		                                     WHERE MC.DIVISION_CD = A.DIVISION_CD 
+		                                       AND MC.COMPANY_CD = A.COMPANY_CD 
+		                                       AND MC.CODE_CLASS_ID = 'IO_CATEGORY' 
+		                                       AND MC.USE_YN = 'Y' 
+		                                       AND MC.ATTRIBUTE13 = 'Y')
+		              AND NOT EXISTS
+		                     (SELECT '*'
+		                        FROM MOM_ITEM_STOCK_INOUT IC
+		                       WHERE IC.DIVISION_CD = A.DIVISION_CD 
+		                         AND IC.COMPANY_CD = A.COMPANY_CD 
+		                         AND IC.IO_TYPE = A.IO_TYPE 
+		                         AND IC.PREV_STOCK_INOUT_ID = A.ITEM_STOCK_INOUT_ID)
+		         GROUP BY A.DIVISION_CD, A.COMPANY_CD, A.VENDOR_CD)
+		   , TEMP2
+		     AS (  SELECT A.VENDOR_CD
+	
+		                , SUM (A.QTY) AS QTY
+		                , SUM (A.INOUT_PRICE) AS AMT
+		                , MAX (A.IO_TIME) AS IO_TIME
+		             FROM MOM_ITEM_STOCK_INOUT A, MOM_ITEM_DEFINITION MD
+		            WHERE A.DIVISION_CD = MD.DIVISION_CD
+		              AND A.COMPANY_CD = MD.COMPANY_CD
+		              AND A.ITEM_ID = MD.ITEM_ID
+		              AND A.DIVISION_CD = #{divisionCd,jdbcType=VARCHAR}
+		              AND A.COMPANY_CD = #{companyCd,jdbcType=VARCHAR}
+		              AND A.IO_TYPE = 'I'
+		               
+		              AND TRUNC (A.IO_TIME) BETWEEN TO_DATE (#{fromDate,jdbcType=VARCHAR}, 'YYYY-MM-DD') AND TO_DATE (#{toDate,jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.999 / 24
+		               
+		              AND A.IO_CATEGORY IN (SELECT MC.CODE_ID
+		                                      FROM MOM_CODE MC
+		                                     WHERE MC.DIVISION_CD = A.DIVISION_CD 
+		                                       AND MC.COMPANY_CD = A.COMPANY_CD 
+		                                       AND MC.CODE_CLASS_ID = 'IO_CATEGORY' 
+		                                       AND MC.USE_YN = 'Y' 
+		                                       AND MC.ATTRIBUTE13 = 'Y')
+		              AND NOT EXISTS
+		                     (SELECT '*'
+		                        FROM MOM_ITEM_STOCK_INOUT IC
+		                       WHERE IC.DIVISION_CD = A.DIVISION_CD 
+		                         AND IC.COMPANY_CD = A.COMPANY_CD 
+		                         AND IC.IO_TYPE = A.IO_TYPE 
+		                         AND IC.PREV_STOCK_INOUT_ID = A.ITEM_STOCK_INOUT_ID)
+		         GROUP BY A.DIVISION_CD, A.COMPANY_CD, A.VENDOR_CD)
+		  SELECT Z1.VENDOR_CD
+	      , (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME (Z1.DIVISION_CD, Z1.COMPANY_CD, Z1.VENDOR_CD) FROM DUAL) VENDOR_NAME
+		       , NVL (Z2.QTY, 0) QTY
+		       , NVL (Z2.AMT, 0) AMT
+		       , TO_CHAR(NVL (Z2.IO_TIME, TRUNC (MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd,jdbcType=VARCHAR}, #{companyCd,jdbcType=VARCHAR}))), 'YYYY-MM-DD') IO_TIME
+		       , Z1.SUM_QTY
+		       , Z1.SUM_AMT
+		    FROM TEMP1 Z1
+		       , TEMP2 Z2
+		   WHERE Z1.VENDOR_CD = Z2.VENDOR_CD(+)
+	
+		ORDER BY VENDOR_NAME 
+		
+	</select>
+	
+</mapper>

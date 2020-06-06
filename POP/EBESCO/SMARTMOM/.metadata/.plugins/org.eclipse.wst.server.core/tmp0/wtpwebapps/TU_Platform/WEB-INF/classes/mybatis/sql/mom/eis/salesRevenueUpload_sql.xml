@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.eis.salesRevenueUpload">
+	<select id="get_salesRevenueUpload_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT *
+		  FROM (SELECT A.YYYYMM 
+					 , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( #{divisionCd, jdbcType=VARCHAR} 
+			                                              	  , #{companyCd, jdbcType=VARCHAR}
+			                                                  , 'ITEM_GROUP_MEDIUM' 
+			                                                  , A.ITEM_BUSINESS) 
+			            FROM DUAL) AS ITEM_BUSINESS_NAME
+					 , A.ITEM_BUSINESS 
+				     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( #{divisionCd, jdbcType=VARCHAR} 
+				                                              , #{companyCd, jdbcType=VARCHAR}
+				                                              , 'ITEM_GROUP_LARGE'
+				                                              , A.ITEM_GROUP) 
+			            FROM DUAL) AS ITEM_GROUP_NAME
+				     , A.ITEM_GROUP
+				     , A.ITEM_MODEL
+				     , MAX(DECODE(MM, '01', A.AMT, '0')) AS "01"
+				     , MAX(DECODE(MM, '02', A.AMT, '0')) AS "02"
+				     , MAX(DECODE(MM, '03', A.AMT, '0')) AS "03"
+				     , MAX(DECODE(MM, '04', A.AMT, '0')) AS "04"
+				     , MAX(DECODE(MM, '05', A.AMT, '0')) AS "05"
+				     , MAX(DECODE(MM, '06', A.AMT, '0')) AS "06"
+				     , MAX(DECODE(MM, '07', A.AMT, '0')) AS "07"
+				     , MAX(DECODE(MM, '08', A.AMT, '0')) AS "08"
+				     , MAX(DECODE(MM, '09', A.AMT, '0')) AS "09"
+				     , MAX(DECODE(MM, '10', A.AMT, '0')) AS "10"
+				     , MAX(DECODE(MM, '11', A.AMT, '0')) AS "11"
+				     , MAX(DECODE(MM, '12', A.AMT, '0')) AS "12"		    
+				  FROM MOM_EIS_SALES_TREND_DATA A
+				  	 , MOM_CODE MC
+		         WHERE A.DIVISION_CD  = MC.DIVISION_CD
+		 		   AND A.COMPANY_CD   = MC.COMPANY_CD
+		 		   AND A.ITEM_GROUP   = MC.CODE_ID
+		 		   AND MC.USE_YN = 'Y'
+		 		   AND A.DIVISION_CD  = #{divisionCd, jdbcType=VARCHAR}
+				   AND A.COMPANY_CD   = #{companyCd, jdbcType=VARCHAR}
+				   <if test="yyyy != null and yyyy != ''">
+				   AND 	A.YYYYMM LIKE #{yyyy, jdbcType=VARCHAR} || '%'
+				   </if>
+				   <if test="itemModel != null and itemModel != '' ">
+				   AND	UPPER(A.ITEM_MODEL) LIKE '%' || TRIM(UPPER(#{itemModel, jdbcType=VARCHAR})) || '%'
+				   </if>
+				 GROUP BY  A.YYYYMM
+				 		 , A.ITEM_BUSINESS
+						 , A.ITEM_GROUP
+						 , A.ITEM_MODEL
+						 , A.DIVISION_CD
+						 , A.COMPANY_CD
+			     ORDER BY  A.YYYYMM DESC
+			      		 , A.ITEM_BUSINESS
+			      		 , A.ITEM_GROUP
+			      		 , A.ITEM_MODEL ) Z
+			WHERE 1 = 1
+			  <if test="itemBusiness != null and itemBusiness != '' ">
+			  AND  UPPER(Z.ITEM_BUSINESS_NAME) LIKE '%' || TRIM(UPPER(#{itemBusiness, jdbcType=VARCHAR})) || '%' 
+			  </if>
+			  <if test="itemGroup != null and itemGroup != '' ">
+			  AND  UPPER(Z.ITEM_GROUP_NAME) LIKE '%' || TRIM(UPPER(#{itemGroup, jdbcType=VARCHAR})) || '%' 
+			  </if>		
+	</select>
+	
+	<insert id="create_salesRevenueUpload" parameterType="java.util.HashMap">	      
+		INSERT INTO MOM_EIS_SALES_TREND_DATA 
+				   (DIVISION_CD
+				  , COMPANY_CD
+				  , YYYYMM
+				  , ITEM_BUSINESS
+				  , ITEM_GROUP
+				  , ITEM_MODEL
+				  , MM
+				  , AMT
+				  , DESCRIPTION
+				  , CREATE_DATE
+				  , CREATE_BY
+				  , UPDATE_DATE
+				  , UPDATE_BY
+				   )
+		VALUES(   #{divisionCd, jdbcType=VARCHAR}
+				, #{companyCd, jdbcType=VARCHAR}
+				, #{yyyymm, jdbcType=VARCHAR}
+				, #{itemBusiness, jdbcType=VARCHAR}
+				, #{itemGroup, jdbcType=VARCHAR}
+				, #{itemModel, jdbcType=VARCHAR}
+				, #{mm, jdbcType=VARCHAR}
+				, #{amt, jdbcType=INTEGER}
+				, #{description, jdbcType=VARCHAR}
+				, MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+				, #{createBy, jdbcType=VARCHAR}
+				, MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+				, #{updateBy, jdbcType=VARCHAR}
+				 )
+	</insert>
+	
+	<update id="modify_salesRevenueUpload" parameterType="java.util.HashMap">
+	   UPDATE MOM_EIS_SALES_TREND_DATA
+		  SET AMT 			 = #{amt, jdbcType=INTEGER}
+		    , UPDATE_DATE	 = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		    , UPDATE_BY  	 = #{userId, jdbcType=VARCHAR}
+		WHERE DIVISION_CD  	 = #{divisionCd, jdbcType=VARCHAR}
+		  AND COMPANY_CD  	 = #{companyCd, jdbcType=VARCHAR}
+		  AND YYYYMM      	 = #{yyyymm, jdbcType=VARCHAR}
+		  AND MM         	 = #{mm, jdbcType=VARCHAR}
+		  AND ITEM_BUSINESS  = #{itemBusiness, jdbcType=VARCHAR}
+		  AND ITEM_GROUP  	 = #{itemGroup, jdbcType=VARCHAR}
+		  AND ITEM_MODEL  	 = #{itemModel, jdbcType=VARCHAR}
+	</update>
+	
+	<delete id="remove_salesRevenueUpload" parameterType="java.util.HashMap">
+	   DELETE
+	     FROM MOM_EIS_SALES_TREND_DATA
+	    WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	      AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+	      AND YYYYMM      = SUBSTR(REGEXP_REPLACE(#{yyyymm, jdbcType=VARCHAR}, '-|/', ''), 0, 6)
+	</delete>
+	
+	<select id="get_salesRevenueMonth_list" resultType="camelMap" parameterType="java.util.HashMap">
+	   SELECT DISTINCT SUBSTR(YYYYMM, 0, 4) AS CODE
+		    , SUBSTR(YYYYMM, 0, 4) AS NAME
+		 FROM MOM_EIS_SALES_TREND_DATA
+	    WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+	    ORDER BY SUBSTR(YYYYMM, 0, 4) DESC
+	</select>
+</mapper>

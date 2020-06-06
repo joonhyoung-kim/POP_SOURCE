@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.equipment.equipmentOpcTag">
+	<select id="get_equipmentOpcTag_list" resultType="camelMap" parameterType="java.util.HashMap">
+		<if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+		WITH TEMP1 AS (	
+	    </if>
+			SELECT A.TAG_ID
+				 , A.DIVISION_CD
+				 , A.COMPANY_CD
+				 , A.RESOURCE_CD
+				 , A.OPC_ID
+				 , A.OPC_ID AS OPC_ID_DISP
+				 , (SELECT OPC_NAME
+                      FROM TU_OPC_SERVER
+                     WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+                       AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+                       AND OPC_ID = A.OPC_ID) AS OPC_NAME
+				 , A.OPC_SCENARIO
+				 , A.EVENT_YN
+				 , A.ALARM_YN
+				 , A.DATA_TYPE
+				 , A.DATA_POINT
+				 , A.DATA_UNIT_CD
+				 , A.COLUMN_ID
+				 , A.USE_YN
+				 , A.CREATE_BY
+				 , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS CREATE_DATE
+				 , A.UPDATE_BY
+				 , TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS UPDATE_DATE
+			  FROM TU_OPC_TAG A
+			 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+			 <if test="opcId != null and opcId != ''">
+			   AND A.OPC_ID = #{opcId, jdbcType=VARCHAR} 
+			 </if>
+			 <if test="opcScenario != null and opcScenario != ''">
+			   AND A.OPC_SCENARIO = #{opcScenario, jdbcType=VARCHAR}
+			 </if>
+			 <if test="tagId != null and tagId != ''">
+			   AND UPPER(A.TAG_ID) LIKE '%' || UPPER(TRIM(#{tagId, jdbcType=VARCHAR})) || '%'
+			 </if>
+			 ORDER BY A.TAG_ID
+	   <if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+				)
+	      SELECT A.*
+	           , B.ROW_COUNT
+	      FROM (SELECT A.*
+	                 , ROWNUM GRIDROW
+	              FROM TEMP1 A) A
+	         , (SELECT COUNT(*) ROW_COUNT
+	              FROM TEMP1) B 
+	      WHERE GRIDROW BETWEEN #{startPage, jdbcType=INTEGER} AND #{endPage, jdbcType=INTEGER}
+       </if>
+    </select>
+    
+    <insert id="create_equipmentOpcTag" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+      DECLARE
+      BEGIN
+      	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+      		
+		INSERT INTO TU_OPC_TAG (
+			TAG_ID
+		  , DIVISION_CD
+		  , COMPANY_CD
+		  , RESOURCE_CD
+		  , OPC_ID
+		  , OPC_SCENARIO
+		  , EVENT_YN
+		  , ALARM_YN
+		  , DATA_TYPE
+		  , DATA_POINT
+		  , DATA_UNIT_CD
+		  , COLUMN_ID
+		  , USE_YN
+		  , CREATE_BY
+		  , CREATE_DATE
+		  , UPDATE_BY
+		  , UPDATE_DATE
+		) 
+		VALUES (
+		    #{tagId, jdbcType=VARCHAR}
+		  , #{divisionCd, jdbcType=VARCHAR}
+		  , #{companyCd, jdbcType=VARCHAR}
+		  , UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+		  , UPPER(TRIM(#{opcId, jdbcType=VARCHAR}))
+		  , UPPER(TRIM(#{opcScenario, jdbcType=VARCHAR}))
+		  , UPPER(TRIM(#{eventYn, jdbcType=VARCHAR}))
+		  , UPPER(TRIM(#{alarmYn, jdbcType=VARCHAR}))
+		  , UPPER(TRIM(#{dataType, jdbcType=VARCHAR}))
+		  , #{dataPoint, jdbcType=VARCHAR}
+		  , UPPER(TRIM(#{dataUnitCd, jdbcType=VARCHAR}))
+		  , #{columnId, jdbcType=VARCHAR}
+		  , UPPER(TRIM(#{useYn, jdbcType=VARCHAR}))
+		  , #{createBy, jdbcType=VARCHAR}
+		  , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		  , #{updateBy, jdbcType=VARCHAR}
+		  , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		);
+
+        
+        INSERT INTO TU_OPC_TAG_HIST ( 
+	        LAST_EVENT_SEQ
+		  , TAG_ID
+		  , DIVISION_CD
+		  , COMPANY_CD
+		  , RESOURCE_CD
+		  , OPC_ID
+		  , OPC_SCENARIO
+		  , EVENT_YN
+		  , ALARM_YN
+		  , DATA_TYPE
+		  , DATA_POINT
+		  , DATA_UNIT_CD
+		  , COLUMN_ID
+		  , ACTIVITY
+		  , PREV_ACTIVITY
+		  , CUSTOM_ACTIVITY
+		  , PREV_CUSTOM_ACTIVITY
+		  , USE_YN
+		  , COMMENTS
+		  , DESCRIPTION
+		  , CREATE_BY
+		  , CREATE_DATE
+		  , UPDATE_BY
+		  , UPDATE_DATE
+		  , TID 
+		)
+        SELECT S_ORDER_SEQ.NEXTVAL 
+        	 , TAG_ID
+			 , DIVISION_CD
+			 , COMPANY_CD
+			 , RESOURCE_CD
+			 , OPC_ID
+			 , OPC_SCENARIO
+			 , EVENT_YN
+			 , ALARM_YN
+			 , DATA_TYPE
+			 , DATA_POINT
+			 , DATA_UNIT_CD
+			 , COLUMN_ID
+			 , ACTIVITY
+			 , PREV_ACTIVITY
+			 , CUSTOM_ACTIVITY
+			 , PREV_CUSTOM_ACTIVITY
+			 , USE_YN
+			 , COMMENTS
+			 , DESCRIPTION
+			 , #{createBy, jdbcType=VARCHAR}
+			 , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			 , #{updateBy, jdbcType=VARCHAR}
+			 , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			 , TID 
+          FROM TU_OPC_TAG
+         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+           AND TAG_ID = #{tagId, jdbcType=VARCHAR}
+        ;
+         
+        SELECT
+			CASE 
+				WHEN COUNT(*) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		  FROM TU_OPC_TAG
+         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+           AND TAG_ID = #{tagId, jdbcType=VARCHAR}
+		;
+        END
+    }
+	</insert>
+	
+	<update id="modify_equipmentOpcTag" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+      DECLARE
+      BEGIN
+      	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+      		
+		UPDATE TU_OPC_TAG 
+		   SET RESOURCE_CD = UPPER(TRIM(#{resourceCd, jdbcType=VARCHAR}))
+			 , OPC_ID = UPPER(TRIM(#{opcId, jdbcType=VARCHAR}))
+			 , OPC_SCENARIO = UPPER(TRIM(#{opcScenario, jdbcType=VARCHAR}))
+			 , EVENT_YN = UPPER(TRIM(#{eventYn, jdbcType=VARCHAR}))
+			 , ALARM_YN = UPPER(TRIM(#{alarmYn, jdbcType=VARCHAR}))
+			 , DATA_TYPE = UPPER(TRIM(#{dataType, jdbcType=VARCHAR}))
+			 , DATA_POINT = #{dataPoint, jdbcType=VARCHAR}
+			 , DATA_UNIT_CD = UPPER(TRIM(#{dataUnitCd, jdbcType=VARCHAR}))
+			 , COLUMN_ID = #{columnId, jdbcType=VARCHAR}
+			 , USE_YN = UPPER(TRIM(#{useYn, jdbcType=VARCHAR}))
+			 , UPDATE_BY = #{updateBy, jdbcType=VARCHAR}
+			 , UPDATE_DATE = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND TAG_ID = #{tagId, jdbcType=VARCHAR}
+		 ;
+        
+        INSERT INTO TU_OPC_TAG_HIST (
+			LAST_EVENT_SEQ
+		  , TAG_ID
+		  , DIVISION_CD
+		  , COMPANY_CD
+		  , RESOURCE_CD
+		  , OPC_ID
+		  , OPC_SCENARIO
+		  , EVENT_YN
+		  , ALARM_YN
+		  , DATA_TYPE
+		  , DATA_POINT
+		  , DATA_UNIT_CD
+		  , COLUMN_ID
+		  , ACTIVITY
+		  , PREV_ACTIVITY
+		  , CUSTOM_ACTIVITY
+		  , PREV_CUSTOM_ACTIVITY
+		  , USE_YN
+		  , COMMENTS
+		  , DESCRIPTION
+		  , CREATE_BY
+		  , CREATE_DATE
+	   	  , UPDATE_BY
+		  , UPDATE_DATE
+			)
+		SELECT S_ORDER_SEQ.NEXTVAL
+			 , TAG_ID
+			 , DIVISION_CD
+			 , COMPANY_CD
+			 , RESOURCE_CD
+			 , OPC_ID
+			 , OPC_SCENARIO
+			 , EVENT_YN
+			 , ALARM_YN
+			 , DATA_TYPE
+			 , DATA_POINT
+			 , DATA_UNIT_CD
+			 , COLUMN_ID
+			 , ACTIVITY
+			 , PREV_ACTIVITY
+			 , CUSTOM_ACTIVITY
+			 , PREV_CUSTOM_ACTIVITY
+			 , USE_YN
+			 , COMMENTS
+			 , DESCRIPTION
+			 , #{createBy, jdbcType=VARCHAR}
+			 , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			 , #{updateBy, jdbcType=VARCHAR}
+			 , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		  FROM TU_OPC_TAG
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND TAG_ID = #{tagId, jdbcType=VARCHAR}
+        ;
+         
+        SELECT
+			CASE 
+				WHEN COUNT(*) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		  FROM TU_OPC_TAG
+         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+           AND TAG_ID = #{tagId, jdbcType=VARCHAR}
+		;
+        END
+    }
+	</update>
+	
+	<select id="get_equipmentOpcScenario_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT OPC_SCENARIO AS CODE
+		     , OPC_SCENARIO || '(' || OPC_SCENARIO_NAME || ')' AS NAME
+		  FROM TU_OPC_SCENARIO
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND USE_YN = 'Y'
+		 ORDER BY OPC_SCENARIO 
+	</select>
+    
+</mapper>

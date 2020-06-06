@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.plan.plan.verificationPlan"> 
+	<select id="get_verificationPlan_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.PLAN_ID  
+		     , A.MASTER_ID
+		     , A.PROBLEM_TYPE
+		     , A.PROBLEM_REASON
+		     , NVL(TO_CHAR(A.PROBLEM_DTTM, 'YYYY-MM-DD'), '-') AS DUE_DATE
+		     , TO_CHAR(A.REQUEST_DTTM, 'YYYY-MM-DD') REQUEST_DATE
+		     , A.DEMAND_ID
+		     , A.ITEM_ID 
+		     , B.ITEM_NAME
+		     , B.SPECIFICATION
+		     , B.ITEM_TYPE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( #{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}, 'ITEM_TYPE', B.ITEM_TYPE) 
+		        FROM   DUAL ) AS ITEM_TYPE_NAME    
+		     , A.PROBLEM_QTY
+		     , A.ORG_DEMAND_QTY
+		     , A.PROBLEM_ITEM
+		     , ( SELECT MOM_COMMON_PKG.FN_GET_ITEM_NAME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}, A.PROBLEM_ITEM)  
+		         FROM   DUAL ) AS PROBLEM_ITEM_NAME
+		     , A.PROBLEM_RESOURCE
+		     , ( SELECT MOM_COMMON_PKG.FN_GET_RESOURCE_NAME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}, A.PROBLEM_RESOURCE)  
+		         FROM   DUAL ) AS PROBLEM_RESOURCE_NAME 
+		FROM   TH_EXP_PROBLEMREPORT A
+		     , MOM_ITEM_DEFINITION B
+		WHERE  A.MASTER_ID = B.DIVISION_CD
+		AND    A.ITEM_ID   = B.ITEM_ID
+		AND    A.MASTER_ID = #{divisionCd, jdbcType=VARCHAR}
+    <if test="planId != null and planId != ''">
+		AND    A.PLAN_ID   =  #{planId, jdbcType=VARCHAR} 
+	</if>
+	<if test="problemReason != null and problemReason != ''">
+		AND    A.PROBLEM_REASON   =  #{problemReason, jdbcType=VARCHAR} 
+	</if>
+	<if test="problemType != null and problemType != ''">
+		AND    A.PROBLEM_TYPE   =  #{problemType, jdbcType=VARCHAR} 
+	</if>
+	<if test="itemType != null and itemType != ''">
+	    AND    B.ITEM_TYPE  =  #{itemType, jdbcType=VARCHAR} 
+	</if>
+	<if test="itemName != null and itemName != ''">
+	    AND (UPPER(B.ITEM_ID) LIKE UPPER('%' || #{itemName, jdbcType=VARCHAR} || '%') 
+            OR UPPER(B.ITEM_NAME) LIKE UPPER('%' || #{itemName, jdbcType=VARCHAR} || '%'))
+    </if>
+	<if test="fromDate != null and fromDate != ''">
+	    AND    A.DUE_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') AND TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+	</if>
+	    AND    B.USE_YN = 'Y'
+	    ORDER BY A.REQUEST_DTTM, A.DUE_DATE, A.ITEM_ID, A.PROBLEM_ITEM     
+	</select>
+	
+	<select id="get_planId_list"  resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT PLAN_ID
+  		FROM TH_MST_PLAN
+ 		WHERE 1 = 1
+   		AND MASTER_ID = #{divisionCd, jdbcType=VARCHAR}
+ 		GROUP BY PLAN_ID
+ 		ORDER BY PLAN_ID DESC
+	</select>
+
+</mapper>

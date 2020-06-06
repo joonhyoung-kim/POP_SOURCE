@@ -1,0 +1,1013 @@
+.containers {
+	width: 100%;
+	height: 100%;
+	max-width: 100%;
+	margin-right: 0px;
+	padding-right: 0px;
+	padding-left: 0px;
+}
+.containers.board {
+	font-weight: bold;
+}
+containers {}
+
+.main_wrapper3 {
+    display: inline-block;
+    padding: 0;
+    width: 70%;
+    float: left;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+
+.main_wrapper4 {
+    display: inline-block;
+    border-right: 2px solid #fff;
+    /* padding: 0; */
+    /* margin: 0; */
+    width: 10%;
+    float: left;
+    height: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    border: 1px solid black;
+}
+.main_wrapper5 {
+    display: inline-block;
+    /* border-left: 2px solid #fff; */
+    /* border-right: 2px solid #fff; */
+    padding: 0;
+    margin: 0;
+    width: 20%;
+    float: left;
+    height: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+   
+}
+.main_wrapper6 {
+    display: inline-block;
+    padding: 0;
+    width: 100%;
+    float: left;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+.main_wrapper7 {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    float: left;
+    height: 10%;
+    /* overflow-x: hidden; */
+    /* overflow-y: hidden; */
+}
+.main_wrapper8 {
+    display: inline-block;
+    padding: 0;
+    width: 85%;
+    float: left;
+    height: 90%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+.main_wrapper9 {
+    display: inline-block;
+    padding: 0;
+    width: 15%;
+    float: left;
+    height: 90%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.main_details1 {
+	position: relative;
+	width: 100%;
+	height: 33.33%;
+	border-bottom: 2px solid black;
+	box-sizing: border-box;
+}
+.main_details2 {
+	position: relative;
+	width: 100%;
+	height: 12.5%;
+	border-bottom: 2px solid #fff;
+	box-sizing: border-box;
+}
+.main_details3 {
+    border: 1px solid black;
+    position: relative;
+    width: 100%;
+    height: 16.6%;
+    /* border-bottom: 1px solid #fff; */
+    box-sizing: border-box;
+}
+.main_details4 {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-bottom: 2px solid #2b333e;
+    box-sizing: border-box;
+  background-color: #212529;
+}
+.main_details5 {
+    position: relative;
+    width: 100%;
+    height: 33.33%;
+    
+    box-sizing: border-box;
+}
+.main_details6 {
+    position: relative;
+    width: 100%;
+    height: 10.94%;
+    border-bottom: 2px solid black;
+    box-sizing: border-box;
+}
+.main_details7 {
+    position: relative;
+    width: 100%;
+    height: 12.499%;
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+    box-sizing: border-box;
+   background-color: #212529;
+}
+.main_details8 {
+    position: relative;
+    width: 100%;
+    height: 10%;
+    border-bottom: 2px solid black;
+    box-sizing: border-box;
+}
+.main_details9 {
+    position: relative;
+    width: 100%;
+    height: 90%;
+    border-bottom: 2px solid black;
+    box-sizing: border-box;
+    list-style:none;
+}
+.details_title1 {
+	position: absolute;
+	top: 0;
+	width: 25%;
+	height: 100%;
+	
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+.details_title21 {
+	position: absolute;
+	top: 0;
+	width: 25%;
+	left: 25%;
+	height: 100%;
+	
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+.details_title2 {
+		position: absolute;
+	top: 0;
+	left: 50%;
+	width: 25%;
+	height: 100%;
+	
+	
+	overflow-x: hidden;
+	overflow-y: hidden;
+	
+}
+.details_title3 {
+	position: absolute;
+	top: 0;
+	left: 75%;
+	width: 25%;
+	height: 100%;
+	border-right: 2px solid black;
+	
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+
+
+
+.details_title4 {
+		position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	border-right: 2px solid black;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	white-space: nowrap;
+	background-color: #045FB4;
+	word-break:break-all;
+	
+}
+.details_title5 {
+		position: absolute;
+	top: 0;
+	left: 50%;
+	width: 25%;
+	height: 100%;
+	border-right: 2px solid black;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	white-space: nowrap;
+	word-break:break-all;
+}
+.details_title6 {
+		position: absolute;
+	top: 0;
+	left: 75%;
+	width: 25%;
+	height: 100%;
+	border-right: 2px solid black;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	white-space: nowrap;
+	word-break:break-all;
+	
+}
+.details_title8 {
+		position: absolute;
+	top: 0;
+	left:75%;
+	width: 25%;
+	height: 100%;
+	border-right: 2px solid #fff;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	white-space: nowrap;
+	
+}
+.details_title9 {
+		position: absolute;
+	top: 0;
+	left: 50%;
+	width: 25%;
+	height: 100%;
+	border-right: 2px solid #fff;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	white-space: nowrap;
+	
+}
+.details_title10 {
+		position: absolute;
+	top: 0;
+	left:75%;
+	width: 25%;
+	height: 100%;
+	border-right: 2px solid #fff;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	white-space: nowrap;
+	
+}
+.details_title11 {
+    position: relative;
+    top: -2%;
+    width: 20%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    float: left;
+    background-color: #212529;
+}
+.details_title12 {
+    position: relative;
+    top: -2%;
+    width: 40%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    float: left;
+}
+.details_title13 {
+    position: relative;
+    top: -2%;
+    width: 40%;
+    height: 100%;
+    overflow-x: hidden;
+    float: left;
+    overflow-y: hidden;
+}
+.details_title14 {
+    position: relative;
+    top: 0;
+    
+    width: 33.3%;
+    height: 100%;
+    overflow-x: hidden;
+    float: left;
+    overflow-y: hidden;
+    border-right: 2px solid black;
+    word-break:break-all;
+}
+.details_title15 {
+    position: relative;
+    top: 0;
+   
+    width: 33.3%;
+    height: 100%;
+    overflow-x: hidden;
+    float: left;
+    overflow-y: hidden;
+    border-right: 2px solid black;
+    word-break:break-all;
+}
+.details_title16 {
+    position: relative;
+    top: 0;
+    width: 33.3333333%;
+    height: 100%;
+    overflow-x: hidden;
+    float: left;
+    overflow-y: hidden;
+    border-right: 2px solid black;
+    word-break:break-all;
+    /* padding: 0; */
+    /* margin: 0; */
+}
+.details_title17 {
+    position: relative;
+    top: 0;
+    
+    width: 25%;
+    height: 100%;
+    overflow-x: hidden;
+    float: left;
+    overflow-y: hidden;
+    border-right: 2px solid black;
+}
+.details_title18 {
+    position: relative;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    float: top;
+    overflow-y: hidden;
+    border-right: 2px solid black;
+}
+.details_title19 {
+    position: relative;
+    top: 0;
+    
+    width: 25%;
+    height: 100%;
+    overflow-x: hidden;
+    float: left;
+    overflow-y: hidden;
+    border-right: 2px solid black;
+}
+.details_title20 {
+    position: relative;
+    top: 0;
+    
+    width: 25%;
+    height: 100%;
+    overflow-x: hidden;
+    float: left;
+    overflow-y: hidden;
+    border-right: 2px solid black;
+}
+.txtOpt5{
+	color: white;
+	left: 10%;
+    font-size: 700%;
+    text-align: center;
+    line-height: 2.3;
+}
+.txtOpt6 {
+    right: -14%;
+    color: #428bca;
+    font-size: 400%;
+    text-align: center;
+    line-height: 2.3;
+}
+.txtOpt7 {
+    color: black;
+    font-size: 3.6em;
+    text-align: center;
+    line-height: 2.3;
+    margin: 0;
+    padding: 0;
+}
+.txtOpt8 {
+    color: black;
+    font-size: 500%;
+    text-align: center;
+    line-height: 2.3;
+    margin: 0;
+    padding: 0;
+}
+.txtOpt9{
+	color: white;
+    font-size: 400%;
+    text-align: center;
+    line-height: 2.3;
+}
+.txtOpt10 {
+	color: black;
+    font-size: 3.8em;
+    line-height: 3.6;
+}
+.txtOpt11 {
+    right: -14%;
+    color: #f4f8fa;
+    font-size: 400%;
+    text-align: center;
+    line-height: 2.3;
+}
+.details_box1 {
+	position: absolute;
+	top: 0;
+	left: 0%;
+	width: 25%;
+	height: 100%;
+	border-right: 2px solid black;
+	box-sizing: border-box;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	background-color: #045FB4;
+}
+.details_box2 {
+	position: absolute;
+	top: 0;
+	left: 25%;
+	width: 25%;
+	height: 100%;
+	border-right: 2px solid black;
+	box-sizing: border-box;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	white-space: nowrap;
+	font-size: 3.8em;
+}
+.details_box3 {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	width: 25%;
+	height: 100%;
+	border-right: 2px solid black;
+	box-sizing: border-box;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	background-color: #045FB4;
+}
+.details_box4 {
+	position: absolute;
+	top: 0;
+	left: 75%;
+	width: 25%;
+	height: 100%;
+	border-right: 2px solid black;
+	box-sizing: border-box;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	white-space: nowrap;
+	font-size: 3.8em;
+}
+.details_box5 {
+	position: absolute;
+	top: 0;
+	left: 25%;
+	width: 75%;
+	height: 100%;
+	border-right: 2px solid black;
+	box-sizing: border-box;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	white-space: nowrap;
+	font-size: 3.8em;
+}
+.details_box6 {
+	position: absolute;
+	top: 0;
+	left: 0%;
+	width: 100%;
+	height: 100%;
+	border-right: 2px solid black;
+	box-sizing: border-box;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	white-space: nowrap;
+	font-size: 3.8em;
+}
+.details_button1 {
+	position: absolute;	
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+.details_button2 {
+	position: absolute;
+	top: 0;
+	left: 25%;
+	width: 25%;       
+	height: 100%;
+	border-right: 2px solid black;
+	box-sizing: border-box;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	white-space: nowrap;
+	font-size: 3.8em;
+}
+.details_button3 {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	width: 25%;       
+	height: 100%;
+	border-right: 2px solid black;
+	box-sizing: border-box;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	white-space: nowrap;
+	background: #0f9c06a8;
+}
+.details_button4 {
+	position: absolute;
+	top: 0;
+	left: 75%;
+	width: 25%;       
+	height: 100%;
+	border-right: 2px solid black;
+	box-sizing: border-box;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	white-space: nowrap;
+	background: #f30303eb;
+}
+.loginbutton2 {
+    /* left: 60%; */
+    width: 100%;
+    height: 100%;
+    margin-top: 30px;
+    padding-top: 20px;
+    /* float: right; */
+    border-radius: 3px;
+    background-color: #5b93d3;
+    transition: all 200ms ease-out;
+    font-family: Aritadm, sans-serif;
+    color: white;
+    /* top: 100px; */
+    font-size: 45px;
+    font-weight: 400;
+    /* left: 50px; */
+    text-align: center;
+    letter-spacing: 1px;
+    margin-right: 8%;
+    /* left: 50px; */
+    background-color: #428bca;
+}
+.loginbox2 {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 3px;
+    background-color: #2b333e;
+    box-shadow: rgba(0, 0, 0, 0.18) 4px 4px 10px 0px;
+    transform: translate(-50%, -50%);
+    
+}
+.loginbutton4{
+   top: -62%;
+   position: relative;
+   height: 100%;
+   width: 17%;
+   left: 83%;
+}
+.loginbox2 {}
+.textinput2 {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    height: 80%;  
+    border-color: black;
+    /* background-color: Gainsboro; */
+    transition: all 200ms ease;
+    font-size: 120px; 
+    border-style: solid;     
+}
+@media screen and (max-width : 1024px) {
+.loginbox2 {
+	width: 500px;
+}
+}
+@media screen and (max-height : 820px) {
+.selectBox4 {
+    top: 95%;
+    left: -20%;
+    position: absolute;
+}
+.textLang4 {
+    top: -9%;
+    position: relative;
+    left: -12%;
+}
+.loginText4 {
+      top: 50%;
+    position: absolute;
+    right: 18%;  
+}
+.loginbutton4{
+    top: -62%;
+    position: relative;
+    height: 100%;
+    width: 25%;
+    left: 74.5%;
+}
+.heading3_1 {
+    top: -3%;
+    position: relative;
+    margin-bottom: 4%;
+    width: 100%;
+    height: 5%;
+    font-size: 70px;
+    font-family: Aritadm, sans-serif;
+    color: #2b333e;
+    font-weight: 700;
+    text-align: center;
+}
+.textinput2 {
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    height: 80%;  
+    border-color: black;
+    /* background-color: Gainsboro; */
+    transition: all 200ms ease;
+    font-size: 50px; 
+    border-style: solid;   
+}
+}
+
+.textLang4 {
+    top: -2%;
+    position: relative;
+    left: -12%;
+}
+.topbox2 {
+    display: block;
+    height: 120px;
+    margin-bottom: 40px;
+    padding-top: 15px;
+    
+    font-size: 50px;
+    text-align: left;
+}
+.logo-title2 {
+	height: 31px;
+	font-family: Varela, sans-serif;
+	color: #5b93d3;
+	font-size: 50px;
+	font-weight: 700;
+	text-align: left;
+}
+
+.blue2 {
+    font-family: Varela, sans-serif;
+    color: #5b93d3;
+    font-size: 50px;
+    font-weight: 700;
+}
+.text.m2 {
+	margin-left: -4px;
+}
+
+.text.r7 {
+    margin-right: 6px;
+    float: left;
+    margin-top: 20px;
+}
+
+.infobox2 {
+	margin-top: 70px;
+	color: #d8dce3;
+	font-size: 28px;
+	text-align: left;
+}
+.inputbox2 {
+	position: relative;	
+	width: 100%;
+	height: 100%;
+}
+.inputbox2.text16 {
+	width: 170px;
+	margin-bottom: 10px;
+	padding: 0px;
+	float: left;
+	color: #2b333e;
+	font-size: 15px;
+}
+.inputbox2.check {
+	margin-bottom: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	color: #0866c6;
+}
+
+.text16_1 {
+    width: 50%;
+    height: 25%;
+    float: left;
+}
+.login_text2 {
+    position: relative;
+    height: 50%;
+    width: 100%;
+    font-size: 22px;
+    
+}
+.login_text3 {
+    left: 7%;
+    position: relative;
+    height: 10%;
+    width: 40%;
+    top: 10%;
+    font-size: 50px;
+    /* left: 5%; */
+}
+.login_text4 {
+    position: relative;
+    top: 8px;
+    height: 100%;
+    width: 80%;
+    font-size: 40px;
+    margin-left: 26%;
+}
+.select3 {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    width: 30%;
+    height: 30%;
+    margin-right: auto;
+    margin-left: auto;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(38, 77, 106, 0.36);
+    color: #495057;
+    font-size: 55px;
+    /* float: left; */
+    right: 6%;
+}
+.select4 {
+    position: relative;
+    top: -110%;
+    display: inline-block;
+    width: 30%;
+    height: 30%;
+    margin-right: auto;
+    margin-left: auto;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgba(38, 77, 106, 0.36);
+    color: #495057;
+    font-size: 60px;
+    left: 122%;
+    /* float: left; */
+}
+.loginText4 {
+    top: 50%;
+    position: absolute;
+    right: 18%;
+}
+.mom-logo2 {
+    position: absolute;
+    /* left: 1%; */
+    top: 0px;
+    width: 55%;
+    height: 38px;
+    float: left;
+    /* border-right: 1px solid #2b333e; */
+    /* background-color: #384250; */
+    color: white;
+    font-size: 17px;
+    line-height: 36px;
+    font-weight: 400;
+    text-align: left;
+}
+.pop_screen_button:hover {
+	 font-size: 500%;
+    /* border:solid 1px black;
+ */    
+}
+.pop_screen_button:active {
+	 font-size: 500%;
+    background-color: #aaa;
+}
+.textblock.center2 {
+    position: absolute;
+    left: 0%;
+    top: 0%;
+    width: 100%;
+    height: 100%;
+  /*   margin-top: 16%; */
+    font-family: Aritadm, sans-serif;
+}
+.textblock.center3 {
+    position: absolute;
+    left: 0%;
+    top: 0%;
+    width: 100%;
+    height: 100%;
+    margin-top: 16%;
+    font-family: Aritadm, sans-serif;
+}
+
+.textblock.center4 {
+      position: relative;
+    left: 30%;
+    top: 5%;
+    /* height: 50%; */
+    float: left;
+    width: 55%;
+}
+.textblock.center5 {
+        position: relative;
+    width: 30%;
+    float: left;
+    margin-right: 0.;
+}
+.textblock.center6 {
+    position: relative;
+    left: 0%;
+    top: 0%;
+    width: 100%;
+    height: 50%;
+   /*  margin-top: 16%; */
+    font-family: Aritadm, sans-serif;
+}
+.textblock.center7 {
+    position: relative;
+    left: 0%;
+    top: 0%;
+    width: 100%;
+    height: 50%;
+   /*  margin-top: 16%; */
+    font-family: Aritadm, sans-serif;
+    float: left;
+}
+.pop_close_button {
+    width: 100%;
+    /* background-color: #BDBDBD; */
+    border: none;
+    color: #fff;
+    padding: 15px 0;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 50px;
+    margin: 4px;
+    cursor: pointer;
+    left: -2%;
+}
+.pop_Btn01 {
+    font-size: 300%;
+    color: #232322;
+    background-color: #908e8670;
+}
+
+.pop_Btn01:hover {
+	 font-size: 300%;
+    color: #fbcf04;
+    background-color: #c0c0c0;
+}
+
+.pop_Btn01:active {
+	 font-size: 300%;
+    color: #fbcf04;
+    background-color: #ffffff;
+}
+.pop_up-down_button:hover {
+	 font-size: 500%;
+    color: #black;
+    background-color: #eca504;
+}
+
+.pop_up-down_button:active {
+	 font-size: 500%;
+    color: white;
+    background-color: #b17200;
+}
+.pop_close_button:hover {
+	 font-size: 500%;
+    color: #black;
+    background-color: #777;
+}
+
+.pop_close_button:active {
+	font-size: 500%;
+    color: white;
+    background-color: #555;
+}
+.heading3_1 {
+    margin-bottom: 4%;
+    width: 100%;
+    height: 5%;
+    font-size: 70px;
+    font-family: Aritadm, sans-serif;
+    color: #2b333e;
+    font-weight: 700;
+    text-align: center;
+}
+.leftinfo2 {
+    width: 25%;
+    height: 100%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    padding-left: 30px;
+    float: left;
+    font-family: Aritadl, sans-serif;
+    color: white;
+    font-size: 18px;
+    text-align: center;
+}
+@media screen and (max-width : 1024px) {
+.leftinfo2 {
+	display: none;
+	float: left;
+	
+}
+}
+.rightinfo2 {
+    width: 70%;
+    height: 94%;
+    margin-top: 2%;
+    margin-right: 2%;
+    padding: 30px;
+    float: right;
+    border-radius: 5px;
+    background-color: white;
+}
+@media screen and (max-width : 1024px) {
+.rightinfo2 {
+	width: calc(100% - 60px);
+	margin-left: 30px;
+	float: none;
+}
+}
+.details_button1 {
+	position: absolute;	
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+.details_button2 {
+	position: absolute;
+	top: 0;
+	left: 25%;
+	width: 25%;       
+	height: 100%;
+	border-right: 2px solid black;
+	box-sizing: border-box;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	white-space: nowrap;
+}
+.details_button3 {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	width: 25%;       
+	height: 100%;
+	border-right: 2px solid black;
+	box-sizing: border-box;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	white-space: nowrap;
+}
+.details_button4 {
+	position: absolute;
+	top: 0;
+	left: 75%;
+	width: 25%;       
+	height: 100%;
+	border-right: 2px solid black;
+	box-sizing: border-box;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	white-space: nowrap;
+}

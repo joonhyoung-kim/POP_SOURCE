@@ -1,0 +1,7 @@
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMom_Lib\obj\Release\SmartMom_Lib.csprojAssemblyReference.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMom_Lib\obj\Release\SmartMom_Lib.frmLabelDesign.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMom_Lib\obj\Release\SmartMom_Lib.frmLabelDesign_P01.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMom_Lib\obj\Release\SmartMom_Lib.frmMessage.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMom_Lib\obj\Release\SmartMom_Lib.frmPrintConfig.resources
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMom_Lib\obj\Release\SmartMom_Lib.csproj.GenerateResource.cache
+C:\Users\TU\Desktop\THIRAUTECH\03. Project\02.MSE\01.Source\WMS_20190605\WINFORM\SmartMOM_POP(화인알텍버전)\SmartMom_Lib\obj\Release\SmartMom_Lib.csproj.CoreCompileInputs.cache

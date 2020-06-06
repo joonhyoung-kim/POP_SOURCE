@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.quality.processQualityCoorperation">
+	<!-- modify_hists 
+    * XMOME20 / 20191105 / gyp / TRIM, UPPER 처리. SQL 정리
+     -->
+	<select id="get_processQualityCoorperationUp_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.WORK_ORDER_ID
+		     , A.PRODUCT_ORDER_ID
+		     , A.ITEM_ID
+		     , B.ITEM_NAME
+		     , B.SPECIFICATION
+		     , A.CONFIRM_QTY
+		     , NVL(A.PLAN_QTY, 0) AS PLAN_QTY
+		     , NVL(A.GOOD_QTY, 0) AS GOOD_QTY
+		     , NVL(A.BAD_QTY, 0) AS BAD_QTY
+		     , NVL(A.CANCEL_QTY, 0) AS CANCEL_QTY 
+		     , TO_CHAR(A.START_TIME , 'YYYY-MM-DD') AS START_TIME
+		     , TO_CHAR(A.CUSTOMER_DUE_DATE , 'YYYY-MM-DD') AS CUSTOMER_DUE_DATE
+		     , A.WO_STATE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'WORK_ORDER_STATE', A.WO_STATE) FROM DUAL) AS STATE_NAME
+		     , TO_CHAR (A.CREATE_DATE, 'YYYY-MM-DD') AS CREATE_DATE
+		     , A.RESOURCE_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_RESOURCE_NAME (A.DIVISION_CD, A.COMPANY_CD, A.RESOURCE_CD) FROM DUAL) AS RESOURCE_NAME
+		     , B.UNIT
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(B.DIVISION_CD, B.COMPANY_CD, 'ITEM_UNIT', B.UNIT) FROM DUAL) AS UNIT_NAME
+		     , A.TID
+		     , DECODE(NVL(MS.ITEM_ID, 'N'), A.ITEM_ID, 'Y', 'N') AS PQC_SPCE_FLAG
+		  FROM MOM_WORK_ORDER A
+		     , MOM_ITEM_DEFINITION B
+		     ,(SELECT DISTINCT(ITEM_ID) AS ITEM_ID
+		         FROM MOM_MEASURE_SPEC
+		        WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		          AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		          AND MEASURE_TYPE = 'PQC'
+		          AND NVL(USE_YN,'N') ='Y') MS
+		 WHERE 1 = 1
+		   AND A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND A.DIVISION_CD = B.DIVISION_CD(+)
+		   AND A.COMPANY_CD = B.COMPANY_CD(+)
+		   AND A.ITEM_ID = B.ITEM_ID(+)
+		   AND A.ITEM_ID = MS.ITEM_ID(+)
+		   AND A.WO_STATE = 'T'
+		   AND NVL(B.PQC_FLAG, 'N') = 'Y'
+		   AND NVL(A.PQC_FLAG, 'N') = 'N'
+		   AND NOT EXISTS (SELECT '*'
+                             FROM MOM_CODE
+                            WHERE DIVISION_CD = A.DIVISION_CD
+	                          AND COMPANY_CD = A.COMPANY_CD
+	                          AND CODE_CLASS_ID = 'PRODUCT_ORDER_TYPE'
+	                          AND ATTRIBUTE2 = 'Y'
+	                          AND NVL(USE_YN, 'N') = 'Y'
+	                          AND CODE_ID = A.PRODUCT_ORDER_TYPE)
+		  <if test="fromDate != null and fromDate != ''">
+		   AND A.START_TIME BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
+		                        AND TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.9997/24
+		  </if>
+		  <if test="itemId != null and itemId != ''">
+		   AND (A.ITEM_ID LIKE '%' || TRIM(UPPER(#{itemId, jdbcType=VARCHAR})) || '%'
+		        OR UPPER(B.ITEM_NAME) LIKE '%' || TRIM(UPPER(#{itemId, jdbcType=VARCHAR})) || '%')
+		  </if>
+		  <if test="workOrderId != null and workOrderId != ''">
+		   AND (A.WORK_ORDER_ID LIKE '%' || TRIM(UPPER(#{workOrderId, jdbcType=VARCHAR})) || '%'
+		        OR A.PRODUCT_ORDER_ID LIKE '%' || TRIM(UPPER(#{workOrderId, jdbcType=VARCHAR})) || '%')
+		  </if>
+		  <if test="resourceCd != null and resourceCd != ''">
+		   AND A.RESOURCE_CD = #{resourceCd, jdbcType=VARCHAR}
+		  </if>
+		 ORDER BY A.START_TIME DESC, A.WORK_ORDER_ID 
+	</select>
+	
+	<!-- modify_hists 
+    * XMOME20 / 20191105 / gyp / SQL 정리
+     -->
+	<select id="get_processQualityCoorperationDown_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.WORK_ORDER_ID
+		     , A.ITEM_ID
+		     , A.DEFECT_STATE AS STATE
+		     , B.SEQ
+		     , A.MEASURE_TYPE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'MEASURE_TYPE', A.MEASURE_TYPE) FROM DUAL) AS MEASURE_TYPE_NAME
+		     , A.MEASURE_METHOD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'MEASURE_METHOD', A.MEASURE_METHOD) FROM DUAL) AS MEASURE_METHOD_NAME
+		     , A.GAUGE_METHOD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'GAUGE_METHOD', A.GAUGE_METHOD) FROM DUAL) AS GAUGE_METHOD_NAME
+		     , B.MEASURE_SPEC
+		     , A.TARGET
+		     , A.USL
+		     , A.LSL
+		     , A.AQL
+		     , B.SAMPLE_CNT
+		     , MID.UNIT
+		     , A.SAMPLING_BASE
+		     , A.CHECK_LEVEL
+		     , A.DIVISION_CD
+		     , A.COMPANY_CD
+		     , A.PRODUCT_QTY
+		     , A.DEFECT_RESULT_ID
+		     , A.DEFECT_LEVEL
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'PQC_STATE', A.DEFECT_LEVEL) FROM DUAL) AS DEFECT_LEVEL_NAME
+		     , 'Y' SAVE_FLAG
+		     , ITEM_VALUE1
+		     , ITEM_VALUE2
+		     , ITEM_VALUE3
+		     , ITEM_VALUE4
+		     , ITEM_VALUE5
+		     , DEFECT_QTY
+		     , A.JUDGMENT_ID
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'PASS_FLAG', A.JUDGMENT_ID) FROM DUAL) AS JUDGMENT_NAME
+		     , MA.SAMPLE_QTY
+		     , CASE WHEN A.SAMPLING_BASE = 'NO_USE' THEN 1
+		            ELSE MA.REJECT 
+		       END AS REJECT
+		     , TO_CHAR(A.START_TIME, 'HH24MI') AS START_TIME
+		     , TO_CHAR(A.END_TIME, 'HH24MI') AS END_TIME
+		     , A.DESCRIPTION
+		     , DECODE(NVL((SELECT 'Y'
+					         FROM MOM_FILE
+					        WHERE ENTITY_ID = A.DEFECT_RESULT_ID
+					          AND USE_YN = 'Y'
+					          AND DIVISION_CD = A.DIVISION_CD
+					          AND COMPANY_CD = A.COMPANY_CD
+					          AND ROWNUM = 1), 'N') 
+					 , 'Y', 'Y', 'N') AS IS_FILE
+		 FROM  MOM_DEFECT_RESULT A
+		     , MOM_AQL MA
+		     , MOM_MEASURE_SPEC B
+		     , MOM_ITEM_DEFINITION MID
+		WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		  AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		  AND A.WORK_ORDER_ID = #{workOrderId, jdbcType=VARCHAR}
+		  AND A.CHECK_LEVEL = MA.AQL_GROUP_ID(+)
+		  AND A.AQL = MA.AQL_ID(+)
+		  AND A.DIVISION_CD = MA.DIVISION_CD(+)
+		  AND A.COMPANY_CD = MA.COMPANY_CD(+)
+		  AND A.PRODUCT_QTY BETWEEN MA.MIN_LOT_COUNT(+) AND MA.MAX_LOT_COUNT(+)       
+		  AND B.MEASURE_TYPE = 'PQC'
+		  AND A.ITEM_ID = B.ITEM_ID
+		  AND A.DIVISION_CD = B.DIVISION_CD
+		  AND A.COMPANY_CD = B.COMPANY_CD
+		  AND A.GAUGE_METHOD = B.GAUGE_METHOD
+		  AND A.DIVISION_CD = MID.DIVISION_CD
+          AND A.COMPANY_CD = MID.COMPANY_CD
+          AND A.ITEM_ID = MID.ITEM_ID
+		UNION ALL
+		SELECT A.WORK_ORDER_ID
+             , A.ITEM_ID
+             , A.STATE
+             , A.SEQ
+             , A.MEASURE_TYPE
+             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'MEASURE_TYPE', A.MEASURE_TYPE) FROM DUAL) AS MEASURE_TYPE_NAME
+             , A.MEASURE_METHOD
+             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'MEASURE_METHOD', A.MEASURE_METHOD) FROM DUAL) AS MEASURE_METHOD_NAME
+             , A.GAUGE_METHOD
+             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'GAUGE_METHOD', A.GAUGE_METHOD) FROM DUAL) AS GAUGE_METHOD_NAME
+             , A.MEASURE_SPEC
+             , A.TARGET
+             , A.USL
+             , A.LSL
+             , A.AQL
+             , A.SAMPLE_CNT
+             , A.UNIT
+             , A.SAMPLING_BASE
+             , A.CHECK_LEVEL
+             , A.DIVISION_CD
+             , A.COMPANY_CD
+             , A.PRODUCT_QTY
+		     , '' DEFECT_RESULT_ID
+		     , PQC.DEFECT_LEVEL
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'PQC_STATE', PQC.DEFECT_LEVEL) FROM DUAL) AS DEFECT_LEVEL_NAME
+		     , 'N' SAVE_FLAG
+		     , NULL AS ITEM_VALUE1
+		     , NULL AS ITEM_VALUE2
+		     , NULL AS ITEM_VALUE3
+		     , NULL AS ITEM_VALUE4
+		     , NULL AS ITEM_VALUE5
+		     , NULL AS DEFECT_QTY
+		     , NULL AS JUDGMENT_ID
+		     , NULL AS JUDGMENT_NAME
+		     , <![CDATA[
+		     	CASE WHEN A.MEASURE_METHOD = 'COUNT' THEN
+		            CASE WHEN A.SAMPLING_BASE = 'NO_USE' THEN A.SAMPLE_CNT
+		                 WHEN A.PRODUCT_QTY < MA.SAMPLE_QTY THEN A.PRODUCT_QTY
+		                 ELSE MA.SAMPLE_QTY 
+		            END 
+		            ELSE A.SAMPLE_CNT 
+		       END  AS SAMPLE_QTY
+		      ]]> 
+		     , CASE WHEN A.MEASURE_METHOD = 'COUNT' THEN
+			            CASE WHEN A.SAMPLING_BASE = 'NO_USE' THEN 1
+			                 ELSE MA.REJECT 
+			            END 
+		       END AS REJECT
+		     , NULL START_TIME
+		     , NULL END_TIME   
+		     , '' DESCRIPTION
+		     , 'N' AS IS_FILE
+		  FROM (SELECT A.WORK_ORDER_ID
+		             , A.ITEM_ID
+		             , 'SAVE' STATE
+		             , B.SEQ
+		             , B.MEASURE_TYPE
+		             , B.MEASURE_METHOD
+		             , B.GAUGE_METHOD                         
+		             , B.MEASURE_SPEC
+		             , B.TARGET
+		             , B.USL
+		             , B.LSL
+		             , B.AQL
+		             , B.SAMPLE_CNT
+		             , MID.UNIT
+		             , B.SAMPLING_BASE
+		             , B.CHECK_LEVEL
+		             , A.DIVISION_CD
+		             , A.COMPANY_CD 
+		             , A.PLAN_QTY PRODUCT_QTY
+		          FROM MOM_WORK_ORDER A
+		             , MOM_MEASURE_SPEC B
+		             , MOM_ITEM_DEFINITION MID
+		         WHERE 1 = 1
+		    	   AND A.WORK_ORDER_ID = #{workOrderId, jdbcType=VARCHAR}
+		  		   AND A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+                   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		           AND B.MEASURE_TYPE = 'PQC'
+		           AND A.ITEM_ID = B.ITEM_ID
+		           AND A.DIVISION_CD = B.DIVISION_CD
+		           AND A.COMPANY_CD = B.COMPANY_CD 
+		           AND A.DIVISION_CD = MID.DIVISION_CD
+                   AND A.COMPANY_CD = MID.COMPANY_CD
+                   AND A.ITEM_ID = MID.ITEM_ID) A
+		     , MOM_AQL MA
+		     , (SELECT NVL(TO_CHAR(TO_NUMBER(MAX(DEFECT_LEVEL) + 1)), '1') DEFECT_LEVEL
+		              ,NVL(MAX(DEFECT_STATE),'FINISH') DEFECT_STATE
+		          FROM MOM_DEFECT_RESULT
+		         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		    	   AND WORK_ORDER_ID = #{workOrderId, jdbcType=VARCHAR}
+		       ) PQC
+		 WHERE 1 = 1
+		   AND A.CHECK_LEVEL = MA.AQL_GROUP_ID(+)
+		   AND A.AQL = MA.AQL_ID(+)
+		   AND A.DIVISION_CD = MA.DIVISION_CD(+)
+		   AND A.COMPANY_CD = MA.COMPANY_CD(+)
+		   AND A.PRODUCT_QTY BETWEEN MA.MIN_LOT_COUNT(+) AND MA.MAX_LOT_COUNT(+)
+		   AND PQC.DEFECT_STATE != 'SAVE'
+		 ORDER BY DEFECT_LEVEL, DEFECT_RESULT_ID
+	</select>
+	
+	<insert id="create_upsertPqc" statementType="CALLABLE">
+	{
+        CALL SP_MOM_QA_PKG.P_UPSERT_PQC_RESULT (
+             #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+           , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+           , #{companyCd, mode=IN, jdbcType=VARCHAR}
+           , #{workOrderId, mode=IN, jdbcType=VARCHAR}
+           , #{defectResultId, mode=IN, jdbcType=VARCHAR}
+           , #{itemValue1, mode=IN, jdbcType=VARCHAR}
+           , #{itemValue2, mode=IN, jdbcType=VARCHAR}
+           , #{itemValue3, mode=IN, jdbcType=VARCHAR}
+           , #{itemValue4, mode=IN, jdbcType=VARCHAR}
+           , #{itemValue5, mode=IN, jdbcType=VARCHAR}
+           , #{productQty, mode=IN, jdbcType=INTEGER}
+           , #{gaugeMethod, mode=IN, jdbcType=VARCHAR}
+           , #{defectLevel, mode=IN, jdbcType=VARCHAR}
+           , #{startTime, mode=IN, jdbcType=VARCHAR}
+           , #{endTime, mode=IN, jdbcType=VARCHAR}
+           , #{buttonState, mode=IN, jdbcType=VARCHAR}
+           , #{userId, mode=IN, jdbcType=VARCHAR}
+           , #{description, mode=IN, jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+
+</mapper>

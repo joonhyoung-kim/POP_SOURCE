@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.reference.workinghours.calOffClass">
+	<select id="get_calOffClass_list" resultType="camelMap" parameterType="java.util.HashMap">
+	WITH TEMP1 AS (
+		SELECT A.DIVISION_CD
+			 , A.COMPANY_CD
+			 , A.OFF_CD
+			 , A.OFF_NAME
+			 , A.OFF_CD AS CODE
+         	 , A.OFF_CD || '(' || A.OFF_NAME || ')' AS NAME
+			 , A.START_TIME
+			 , A.END_TIME
+			 , TRUNC(A.OFF_TIME) AS OFF_TIME
+			 , A.USE_YN
+			 , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(DIVISION_CD, COMPANY_CD, 'USE_FLAG', A.USE_YN) FROM DUAL) AS USE_YN_NAME
+			 , A.CREATE_BY
+			 , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD') AS CREATE_DATE
+			 , A.UPDATE_BY
+			 , TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD') AS UPDATE_DATE
+			 , A.UI_SEQUENCE
+			 , A.DESCRIPTION
+          FROM MOM_SHIFT_OFF_CODE A
+     	 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+       	   AND A.COMPANY_CD  = #{companyCd,jdbcType=VARCHAR}
+     	 <if test="offClassId != null and offClassId != ''">
+           AND (A.OFF_CD LIKE '%' || TRIM(UPPER(#{offClassId, jdbcType=VARCHAR})) || '%' 
+        	   OR UPPER(A.OFF_NAME) LIKE '%' || TRIM(UPPER(#{offClassId, jdbcType=VARCHAR})) || '%')
+     	 </if>
+	     ORDER BY A.UI_SEQUENCE, A.OFF_CD)
+     SELECT A.*
+          , B.ROW_COUNT
+     FROM (SELECT A.*
+                , ROWNUM GRIDROW
+             FROM TEMP1 A) A
+        , (SELECT COUNT(*) ROW_COUNT
+             FROM TEMP1) B 
+    <if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+     WHERE GRIDROW BETWEEN #{startPage, jdbcType=INTEGER} AND #{endPage, jdbcType=INTEGER}
+    </if>
+	</select>
+	
+	<insert id="create_calOffClass" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+		INSERT INTO MOM_SHIFT_OFF_CODE (
+			   DIVISION_CD
+			 , COMPANY_CD
+			 , OFF_CD
+			 , OFF_NAME
+			 , START_TIME
+			 , END_TIME
+			 , OFF_TIME
+			 , USE_YN
+			 , CREATE_BY
+			 , CREATE_DATE
+			 , UPDATE_BY
+			 , UPDATE_DATE
+			 , UI_SEQUENCE
+			 , DESCRIPTION
+			)
+			VALUES (
+			#{divisionCd, jdbcType=VARCHAR},
+			#{companyCd, jdbcType=VARCHAR},
+			UPPER(TRIM(#{calOffClassId, jdbcType=VARCHAR})),
+			#{calOffClassName, jdbcType=VARCHAR},
+			#{startTime, jdbcType=VARCHAR},
+			#{endTime, jdbcType=VARCHAR},
+			(SELECT TRUNC(((TO_DATE(#{endTime, jdbcType=VARCHAR}, 'HH24:MI') + #{addDate, jdbcType=NUMERIC}) - TO_DATE(#{startTime, jdbcType=VARCHAR}, 'HH24:MI')) * 60 * 24)
+		 	   FROM DUAL),
+			NVL(#{useYn, jdbcType=VARCHAR}, 'Y'),
+			#{updateBy, jdbcType=VARCHAR},
+			MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			#{updateBy, jdbcType=VARCHAR},
+			MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			#{uiSequence, jdbcType=NUMERIC},
+			#{description, jdbcType=VARCHAR}
+		)
+	   ;
+	   
+		INSERT INTO MOM_SHIFT_OFF_CODE_HIST (
+			LAST_EVENT_SEQ
+		  , DIVISION_CD
+		  , COMPANY_CD
+		  , CUD_FLAG
+		  , OFF_CD
+		  , OFF_NAME
+		  , START_TIME
+		  , END_TIME
+		  , OFF_TIME
+		  , USE_YN
+		  , CREATE_BY
+		  , CREATE_DATE
+		  , UPDATE_BY
+		  , UPDATE_DATE
+		  , UI_SEQUENCE
+		  , DESCRIPTION
+		)
+		SELECT S_SS_SEQ.NEXTVAL
+			 , DIVISION_CD
+	         , COMPANY_CD
+	         , 'C'
+	         , OFF_CD
+	         , OFF_NAME
+		     , START_TIME
+		     , END_TIME
+		     , OFF_TIME
+		     , USE_YN
+		     , CREATE_BY
+		     , CREATE_DATE
+		     , UPDATE_BY
+		     , UPDATE_DATE
+		     , UI_SEQUENCE
+		     , DESCRIPTION
+		 FROM MOM_SHIFT_OFF_CODE
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		  AND OFF_CD = UPPER(TRIM(#{calOffClassId, jdbcType=VARCHAR}))
+	  ;
+	 		
+		SELECT
+			CASE 
+				WHEN COUNT(OFF_CD) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		  FROM MOM_SHIFT_OFF_CODE
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		   AND OFF_CD = UPPER(TRIM(#{calOffClassId, jdbcType=VARCHAR}))
+		;
+	 END
+	}
+	</insert>	
+	
+	<update id="modify_calOffClass" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+	  UPDATE MOM_SHIFT_OFF_CODE
+		 SET OFF_NAME = #{calOffClassName, jdbcType=VARCHAR},
+		     START_TIME = #{startTime, jdbcType=VARCHAR},
+		     END_TIME =  #{endTime, jdbcType=VARCHAR},
+			 OFF_TIME =  (SELECT TRUNC(((TO_DATE(#{endTime, jdbcType=VARCHAR}, 'HH24:MI') + #{addDate, jdbcType=NUMERIC}) - TO_DATE(#{startTime, jdbcType=VARCHAR}, 'HH24:MI')) * 60 * 24)
+			    	   		FROM DUAL),
+			 USE_YN = NVL(#{useYn, jdbcType=VARCHAR}, 'Y'),
+			 UPDATE_DATE =  MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			 UPDATE_BY =  #{updateBy, jdbcType=VARCHAR},
+			 UI_SEQUENCE = #{uiSequence, jdbcType=NUMERIC},
+			 DESCRIPTION =  #{description, jdbcType=VARCHAR}
+	   WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	     AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		 AND OFF_CD = UPPER(TRIM(#{calOffClassId, jdbcType=VARCHAR}))
+	  ;
+	  
+	  INSERT INTO MOM_SHIFT_OFF_CODE_HIST (
+		     LAST_EVENT_SEQ
+		   , DIVISION_CD
+		   , COMPANY_CD
+		   , CUD_FLAG
+		   , OFF_CD
+		   , OFF_NAME
+		   , START_TIME
+		   , END_TIME
+		   , OFF_TIME
+		   , USE_YN
+		   , CREATE_BY
+		   , CREATE_DATE
+		   , UPDATE_BY
+		   , UPDATE_DATE
+		   , UI_SEQUENCE
+		   , DESCRIPTION
+	    )
+	  SELECT S_SS_SEQ.NEXTVAL
+		   , DIVISION_CD
+	       , COMPANY_CD
+	       , 'U'
+	       , OFF_CD
+	       , OFF_NAME
+		   , START_TIME
+		   , END_TIME
+		   , OFF_TIME
+		   , USE_YN
+		   , CREATE_BY
+		   , CREATE_DATE
+		   , UPDATE_BY
+		   , UPDATE_DATE
+		   , UI_SEQUENCE
+		   , DESCRIPTION
+		FROM MOM_SHIFT_OFF_CODE
+	   WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		 AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		 AND OFF_CD = UPPER(TRIM(#{calOffClassId, jdbcType=VARCHAR}))
+	  ;
+	  	
+	  SELECT
+		  CASE 
+			  WHEN COUNT(OFF_CD) = 0 THEN 'E'
+			  ELSE 'S' 
+		  END  
+		  INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_SHIFT_OFF_CODE
+	   WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		 AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		 AND OFF_CD = UPPER(TRIM(#{calOffClassId, jdbcType=VARCHAR}))
+	  ;
+	  END
+	}	
+	</update>
+	
+	<delete id="remove_calOffClass" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+	  INSERT INTO MOM_SHIFT_OFF_CODE_HIST (
+			LAST_EVENT_SEQ
+		  , DIVISION_CD
+		  , COMPANY_CD
+		  , CUD_FLAG
+		  , OFF_CD
+		  , OFF_NAME
+		  , START_TIME
+		  , END_TIME
+		  , OFF_TIME
+		  , USE_YN
+		  , CREATE_BY
+		  , CREATE_DATE
+		  , UPDATE_BY
+		  , UPDATE_DATE
+		  , UI_SEQUENCE
+		  , DESCRIPTION
+	  )
+	  SELECT S_SS_SEQ.NEXTVAL
+		   , DIVISION_CD
+	       , COMPANY_CD
+	       , 'D'
+	       , OFF_CD
+	       , OFF_NAME
+		   , START_TIME
+		   , END_TIME
+		   , OFF_TIME
+		   , USE_YN
+		   , CREATE_BY
+		   , CREATE_DATE
+		   , #{updateBy, jdbcType=VARCHAR}
+		   , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		   , UI_SEQUENCE
+		   , 'Delete Data'
+		FROM MOM_SHIFT_OFF_CODE
+	   WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		 AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		 AND OFF_CD = UPPER(TRIM(#{calOffClassId, jdbcType=VARCHAR}))
+	  ;
+	   
+	  DELETE FROM MOM_SHIFT_OFF_CODE
+	   WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR} 
+	   	 AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		 AND OFF_CD = UPPER(TRIM(#{calOffClassId, jdbcType=VARCHAR}))
+	  ;
+	  	
+		SELECT
+			CASE 
+				WHEN COUNT(OFF_CD) = 0 THEN 'S'
+				ELSE 'E' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		  FROM MOM_SHIFT_OFF_CODE
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		   AND OFF_CD = UPPER(TRIM(#{calOffClassId, jdbcType=VARCHAR}))
+		;
+	 END
+	}
+	</delete>
+	
+	<select id="get_checkShiftCodeDetail_list" resultType="camelMap" parameterType="java.util.HashMap">
+	  SELECT COUNT(*) AS ROW_COUNT
+		FROM MOM_SHIFT_CODE_OFF_MAP A
+	   WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	 	 AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	 	 AND A.OFF_CD IN(${calOffClassIds})
+	</select>
+	
+	<select id="get_calOffClassId_list" resultType="camelMap" parameterType="java.util.HashMap">
+	  SELECT TO_NUMBER(SUBSTR(MAX(A.OFF_CD), 3, 4)) AS CODE_SEQ
+		FROM MOM_SHIFT_OFF_CODE A
+	   WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	 	 AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	</select>
+	
+</mapper>

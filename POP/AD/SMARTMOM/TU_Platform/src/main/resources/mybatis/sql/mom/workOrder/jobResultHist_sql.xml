@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.workOrder.jobResultHist">
+	<select id="get_jobResultHist_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.*
+		  FROM(SELECT A.WORK_ORDER_ID
+				    , A.ITEM_ID
+				    , A.ITEM_NAME
+				    , A.SPECIFICATION
+				    , A.START_TIME
+				    , A.END_TIME
+				    , A.INSERT_NUMBER
+				    , A.CONFIRM_QTY
+				    , A.GOOD_QTY
+				    , A.CANCEL_QTY
+				    , A.BAD_QTY
+				    , A.REMAIN_QTY
+				    , A.SHIFT_CD
+				    , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD
+				    										, A.COMPANY_CD
+				    										, 'SHIFT_CODE'
+				    										, A.SHIFT_CD)
+				    	 FROM DUAL) SHIFT_CD_NAME
+				    , A.WORK_DAY
+				    , A.RESOURCE_CD
+				    , (SELECT MOM_COMMON_PKG.FN_GET_RESOURCE_NAME(A.DIVISION_CD
+				    											, A.COMPANY_CD
+				    											, A.RESOURCE_CD) 
+				    	 FROM DUAL) AS RESOURCE_NAME
+				    , A.CREATE_BY
+				    , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(A.DIVISION_CD
+				    										, A.COMPANY_CD
+				    										, A.CREATE_BY) 
+				    	 FROM DUAL) AS CREATE_USER_NAME 
+				    , A.CREATE_DATE
+				    , A.PRODUCT_ORDER_ID
+				    , A.ORDER_FLAG
+                    , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD
+                                                            , A.COMPANY_CD
+                                                            , 'WO_FLAG'
+                                                            , A.ORDER_FLAG) 
+                         FROM DUAL) AS ORDER_FLAG_NAME
+				    , A.WO_TYPE
+                    , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD
+                                                            , A.COMPANY_CD
+                                                            , 'PRODUCT_ORDER_TYPE'
+                                                            , A.WO_TYPE) <!-- 20191106 / ljw / 작업실적현황 조회 시 식별자 오류로 인한 수정 -->
+                         FROM DUAL) AS WO_TYPE_NAME
+                    , A.EQUIPMENT_CD
+                    , (SELECT MOM_COMMON_PKG.FN_GET_EQUIPMENT_NAME(A.DIVISION_CD
+                    											 , A.COMPANY_CD
+                    											 , A.EQUIPMENT_CD) 
+                    	 FROM DUAL) AS EQUIPMENT_NAME
+                    , A.INLINE_FLAG
+                    , A.ECO_NO
+				 FROM (SELECT WOR.WORK_ORDER_ID
+				            , WOR.DIVISION_CD
+				            , WOR.COMPANY_CD
+				            , MIN(WO.ITEM_ID)     AS ITEM_ID
+				            , MIN(MI.ITEM_NAME)     AS ITEM_NAME
+				            , MIN(MI.SPECIFICATION)     AS SPECIFICATION
+				            , MIN(TO_CHAR(WOR.START_TIME, 'YYYY-MM-DD HH24:MI:SS'))     AS START_TIME
+							, MAX(TO_CHAR(WOR.END_TIME, 'YYYY-MM-DD HH24:MI:SS'))     AS END_TIME
+				            , MIN(WOR.INSERT_NUMBER)     AS INSERT_NUMBER
+				            , MIN(WO.CONFIRM_QTY)     AS CONFIRM_QTY
+				            , SUM(DECODE(WOR.STATE, 'E', WOR.GOOD_QTY, 0))            AS GOOD_QTY
+				            , SUM(DECODE(WOR.STATE, 'C', ABS(WOR.GOOD_QTY), 0))       AS CANCEL_QTY
+				            , SUM(WOR.BAD_QTY)     AS BAD_QTY
+				            , MIN(WO.CONFIRM_QTY) - SUM(DECODE(WOR.STATE, 'E', WOR.GOOD_QTY, 0)) + SUM(DECODE(WOR.STATE, 'C', ABS(WOR.GOOD_QTY), 0)) - SUM(WOR.BAD_QTY)     AS REMAIN_QTY
+				            , MIN(WOR.SHIFT_CD)     AS SHIFT_CD
+				            , MIN(TO_CHAR(WOR.WORK_DAY, 'YYYY-MM-DD HH24:MI:SS'))     AS WORK_DAY
+				            , MIN(WOR.RESOURCE_CD)     AS RESOURCE_CD
+				            , MIN(WOR.CREATE_BY)       AS CREATE_BY
+				            , MIN(TO_CHAR(WOR.CREATE_DATE, 'YYYY-MM-DD HH24:MI:SS')) AS CREATE_DATE
+				            , MIN(WO.PRODUCT_ORDER_ID) AS PRODUCT_ORDER_ID
+				            , MIN(WO.ORDER_FLAG) AS ORDER_FLAG
+		            	    , WO.PRODUCT_ORDER_TYPE AS WO_TYPE
+                            , WOR.EQUIPMENT_CD
+                            , MIN(NVL(WO.INLINE_FLAG, 'N')) AS INLINE_FLAG
+                            , MIN(WO.ECO_NO) AS ECO_NO
+				        FROM  MOM_WORK_ORDER_RESULT WOR
+				            , MOM_WORK_ORDER WO
+				            , MOM_ITEM_DEFINITION MI
+				        WHERE WOR.DIVISION_CD = WO.DIVISION_CD
+				        AND   WOR.COMPANY_CD  = WO.COMPANY_CD
+				        AND   WOR.WORK_ORDER_ID = WO.WORK_ORDER_ID
+				        AND   WO.DIVISION_CD = MI.DIVISION_CD
+				        AND   WO.COMPANY_CD = MI.COMPANY_CD
+				        AND   WO.ITEM_ID = MI.ITEM_ID
+				        AND   WOR.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+				        AND   WOR.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+				  <if test="searchJobTerms != null and searchJobTerms != '' and searchKeyWord != null and searchKeyWord != ''">
+			           <choose>
+			               <when test="searchJobTerms == 'PRODUCT_DEFINITION_ID'">
+			                AND (WO.ITEM_ID LIKE '%'|| TRIM(UPPER(#{searchKeyWord, jdbcType=VARCHAR})) || '%'
+			                     OR UPPER(MI.ITEM_NAME) LIKE '%'|| TRIM(UPPER(#{searchKeyWord, jdbcType=VARCHAR})) || '%')
+			               </when>
+			               <when test="searchJobTerms == 'WO_PO_ID'">
+			                AND (WO.WORK_ORDER_ID LIKE '%'|| TRIM(UPPER(#{searchKeyWord, jdbcType=VARCHAR})) || '%'
+			                	 OR WO.PRODUCT_ORDER_ID LIKE '%' || TRIM(UPPER(#{searchKeyWord, jdbcType=VARCHAR})) || '%')
+			               </when>
+			           </choose>
+				   </if>
+				   <if test="workState != null and workState != ''">
+				    AND WOR.STATE = #{workState, jdbcType=VARCHAR}
+				   </if>
+				   <if test="resourceName != null and resourceName != ''">
+				    AND WOR.RESOURCE_CD = #{resourceName, jdbcType=VARCHAR}
+				   </if>
+				   <if test="resourceCd != null and resourceCd != ''">
+				    AND WOR.RESOURCE_CD = #{resourceCd, jdbcType=VARCHAR}
+				   </if>
+				   <if test="dateCombo != null and dateCombo != ''">
+			           <choose>
+			               <when test="dateCombo == 'CREATE_TIME'">
+			                AND WOR.CREATE_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR},'YYYY-MM-DD') AND TO_DATE(#{toDate, jdbcType=VARCHAR},'YYYY-MM-DD') + 23.9997/24
+			               </when>
+			               <when test="dateCombo == 'START_TIME'">
+			                AND WOR.START_TIME BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR},'YYYY-MM-DD') AND TO_DATE(#{toDate, jdbcType=VARCHAR},'YYYY-MM-DD') + 23.9997/24
+			               </when>
+			               <when test="dateCombo == 'END_TIME'">
+			                AND WOR.END_TIME BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR},'YYYY-MM-DD') AND TO_DATE(#{toDate, jdbcType=VARCHAR},'YYYY-MM-DD') + 23.9997/24
+			               </when>
+			           </choose>
+				   </if>
+				   <if test = "orderFlag != null and orderFlag != ''">
+				   AND WO.ORDER_FLAG = #{orderFlag, jdbcType=VARCHAR}
+				   </if>
+				   <if test="equipmentCd != null and equipmentCd != ''">
+				   AND WOR.EQUIPMENT_CD = #{equipmentCd, jdbcType=VARCHAR}
+				   </if>
+		        GROUP BY WOR.DIVISION_CD, WOR.COMPANY_CD, WOR.WORK_ORDER_ID, WO.ORDER_FLAG, WO.PRODUCT_ORDER_TYPE, WOR.EQUIPMENT_CD, WO.DIVISION_CD, WO.COMPANY_CD ) A
+   			  ) A
+			   <if test="userName != null and userName != ''">
+			    WHERE UPPER(A.CREATE_USER_NAME) LIKE '%'|| TRIM(UPPER(#{userName, jdbcType=VARCHAR})) ||'%'
+			   </if> 
+	       ORDER BY A.CREATE_DATE DESC
+				  , A.WORK_ORDER_ID DESC       
+	</select>
+	
+</mapper>

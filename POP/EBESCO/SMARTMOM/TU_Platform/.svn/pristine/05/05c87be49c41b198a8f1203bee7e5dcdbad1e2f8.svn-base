@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.purchase.purchasing.irregularOrderCancel">
+	<select id="get_irregularOrderCancel_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.DIVISION_CD
+		     , A.COMPANY_CD
+		     , A.ORDER_GROUP_ID
+		     , A.ORDER_SEQ
+		     , A.MATERIAL_ORDER_ID
+		     , A.VENDOR_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME(A.DIVISION_CD 
+		     										   , A.COMPANY_CD 
+		     										   ,A.VENDOR_CD)
+		          FROM DUAL) AS VENDOR_NAME
+		     , A.DEPARTURE_VENDOR_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME(A.DIVISION_CD 
+		     										   , A.COMPANY_CD 
+		     										   , A.DEPARTURE_VENDOR_CD )
+		          FROM DUAL) AS DEPARTURE_VENDOR_NAME
+		     , A.ITEM_ID
+		     , A.ITEM_NAME
+		     , TO_CHAR(A.ORDER_DATE , 'YYYY-MM-DD') AS ORDER_DATE
+		     , TO_CHAR(A.DELIVERY_DATE , 'YYYY-MM-DD') AS DEPARTURE_DATE
+		     , TO_CHAR(A.CREATE_DATE , 'YYYY-MM-DD') AS CREATE_DATE
+		     , A.CREATE_BY
+		     , A.CREATE_BY_NAME
+		     , TO_CHAR(A.UPDATE_DATE , 'YYYY-MM-DD') AS UPDATE_DATE
+		     , A.UPDATE_BY
+		     , A.UPDATE_BY_NAME
+		     , NVL(A.ORDER_QTY , 0) AS ORDER_QTY
+		     , NVL(A.CLOSED_QTY, 0) AS RESULT_QTY
+		     , NVL(A.DEPARTURE_QTY, 0) AS DEPARTURE_QTY
+		     , NVL(A.CANCEL_QTY, 0) AS CANCEL_QTY
+		     , (A.ORDER_QTY - NVL(A.CANCEL_QTY, 0) - GREATEST(NVL(A.DEPARTURE_QTY,0), NVL(A.CLOSED_QTY,0))) AS REMAINED_QTY
+		     , (A.ORDER_QTY - NVL(A.CANCEL_QTY, 0) - GREATEST(NVL(A.DEPARTURE_QTY,0), NVL(A.CLOSED_QTY,0))) AS COMPARE_REMAIN_QTY
+		     , A.UNIT
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.DIVISION_CD 
+		     										  , A.COMPANY_CD 
+		     										  , 'ITEM_UNIT' 
+		     										  , A.UNIT )
+		          FROM DUAL) AS UNIT_NAME
+		     , A.ORDER_STATE
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD 
+		     										 , A.COMPANY_CD 
+		     										 , 'MATERIAL_ORDER_STATE' 
+		     										 , A.ORDER_STATE )
+		          FROM DUAL) AS ORDER_STATE_NAME
+		     , A.ITEM_USER_ID
+		     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(A.DIVISION_CD 	
+		     										 , A.COMPANY_CD 
+		     										 , A.ITEM_USER_ID)
+		          FROM DUAL) AS ITEM_USER_NAME
+		     , A.DESCRIPTION
+		     , A.SPECIFICATION
+		     , A.MARKET_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD 
+		     										 , A.COMPANY_CD 
+		     										 , 'MARKET_CODE' 
+		     										 , A.MARKET_CD )
+		          FROM DUAL) AS MARKET_NAME
+		     , A.CURRENCY_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD 
+		     										 , A.COMPANY_CD 
+		     										 , 'CURRENCY_CODE' 
+		     										 , A.CURRENCY_CD )
+		          FROM DUAL) AS CURRENCY_NAME
+		     , A.ORDER_FLAG
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (A.DIVISION_CD 
+		     										  , A.COMPANY_CD 
+		     										  , 'ORDER_FLAG' 
+		     										  , A.ORDER_FLAG)
+		          FROM DUAL) AS ORDER_FLAG_NAME
+		     , A.WORK_ORDER_ID
+		     , A.TRANSACTION_SEQ
+		  FROM (SELECT MR.DIVISION_CD
+		             , MR.COMPANY_CD
+		             , MR.ORDER_GROUP_ID
+		             , MR.ORDER_SEQ
+		             , MR.MATERIAL_ORDER_ID
+		             , MR.VENDOR_CD
+		             , MR.DEPARTURE_VENDOR_CD
+		             , MR.ITEM_ID
+		             , MID.ITEM_NAME
+		             , MR.ORDER_DATE
+		             , MR.DELIVERY_DATE
+		             , MR.CREATE_DATE
+		             , MR.CREATE_BY
+		             , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(MR.DIVISION_CD 
+		             										 , MR.COMPANY_CD 
+		             										 , MR.CREATE_BY)
+		                  FROM DUAL) AS CREATE_BY_NAME
+		             , MR.UPDATE_DATE AS UPDATE_DATE
+		             , MR.UPDATE_BY
+		             , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME(MR.DIVISION_CD 
+		             										 , MR.COMPANY_CD 
+		             										 , MR.UPDATE_BY)
+		                  FROM DUAL) AS UPDATE_BY_NAME
+		             , MR.ORDER_QTY
+		             , MR.DEPARTURE_QTY
+		             , MR.CANCEL_QTY
+		             , MR.CLOSED_QTY
+		             , MID.UNIT
+		             , MR.ORDER_STATE
+		             , MID.ITEM_USER_ID
+		             , MR.DESCRIPTION
+		             , MID.SPECIFICATION
+		             , MR.MARKET_CD
+		             , MR.CURRENCY_CD
+		             , MR.ORDER_FLAG
+		             , MR.WORK_ORDER_ID
+		             , MR.TRANSACTION_SEQ
+		          FROM MOM_MATERIAL_ORDER MR
+		             , MOM_ITEM_DEFINITION MID
+		         WHERE 1 = 1
+		           AND MR.DIVISION_CD = MID.DIVISION_CD
+		           AND MR.COMPANY_CD = MID.COMPANY_CD
+		           AND MR.ITEM_ID = MID.ITEM_ID
+				   AND    MR.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+				   AND    MR.COMPANY_CD   = #{companyCd, jdbcType=VARCHAR}
+				   <if test="fromDate != null and fromDate != ''">
+				   AND    MR.ORDER_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}  , 'yyyy-mm-dd') 
+				                        AND     TO_DATE(#{toDate, jdbcType=VARCHAR}  , 'yyyy-mm-dd') 
+				   </if>
+				   <if test="vendorCd != null and vendorCd != '' ">
+				   AND    MR.VENDOR_CD = #{vendorCd, jdbcType=VARCHAR}  
+				   </if>
+				   <if test="vendorName != null and vendorName != '' ">
+				   AND    MR.VENDOR_CD = #{vendorName, jdbcType=VARCHAR}  
+				   </if>
+				   <if test="itemId != null and itemId != '' ">
+				   AND    (MR.ITEM_ID LIKE '%' || TRIM(UPPER(#{itemId, jdbcType=VARCHAR})) || '%'
+				   	   OR UPPER(MID.ITEM_NAME) LIKE '%' || TRIM(UPPER(#{itemId, jdbcType=VARCHAR})) || '%')
+				   </if>
+				   <if test="itemName != null and itemName != '' ">
+				   AND    (MR.ITEM_ID LIKE '%' || TRIM(UPPER(#{itemName, jdbcType=VARCHAR})) || '%'
+				   	OR UPPER(MID.ITEM_NAME) LIKE TRIM(UPPER('%' || #{itemName, jdbcType=VARCHAR} || '%')))
+				   </if>
+				   <if test="orderState != null and orderState != '' ">
+				   AND    MR.ORDER_STATE = #{orderState, jdbcType=VARCHAR}  
+				   </if>
+				   <if test="materialOrderId != null and materialOrderId != '' ">
+				   AND    MR.MATERIAL_ORDER_ID = #{materialOrderId, jdbcType=VARCHAR}  
+				   </if>
+				   <if test="orderNumber != null and orderNumber != '' ">
+				   AND    MR.MATERIAL_ORDER_ID = #{orderNumber, jdbcType=VARCHAR}  
+				   </if>
+				   <if test="departureVendorCd != null and departureVendorCd != '' ">
+				   AND    MR.DEPARTURE_VENDOR_CD = #{departureVendorCd, jdbcType=VARCHAR}  
+				   </if>
+				   <if test="departureVendorName != null and departureVendorName != '' ">
+				   AND    MR.DEPARTURE_VENDOR_CD = #{departureVendorName, jdbcType=VARCHAR}  
+				   </if>
+				   <if test="orderFlag != null and orderFlag != ''">
+				   AND    MR.ORDER_FLAG = #{orderFlag, jdbcType=VARCHAR}
+				   </if>
+				   <if test="orderType != null and orderType != ''">
+				   AND    MR.ORDER_FLAG = #{orderType, jdbcType=VARCHAR}
+				   </if>
+				   )A
+			   WHERE 1 = 1
+			   <if test="orderBy != null and orderBy != ''">
+			   AND	   UPPER(A.CREATE_BY_NAME) LIKE '%' || TRIM(UPPER(#{orderBy, jdbcType=VARCHAR})) || '%'
+			   </if>
+			   ORDER BY A.ORDER_GROUP_ID, A.TRANSACTION_SEQ
+	</select>
+
+	<insert id="create_cancelMaterialOrderProc" statementType="CALLABLE">
+		{
+	        CALL SP_MOM_MATERIAL_PKG.P_CANCEL_MATERIAL_ORDER (
+	             #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+	           , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+	           , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+	           , #{companyCd, mode=IN, jdbcType=VARCHAR}
+	           , #{menuId, mode=IN, jdbcType=VARCHAR}
+	           , #{tableId, mode=IN, jdbcType=VARCHAR}
+	           , #{createBy, mode=IN, jdbcType=VARCHAR}
+	        )
+	    }
+	</insert>
+	
+	<!-- 
+	* 20191031 / gyp / com.thirautech.mom.common.get_specifyCode_list 사용하는 것으로 변경하고 삭제예정
+	 -->
+	<select id="get_comState_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.CODE_ID AS CODE
+		     , A.CODE_NAME AS NAME
+		  FROM MOM_CODE A
+		 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND A.CODE_CLASS_ID = #{codeClassId, jdbcType=VARCHAR} 
+		   AND NVL(A.USE_YN, 'Y') = 'Y'
+		   AND NVL(A.ATTRIBUTE3, 'N') = 'Y'
+	</select>
+	
+	<update id="modify_comOrderState" parameterType="java.util.HashMap">
+		UPDATE MOM_MATERIAL_ORDER
+	       SET ORDER_STATE = #{orderState, jdbcType=VARCHAR}
+	    	 , UPDATE_BY = #{userId, jdbcType=VARCHAR}
+	    	 , UPDATE_DATE = MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+	    	 , TID = SUBSTR(TO_CHAR(SYSTIMESTAMP, 'YYYYMMDDHH24MISSFF'),0,17) || SUBSTR(SYS_GUID(),0,17)
+	    	 , CANCEL_QTY = NVL(CANCEL_QTY, 0) + #{cancelQty, jdbcType=VARCHAR}
+	     WHERE MATERIAL_ORDER_ID = #{materialOrderId, jdbcType=VARCHAR}
+	       AND DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	       AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	</update>
+
+    <select id="get_orderExcelPrint_list" resultType="camelMap" parameterType="java.util.HashMap">
+        WITH TEMP1 AS(
+	        SELECT A.ORDER_GROUP_ID     AS 그룹번호
+	             , A.ORDER_GROUP_ID     AS 그룹번호_BAR128
+	             , A.ORDER_GROUP_ID     AS 그룹번호_BARQR
+	             , TO_CHAR(A.CREATE_DATE, 'YYYY-MM-DD') AS 생성일
+	             , A.VENDOR_CD          AS 업체코드
+<!-- 	             , B.VENDOR_NAME        AS 업체명 -->
+				 , (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME (A.DIVISION_CD, A.COMPANY_CD, A.VENDOR_CD)
+                      FROM DUAL) AS 업체명
+	             , NVL(B.MANAGER_NAME, '-') AS 업체담당자
+	             , NVL(B.TEL_NO, '-')   AS 업체TEL
+	             , NVL(B.FAX_NO, '-')   AS 업체FAX
+	             , NVL(D.VENDOR_NAME, '-')  AS 납품처명
+	             , NVL(D.CEO_NAME, '-')     AS 납품처대표
+	             , NVL(D.BUSINESS_NO, '-')  AS 납품처등록번호
+	             , NVL(D.TEL_NO, '-')       AS 납품처TEL
+	             , NVL(D.FAX_NO, '-')       AS 납품처FAX
+	             , NVL(D.ADDRESS, '-')      AS 납품처주소
+	             , A.MATERIAL_ORDER_ID  AS PLIST_ORDER_ID
+	             , A.ITEM_ID            AS PLIST_ITEM_ID
+	             , C.ITEM_NAME          AS PLIST_ITEM_NAME
+	             , C.SPECIFICATION      AS PLIST_SPECIFICATION
+	             , A.MARKET_CD         AS PLIST_MARKET
+	             , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME(A.DIVISION_CD, A.COMPANY_CD, A.LOCATION_CD) FROM DUAL ) AS PLIST_LOCATION_NAME
+	             , NVL (TO_CHAR(A.ORDER_QTY), 0) AS PLIST_QTY
+	             , C.UNIT               AS PLIST_UNIT
+	             , TO_CHAR(A.ORDER_DATE, 'MM/DD') AS PLIST_ORDER_DATE
+	             , A.DESCRIPTION        AS PLIST_DESCRIPTION
+	             , A.TRANSACTION_SEQ
+	             , A.DIVISION_CD
+                 , A.COMPANY_CD
+                 , A.ORDER_GROUP_ID
+                 , TO_CHAR(A.ORDER_DATE, 'YYYY-MM-DD') AS 발주일자
+              	 , TO_CHAR(A.ORDER_DATE, 'YYYY-MM-DD') AS 납기일자
+              	 , A.UNIT_PRICE AS PLIST_UNIT_PRICE
+              	 , NVL(A.ORDER_QTY, 0) * NVL(A.UNIT_PRICE, 0) AS PLIST_PRICE
+              	 , (NVL(A.ORDER_QTY, 0) * NVL(A.UNIT_PRICE, 0)) / 10 AS PLIST_SURTAX
+	          FROM MOM_MATERIAL_ORDER A
+	             , MOM_VENDOR B
+	             , MOM_ITEM_DEFINITION C
+	             , (SELECT *
+	                  FROM MOM_VENDOR
+	                 WHERE VENDOR_CD = #{divisionCd, jdbcType=VARCHAR}
+	                   AND ROWNUM = 1) D
+	         WHERE 1 = 1
+	           AND A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	           AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	           AND A.DIVISION_CD = B.DIVISION_CD(+)
+	           AND A.COMPANY_CD = B.COMPANY_CD(+)
+	           AND A.DIVISION_CD = C.DIVISION_CD(+)
+	           AND A.COMPANY_CD = C.COMPANY_CD(+)
+	           AND A.DIVISION_CD = D.DIVISION_CD(+)
+	           AND A.COMPANY_CD = D.COMPANY_CD(+)
+	           AND A.VENDOR_CD = B.VENDOR_CD(+)
+	           AND A.ITEM_ID = C.ITEM_ID(+)
+	           AND A.ORDER_GROUP_ID IN (${orderGroupIds})
+	           AND A.ORDER_STATE != 'CANCEL'
+	          )
+	         SELECT A.*
+			      , CASE
+			          WHEN MOD (PLIST_CELLROW, LIST_ALLCOUNT) = 1
+			          THEN
+			              (CEIL (PLIST_CELLROW / LIST_ALLCOUNT)) || '/' || (CEIL (GROUP_COUNT / LIST_ALLCOUNT))
+			          ELSE
+			             ''
+			        END AS PLIST_PAGING
+			   FROM (SELECT A.*
+			              , ROW_NUMBER() OVER(PARTITION BY A.ORDER_GROUP_ID ORDER BY A.ORDER_GROUP_ID, A.TRANSACTION_SEQ) PLIST_CELLROW
+			              , COUNT(*) OVER(PARTITION BY A.ORDER_GROUP_ID) AS GROUP_COUNT 
+			              , (SELECT LIST_ALLCOUNT
+		                       FROM MOM_EXCEL
+		                      WHERE DIVISION_CD = A.DIVISION_CD
+		                        AND COMPANY_CD = A.COMPANY_CD
+		                        AND EXCEL_ID = #{excelId, jdbcType=VARCHAR}) AS LIST_ALLCOUNT
+			           FROM TEMP1 A
+			        ) A
+    </select>
+    
+    <select id="get_orderExcelPrintCount_list" resultType="camelMap" parameterType="java.util.HashMap">
+    	SELECT COUNT(*) AS ROW_COUNT
+    	  FROM MOM_MATERIAL_ORDER
+    	 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+    	   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+    	   AND ORDER_GROUP_ID IN(${orderGroupIds})
+    	   AND ORDER_STATE != 'CANCEL'
+    </select>
+	
+</mapper>

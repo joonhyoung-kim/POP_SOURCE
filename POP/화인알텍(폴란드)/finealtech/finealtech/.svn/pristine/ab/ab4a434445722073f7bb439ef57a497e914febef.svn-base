@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.lang">
+	<select id="get_locale_list" resultType="camelMap" parameterType="java.util.HashMap">
+    	SELECT 
+			  DISTINCT(LOCALE) AS CODE
+			, LOCALE_VALUE AS NAME
+		FROM 
+			MOM_MULTI_LANGUAGE
+		WHERE 
+    		    COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+           	AND DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           	
+    </select>
+    
+    <select id="get_widget_list" resultType="camelMap" parameterType="java.util.HashMap">
+    	<!-- SELECT 
+		      T2.COMPANY_CD
+		    , T2.DIVISION_CD
+		    , T2.LOCALE
+		    , T2.LOCALE_VALUE 
+		    , T2.PAGE_ID
+		    , T2.CODE_TYPE
+		    , T1.KEYWORD AS FROM_LANG
+		    , T2.KEYWORD AS TO_LANG
+		    , T2.DESCRIPTION
+		    , T2.UPDATE_BY
+		FROM 
+		    MOM_MULTI_LANGUAGE T1,
+		    MOM_MULTI_LANGUAGE T2
+		WHERE 
+		        T2.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		    AND T2.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		    AND T2.LOCALE = #{toLang, jdbcType=VARCHAR}
+		    AND T2.CODE_TYPE = T1.CODE_TYPE
+		    AND T1.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		    AND T1.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		    AND T1.LOCALE = #{fromLang, jdbcType=VARCHAR}		    
+		ORDER BY T2.CODE_TYPE ASC -->
+		
+		SELECT 
+		      T1.COMPANY_CD
+		    , T1.DIVISION_CD
+		    , NVL(T2.LOCALE, T1.LOCALE) AS LOCALE
+            , NVL(T2.LOCALE_VALUE, T1.LOCALE_VALUE) AS LOCALE_VALUE 
+		    , T1.PAGE_ID
+		    , T1.CODE_TYPE
+		    , T1.KEYWORD AS FROM_LANG
+			, T2.KEYWORD AS TO_LANG
+		    , T2.DESCRIPTION
+		    , T2.UPDATE_BY
+		FROM 
+		    MOM_MULTI_LANGUAGE T1
+		LEFT OUTER JOIN 
+			MOM_MULTI_LANGUAGE T2
+		ON 
+		        T1.COMPANY_CD = T2.COMPANY_CD
+			AND T1.DIVISION_CD = T2.DIVISION_CD
+			AND T1.CODE_TYPE = T2.CODE_TYPE
+			AND T2.LOCALE = #{toLocale, jdbcType=VARCHAR}
+        WHERE
+                T1.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		    AND T1.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		    AND T1.LOCALE = #{fromLocale, jdbcType=VARCHAR}
+		    <if test="keyword != '' and keyword != null">
+            AND (   UPPER(T1.CODE_TYPE) LIKE '%' || UPPER(#{keyword, jdbcType=VARCHAR}) || '%'
+                OR  UPPER(T1.KEYWORD) LIKE '%' || UPPER(#{keyword, jdbcType=VARCHAR}) || '%'
+                OR  UPPER(T2.KEYWORD) LIKE '%' || UPPER(#{keyword, jdbcType=VARCHAR}) || '%'
+                )
+            </if>
+        ORDER BY T1.CODE_TYPE ASC
+    </select>
+    
+    <insert id="create_widget" parameterType="java.util.HashMap">
+    	INSERT INTO 
+    		MOM_MULTI_LANGUAGE(
+    			  COMPANY_CD
+	    		, DIVISION_CD
+	    		, LOCALE
+	    		, LOCALE_VALUE 
+	    		, PAGE_ID
+	    		, CODE_TYPE
+	    		, KEYWORD
+	    		<!-- , USE_YN -->
+	    		, DESCRIPTION
+	    		, CREATE_DATE
+	    		, CREATE_BY
+	    		, UPDATE_DATE
+	    		, UPDATE_BY
+	    	)
+		    VALUES(
+		    	  #{companyCd, jdbcType=VARCHAR}
+		    	, #{divisionCd, jdbcType=VARCHAR}
+		    	, UPPER(#{locale, jdbcType=VARCHAR})
+		    	, UPPER(#{localeValue, jdbcType=VARCHAR})
+		    	, #{pageId, jdbcType=VARCHAR}
+		    	, UPPER(#{codeType, jdbcType=VARCHAR})
+		    	, #{toLang, jdbcType=VARCHAR}
+		    	<!-- , #{useYn, jdbcType=VARCHAR} -->
+		    	, #{description, jdbcType=VARCHAR}
+		    	, MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		    	, #{userId, jdbcType=VARCHAR}
+		    	, MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		    	, #{userId, jdbcType=VARCHAR}
+		    )
+    </insert>
+    
+    <update id="modify_widget" parameterType="java.util.HashMap">
+    	UPDATE 
+    		MOM_MULTI_LANGUAGE
+    	SET 
+    		  LOCALE_VALUE = UPPER(#{localeValue, jdbcType=VARCHAR})
+    		, PAGE_ID = #{pageId, jdbcType=VARCHAR}
+    		, KEYWORD = #{toLang, jdbcType=VARCHAR}
+    		<!-- , USE_YN = #{useYn, jdbcType=VARCHAR} -->
+    		, DESCRIPTION = #{description, jdbcType=VARCHAR}
+    		, UPDATE_DATE= MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+    		, UPDATE_BY = #{userId, jdbcType=VARCHAR}
+	    WHERE 
+    		    COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+           	AND DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           	AND LOCALE = #{locale, jdbcType=VARCHAR}
+           	AND CODE_TYPE = #{codeType, jdbcType=VARCHAR}
+    </update>
+    
+    <delete id="remove_widget" parameterType="java.util.HashMap">
+    	DELETE FROM
+    		MOM_MULTI_LANGUAGE
+    	WHERE 
+    		    COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+           	AND DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           	AND LOCALE = #{locale, jdbcType=VARCHAR}
+           	AND CODE_TYPE = #{codeType, jdbcType=VARCHAR}
+    </delete>
+    
+	<select id="get_language_list" resultType="camelMap" parameterType="java.util.HashMap">
+    	SELECT 
+    		<!--   COMPANY_CD
+    		, DIVISION_CD
+    		,--> LOCALE
+    		<!-- , LOCALE_VALUE 
+    		, PAGE_ID--> 
+    		, CODE_TYPE
+    		, KEYWORD
+    		<!-- , USE_YN
+    		, DESCRIPTION
+    		, CREATE_DATE
+    		, CREATE_BY
+    		, UPDATE_DATE
+    		, UPDATE_BY -->
+    	FROM 
+    		MOM_MULTI_LANGUAGE
+    	WHERE 
+    		    COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+           	AND DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           	<!-- AND USE_YN = 'Y' -->
+           	<if test="keyword != '' and keyword != null">
+            AND (
+            	    UPPER(CODE_TYPE) LIKE '%' || UPPER(#{keyword, jdbcType=VARCHAR}) || '%'
+                OR  UPPER(KEYWORD) LIKE '%' || UPPER(#{keyword, jdbcType=VARCHAR}) || '%'
+                )
+            </if>
+           	<if test="widget == 'FRONT' and locale == 'KR'">
+           	AND LOCALE      = #{locale, jdbcType=VARCHAR}
+           	AND (PAGE_ID = 'FRONT' OR PAGE_ID = 'SERVER' OR PAGE_ID = 'PROC')
+           	</if>
+           	<if test="widget == 'FRONT' and locale != 'KR'">
+           	AND ((LOCALE = #{locale, jdbcType=VARCHAR} AND (PAGE_ID = 'FRONT' OR PAGE_ID = 'SERVER' OR PAGE_ID = 'PROC')) OR (LOCALE = 'KR' AND PAGE_ID = 'FRONT')) 
+           	</if>
+           	<if test="widget == 'SERVER'">
+           	AND LOCALE      = #{locale, jdbcType=VARCHAR}
+           	AND (<!-- PAGE_ID = 'SERVER' OR  -->PAGE_ID = 'XML')
+           	</if>
+    	ORDER BY CODE_TYPE ASC
+    </select>
+    
+    
+    <insert id="create_setLangBatchProcessing" parameterType="java.util.HashMap">
+        SELECT MOM_COMMON_PKG.FN_SET_MULTI_LANG(#{divisionCd, jdbcType=VARCHAR},#{companyCd, jdbcType=VARCHAR}, UPPER(#{locale, jdbcType=VARCHAR})) 
+          FROM DUAL
+    </insert>
+    
+    <update id="modify_setLangBatchProcessing" parameterType="java.util.HashMap">
+        UPDATE MOM_MULTI_LANGUAGE
+           SET UPDATE_DATE = UPDATE_DATE
+             , UPDATE_BY = UPDATE_BY
+         WHERE COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+           AND DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           AND LOCALE = #{locale, jdbcType=VARCHAR}
+           AND ROWNUM = 1
+    </update>
+    
+    <!-- <insert id="create_language" parameterType="java.util.HashMap">
+    	INSERT INTO 
+    		MOM_MULTI_LANGUAGE(
+    			  COMPANY_CD
+	    		, DIVISION_CD
+	    		, LOCALE
+	    		, LOCALE_VALUE 
+	    		, PAGE_ID
+	    		, CODE_TYPE
+	    		, KEYWORD
+	    		, USE_YN
+	    		, DESCRIPTION
+	    		, CREATE_DATE
+	    		, CREATE_BY
+	    		, UPDATE_DATE
+	    		, UPDATE_BY
+	    	)
+		    VALUES(
+		    	  #{companyCd, jdbcType=VARCHAR}
+		    	, #{divisionCd, jdbcType=VARCHAR}
+		    	, #{locale, jdbcType=VARCHAR}
+		    	, #{localeValue, jdbcType=VARCHAR}
+		    	, #{pageId, jdbcType=VARCHAR}
+		    	, #{codeType, jdbcType=VARCHAR}
+		    	, #{keyword, jdbcType=VARCHAR}
+		    	, #{useYn, jdbcType=VARCHAR}
+		    	, #{description, jdbcType=VARCHAR}
+		    	, SYSDATE
+		    	, #{userId, jdbcType=VARCHAR}
+		    	, SYSDATE
+		    	, #{userId, jdbcType=VARCHAR}
+		    )
+    </insert> -->
+    
+    <!-- <update id="modify_language" parameterType="java.util.HashMap">
+    	UPDATE 
+    		MOM_MULTI_LANGUAGE
+    	SET 
+    		  LOCALE_VALUE = #{localeValue, jdbcType=VARCHAR}
+    		, PAGE_ID = #{pageId, jdbcType=VARCHAR}
+    		, KEYWORD = #{keyword, jdbcType=VARCHAR}
+    		, USE_YN = #{useYn, jdbcType=VARCHAR}
+    		, DESCRIPTION = #{description, jdbcType=VARCHAR}
+    		, UPDATE_DATE= SYSDATE
+    		, UPDATE_BY = #{userId, jdbcType=VARCHAR}
+	    WHERE 
+    		    COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+           	AND DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           	AND LOCALE = #{locale, jdbcType=VARCHAR}
+           	AND CODE_TYPE = #{codeType, jdbcType=VARCHAR}
+    </update> -->
+    
+    <!-- <delete id="remove_language" parameterType="java.util.HashMap">
+    	DELETE FROM
+    		MOM_MULTI_LANGUAGE
+    	WHERE 
+    		    COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+           	AND DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           	AND LOCALE = #{locale, jdbcType=VARCHAR}
+           	AND CODE_TYPE = #{codeType, jdbcType=VARCHAR}
+    </delete>
+    
+    <update id="modify_createbackup" parameterType="java.util.HashMap">
+    	UPDATE 
+    		MOM_MULTI_LANGUAGE
+    	SET 
+    		DIVISION_CD = DIVISION_CD || '.BAK'
+    	WHERE 
+    		    COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+           	AND DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           	AND LOCALE = #{locale, jdbcType=VARCHAR}
+    </update> -->
+    
+    <!-- <update id="modify_rollbackbackup" parameterType="java.util.HashMap">
+    	UPDATE 
+    		MOM_MULTI_LANGUAGE
+    	SET 
+    		DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+    	WHERE 
+    		    COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+           	AND DIVISION_CD = #{divisionCd, jdbcType=VARCHAR} || '.BAK'
+           	AND LOCALE = #{locale, jdbcType=VARCHAR}
+    </update> -->
+    
+    <!-- <delete id="remove_removebackup" parameterType="java.util.HashMap">
+    	DELETE FROM
+    		MOM_MULTI_LANGUAGE
+    	WHERE 
+    		    COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+           	AND DIVISION_CD = #{divisionCd, jdbcType=VARCHAR} || '.BAK'
+           	AND LOCALE = #{locale, jdbcType=VARCHAR}
+    </delete> -->
+</mapper>

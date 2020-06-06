@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.purchase.stock.itemStockMoveHist">
+	<select id="get_itemStockMoveHist_list" resultType="camelMap" parameterType="java.util.HashMap">
+<!-- 		SELECT A.* -->
+<!-- 			, (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (#{divisionCd, jdbcType=VARCHAR} -->
+<!-- 		                                             , #{companyCd, jdbcType=VARCHAR} -->
+<!-- 		                                             , 'Y_N' -->
+<!-- 		                                             , A.CANCEL_FLAG) -->
+<!-- 		         FROM DUAL) AS CANCEL_FLAG_NAME -->
+<!-- 		    , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (#{divisionCd, jdbcType=VARCHAR} -->
+<!-- 		                                             , #{companyCd, jdbcType=VARCHAR} -->
+<!-- 		                                             , 'IO_CATEGORY' -->
+<!-- 		                                             , A.IO_CATEGORY) -->
+<!-- 		         FROM DUAL) AS IO_CATEGORY_NAME   -->
+<!-- 	      FROM ( SELECT A.ITEM_ID -->
+<!-- 			     , B.ITEM_NAME -->
+<!-- 			     , B.SPECIFICATION -->
+<!-- 			     , A.QTY -->
+<!-- 			     , (NVL(C.QTY,0) * -1) AS CANCEL_QTY -->
+<!-- 			     , A.PREV_LOCATION_CD AS FROM_LOCATION_CD -->
+<!-- 			     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME (A.DIVISION_CD, A.COMPANY_CD, A.PREV_LOCATION_CD) FROM DUAL) AS FROM_LOCATION_NAME -->
+<!-- 			     , A.LOCATION_CD AS TO_LOCATION_CD -->
+<!-- 			     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME (A.DIVISION_CD, A.COMPANY_CD, A.LOCATION_CD) FROM DUAL) AS TO_LOCATION_NAME -->
+<!-- 			     , A.UPDATE_BY -->
+<!-- 			     , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME (A.DIVISION_CD, A.COMPANY_CD, A.UPDATE_BY) FROM DUAL) AS USER_NAME -->
+<!-- 			     , TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD') AS UPDATE_DATE -->
+<!-- 			     , A.DESCRIPTION -->
+<!-- 			     , TO_CHAR(A.IO_TIME, 'YYYY-MM-DD') AS IO_TIME -->
+<!-- 			     , TO_CHAR(C.IO_TIME, 'YYYY-MM-DD') AS CANCEL_IO_TIME -->
+<!-- 			     , B.ITEM_TYPE -->
+<!-- 			     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( B.DIVISION_CD, B.COMPANY_CD, 'ITEM_TYPE', B.ITEM_TYPE ) FROM DUAL ) AS ITEM_TYPE_NAME -->
+<!-- 			     , A.PREV_STOCK_INOUT_ID AS FROM_INOUT_ID -->
+<!-- 	             , A.ITEM_STOCK_INOUT_ID AS TO_INOUT_ID -->
+<!-- 	             , A.IO_CATEGORY -->
+<!-- 		         , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (A.DIVISION_CD, A.COMPANY_CD, 'IO_CATEGORY', A.IO_CATEGORY) FROM DUAL) AS IO_CATEGORY_NAME -->
+<!-- 		         , (SELECT MOM_COMMON_PKG.FN_GET_CURRENT_STOCK(A.DIVISION_CD, A.COMPANY_CD, A.ITEM_ID, A.LOCATION_CD) FROM DUAL) AS TO_LOCATION_QTY -->
+<!-- 		         , DECODE(C.ITEM_STOCK_INOUT_ID, NULL, 'N', 'Y' ) AS CANCEL_FLAG -->
+<!-- 		         , C.ITEM_STOCK_INOUT_ID -->
+<!-- 		         , A.ITEM_INPUT_ID -->
+<!-- 			  FROM MOM_ITEM_STOCK_INOUT A -->
+<!-- 			     , MOM_ITEM_DEFINITION B -->
+<!-- 			     , (SELECT * FROM MOM_ITEM_STOCK_INOUT  -->
+<!-- 			      <![CDATA[ WHERE QTY < 0 ]]> -->
+<!-- 			       ) C -->
+<!-- 			     , MOM_PARAMETER P -->
+<!-- 			 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR} -->
+<!-- 			   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR} -->
+<!-- 			   AND A.DIVISION_CD = B.DIVISION_CD(+) -->
+<!-- 			   AND A.COMPANY_CD = B.COMPANY_CD(+) -->
+<!-- 			   AND A.ITEM_ID = B.ITEM_ID(+) -->
+<!-- 			   AND A.DIVISION_CD = C.DIVISION_CD(+) -->
+<!-- 	           AND A.COMPANY_CD = C.COMPANY_CD(+) -->
+<!-- 	           AND A.ITEM_STOCK_INOUT_ID = C.PREV_STOCK_INOUT_ID(+) -->
+<!-- 			   AND A.PREV_STOCK_INOUT_ID IS NOT NULL -->
+<!-- 			   AND A.DIVISION_CD = P.DIVISION_CD -->
+<!--                AND A.COMPANY_CD = P.COMPANY_CD -->
+<!-- 			  <if test="fromDate != null and fromDate != ''"> -->
+<!-- 			   AND A.IO_TIME BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'yyyy-mm-dd') AND TO_DATE(#{toDate, jdbcType=VARCHAR}, 'yyyy-mm-dd')  -->
+<!-- 			  </if> -->
+<!-- 			  <if test = 'stockType =="MAT"'> -->
+<!-- 			   AND A.PREV_LOCATION_CD IN (SELECT FACILITY_CD FROM MOM_FACILITY -->
+<!-- 			                              WHERE DIVISION_CD = A.DIVISION_CD -->
+<!-- 			                              AND COMPANY_CD = A.COMPANY_CD -->
+<!-- 			                              AND NVL(USE_YN, 'Y') = 'Y' -->
+<!-- 			                              AND FACILITY_TYPE IN('FAC200')) -->
+<!-- 			   AND A.LOCATION_CD IN (SELECT FACILITY_CD FROM MOM_FACILITY -->
+<!-- 	                                 WHERE DIVISION_CD = A.DIVISION_CD -->
+<!-- 	                                 AND COMPANY_CD = A.COMPANY_CD -->
+<!-- 	                                 AND NVL(USE_YN, 'Y') = 'Y' -->
+<!-- 	                                 AND FACILITY_TYPE IN('FAC300', 'FAC400')) -->
+<!-- 			  </if> -->
+<!-- 			  <if test = 'stockType =="WO"'> -->
+<!-- 			   AND A.PREV_LOCATION_CD IN ( SELECT FACILITY_CD FROM MOM_FACILITY -->
+<!--                                            WHERE DIVISION_CD = A.DIVISION_CD -->
+<!--                                            AND COMPANY_CD = A.COMPANY_CD -->
+<!--                                            AND NVL(USE_YN, 'Y') = 'Y' -->
+<!--                                            AND FACILITY_TYPE IN('FAC300', 'FAC500')) -->
+<!--                AND A.LOCATION_CD IN (SELECT FACILITY_CD FROM MOM_FACILITY -->
+<!--                                      WHERE DIVISION_CD = A.DIVISION_CD -->
+<!--                                      AND COMPANY_CD = A.COMPANY_CD -->
+<!--                                      AND NVL(USE_YN, 'Y') = 'Y' -->
+<!--                                      AND FACILITY_TYPE IN('FAC300', 'FAC500')) -->
+<!-- 			  </if> -->
+<!-- 	          <if test = 'stockType =="SO"'> -->
+<!-- 	           AND A.PREV_LOCATION_CD IN ( SELECT FACILITY_CD FROM MOM_FACILITY -->
+<!-- 	                                       WHERE DIVISION_CD = A.DIVISION_CD -->
+<!-- 	                                       AND COMPANY_CD = A.COMPANY_CD -->
+<!-- 	                                       AND NVL(USE_YN, 'Y') = 'Y' -->
+<!-- 	                                       AND FACILITY_TYPE IN('FAC300')) -->
+<!-- 	           AND A.LOCATION_CD IN (SELECT FACILITY_CD FROM MOM_FACILITY -->
+<!-- 	                                 WHERE DIVISION_CD = A.DIVISION_CD -->
+<!-- 	                                 AND COMPANY_CD = A.COMPANY_CD -->
+<!-- 	                                 AND NVL(USE_YN, 'Y') = 'Y' -->
+<!-- 	                                 AND FACILITY_TYPE IN('FAC400')) -->
+<!-- 	          </if> -->
+<!-- 			  <if test="itemName != null and itemName != ''"> -->
+<!-- 			   AND (UPPER(A.item_id) LIKE UPPER('%' || #{itemName, jdbcType=VARCHAR} || '%') -->
+<!-- 			    OR UPPER(B.item_name) LIKE UPPER('%' || #{itemName, jdbcType=VARCHAR} || '%') -->
+<!-- 			    OR UPPER(B.SPECIFICATION) LIKE UPPER('%' || #{itemName, jdbcType=VARCHAR} || '%')) -->
+<!-- 			  </if> -->
+<!-- 			  <if test="locationName != null and locationName != ''"> -->
+<!-- 			   AND A.LOCATION_CD = #{locationName, jdbcType=VARCHAR} -->
+<!-- 			  </if> -->
+<!-- 			  <if test="type != null and type != ''"> -->
+<!-- 			   AND A.IO_TYPE = #{type, jdbcType=VARCHAR} -->
+<!-- 			  </if> -->
+<!-- 			  <if test="itemType != null and itemType != ''"> -->
+<!-- 			   AND B.ITEM_TYPE =  #{itemType, jdbcType=VARCHAR} -->
+<!-- 			  </if> -->
+<!-- 			 ORDER BY A.UPDATE_DATE DESC) A -->
+		
+		  SELECT a.*
+		       , (NVL (c.qty, 0) * -1) AS cancel_qty
+		       , TO_CHAR(c.io_time, 'YYYY-MM-DD') AS cancel_io_time
+		       , DECODE (c.item_stock_inout_id, '', 'N', 'Y') AS cancel_flag
+		       , (SELECT mom_common_pkg.fn_get_code_name (
+		                    a.division_cd
+		                  , a.company_cd
+		                  , 'Y_N'
+		                  , DECODE (c.item_stock_inout_id, '', 'N', 'Y'))
+		            FROM DUAL)
+		            AS cancel_flag_name
+		    FROM (SELECT a.division_cd
+		               , a.company_cd
+		               , a.io_type
+		               , a.io_category
+		               , a.item_input_id
+		               , a.item_id
+		               , b.item_name
+		               , b.specification
+		               , a.vendor_Cd
+		               , a.qty
+		               , a.prev_location_cd AS from_location_cd
+		               , (SELECT mom_common_pkg.fn_get_facility_name (
+		                            a.division_cd
+		                          , a.company_cd
+		                          , a.prev_location_cd)
+		                    FROM DUAL)
+		                    AS from_location_name
+		               , a.location_cd AS to_location_cd
+		               , (SELECT mom_common_pkg.fn_get_facility_name (a.division_cd
+		                                                            , a.company_cd
+		                                                            , a.location_cd)
+		                    FROM DUAL)
+		                    AS to_location_name
+		               , a.update_by
+		               , (SELECT mom_common_pkg.fn_get_user_name (a.division_cd
+		                                                        , a.company_cd
+		                                                        , a.update_by)
+		                    FROM DUAL)
+		                    AS user_name
+		               , TO_CHAR(a.io_time, 'YYYY-MM-DD') AS IO_TIME
+		               , a.description
+		               , a.update_date
+		               , b.item_type
+		               , (SELECT mom_common_pkg.fn_get_code_name (b.division_cd
+		                                                        , b.company_cd
+		                                                        , 'ITEM_TYPE'
+		                                                        , b.item_type)
+		                    FROM DUAL)
+		                    AS item_type_name
+		               , a.prev_stock_inout_id AS from_inout_id
+		               , a.item_stock_inout_id AS to_inout_id
+		               , (SELECT mom_common_pkg.fn_get_code_name (a.division_cd
+		                                                        , a.company_cd
+		                                                        , 'IO_CATEGORY'
+		                                                        , a.io_category)
+		                    FROM DUAL)
+		                    AS io_category_name
+		               , (SELECT mom_common_pkg.fn_get_current_stock (a.division_cd
+		                                                            , a.company_cd
+		                                                            , a.item_id
+		                                                            , a.location_cd)
+		                    FROM DUAL)
+		                    AS to_location_qty                              
+		            FROM mom_item_stock_inout a, mom_Item_Definition b
+		           WHERE     a.division_cd = b.division_cd
+		                 AND a.company_cd = b.company_cd
+		                 AND a.item_id = b.item_id
+		                 AND a.division_cd = #{divisionCd, jdbcType=VARCHAR}
+		                 AND a.company_cd = #{companyCd, jdbcType=VARCHAR}
+		                <if test="fromDate != null and fromDate != ''">
+		                 AND A.IO_TIME BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'yyyy-mm-dd') AND TO_DATE(#{toDate, jdbcType=VARCHAR}, 'yyyy-mm-dd')
+		                </if>
+		                <if test="itemName != null and itemName != ''">
+					     AND (UPPER(A.item_id) LIKE UPPER('%' || #{itemName, jdbcType=VARCHAR} || '%')
+					     OR UPPER(B.item_name) LIKE UPPER('%' || #{itemName, jdbcType=VARCHAR} || '%')
+					     OR UPPER(B.SPECIFICATION) LIKE UPPER('%' || #{itemName, jdbcType=VARCHAR} || '%'))
+					    </if>
+					    <if test="fromLocation != null and fromLocation != ''">
+					     AND A.PREV_LOCATION_CD = #{fromLocation, jdbcType=VARCHAR}
+					    </if>
+					    <if test="toLocation != null and toLocation != ''">
+					     AND A.LOCATION_CD = #{toLocation, jdbcType=VARCHAR}
+					    </if>
+					    <if test="type != null and type != ''">
+					     AND A.IO_CATEGORY = #{type, jdbcType=VARCHAR}
+					    </if>
+					    <if test="itemType != null and itemType != ''">
+					     AND B.ITEM_TYPE =  #{itemType, jdbcType=VARCHAR}
+					    </if>
+					     AND A.IO_TYPE = 'I'
+		                <!-- 자재이동 -->
+		                <if test = "stockType =='MAT'">
+		                 AND a.io_category IN
+		                        (SELECT mc.code_id
+		                           FROM mom_code mc
+		                          WHERE mc.division_cd = a.division_cd
+	                                AND mc.company_cd = a.company_cd
+	                                AND mc.code_class_id = 'IO_CATEGORY'
+	                                AND mc.use_yn = 'Y'
+	                                AND mc.attribute7 = 'Y')
+		                </if>
+		                <!-- 공정이동 -->
+		                <if test = "stockType =='WO'">
+		                 AND a.io_category IN
+		                            (SELECT mc.code_id
+		                               FROM mom_code mc
+		                              WHERE mc.division_cd = a.division_cd
+	                                    AND mc.company_cd = a.company_cd
+	                                    AND mc.code_class_id = 'IO_CATEGORY'
+	                                    AND mc.use_yn = 'Y'
+	                                    AND mc.attribute8 = 'Y') 
+		                </if>
+		                <!-- 제품이동 -->
+		                <if test = "stockType =='SO'">
+		                 AND a.io_category IN
+		                        (SELECT mc.code_id
+		                           FROM mom_code mc
+		                          WHERE mc.division_cd = a.division_cd
+	                                AND mc.company_cd = a.company_cd
+	                                AND mc.code_class_id = 'IO_CATEGORY'
+	                                AND mc.use_yn = 'Y'
+	                                AND mc.attribute11 = 'Y')
+		                </if>
+		                <!-- 자재반납 -->
+                        <if test = "stockType =='MRTN'">
+                        AND a.io_category IN
+                               (SELECT mc.code_id
+                                  FROM mom_code mc
+                                 WHERE mc.division_cd = a.division_cd
+                                   AND mc.company_cd = a.company_cd
+                                   AND mc.code_class_id = 'IO_CATEGORY'
+                                   AND mc.use_yn = 'Y'
+                                   AND mc.attribute1 = 'Y')
+                        </if>
+		                ) a
+		       , mom_item_stock_inout c
+		   WHERE     a.division_cd = c.division_cd(+)
+		         AND a.company_cd = c.company_cd(+)
+		         AND a.to_inout_id = c.prev_stock_inout_id(+)
+		ORDER BY A.UPDATE_DATE DESC, A.TO_INOUT_ID DESC 
+	</select>
+	
+	<select id="get_itemStockMoveHistPrint_list" resultType="camelMap" parameterType="java.util.HashMap">
+	  WITH TEMP1 AS (
+		SELECT TO_CHAR(A.IO_TIME, 'YYYY-MM-DD') AS 출고일자
+		     , TO_CHAR(A.IO_TIME, 'YYYY-MM-DD') AS 출고일자하단
+		     , A.ITEM_INPUT_ID AS 출고번호
+		     , A.USER_ID
+		     , CASE
+		           WHEN A.VENDOR_CD IS NOT NULL
+		           THEN
+		              (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME (A.DIVISION_CD
+		                                                       , A.COMPANY_CD
+		                                                       , A.VENDOR_CD)
+		                 FROM DUAL)
+		           ELSE
+		              (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME (A.DIVISION_CD
+		                                                         , A.COMPANY_CD
+		                                                         , A.LOCATION_CD)
+		                 FROM DUAL)
+		       END AS 거래선
+		       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (A.DIVISION_CD
+		                                                , A.COMPANY_CD
+		                                                , 'DEPT_CD'
+		                                                , A.DEPT_CD)
+		            FROM DUAL) AS 소속
+		       , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME (A.DIVISION_CD
+		                                                , A.COMPANY_CD
+		                                                , A.USER_ID)
+		            FROM DUAL) AS 성명
+		       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(A.DIVISION_CD, A.COMPANY_CD, 'IO_CATEGORY', A.IO_CATEGORY) FROM DUAL)  AS 출고구분
+		       , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME (A.DIVISION_CD
+		                                                , A.COMPANY_CD
+		                                                , 'ITEM_TYPE'
+		                                                , A.ITEM_TYPE)
+		            FROM DUAL) AS 종류
+		       , '*' || A.ITEM_INPUT_ID || '*' AS 바코드
+		       , A.ITEM_ID || '/' || A.ITEM_NAME AS PLIST_ITEM
+		       , TO_CHAR(A.QTY) AS PLIST_QTY
+		       , '' AS PLIST_UNIT_PRICE
+		       , '' AS PLIST_DESCRIPTION
+		       , (SELECT MV.VENDOR_NAME
+		            FROM MOM_VENDOR MV
+		           WHERE MV.VENDOR_CD = A.DIVISION_CD
+		             AND MV.COMPANY_CD = A.COMPANY_CD) AS COMPANY_NAME
+		       , A.ITEM_STOCK_INOUT_ID
+		       , A.DIVISION_CD
+               , A.COMPANY_CD
+               , A.ITEM_INPUT_ID
+               , A.UPDATE_DATE
+		    FROM (SELECT A.COMPANY_CD
+		               , A.DIVISION_CD
+		               , A.IO_CATEGORY
+		               , A.IO_TIME
+		               , A.ITEM_INPUT_ID AS ITEM_INPUT_ID
+		               , A.UPDATE_BY AS USER_ID
+		               , MIN (A.UPDATE_DATE) AS UPDATE_DATE
+		               , MIN (A.VENDOR_CD) AS VENDOR_CD
+		               , MIN (A.LOCATION_CD) AS LOCATION_CD
+		               , (SELECT TU.DEPT_CD
+		                    FROM TU_USER TU
+		                   WHERE TU.DIVISION_CD = A.DIVISION_CD
+                             AND TU.COMPANY_CD = A.COMPANY_CD
+                             AND TU.EMP_NO = A.UPDATE_BY) AS DEPT_CD
+		               , A.ITEM_ID
+		               , MIN (B.ITEM_TYPE) AS ITEM_TYPE
+		               , MIN (B.ITEM_NAME) AS ITEM_NAME
+		               , SUM (A.QTY) AS QTY
+		               , (SELECT MV.VENDOR_NAME
+		                    FROM MOM_VENDOR MV
+		                   WHERE MV.VENDOR_CD = A.DIVISION_CD
+		                     AND MV.COMPANY_CD = A.COMPANY_CD) AS COMPANY_NAME
+		               , A.ITEM_STOCK_INOUT_ID
+		              FROM MOM_ITEM_STOCK_INOUT A, MOM_ITEM_DEFINITION B
+		             WHERE     A.DIVISION_CD = B.DIVISION_CD
+		                   AND A.COMPANY_CD = B.COMPANY_CD
+		                   AND A.ITEM_ID = B.ITEM_ID
+		                   AND A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		                   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		                   AND A.IO_TYPE = 'I'
+<!-- 		                   AND a.item_input_id = #{itemInputId, jdbcType=VARCHAR} -->
+						   AND A.ITEM_INPUT_ID IN (${itemInputIds})
+		                   AND NOT EXISTS
+                              (SELECT '*'
+                                 FROM MOM_ITEM_STOCK_INOUT C
+                                WHERE     C.DIVISION_CD = A.DIVISION_CD
+                                      AND C.COMPANY_CD = A.COMPANY_CD
+                                      AND C.IO_TYPE = A.IO_TYPE
+                                      AND C.PREV_STOCK_INOUT_ID = A.ITEM_STOCK_INOUT_ID)
+			              <if test = "stockType =='MAT'">
+			               AND A.IO_CATEGORY IN
+			                        (SELECT MC.CODE_ID
+			                           FROM MOM_CODE MC
+			                          WHERE MC.DIVISION_CD = A.DIVISION_CD
+		                                AND MC.COMPANY_CD = A.COMPANY_CD
+		                                AND MC.CODE_CLASS_ID = 'IO_CATEGORY'
+		                                AND MC.USE_YN = 'Y'
+		                                AND MC.ATTRIBUTE7 = 'Y')
+			              </if>
+			              <if test = "stockType =='WO'">
+			               AND A.IO_CATEGORY IN
+		                            (SELECT MC.CODE_ID
+		                               FROM MOM_CODE MC
+		                              WHERE MC.DIVISION_CD = A.DIVISION_CD
+	                                    AND MC.COMPANY_CD = A.COMPANY_CD
+	                                    AND MC.CODE_CLASS_ID = 'IO_CATEGORY'
+	                                    AND MC.USE_YN = 'Y'
+	                                    AND MC.ATTRIBUTE8 = 'Y') 
+			              </if>
+			              <if test = "stockType =='SO'">
+			               AND A.IO_CATEGORY IN
+			                        (SELECT MC.CODE_ID
+			                           FROM MOM_CODE MC
+			                          WHERE MC.DIVISION_CD = A.DIVISION_CD
+		                                AND MC.COMPANY_CD = A.COMPANY_CD
+		                                AND MC.CODE_CLASS_ID = 'IO_CATEGORY'
+		                                AND MC.USE_YN = 'Y'
+		                                AND MC.ATTRIBUTE11 = 'Y')
+			              </if>
+			              <if test = "stockType =='MRTN'">
+	                      AND a.io_category IN
+	                               (SELECT mc.code_id
+	                                  FROM mom_code mc
+	                                 WHERE mc.division_cd = a.division_cd
+	                                   AND mc.company_cd = a.company_cd
+	                                   AND mc.code_class_id = 'IO_CATEGORY'
+	                                   AND mc.use_yn = 'Y'
+	                                   AND mc.attribute1 = 'Y')
+	                      </if>
+		          GROUP BY A.DIVISION_CD
+		                 , A.COMPANY_CD
+		                 , A.IO_CATEGORY
+		                 , A.IO_TIME
+		                 , A.ITEM_INPUT_ID
+		                 , A.UPDATE_BY
+		                 , A.ITEM_ID
+		                 , A.ITEM_STOCK_INOUT_ID) A
+		)
+	SELECT A.*
+	     , CASE WHEN MOD(PLIST_CELLROW, C.LIST_ALLCOUNT) = 1 THEN (CEIL(PLIST_CELLROW / C.LIST_ALLCOUNT)) || '/' || (CEIL(GROUP_COUNT / C.LIST_ALLCOUNT)) 
+      		   ELSE '' END AS PLIST_PAGING
+	  FROM (SELECT A.*, ROW_NUMBER() OVER(PARTITION BY A.ITEM_INPUT_ID ORDER BY A.UPDATE_DATE DESC, A.ITEM_STOCK_INOUT_ID DESC) PLIST_CELLROW
+	  			 , COUNT(*) OVER(PARTITION BY A.ITEM_INPUT_ID) AS GROUP_COUNT 
+	          FROM TEMP1 A
+	             , MOM_ITEM_STOCK_INOUT B
+	         WHERE A.DIVISION_CD = B.DIVISION_CD
+	           AND A.COMPANY_CD = B.COMPANY_CD
+	           AND A.ITEM_STOCK_INOUT_ID = B.ITEM_STOCK_INOUT_ID) A
+	     , (SELECT LIST_ALLCOUNT
+	          FROM MOM_EXCEL
+	         WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	           AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	           AND EXCEL_ID = #{excelId, jdbcType=VARCHAR}) C
+	</select>
+	
+	<select id="get_itemStockMoveHistPrintCount_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT COUNT(*) AS ROW_COUNT
+		  FROM MOM_ITEM_STOCK_INOUT A
+		 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND A.ITEM_INPUT_ID IN (${itemInputIds})
+		   AND NOT EXISTS
+                  (SELECT '*'
+                     FROM MOM_ITEM_STOCK_INOUT C
+                    WHERE C.DIVISION_CD = A.DIVISION_CD
+                      AND C.COMPANY_CD = A.COMPANY_CD
+                      AND C.IO_TYPE = 'I'
+                      AND C.PREV_STOCK_INOUT_ID = A.ITEM_STOCK_INOUT_ID)
+		              <if test = "stockType =='MAT'">
+		               AND A.IO_CATEGORY IN
+		                        (SELECT MC.CODE_ID
+		                           FROM MOM_CODE MC
+		                          WHERE MC.DIVISION_CD = A.DIVISION_CD
+	                                AND MC.COMPANY_CD = A.COMPANY_CD
+	                                AND MC.CODE_CLASS_ID = 'IO_CATEGORY'
+	                                AND MC.USE_YN = 'Y'
+	                                AND MC.ATTRIBUTE7 = 'Y')
+		              </if>
+		              <if test ="stockType =='WO'">
+		               AND A.IO_CATEGORY IN
+	                            (SELECT MC.CODE_ID
+	                               FROM MOM_CODE MC
+	                              WHERE MC.DIVISION_CD = A.DIVISION_CD
+                                    AND MC.COMPANY_CD = A.COMPANY_CD
+                                    AND MC.CODE_CLASS_ID = 'IO_CATEGORY'
+                                    AND MC.USE_YN = 'Y'
+                                    AND MC.ATTRIBUTE8 = 'Y') 
+		              </if>
+		              <if test = "stockType =='SO'">
+		               AND A.IO_CATEGORY IN
+		                        (SELECT MC.CODE_ID
+		                           FROM MOM_CODE MC
+		                          WHERE MC.DIVISION_CD = A.DIVISION_CD
+	                                AND MC.COMPANY_CD = A.COMPANY_CD
+	                                AND MC.CODE_CLASS_ID = 'IO_CATEGORY'
+	                                AND MC.USE_YN = 'Y'
+	                                AND MC.ATTRIBUTE11 = 'Y')
+		              </if>  
+	</select>
+    
+    <insert id="create_itemStockMoveCancelProc" statementType="CALLABLE" parameterType="java.util.HashMap">
+    {
+        CALL P_ITEM_STOCK_MOVE_C (
+             #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+           , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+           , #{companyCd, mode=IN, jdbcType=VARCHAR}
+           , #{fromInoutId, mode=IN, jdbcType=VARCHAR}
+           , #{toInoutId, mode=IN, jdbcType=VARCHAR}
+           , #{cancelIoTime, mode=IN, jdbcType=VARCHAR}
+           , #{createBy, mode=IN, jdbcType=VARCHAR}
+        )
+    }
+    </insert>
+</mapper>

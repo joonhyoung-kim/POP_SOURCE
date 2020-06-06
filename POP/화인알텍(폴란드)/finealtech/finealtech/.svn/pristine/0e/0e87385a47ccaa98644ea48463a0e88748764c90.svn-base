@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.reference.price.standardPrice"> 
+	<select id="get_standardPrice_list" resultType="camelMap" parameterType="java.util.HashMap">
+		  SELECT
+   			   (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR},'ITEM_TYPE', B.ITEM_TYPE) 
+   			      FROM DUAL) AS ITEM_TYPE_NAME
+               , A.ITEM_ID
+               , B.ITEM_NAME AS ITEM_NAME
+               , B.SPECIFICATION SPECIFICATION
+              , B.UNIT UNIT
+              , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR},'ITEM_UNIT', B.UNIT) FROM DUAL) AS UNIT_NAME
+              , A.UNIT_PRICE
+              , NVL(LEAD(A.UNIT_PRICE) OVER(PARTITION BY A.ITEM_ID, A.PRICE_TYPE ORDER BY A.ITEM_ID, A.PRICE_TYPE, A.START_DATE DESC), 0) AS PREV_PRICE
+              , TO_CHAR(A.START_DATE, 'YYYY-MM-DD') AS START_DATE
+              , TO_CHAR(A.END_DATE, 'YYYY-MM-DD') AS END_DATE
+              , A.DESCRIPTION
+              , A.USE_YN
+              , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR},'USE_FLAG', A.USE_YN) FROM DUAL) AS USE_YN_NAME
+              , A.UPDATE_BY
+              , (SELECT MOM_COMMON_PKG.FN_GET_USER_NAME (#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}, A.UPDATE_BY) FROM DUAL) AS UPDATE_BY_NAME
+              , TO_CHAR(A.UPDATE_DATE, 'YYYY-MM-DD') AS UPDATE_DATE
+              , A.PRICE_TYPE
+            FROM   MOM_STANDARD_PRICE A
+                 , MOM_ITEM_DEFINITION B
+           WHERE  1 = 1
+             AND    A.DIVISION_CD = B.DIVISION_CD
+             AND    A.COMPANY_CD = B.COMPANY_CD
+             AND    A.ITEM_ID = B.ITEM_ID
+             AND    A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+             AND    A.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+            <if test="itemName != null and itemName != ''">
+		     AND (UPPER(A.ITEM_ID) LIKE UPPER('%' || #{itemName, jdbcType=VARCHAR} || '%') 
+		          OR UPPER(B.ITEM_NAME) LIKE UPPER('%' || #{itemName, jdbcType=VARCHAR} || '%'))
+     		</if> 
+		    <if test="itemType != null and itemType != ''">
+		     AND  B.ITEM_TYPE = #{itemType, jdbcType=VARCHAR}  
+		    </if>
+     		<if test="fromDate != null and fromDate != ''">
+             AND  TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') BETWEEN A.START_DATE AND A.END_DATE   
+            </if>
+	</select>
+	
+	<delete id="remove_standardPriceTemp" parameterType="java.util.HashMap">
+		DELETE 
+		  FROM MOM_STANDARD_PRICE_TMP
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	</delete>
+	
+	<select id="get_standardPriceTemp" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT *
+		  FROM MOM_STANDARD_PRICE_TMP
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		   AND CUD_FLAG = #{cudFlag, jdbcType=VARCHAR}
+	</select>
+	
+	<insert id="create_standardPriceTemp" parameterType="java.util.HashMap">
+		INSERT INTO MOM_STANDARD_PRICE_TMP (
+			DIVISION_CD,
+			COMPANY_CD,
+			ITEM_ID,
+			START_DATE,
+			UNIT_PRICE,
+			CUD_FLAG,
+			DESCRIPTION,
+			CREATE_DATE,
+			CREATE_BY
+		) 
+		VALUES (
+			#{divisionCd, jdbcType=VARCHAR},
+			#{companyCd, jdbcType=VARCHAR},
+			UPPER(TRIM(#{itemId, jdbcType=VARCHAR})),
+			TO_DATE(#{startDate, jdbcType=VARCHAR}, 'YYYY-MM-DD'),
+			#{unitPrice, jdbcType=NUMERIC},
+			#{cudFlag, jdbcType=VARCHAR},
+			#{description, jdbcType=VARCHAR},
+			MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			#{createBy, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<update id="modify_standardPriceTemp" parameterType="java.util.HashMap">
+		UPDATE MOM_STANDARD_PRICE_TMP
+		SET 
+			UNIT_PRICE 		= #{unitPrice, jdbcType=INTEGER}
+		WHERE 
+			    DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+			AND ITEM_ID		= UPPER(TRIM(#{itemId, jdbcType=VARCHAR}))
+			AND TO_CHAR(START_DATE, 'YYYY-MM-DD') = #{startDate, jdbcType=VARCHAR}
+			AND CUD_FLAG	= #{cudFlag, jdbcType=VARCHAR}		
+	</update>
+	
+	<insert id="create_standardPrice" statementType="CALLABLE">
+	{
+        CALL P_STANDARD_PRICE_UPSERT (
+             #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+           , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+           , #{companyCd, mode=IN, jdbcType=VARCHAR}
+           , #{cudFlag, mode=IN, jdbcType=VARCHAR}
+           , #{priceType, mode=IN, jdbcType=VARCHAR}
+        )
+    }
+	</insert>
+	
+</mapper>

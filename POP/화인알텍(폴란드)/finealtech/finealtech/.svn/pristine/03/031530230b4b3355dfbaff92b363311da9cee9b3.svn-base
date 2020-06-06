@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.shipping.exceptionShipping">
+	<select id="get_exceptionShipping_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT A.LOCATION_CD
+			 , A.LOCATION_NAME
+			 , A.ITEM_TYPE_NAME
+			 , A.ITEM_ID
+			 , A.ITEM_NAME
+			 , A.SPECIFICATION
+			 , A.CURRENT_QTY
+			 , A.UNIT
+			 , A.EX_SHIPPING_QTY
+			 , A.EXCEPTION_FLAG
+			 , A.EX_SHIPPING_DATE
+			 , A.DESCRIPTION
+			 , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}, 'EXCEPTION_OUT_FLAG', EXCEPTION_FLAG) FROM DUAL) EXCEPTION_FLAG_NAME
+	      FROM (SELECT MIS.LOCATION_CD
+	                 , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME(MIS.DIVISION_CD, MIS.COMPANY_CD, MIS.LOCATION_CD) FROM DUAL) LOCATION_NAME
+					 , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(MID.DIVISION_CD, MID.COMPANY_CD, 'ITEM_TYPE', MID.ITEM_TYPE) FROM DUAL) ITEM_TYPE_NAME
+					 , MIS.ITEM_ID
+					 , MID.ITEM_NAME
+					 , MID.SPECIFICATION
+					 , MIS.CURRENT_QTY
+					 , MID.UNIT
+					 , 0 AS EX_SHIPPING_QTY
+					 , (SELECT * FROM (SELECT CODE_ID 
+					                     FROM MOM_CODE 
+					                    WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR} 
+					                      AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR} 
+					                      AND CODE_CLASS_ID = 'EXCEPTION_OUT_FLAG' 
+					                    ORDER BY UI_SEQUENCE)
+					            WHERE ROWNUM = 1) EXCEPTION_FLAG
+					 , TO_CHAR(MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR},#{companyCd, jdbcType=VARCHAR}),'YYYY-MM-DD') EX_SHIPPING_DATE
+<!-- 					 , MIS.DESCRIPTION -->
+					 , '' AS DESCRIPTION
+				  FROM MOM_ITEM_STOCK MIS
+					 , MOM_ITEM_DEFINITION MID
+				 WHERE MIS.ITEM_ID = MID.ITEM_ID
+				   AND MIS.DIVISION_CD = MID.DIVISION_CD
+				   AND MIS.COMPANY_CD = MID.COMPANY_CD
+				   AND MIS.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+				   AND MIS.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+				   AND NVL(MID.USE_YN, 'Y') = 'Y'
+				   AND MIS.LOCATION_CD IN (SELECT FACILITY_CD
+										     FROM MOM_FACILITY
+											WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+											  AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+											  AND FACILITY_TYPE IN ('FAC200', 'FAC300', 'FAC400', 'FAC500', 'FAC600')
+											  AND NVL(USE_YN,'Y') = 'Y')
+				<if test="itemName != null and itemName != ''">
+				   AND (UPPER(MIS.ITEM_ID) LIKE UPPER('%' || #{itemName, jdbcType=VARCHAR} || '%')
+					OR UPPER(MID.ITEM_NAME) LIKE UPPER('%' || #{itemName, jdbcType=VARCHAR} || '%')
+					OR UPPER(MID.SPECIFICATION) LIKE UPPER('%' ||#{itemName, jdbcType=VARCHAR} || '%'))
+				</if>
+				<if test="itemType != null and itemType != ''">
+					AND MID.ITEM_TYPE = #{itemType, jdbcType=VARCHAR}
+				</if>
+				<if test='stockFlag == "N"'>
+					AND MIS.CURRENT_QTY != 0
+				</if>
+				<if test="locationName != null and locationName != ''">
+					AND MIS.LOCATION_CD = #{locationName, jdbcType=VARCHAR}
+				</if>
+			   ) A
+	    ORDER BY A.LOCATION_CD, A.ITEM_ID
+	</select>
+
+	<delete id="remove_exceptionShippingTemp" parameterType="java.util.HashMap">
+		DELETE
+		FROM   MOM_ITEM_STOCK_EX_TMP
+		WHERE  DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND    COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		AND    IN_OUT_FLAG = 'OUT'
+	</delete>
+	
+	<update id="modify_exceptionShippingTemp" parameterType="java.util.HashMap">
+		UPDATE MOM_ITEM_STOCK_EX_TMP
+		SET QTY = #{exShippingQty, jdbcType=INTEGER},
+			UNIT_PRICE = #{unitPrice, jdbcType=INTEGER},
+			EXCHANGE_RATE = #{exchangeRate, jdbcType=INTEGER},
+			ORDER_SEQ = #{orderSeq, jdbcType=INTEGER}
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		AND ITEM_ID = #{itemId, jdbcType=VARCHAR}
+		AND VENDOR_CD = #{vendorCd, jdbcType=VARCHAR}
+		AND LOCATION_CD = #{locationCd, jdbcType=VARCHAR}
+		AND CURRENCY_CD = #{currencyCd, jdbcType=VARCHAR}
+		AND MARKET_CD = #{marketCd, jdbcType=VARCHAR}
+		AND NVL(TO_CHAR(STATE_TIME, 'YYYY-MM-DD'), '0000-00-00') = #{stateTime, jdbcType=VARCHAR}
+		AND EXCHANGE_RATE = #{exchangeRate, jdbcType=VARCHAR}
+		AND INPUT_GROUP_ID = #{inputGroupId, jdbcType=VARCHAR}
+		AND IN_OUT_FLAG = 'OUT'
+		AND EXCEPTION_CD = #{exceptionFlag, jdbcType=VARCHAR}
+	</update>
+
+	<insert id="create_exceptionShippingTemp" parameterType="java.util.HashMap">
+		INSERT INTO MOM_ITEM_STOCK_EX_TMP
+			( DIVISION_CD
+			, COMPANY_CD
+			, ITEM_ID
+			, VENDOR_CD
+			, LOCATION_CD
+			, QTY
+			, UNIT_PRICE
+			, CURRENCY_CD
+			, MARKET_CD
+			, STATE_TIME
+			, EXCHANGE_RATE
+			, INPUT_GROUP_ID
+			, ORDER_SEQ
+			, COST_FLAG
+			, IN_OUT_FLAG
+			, EXCEPTION_CD
+			, DESCRIPTION
+			, CREATE_DATE
+			, CREATE_BY
+			)
+			VALUES ( #{divisionCd, jdbcType=VARCHAR}
+			, #{companyCd, jdbcType=VARCHAR}
+			, #{itemId, jdbcType=VARCHAR}
+			, ''
+			, #{locationCd, jdbcType=VARCHAR}
+			, #{exShippingQty, jdbcType=NUMERIC}
+			, ''
+			, ''
+			, ''
+			, TO_DATE(#{exShippingDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+			, ''
+			, ''
+			, #{orderSeq, jdbcType=NUMERIC}
+			, ''
+			, 'OUT'
+			, #{exceptionFlag, jdbcType=VARCHAR}
+			, #{description, jdbcType=VARCHAR}
+			, MOM_COMMON_PKG.FN_GET_LOCAL_TIME( #{divisionCd, jdbcType=VARCHAR},#{companyCd, jdbcType=VARCHAR} )
+			, #{createBy, jdbcType=VARCHAR}
+			)
+	</insert>
+
+	<insert id="create_exceptionShipping" statementType="CALLABLE">
+		{
+			CALL P_ITEM_STOCK_OUT_EXCEPTION (
+				 #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+				,#{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+				,#{divisionCd, mode=IN, jdbcType=VARCHAR}
+				,#{companyCd, mode=IN, jdbcType=VARCHAR}
+			)
+		}
+	</insert>
+
+</mapper>

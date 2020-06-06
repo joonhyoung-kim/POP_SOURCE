@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.purchase.stock.othersInOutFinished">
+	<select id="get_othersInOutFinished_list" resultType="camelMap" parameterType="java.util.HashMap">
+		<if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+		WITH TEMP1 AS (
+		</if>
+		SELECT S.ITEM_STOCK_ID
+		     , D.ITEM_ID            
+		     , D.ITEM_NAME          
+		     , D.SPECIFICATION      
+		     , ROUND(S.CURRENT_QTY, 4) AS CURRENT_QTY 
+		     , D.UNIT                                  
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(D.DIVISION_CD, D.COMPANY_CD, 'ITEM_UNIT', D.UNIT)
+		        FROM   DUAL ) AS UNIT_NAME             
+		     , NVL(S.LOCATION_CD, D.IN_LOCATION_ID) LOCATION_CD
+		     , (SELECT MOM_COMMON_PKG.FN_GET_FACILITY_NAME(D.DIVISION_CD, D.COMPANY_CD, NVL(S.LOCATION_CD, D.IN_LOCATION_ID))
+		        FROM   DUAL ) AS LOCATION_NAME                                      
+		     , D.ITEM_TYPE                             
+		     , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(D.DIVISION_CD, D.COMPANY_CD, 'ITEM_TYPE', D.ITEM_TYPE)
+		        FROM   DUAL ) AS ITEM_TYPE_NAME                      
+<!-- 		     , S.DESCRIPTION -->
+			 , '' AS DESCRIPTION
+		     , D.DIVISION_CD
+		     , D.COMPANY_CD
+		     , TO_CHAR((SELECT MOM_COMMON_PKG.FN_GET_LOCAL_TIME(D.DIVISION_CD, D.COMPANY_CD) FROM DUAL), 'yyyy-mm-dd') AS STATE_TIME
+		FROM   MOM_ITEM_STOCK S
+		     , MOM_ITEM_DEFINITION D
+		WHERE  D.DIVISION_CD = S.DIVISION_CD(+)
+		AND    D.COMPANY_CD  = S.COMPANY_CD(+)
+		AND    D.ITEM_ID     = S.ITEM_ID(+)
+		AND    D.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND    D.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+	    <if test="itemId != null and itemId != '' ">
+	    AND (D.ITEM_ID LIKE '%' || TRIM(UPPER(#{itemId, jdbcType=VARCHAR})) || '%'
+	         OR UPPER(D.ITEM_NAME) LIKE '%' || TRIM(UPPER(#{itemId, jdbcType=VARCHAR})) || '%')
+	    </if>
+		ORDER BY S.LOCATION_CD, D.ITEM_ID
+		<if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+		        ) 
+		SELECT 	A.* , 
+        		B.ROW_COUNT 
+   		FROM (	SELECT 	A.* , 
+          				ROWNUM GRIDROW 
+           		FROM TEMP1 A) A , 
+        	 (	SELECT COUNT(*) ROW_COUNT 
+           		FROM TEMP1) B
+        WHERE GRIDROW BETWEEN #{startPage, jdbcType=INTEGER} AND #{endPage, jdbcType=INTEGER}
+		</if>
+	</select>
+	
+	<insert id="create_othersInOutFinishedProc" statementType="CALLABLE" parameterType="java.util.HashMap">
+		{
+	        CALL P_ITEM_STOCK_CHANGE (
+	             #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+	           , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+	           , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+	           , #{companyCd, mode=IN, jdbcType=VARCHAR}
+	           , #{itemId, mode=IN, jdbcType=VARCHAR}
+	           , #{locationCd, mode=IN, jdbcType=VARCHAR}
+<!-- 	           , #{itemStockId, mode=IN, jdbcType=VARCHAR} -->
+	           , #{updateQty, mode=IN, jdbcType=INTEGER}
+	           , #{createBy, mode=IN, jdbcType=VARCHAR}
+	           , #{reasonCd, mode=IN, jdbcType=VARCHAR}
+	           , #{stateTime, mode=IN, jdbcType=VARCHAR}
+	           , #{description, mode=IN, jdbcType=VARCHAR}
+	        )
+	    }
+	</insert>
+	
+</mapper>

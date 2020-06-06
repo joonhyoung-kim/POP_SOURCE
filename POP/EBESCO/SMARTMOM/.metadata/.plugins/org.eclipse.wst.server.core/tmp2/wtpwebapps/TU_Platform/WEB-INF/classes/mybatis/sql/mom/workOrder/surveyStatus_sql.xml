@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.workOrder.surveyStatus">
+	<select id="get_surveyStatus_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT MO.WORK_ORDER_ID                           
+		     , MIN(TO_CHAR(MO.PLAN_DATE, 'YYYY-MM-DD'))       AS PLAN_DATE        
+		     , MIN(MO.ITEM_ID)         AS PARENT_ITEM_ID   
+		     , MR.ITEM_ID                                  
+		     , MIN(MO.CONFIRM_QTY)     AS CONFIRM_QTY      
+		     , MIN(MR.REQUEST_QTY)     AS REQUEST_QTY      
+		     , SUM(MS.MEASURE)  / 1000        AS MEASURE          
+		     , MIN(TO_CHAR(MS.CREATE_DATE, 'YYYY-MM-DD'))     AS CREATE_DATE       
+		FROM   MOM_WORK_ORDER MO
+		     , MOM_MATERIAL_REQUEST MR
+		     , MOM_POP_MAT_SCALE_MEASURE MS
+		WHERE  MO.DIVISION_CD   = MR.DIVISION_CD(+)
+		AND    MO.COMPANY_CD    = MR.COMPANY_CD(+)
+		AND    MO.WORK_ORDER_ID = MR.WORK_ORDER_ID(+)
+		AND    MR.DIVISION_CD   = MS.DIVISION_CD(+)
+		AND    MR.COMPANY_CD    = MS.COMPANY_CD(+)
+		AND    MR.WORK_ORDER_ID = MS.WORK_ORDER_ID(+)
+		AND    MR.ITEM_ID       = MS.ITEM_ID(+)
+		AND    MO.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		AND    MO.COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		AND    MO.PRODUCT_ORDER_TYPE = 'MM'
+	  <if test="fromDate != null and fromDate != '' and toDate != null and toDate != ''">
+		AND    MO.PLAN_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') - 7 
+		       AND TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')
+	  </if>
+	  <if test="searchWorkOrder != null and searchWorkOrder != ''">
+	    AND	   MO.WORK_ORDER_ID LIKE '%' || TRIM(UPPER(#{searchWorkOrder, jdbcType=VARCHAR}) || '%')
+	  </if>
+	  <if test="searchParentItemId != null and searchParentItemId != ''">
+	    AND    MO.ITEM_ID LIKE '%' || TRIM(UPPER(#{searchParentItemId, jdbcType=VARCHAR}) || '%')
+	  </if>
+	  <if test="searchItemId != null and searchItemId != ''">
+	    AND    MR.ITEM_ID LIKE '%' || TRIM(UPPER(#{searchItemId, jdbcType=VARCHAR}) || '%')
+	  </if>
+		GROUP BY MO.WORK_ORDER_ID
+		       , MR.ITEM_ID
+		ORDER BY MO.WORK_ORDER_ID
+		       , MR.ITEM_ID
+	</select>
+
+</mapper>

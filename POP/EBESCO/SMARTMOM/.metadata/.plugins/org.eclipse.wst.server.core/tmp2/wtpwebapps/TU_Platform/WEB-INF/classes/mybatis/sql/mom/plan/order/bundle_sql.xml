@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.plan.order.bundle">
+	<select id="get_bundelSalesOrder_list" resultType="camelMap" parameterType="java.util.HashMap">
+		<if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+			WITH TEMP1 AS (
+		</if>
+		
+			SELECT A.DIVISION_CD
+			     , A.COMPANY_CD
+			     , A.SALES_ORDER_ID
+			     , A.VENDOR_CD
+			     , A.VENDOR_CD AS CUSTOMER_CD
+			     , A.VENDOR_NAME
+			     , A.DESTINATION_CD
+			     , A.DESTINATION_NAME
+			     , A.CUSTOMER_PO_ID
+			     , A.CUSTOMER_PO_TYPE
+			     , A.CUSTOMER_PO_NO
+			     , A.CUSTOMER_LINE_CD
+			     , A.SALES_ITEM_ID
+			     , A.ITEM_ID
+			     , A.ITEM_NAME
+			     , TO_CHAR(A.DUE_DATE, 'YYYY-MM-DD') AS DUE_DATE
+			     , A.ORDER_QTY
+			     , A.SHIP_QTY
+			     , A.RETURN_QTY
+			     , A.CANCEL_QTY
+			     , A.REMAIN_QTY
+			     , A.ORDER_STATE
+			     , A.ORDER_STATE_NAME
+			     , A.REVENUE_FLAG
+			     , A.MARKET_CD
+			     , A.MARKET_NAME
+			     , A.CURRENCY_CD
+			     , A.CURRENCY_NAME
+			     , A.UNIT_PRICE
+			     , A.FOREIGN_UNIT_PRICE
+			     , A.FOREIGN_TOTAL_PRICE
+			     , A.EXCHANGE_RATE
+			     , A.LC_NO
+			     , A.ORDER_TYPE
+			     , A.ORDER_GUBUN
+			     , A.PRE_BUILD_TERM
+			     , A.ORIGIN_DUE_DATE
+			     , A.PRODUCTION_START_NO
+			     , A.PRODUCTION_END_NO
+			     , A.SPLIT_PO
+			     , A.MIX_GROUP
+			     , A.DESCRIPTION
+			     , A.REASON_CODE
+			     , A.CREATE_USER_NAME
+			     , A.CREATE_DATE
+			     , A.UPDATE_DATE
+			     , A.UPDATE_BY
+			     , A.UPDATE_USER_NAME
+			     , A.ORG_CODE
+			     , A.HS_PART_NO
+			     , A.LGE_PART_NO
+			     , NVL(B.GOOD_QTY, 0) AS GOOD_QTY
+			     <if test="pivot != '' and pivot != null">
+			 		${pivot}
+			    </if>
+			  FROM MOM_SALES_ORDER_V A
+			    , (SELECT PRODUCT_ORDER_ID
+               		    , GOOD_QTY
+         		   FROM MOM_WORK_ORDER
+         		   WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+           		   AND COMPANY_CD = #{divisionCd, jdbcType=VARCHAR}
+                   AND PLAN_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') AND TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.9997/24
+          		   AND WO_STATE != 'C'
+                  ) B
+			  
+			 WHERE A.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+			   AND A.COMPANY_CD = #{divisionCd, jdbcType=VARCHAR}
+			   AND A.DUE_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') AND TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.9997/24
+			   AND NVL(A.SHIP_QTY, 0) = 0
+			   AND NVL(A.REMAIN_QTY, 0) > 0
+			   AND A.MERGE_ID IS NULL
+  			   AND A.MERGE_ID = B.PRODUCT_ORDER_ID(+)
+  			   <if test="vendorCd != null and vendorCd != ''">	
+		       AND A.VENDOR_CD = #{vendorCd, jdbcType=VARCHAR}	
+		      </if>
+		      <if test="itemId != null and itemId != ''">	
+		       AND (A.ITEM_ID LIKE '%' || TRIM(UPPER(#{itemId, jdbcType=VARCHAR})) || '%'	
+			   OR UPPER(A.ITEM_NAME) LIKE '%' || TRIM(UPPER(#{itemId, jdbcType=VARCHAR})) || '%' )
+		      </if>
+		      <if test="customerPoId != null and customerPoId != ''">	
+		       AND UPPER(A.CUSTOMER_PO_ID) LIKE '%' || TRIM(UPPER(#{customerPoId, jdbcType=VARCHAR})) || '%'	
+		      </if>	
+		      <if test="customerPoNo != null and customerPoNo != ''">	
+		       AND UPPER(A.CUSTOMER_PO_NO) LIKE '%' || TRIM(UPPER(#{customerPoNo, jdbcType=VARCHAR})) || '%'	
+		      </if>	
+		      <if test="modelSuffix != null and modelSuffix != ''">	
+		       AND UPPER(A.SALES_ITEM_ID) LIKE '%' || TRIM(UPPER(#{modelSuffix, jdbcType=VARCHAR})) || '%'	
+		      </if>			      
+		      <if test="productionQty != null and productionQty != ''">	
+			      	<choose>
+	                    <when test='productionQty.equals("N")'>
+	                     AND NVL(B.GOOD_QTY, 0) = 0
+	                    </when>
+	                    <otherwise>
+	                     AND B.GOOD_QTY <![CDATA[>]]> 0
+	                    </otherwise>
+	                </choose>		
+		      </if>	
+		      <if test="organizationCode != null and organizationCode != ''">	
+		       AND A.ORG_CODE = #{organizationCode, jdbcType=VARCHAR}	
+		      </if>	
+			 ORDER BY A.ITEM_ID, A.DUE_DATE, A.SALES_ORDER_ID
+		<if test="startPage != null and startPage != '' and endPage != null and endPage != ''">	
+			)	
+		    SELECT A.*		
+		    	 , B.ROW_COUNT
+		    FROM (SELECT A.*		
+		    		   , ROWNUM GRIDROW
+		          FROM TEMP1 A) A		
+		       , (SELECT COUNT(*) ROW_COUNT		
+		          FROM TEMP1) B 		
+		    WHERE GRIDROW BETWEEN #{startPage, jdbcType=INTEGER} AND #{endPage, jdbcType=INTEGER}		
+	    </if>		
+	</select>
+	
+	<delete id="remove_bundleInputTmp" parameterType="java.util.HashMap">
+    	DELETE MOM_DEMAND_MERGE_TMP
+	 	WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	    AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	 </delete>
+	 
+  	<insert id="create_bundleInputTmp" parameterType="java.util.HashMap">
+	  	 INSERT INTO MOM_DEMAND_MERGE_TMP
+						( DIVISION_CD         
+						, COMPANY_CD
+						, ITEM_ID
+						, SALES_ORDER_ID            
+						, CREATE_DATE         
+						, CREATE_BY   
+						, UPDATE_DATE         
+						, UPDATE_BY      
+				        )
+			      VALUES
+			          ( #{divisionCd, jdbcType=VARCHAR}
+			          , #{companyCd, jdbcType=VARCHAR}
+			          , #{itemId, jdbcType=VARCHAR}
+			          , #{salesOrderId, jdbcType=VARCHAR}
+			          , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			          , #{createBy, jdbcType=VARCHAR}
+			          , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+			          , #{updateBy, jdbcType=VARCHAR}
+			          )
+  	</insert>
+	<insert id="create_bundleSaleOrder" statementType="CALLABLE">
+	{
+		CALL SP_MOM_SALES_ORDER_PKG.P_CREATE_DEMAND_MERGE ( 
+			 #{p_err_code, mode=OUT, jdbcType=VARCHAR}
+           , #{p_err_msg, mode=OUT, jdbcType=VARCHAR}
+           , #{divisionCd, mode=IN, jdbcType=VARCHAR}
+           , #{companyCd, mode=IN, jdbcType=VARCHAR}
+           , #{itemId, mode=IN, jdbcType=VARCHAR} 
+           , #{bundleDate, mode=IN, jdbcType=VARCHAR}
+           , #{bundleQty, mode=IN, jdbcType=VARCHAR}
+           , #{description, mode=IN, jdbcType=VARCHAR}
+           , #{updateBy, mode=IN, jdbcType=VARCHAR}
+        )
+	}
+	</insert>
+	
+</mapper>

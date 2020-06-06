@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.addition.dailyPurchaseTotal">
+	<select id="get_dailyPurchaseTotal_list" resultType="camelMap" parameterType="java.util.HashMap">
+		WITH TEMP1
+	     AS (  SELECT S.DIVISION_CD
+	                , S.COMPANY_CD
+	                , S.VENDOR_CD
+	                , SUM (QTY) AS SUM_QTY
+	                , SUM (INOUT_PRICE) SUM_AMT
+	             FROM MOM_ITEM_STOCK_INOUT S
+	            WHERE S.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	              AND S.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	              AND S.IO_TYPE = 'I'
+	              <if test = "fromDate != null and fromDate != ''">
+	              AND S.IO_TIME BETWEEN TO_DATE (SUBSTR(#{toDate, jdbcType=VARCHAR},0,7), 'YYYY-MM') 
+	                                AND TO_DATE (#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.9997/24
+	              </if>
+	              AND S.IO_CATEGORY IN (SELECT MC.CODE_ID
+	                                      FROM MOM_CODE MC
+	                                     WHERE MC.DIVISION_CD = S.DIVISION_CD 
+	                                       AND MC.COMPANY_CD = S.COMPANY_CD 
+	                                       AND MC.CODE_CLASS_ID = 'IO_CATEGORY' 
+	                                       AND MC.USE_YN = 'Y' 
+	                                       AND MC.ATTRIBUTE14 = 'Y')
+	              AND NOT EXISTS (SELECT '*'
+	                                FROM MOM_ITEM_STOCK_INOUT IC
+	                               WHERE IC.DIVISION_CD = S.DIVISION_CD 
+	                                 AND IC.COMPANY_CD = S.COMPANY_CD 
+	                                 AND IC.IO_TYPE = S.IO_TYPE 
+	                                 AND IC.PREV_STOCK_INOUT_ID = S.ITEM_STOCK_INOUT_ID)
+	         GROUP BY S.DIVISION_CD, S.COMPANY_CD, S.VENDOR_CD)
+	   , TEMP2
+	     AS (  SELECT S.DIVISION_CD
+	                , S.COMPANY_CD
+	                , S.VENDOR_CD
+	                , SUM (S.QTY) AS QTY
+	                , SUM (S.INOUT_PRICE) AS AMT
+	             FROM MOM_ITEM_STOCK_INOUT S
+	            WHERE S.DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	              AND S.COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+	              AND S.IO_TYPE = 'I'
+	              <if test = "fromDate != null and fromDate != ''">
+	               AND S.IO_TIME BETWEEN TO_DATE (#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') 
+	                                 AND TO_DATE (#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') + 23.9997/24
+	              </if>
+	              AND S.IO_CATEGORY IN (SELECT MC.CODE_ID
+	                                      FROM MOM_CODE MC
+	                                     WHERE MC.DIVISION_CD = S.DIVISION_CD 
+	                                       AND MC.COMPANY_CD = S.COMPANY_CD 
+	                                       AND MC.CODE_CLASS_ID = 'IO_CATEGORY' 
+	                                       AND MC.USE_YN = 'Y' 
+	                                       AND MC.ATTRIBUTE14 = 'Y')
+	              AND NOT EXISTS (SELECT '*'
+	                                FROM MOM_ITEM_STOCK_INOUT IC
+	                               WHERE IC.DIVISION_CD = S.DIVISION_CD 
+	                                 AND IC.COMPANY_CD = S.COMPANY_CD 
+	                                 AND IC.IO_TYPE = S.IO_TYPE 
+	                                 AND IC.PREV_STOCK_INOUT_ID = S.ITEM_STOCK_INOUT_ID)
+	         GROUP BY S.DIVISION_CD, S.COMPANY_CD, S.VENDOR_CD)
+	  SELECT Z1.VENDOR_CD
+	       , (SELECT MOM_COMMON_PKG.FN_GET_VENDOR_NAME (Z1.DIVISION_CD, Z1.COMPANY_CD, Z1.VENDOR_CD) FROM DUAL) VENDOR_NAME
+	       , NVL (Z2.QTY, 0) QTY
+	       , NVL (Z2.AMT, 0) AMT
+	       , Z1.SUM_QTY
+	       , Z1.SUM_AMT
+	       , '' AS DESCRIPTION
+	    FROM TEMP1 Z1
+	       , TEMP2 Z2
+	   WHERE Z1.VENDOR_CD = Z2.VENDOR_CD(+)
+	ORDER BY VENDOR_NAME
+									
+		
+	</select>
+	
+</mapper>

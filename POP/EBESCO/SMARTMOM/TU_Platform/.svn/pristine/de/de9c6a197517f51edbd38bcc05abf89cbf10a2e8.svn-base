@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.plan.plan.productionPlan">
+<!-- 	<select id="get_productionPlan_list" resultType="camelMap" parameterType="java.util.HashMap"> -->
+<!-- 		SELECT A.ROUTE_ID -->
+<!-- 		     , MIN((SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}, 'ROUTE_CODE', A.ROUTE_ID) -->
+<!-- 		            FROM   DUAL))  AS ROUTE_NAME -->
+<!-- 		     , A.RESOURCE_ID -->
+<!-- 		     , MIN(R.RESOURCE_NAME)  AS RESOURCE_NAME -->
+<!-- 		     , A.ITEM_ID -->
+<!-- 		     , MIN(I.ITEM_NAME) AS ITEM_NAME -->
+<!-- 		     , MIN(MD.SALES_ORDER_ID) AS SALES_ORDER_ID     -->
+<!-- 		     , MIN(TO_CHAR(DD.DUE_DATE, 'YYYY-MM-DD HH24:MI:SS')) AS DUE_DATE -->
+<!-- 		     , MIN(TO_CHAR(A.PLAN_DATE, 'YYYY-MM-DD')) AS PLAN_DATE      -->
+<!-- 		     , MIN(A.DEMAND_ID) AS DEMAND_ID -->
+<!-- 		     , SUM(A.PLAN_QTY)  AS PLAN_QTY -->
+<!-- 		     , MIN(TO_CHAR(MD.START_TIME, 'YYYY-MM-DD HH24:MI:SS')) AS START_TIME -->
+<!-- 		     , MIN(MD.TOTAL_QTY) AS TOTAL -->
+<!-- 		     , MIN(MD.LINE_CODE) AS CUSTOMER_LINE -->
+<!-- 		     , MIN(I.ITEM_GROUP_LARGE ) AS ITEM_GROUP_LARGE -->
+<!-- 		     , MIN(I.ITEM_GROUP_MEDIUM ) AS ITEM_GROUP_MEDIUM           -->
+<!-- 		     , MIN(I.ITEM_GROUP_SMALL) AS ITEM_GROUP_SMALL -->
+<!-- 		     , MIN(I.ITEM_CATEGORY) AS ITEM_CATEGORY -->
+<!-- 		     , MIN(I.RP_ITEM_ID) AS RP_ITEM_ID -->
+<!-- 		     , MIN(I.SPECIFICATION) AS SPECIFICATION -->
+<!-- 		     , MIN(DD.DEMAND_PRIORITY) AS DEMAND_PRIORITY -->
+<!-- 		     , MIN(R.RESOURCE_GROUP_CD) AS RESOURCE_GROUP_CD -->
+<!-- 		     , MIN((SELECT MOM_COMMON_PKG.FN_GET_RESOURCE_GROUP_NAME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}, R.RESOURCE_GROUP_CD)  -->
+<!-- 		            FROM   DUAL))  AS RESOURCE_GROUP_NAME -->
+<!-- 		     , MIN(A.WORK_ORDER_ID) AS WORK_ORDER_ID -->
+<!-- 			<if test="pivot != '' and pivot != null"> -->
+<!-- 			 , ${pivot} -->
+<!-- 			</if> -->
+<!-- 		FROM   TH_EXP_PRODUCTIONPLANDETAIL A -->
+<!-- 		     , TH_DPP_NET_DEMAND DD -->
+<!-- 		     , TH_MST_DEMAND MD -->
+<!-- 		     , MOM_ITEM_DEFINITION I -->
+<!-- 		     , MOM_RESOURCE R -->
+<!-- 		WHERE  A.MASTER_ID = DD.MASTER_ID(+) -->
+<!-- 		AND    A.PLAN_ID   = DD.PLAN_ID(+) -->
+<!-- 		AND    A.DEMAND_ID = DD.NET_DEMAND_ID(+) -->
+<!-- 		AND    DD.MASTER_ID = MD.MASTER_ID(+) -->
+<!-- 		AND    DD.PLAN_ID   = MD.PLAN_ID(+) -->
+<!-- 		AND    DD.DEMAND_ID = MD.DEMAND_ID(+) -->
+<!-- 		AND    A.MASTER_ID  = I.DIVISION_CD -->
+<!-- 		AND    A.ITEM_ID    = I.ITEM_ID -->
+<!-- 		AND    A.MASTER_ID  = R.DIVISION_CD -->
+<!-- 		AND    A.RESOURCE_ID = R.RESOURCE_CD -->
+<!-- 		AND    A.MASTER_ID = #{divisionCd, jdbcType=VARCHAR} -->
+<!-- 		AND    A.PLAN_ID   = #{planId, jdbcType=VARCHAR}   -->
+<!-- 		AND	   A.PLAN_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') AND TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')    -->
+<!-- 	   <if test="itemId != null and itemId != '' "> -->
+<!-- 	 	AND    UPPER(A.ITEM_ID || '@' || I.ITEM_NAME) LIKE '%' || UPPER(#{itemId, jdbcType=VARCHAR}) || '%' -->
+<!--        </if> -->
+<!-- 	   <if test="resourceId != null and resourceId != '' "> -->
+<!-- 		AND    A.RESOURCE_ID = #{resourceId, jdbcType=VARCHAR} -->
+<!-- 	   </if> -->
+<!-- 		GROUP BY A.MASTER_ID -->
+<!-- 		       , A.PLAN_ID -->
+<!-- 		       , A.ITEM_ID -->
+<!-- 		       , A.ROUTE_ID -->
+<!-- 		       , A.RESOURCE_ID -->
+<!-- 	</select> -->
+
+     <select id="get_productionPlan_list" resultType="camelMap" parameterType="java.util.HashMap">
+     WITH TEMP1 AS (
+		SELECT A.ROUTE_ID
+		     , MIN(A.ROUTE_NAME)    AS ROUTE_NAME
+		     , A.RESOURCE_ID
+		     , MIN(A.RESOURCE_NAME) AS RESOURCE_NAME
+		     , A.ITEM_ID
+		     , MIN(A.ITEM_NAME) AS ITEM_NAME
+		     , A.SALES_ORDER_ID
+		     , MIN(A.DUE_DATE)  AS DUE_DATE
+<!-- 		     , MIN(TO_CHAR(A.PLAN_DATE, 'YYYY-MM-DD')) AS PLAN_DATE -->
+			 , TO_CHAR(A.PLAN_DATE, 'YYYY-MM-DD') AS PLAN_DATE
+		     , MIN(A.DEMAND_ID) AS DEMAND_ID
+		     , SUM(A.PLAN_QTY)   AS PLAN_QTY
+		     , MIN(A.START_TIME) AS START_TIME
+		     , MIN(A.TOTAL) AS TOTAL
+		     , MIN(A.CUSTOMER_LINE) AS CUSTOMER_LINE
+		     , MIN(A.ITEM_GROUP_LARGE) AS ITEM_GROUP_LARGE
+		     , MIN(A.ITEM_GROUP_MEDIUM) AS ITEM_GROUP_MEDIUM
+		     , MIN(A.ITEM_GROUP_SMALL) AS ITEM_GROUP_SMALL
+		     , MIN(A.ITEM_CATEGORY) AS ITEM_CATEGORY
+		     , MIN(A.RP_ITEM_ID) AS RP_ITEM_ID
+		     , MIN(A.SPECIFICATION) AS SPECIFICATION
+		     , MIN(A.ITEM_GROUP_CODE) AS ITEM_GROUP_CODE
+		     , MIN(A.DEMAND_PRIORITY) AS DEMAND_PRIORITY
+		     , MIN(A.RESOURCE_GROUP_CD) AS RESOURCE_GROUP_CD
+		     , MIN(A.RESOURCE_GROUP_NAME) AS RESOURCE_GROUP_NAME
+		     , MIN(A.WORK_ORDER_ID) AS WORK_ORDER_ID
+		     <if test="pivot != '' and pivot != null">
+<!-- 			 , ${pivot} -->
+			 	${pivot}
+			 </if>
+        FROM (  SELECT A.ROUTE_ID
+		             , (SELECT MOM_COMMON_PKG.FN_GET_CODE_NAME( A.MASTER_ID
+		                                                      , #{companyCd, jdbcType=VARCHAR}
+		                                                      , 'ROUTE_CODE'
+		                                                      , A.ROUTE_ID)
+		                FROM DUAL)  AS ROUTE_NAME
+		             , A.RESOURCE_ID
+		             , R.RESOURCE_NAME
+		             , A.ITEM_ID
+		             , NVL((SELECT V.CREATE_DEMAND_TYPE
+		                    FROM   MOM_VENDOR V
+		                    WHERE  V.DIVISION_CD = A.DIVISION
+		                    AND    V.VENDOR_CD   = MD.CUSTOMER_ID ), 'N')  AS CREATE_DEMAND_TYPE
+		             , MD.CUSTOMER_ID 
+		             , I.ITEM_NAME
+		             , CASE WHEN NVL((SELECT V.CREATE_DEMAND_TYPE
+		                              FROM   MOM_VENDOR V
+		                              WHERE  V.DIVISION_CD = A.DIVISION
+		                              AND    V.VENDOR_CD   = MD.CUSTOMER_ID ), 'N') = 'Y' THEN DD.SALES_ORDER_ID
+		               ELSE ''
+		               END     SALES_ORDER_ID          
+		             , TO_CHAR(DD.DUE_DATE, 'YYYY-MM-DD HH24:MI:SS') AS DUE_DATE
+		             , A.PLAN_DATE            AS PLAN_DATE
+		             , A.DEMAND_ID
+		             , A.PLAN_QTY AS PLAN_QTY
+		             , TO_CHAR(MD.START_TIME, 'YYYY-MM-DD HH24:MI:SS') AS START_TIME
+		             , MD.TOTAL_QTY          AS TOTAL
+		             , MD.LINE_CODE           AS CUSTOMER_LINE
+		             , I.ITEM_GROUP_LARGE 
+		             , I.ITEM_GROUP_MEDIUM
+		             , I.ITEM_GROUP_SMALL
+		             , I.ITEM_CATEGORY
+		             , I.RP_ITEM_ID
+		             , I.SPECIFICATION
+		             , I.ITEM_GROUP_CODE
+		             , DD.DEMAND_PRIORITY
+		             , R.RESOURCE_GROUP_CD
+		             , (SELECT MOM_COMMON_PKG.FN_GET_RESOURCE_GROUP_NAME ( R.DIVISION_CD
+											                             , R.COMPANY_CD
+											                             , R.RESOURCE_GROUP_CD)
+		                  FROM DUAL) AS RESOURCE_GROUP_NAME
+		             , A.WORK_ORDER_ID   
+		             , A.MASTER_ID
+		             , A.PLAN_ID
+				FROM   TH_EXP_PRODUCTIONPLANDETAIL A
+				     , TH_DPP_NET_DEMAND DD
+				     , TH_MST_DEMAND MD
+				     , MOM_ITEM_DEFINITION I
+				     , MOM_RESOURCE R
+				WHERE  A.MASTER_ID = DD.MASTER_ID(+)
+				AND    A.PLAN_ID   = DD.PLAN_ID(+)
+<!-- 				AND    A.DEMAND_ID = DD.NET_DEMAND_ID(+) -->
+				AND    A.ORG_DEMAND_ID = DD.NET_DEMAND_ID(+)
+				AND    DD.MASTER_ID = MD.MASTER_ID(+)
+				AND    DD.PLAN_ID   = MD.PLAN_ID(+)
+				AND    DD.DEMAND_ID = MD.DEMAND_ID(+)
+				AND    A.MASTER_ID  = I.DIVISION_CD
+				AND    A.ITEM_ID    = I.ITEM_ID
+				AND    A.MASTER_ID  = R.DIVISION_CD
+				AND    A.RESOURCE_ID = R.RESOURCE_CD
+				AND    A.MASTER_ID = #{divisionCd, jdbcType=VARCHAR}
+				AND    A.PLAN_ID   = #{planId, jdbcType=VARCHAR}  
+				AND	   A.PLAN_DATE BETWEEN TO_DATE(#{fromDate, jdbcType=VARCHAR}, 'YYYY-MM-DD') AND TO_DATE(#{toDate, jdbcType=VARCHAR}, 'YYYY-MM-DD')   
+			   <if test="itemId != null and itemId != '' ">
+			 	AND    UPPER(A.ITEM_ID || '@' || I.ITEM_NAME) LIKE '%' || TRIM(UPPER(#{itemId, jdbcType=VARCHAR})) || '%'
+		       </if>
+			   <if test="resourceId != null and resourceId != '' ">
+				AND    A.RESOURCE_ID = #{resourceId, jdbcType=VARCHAR}
+			   </if>
+			   ) A
+<!-- 			   2019.01.02 hyjeong begin -->
+<!-- 			   <if test="startPage != null and startPage != '' and endPage != null and endPage != ''"> -->
+<!-- 			   WHERE ROWNUM BETWEEN #{startPage, jdbcType=INTEGER} AND #{endPage, jdbcType=INTEGER} -->
+<!-- 			   </if> -->
+<!-- 			   2019.01.02 hyjeong end -->
+		GROUP BY A.MASTER_ID
+		       , A.PLAN_ID
+		       , A.ITEM_ID
+		       , A.ROUTE_ID
+		       , A.RESOURCE_ID
+		       , A.SALES_ORDER_ID
+		       , A.PLAN_DATE
+		ORDER BY A.MASTER_ID
+                , A.PLAN_ID
+                , A.RESOURCE_ID
+                , A.ROUTE_ID
+                , A.PLAN_DATE
+                , A.ITEM_ID
+                , A.SALES_ORDER_ID )
+	      SELECT A.*
+	           , B.ROW_COUNT
+	      FROM (SELECT A.*
+	                 , ROWNUM GRIDROW
+	              FROM TEMP1 A) A
+	         , (SELECT COUNT(*) ROW_COUNT
+	              FROM TEMP1) B 
+	     <if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+		  WHERE GRIDROW BETWEEN #{startPage, jdbcType=INTEGER} AND #{endPage, jdbcType=INTEGER}
+	     </if>
+	</select>
+	
+	<!-- 생산계획 PlanID 조회 -->
+	<select id="get_productionPlanId_list" resultType="camelMap" parameterType="java.util.HashMap">
+		SELECT PLAN_ID
+			   , PLAN_ID AS CODE
+			   , PLAN_ID AS NAME
+	      FROM TH_MST_PLAN
+	     WHERE MASTER_ID = #{divisionCd, jdbcType=VARCHAR}
+	      <if test="planDate != null and planDate != ''">
+	       AND PLAN_START_DTTM = TO_DATE(#{planDate, jdbcType=VARCHAR})
+	      </if>
+	     GROUP BY PLAN_ID
+	     ORDER BY PLAN_ID DESC
+	</select>
+	
+	<!-- 날짜 조회 From , To -->
+   <select id="get_planId_date_list" resultType="camelMap" parameterType="java.util.HashMap">
+<!--       SELECT TO_CHAR(SOLAR_DATE, 'YYYYMMDD') PLAN_DATE -->
+<!--       , DAY -->
+<!--       ,DECODE(DAY, #{MESSAGES30013, jdbcType=VARCHAR}, 'Mon' , #{MESSAGES30002, jdbcType=VARCHAR}, 'Tue' , #{MESSAGES30009, jdbcType=VARCHAR}, 'Wed' , #{MESSAGES30069, jdbcType=VARCHAR}, 'Thu' , #{MESSAGES30070, jdbcType=VARCHAR}, 'Fri' , #{MESSAGES30071, jdbcType=VARCHAR}, 'Sat' -->
+<!--       , #{MESSAGES30072, jdbcType=VARCHAR}, 'Sun') AS EDAY -->
+<!--       FROM MOM_CALENDA A -->
+<!--       , (SELECT MIN(PLAN_START_DTTM) START_DATE -->
+<!--       , MAX(PLAN_START_DTTM) + MAX(PLAN_HORIZON) END_DATE -->
+<!--       FROM TH_MST_PLAN A -->
+<!--       WHERE PLAN_ID = #{planId, jdbcType=VARCHAR} -->
+<!--       AND MASTER_ID = #{divisionCd, jdbcType=VARCHAR} -->
+<!--        ) B -->
+<!--       WHERE A.SOLAR_DATE >= START_DATE -->
+<!--       AND A.SOLAR_DATE &lt;= START_DATE+30 -->
+<!--       ORDER BY 1 -->
+   		
+   		SELECT TO_CHAR(A.PLAN_START_DTTM, 'YYYYMMDD') AS FROM_DATE
+             , TO_CHAR(A.PLAN_START_DTTM + A.DEMAND_HORIZON, 'YYYYMMDD') AS TO_DEMAND_DATE
+             , TO_CHAR(A.PLAN_START_DTTM + A.PLAN_HORIZON, 'YYYYMMDD') AS TO_PLAN_DATE     
+		  FROM TH_MST_PLAN A
+		 WHERE MASTER_ID = #{divisionCd, jdbcType=VARCHAR}
+		   AND PLAN_ID   = #{planId, jdbcType=VARCHAR}
+   </select>
+   
+   	<!-- PSI, 확정생산계획업로드 From ~ To 날짜 조회 -->
+   <select id="get_planId_days_list" resultType="camelMap" parameterType="java.util.HashMap">
+   		SELECT TO_CHAR(SOLAR_DATE, 'YYYYMMDD') PLAN_DATE, DAY 
+		     , DECODE(DAY, #{MESSAGES30013, jdbcType=VARCHAR}, 'Mon' 
+	                     , #{MESSAGES30002, jdbcType=VARCHAR}, 'Tue' 
+	                     , #{MESSAGES30009, jdbcType=VARCHAR}, 'Wed' 
+	                     , #{MESSAGES30069, jdbcType=VARCHAR}, 'Thu' 
+	                     , #{MESSAGES30070, jdbcType=VARCHAR}, 'Fri' 
+	                     , #{MESSAGES30071, jdbcType=VARCHAR}, 'Sat' 
+	                     , #{MESSAGES30072, jdbcType=VARCHAR}, 'Sun') AS EDAY
+		  FROM MOM_CALENDA A 
+		     , (SELECT MIN(PLAN_START_DTTM) START_DATE 
+		             , MAX(PLAN_START_DTTM) + MAX(PLAN_HORIZON) END_DATE
+		          FROM TH_MST_PLAN A 
+		         WHERE PLAN_ID = #{planId, jdbcType=VARCHAR}
+		           AND MASTER_ID = #{divisionCd, jdbcType=VARCHAR}) B 
+		 WHERE A.SOLAR_DATE BETWEEN START_DATE AND END_DATE
+    	 ORDER BY 1
+   </select>
+   
+</mapper>

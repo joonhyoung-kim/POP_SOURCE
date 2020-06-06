@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.thirautech.mom.reference.workinghours.nonWorkType">
+	<select id="get_nonWorkType_list" resultType="camelMap" parameterType="java.util.HashMap">
+	WITH TEMP1 AS (
+		SELECT DIVISION_CD
+		     , COMPANY_CD
+		     , NON_CLASS_ID
+		     , NON_CLASS_ID AS NON_CLASS_ID_DISP
+		     , NON_CLASS_NAME
+		     , NON_WORK_CD
+		     , NON_WORK_CD AS NON_WORK_CD_DISP
+		     , NON_WORK_CD_NAME
+		     , NON_TYPE
+		     , NON_TYPE AS NON_TYPE_DISP
+		     , NON_TYPE_NAME
+		     , NON_OPERATION_TYPE
+		     , NON_OPERATION_TYPE AS NON_OPERATION_TYPE_DISP
+		     , NON_OPERATION_TYPE_NAME
+		     , DESCRIPTION
+		     , CREATE_DATE
+		     , CREATE_BY
+		     , UPDATE_DATE
+		     , UPDATE_BY
+		  FROM MOM_NON_WORK
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		  <if test="sNonWorkClassId != null and sNonWorkClassId != ''">
+		   AND NON_CLASS_ID = #{sNonWorkClassId, jdbcType=VARCHAR}
+		  </if>
+		  <if test="sNonWorkCode != null and sNonWorkCode != ''">
+		   AND NON_WORK_CD = #{sNonWorkCode, jdbcType=VARCHAR}
+		  </if>
+		  <if test="sNonWorkType != null and sNonWorkType != ''">
+		   AND NON_TYPE = #{sNonWorkType, jdbcType=VARCHAR}
+		  </if>
+		  <if test="sNonOperationType != null and sNonOperationType != ''">
+		   AND NON_OPERATION_TYPE = #{sNonOperationType, jdbcType=VARCHAR}
+		  </if>
+	     ORDER BY NON_CLASS_ID, NON_WORK_CD, NON_TYPE, NON_OPERATION_TYPE)
+     SELECT A.*
+          , B.ROW_COUNT
+     FROM (SELECT A.*
+                , ROWNUM GRIDROW
+             FROM TEMP1 A) A
+        , (SELECT COUNT(*) ROW_COUNT
+             FROM TEMP1) B 
+    <if test="startPage != null and startPage != '' and endPage != null and endPage != ''">
+     WHERE GRIDROW BETWEEN #{startPage, jdbcType=INTEGER} AND #{endPage, jdbcType=INTEGER}
+    </if>
+	</select>
+	
+	<insert id="create_nonWorkType" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+		INSERT INTO MOM_NON_WORK (
+			   DIVISION_CD
+		     , COMPANY_CD
+		     , NON_CLASS_ID
+		     , NON_CLASS_NAME
+		     , NON_WORK_CD
+		     , NON_WORK_CD_NAME
+		     , NON_TYPE
+		     , NON_TYPE_NAME
+		     , NON_OPERATION_TYPE
+		     , NON_OPERATION_TYPE_NAME
+		     , DESCRIPTION
+		     , CREATE_DATE
+		     , CREATE_BY
+		     , UPDATE_DATE
+		     , UPDATE_BY
+			)
+		VALUES (
+			#{divisionCd, jdbcType=VARCHAR},
+			#{companyCd, jdbcType=VARCHAR},
+			UPPER(TRIM(#{nonClassId, jdbcType=VARCHAR})),
+			MOM_COMMON_PKG.FN_GET_CODE_NAME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}, 'NON_WORK_CLASS', #{nonClassId, jdbcType=VARCHAR}),
+			UPPER(TRIM(#{nonWorkCd, jdbcType=VARCHAR})),
+			MOM_COMMON_PKG.FN_GET_CODE_NAME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}, 'NON_WORK_CODE', #{nonWorkCd, jdbcType=VARCHAR}),
+			UPPER(TRIM(#{nonType, jdbcType=VARCHAR})),
+			MOM_COMMON_PKG.FN_GET_CODE_NAME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}, 'NON_WORK_TYPE', #{nonType, jdbcType=VARCHAR}),
+			UPPER(TRIM(#{nonOperationType, jdbcType=VARCHAR})),
+			MOM_COMMON_PKG.FN_GET_CODE_NAME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}, 'NON_OPERATION_TYPE', #{nonOperationType, jdbcType=VARCHAR}),
+			#{description, jdbcType=VARCHAR},
+			MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			#{updateBy, jdbcType=VARCHAR},
+			MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR}),
+			#{updateBy, jdbcType=VARCHAR}
+		)
+	   ;
+	   
+		INSERT INTO MOM_NON_WORK_HIST (
+			   LAST_EVENT_SEQ
+			 , DIVISION_CD
+			 , COMPANY_CD
+			 , CUD_FLAG
+			 , NON_CLASS_ID
+			 , NON_CLASS_NAME
+			 , NON_WORK_CD
+			 , NON_WORK_CD_NAME
+			 , NON_TYPE
+			 , NON_TYPE_NAME
+			 , NON_OPERATION_TYPE
+		     , NON_OPERATION_TYPE_NAME
+			 , DESCRIPTION
+			 , CREATE_DATE
+			 , CREATE_BY
+			 , UPDATE_DATE
+	      	 , UPDATE_BY
+		)
+		SELECT S_SS_SEQ.NEXTVAL
+			 , DIVISION_CD
+			 , COMPANY_CD
+			 , 'C'
+			 , NON_CLASS_ID
+			 , NON_CLASS_NAME
+			 , NON_WORK_CD
+			 , NON_WORK_CD_NAME
+			 , NON_TYPE
+			 , NON_TYPE_NAME
+			 , NON_OPERATION_TYPE
+		     , NON_OPERATION_TYPE_NAME
+			 , DESCRIPTION
+			 , CREATE_DATE
+			 , CREATE_BY
+			 , UPDATE_DATE
+		     , UPDATE_BY
+		 FROM MOM_NON_WORK
+		WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		  AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		  AND NON_CLASS_ID = UPPER(TRIM(#{nonClassId, jdbcType=VARCHAR}))
+		  AND NON_WORK_CD = UPPER(TRIM(#{nonWorkCd, jdbcType=VARCHAR}))
+		  AND NON_TYPE = UPPER(TRIM(#{nonType, jdbcType=VARCHAR}))
+		  AND NON_OPERATION_TYPE = UPPER(TRIM(#{nonOperationType, jdbcType=VARCHAR}))
+	  ;
+	 		
+		SELECT
+			CASE 
+				WHEN COUNT(NON_CLASS_ID) = 0 THEN 'E'
+				ELSE 'S' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		  FROM MOM_NON_WORK
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		   AND NON_CLASS_ID = UPPER(TRIM(#{nonClassId, jdbcType=VARCHAR}))
+		   AND NON_WORK_CD = UPPER(TRIM(#{nonWorkCd, jdbcType=VARCHAR}))
+		   AND NON_TYPE = UPPER(TRIM(#{nonType, jdbcType=VARCHAR}))
+		   AND NON_OPERATION_TYPE = UPPER(TRIM(#{nonOperationType, jdbcType=VARCHAR}))
+		;
+	 END
+	}
+	</insert>	
+	
+	<update id="modify_nonWorkType" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+	  UPDATE MOM_NON_WORK
+		 SET DESCRIPTION =  #{description, jdbcType=VARCHAR}
+	   WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+	     AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		 AND NON_CLASS_ID = UPPER(TRIM(#{nonClassId, jdbcType=VARCHAR}))
+		 AND NON_WORK_CD = UPPER(TRIM(#{nonWorkCd, jdbcType=VARCHAR}))
+		 AND NON_TYPE = UPPER(TRIM(#{nonType, jdbcType=VARCHAR}))
+		 AND NON_OPERATION_TYPE = UPPER(TRIM(#{nonOperationType, jdbcType=VARCHAR}))
+	  ;
+	  
+	  INSERT INTO MOM_NON_WORK_HIST (
+	  	     LAST_EVENT_SEQ
+		   , DIVISION_CD
+		   , COMPANY_CD
+		   , CUD_FLAG
+		   , NON_CLASS_ID
+		   , NON_CLASS_NAME
+		   , NON_WORK_CD
+		   , NON_WORK_CD_NAME
+		   , NON_TYPE
+		   , NON_TYPE_NAME
+		   , NON_OPERATION_TYPE
+		   , NON_OPERATION_TYPE_NAME
+		   , DESCRIPTION
+		   , CREATE_DATE
+	 	   , CREATE_BY
+		   , UPDATE_DATE
+	       , UPDATE_BY
+	    )
+	  SELECT S_SS_SEQ.NEXTVAL
+		   , DIVISION_CD
+		   , COMPANY_CD
+		   , 'U'
+		   , NON_CLASS_ID
+		   , NON_CLASS_NAME
+		   , NON_WORK_CD
+		   , NON_WORK_CD_NAME
+		   , NON_TYPE
+		   , NON_TYPE_NAME
+		   , NON_OPERATION_TYPE
+		   , NON_OPERATION_TYPE_NAME
+		   , DESCRIPTION
+		   , CREATE_DATE
+		   , CREATE_BY
+		   , UPDATE_DATE
+		   , UPDATE_BY
+		FROM MOM_NON_WORK
+	   WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		 AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		 AND NON_CLASS_ID = UPPER(TRIM(#{nonClassId, jdbcType=VARCHAR}))
+		 AND NON_WORK_CD = UPPER(TRIM(#{nonWorkCd, jdbcType=VARCHAR}))
+		 AND NON_TYPE = UPPER(TRIM(#{nonType, jdbcType=VARCHAR}))
+		 AND NON_OPERATION_TYPE = UPPER(TRIM(#{nonOperationType, jdbcType=VARCHAR}))
+	  ;
+	  	
+	  SELECT
+		  CASE 
+			  WHEN COUNT(NON_CLASS_ID) = 0 THEN 'E'
+			  ELSE 'S' 
+		  END  
+		  INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		FROM MOM_NON_WORK
+	   WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		 AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		 AND NON_CLASS_ID = UPPER(TRIM(#{nonClassId, jdbcType=VARCHAR}))
+		 AND NON_WORK_CD = UPPER(TRIM(#{nonWorkCd, jdbcType=VARCHAR}))
+		 AND NON_TYPE = UPPER(TRIM(#{nonType, jdbcType=VARCHAR}))
+		 AND NON_OPERATION_TYPE = UPPER(TRIM(#{nonOperationType, jdbcType=VARCHAR}))
+	  ;
+	  END
+	}	
+	</update>
+	
+	<delete id="remove_nonWorkType" statementType="CALLABLE" parameterType="java.util.HashMap">
+	{ CALL
+	  DECLARE
+	  BEGIN
+	  	#{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String} := 'E';
+	  	
+	  INSERT INTO MOM_NON_WORK_HIST (
+		  	 LAST_EVENT_SEQ
+		   , DIVISION_CD
+		   , COMPANY_CD
+		   , CUD_FLAG
+		   , NON_CLASS_ID
+		   , NON_CLASS_NAME
+		   , NON_WORK_CD
+		   , NON_WORK_CD_NAME
+		   , NON_TYPE
+		   , NON_TYPE_NAME
+		   , NON_OPERATION_TYPE
+		   , NON_OPERATION_TYPE_NAME
+		   , DESCRIPTION
+		   , CREATE_DATE
+	 	   , CREATE_BY
+		   , UPDATE_DATE
+	       , UPDATE_BY
+	  )
+	  SELECT S_SS_SEQ.NEXTVAL
+		   , DIVISION_CD
+		   , COMPANY_CD
+		   , 'D'
+		   , NON_CLASS_ID
+		   , NON_CLASS_NAME
+		   , NON_WORK_CD
+		   , NON_WORK_CD_NAME
+		   , NON_TYPE
+		   , NON_TYPE_NAME
+		   , NON_OPERATION_TYPE
+		   , NON_OPERATION_TYPE_NAME
+		   , 'Delete Data'
+		   , CREATE_DATE
+		   , CREATE_BY
+		   , MOM_COMMON_PKG.FN_GET_LOCAL_TIME(#{divisionCd, jdbcType=VARCHAR}, #{companyCd, jdbcType=VARCHAR})
+		   , #{updateBy, jdbcType=VARCHAR}
+		FROM MOM_NON_WORK
+	   WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		 AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		 AND NON_CLASS_ID = UPPER(TRIM(#{nonClassId, jdbcType=VARCHAR}))
+		 AND NON_WORK_CD = UPPER(TRIM(#{nonWorkCd, jdbcType=VARCHAR}))
+		 AND NON_TYPE = UPPER(TRIM(#{nonType, jdbcType=VARCHAR}))
+		 AND NON_OPERATION_TYPE = UPPER(TRIM(#{nonOperationType, jdbcType=VARCHAR}))
+	  ;
+	   
+	  DELETE FROM MOM_NON_WORK
+	   WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR} 
+	   	 AND COMPANY_CD = #{companyCd, jdbcType=VARCHAR}
+		 AND NON_CLASS_ID = UPPER(TRIM(#{nonClassId, jdbcType=VARCHAR}))
+		 AND NON_WORK_CD = UPPER(TRIM(#{nonWorkCd, jdbcType=VARCHAR}))
+		 AND NON_TYPE = UPPER(TRIM(#{nonType, jdbcType=VARCHAR}))
+		 AND NON_OPERATION_TYPE = UPPER(TRIM(#{nonOperationType, jdbcType=VARCHAR}))
+	  ;
+	  	
+		SELECT
+			CASE 
+				WHEN COUNT(NON_CLASS_ID) = 0 THEN 'S'
+				ELSE 'E' 
+			END  
+			INTO #{p_err_code, mode=OUT, jdbcType=VARCHAR, javaType=String}
+		  FROM MOM_NON_WORK
+		 WHERE DIVISION_CD = #{divisionCd, jdbcType=VARCHAR}
+		   AND COMPANY_CD  = #{companyCd, jdbcType=VARCHAR}
+		   AND NON_CLASS_ID = UPPER(TRIM(#{nonClassId, jdbcType=VARCHAR}))
+		   AND NON_WORK_CD = UPPER(TRIM(#{nonWorkCd, jdbcType=VARCHAR}))
+		   AND NON_TYPE = UPPER(TRIM(#{nonType, jdbcType=VARCHAR}))
+		   AND NON_OPERATION_TYPE = UPPER(TRIM(#{nonOperationType, jdbcType=VARCHAR}))
+		;
+	 END
+	}
+	</delete>
+	
+</mapper>

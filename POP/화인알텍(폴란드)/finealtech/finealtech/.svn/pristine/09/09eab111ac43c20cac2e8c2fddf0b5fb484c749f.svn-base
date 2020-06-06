@@ -1,0 +1,839 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XtraReportsLayoutSerializer SerializerVersion="18.2.6.0" Ref="0" ControlType="DevExpress.XtraReports.UI.XtraReport, DevExpress.XtraReports.v18.2, Version=18.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Name="Report1" Landscape="true" Margins="21, 28, 35, 35" PaperKind="A4" PageWidth="1169" PageHeight="827" Version="18.2" Font="Arial, 9.75pt">
+  <Parameters>
+    <Item1 Ref="2" Description="prodDate" Name="PRODDATE" />
+    <Item2 Ref="3" Description="aGanbanId" Name="AGANBANID" />
+    <Item3 Ref="4" Description="bGanbanId" Name="BGANBANID" />
+    <Item4 Ref="5" Description="cGanbanId" Name="CGANBANID" />
+    <Item5 Ref="6" Description="APOPCTQTY" ValueInfo="0" Name="APOPCTQTY" />
+    <Item6 Ref="7" Description="BPOPCTQTY" Name="BPOPCTQTY" />
+    <Item7 Ref="8" Description="CPOPCTQTY" Name="CPOPCTQTY" />
+    <Item8 Ref="9" Description="AITEMID" Name="AITEMID" />
+    <Item9 Ref="10" Description="BITEMID" Name="BITEMID" />
+    <Item10 Ref="11" Description="CITEMID" Name="CITEMID" />
+    <Item11 Ref="12" Description="APREITEMID" Name="APREITEMID" />
+    <Item12 Ref="13" Description="BPREITEMID" Name="BPREITEMID" />
+    <Item13 Ref="14" Description="CPREITEMID" Name="CPREITEMID" />
+    <Item14 Ref="15" Description="APOSTITEMID" Name="APOSTITEMID" />
+    <Item15 Ref="16" Description="BPOSTITEMID" Name="BPOSTITEMID" />
+    <Item16 Ref="17" Description="CPOSTITEMID" Name="CPOSTITEMID" />
+    <Item17 Ref="18" Description="AMODEL" Name="AMODEL" />
+    <Item18 Ref="19" Description="BMODEL" Name="BMODEL" />
+    <Item19 Ref="20" Description="CMODEL" Name="CMODEL" />
+    <Item20 Ref="21" Description="APROJECT" Name="APROJECT" />
+    <Item21 Ref="22" Description="BPROJECT" Name="BPROJECT" />
+    <Item22 Ref="23" Description="CPROJECT" Name="CPROJECT" />
+    <Item23 Ref="24" Description="ASHIFT" Name="ASHIFT" />
+    <Item24 Ref="25" Description="BSHIFT" Name="BSHIFT" />
+    <Item25 Ref="26" Description="CSHIFT" Name="CSHIFT" />
+    <Item26 Ref="27" Description="ATYPE" Name="ATYPE" />
+    <Item27 Ref="28" Description="BTYPE" Name="BTYPE" />
+    <Item28 Ref="29" Description="CTYPE" Name="CTYPE" />
+    <Item29 Ref="30" Description="AMATERIAL" Name="AMATERIAL" />
+    <Item30 Ref="31" Description="BMATERIAL" Name="BMATERIAL" />
+    <Item31 Ref="32" Description="CMATERIAL" Name="CMATERIAL" />
+    <Item32 Ref="33" Description="ACOLOR" Name="ACOLOR" />
+    <Item33 Ref="34" Description="BCOLOR" Name="BCOLOR" />
+    <Item34 Ref="35" Description="CCOLOR" Name="CCOLOR" />
+    <Item35 Ref="36" Description="APRESSITEMID" Name="APRESSITEMID" />
+    <Item36 Ref="37" Description="BPRESSITEMID" Name="BPRESSITEMID" />
+    <Item37 Ref="38" Description="CPRESSITEMID" Name="CPRESSITEMID" />
+    <Item38 Ref="39" Description="AIMAGE1" Name="AIMAGE1" />
+    <Item39 Ref="40" Description="BIMAGE1" Name="BIMAGE1" />
+    <Item40 Ref="41" Name="CIMAGE1" />
+    <Item41 Ref="42" Description="AIMAGE2" Name="AIMAGE2" />
+    <Item42 Ref="43" Description="BIMAGE2" Name="BIMAGE2" />
+    <Item43 Ref="44" Description="CIMAGE2" Name="CIMAGE2" />
+    <Item44 Ref="45" Description="AB2BIVENDORCD" Name="AB2BIVENDORCD" />
+    <Item45 Ref="46" Description="BB2BIVENDORCD" Name="BB2BIVENDORCD" />
+    <Item46 Ref="47" Description="CB2BIVENDORCD" Name="CB2BIVENDORCD" />
+  </Parameters>
+  <Bands>
+    <Item1 Ref="48" ControlType="TopMarginBand" Name="TopMargin" HeightF="35" />
+    <Item2 Ref="49" ControlType="DetailBand" Name="Detail" HeightF="768.75">
+      <Controls>
+        <Item1 Ref="50" ControlType="XRTable" Name="table1" SizeF="365.1331,748.5416" LocationFloat="2, 0">
+          <Rows>
+            <Item1 Ref="51" ControlType="XRTableRow" Name="tableRow1" Weight="1.44674933475076">
+              <Cells>
+                <Item1 Ref="52" ControlType="XRTableCell" Name="tableCell1" Weight="0.62740384615384615" Text="RoHS" TextAlignment="MiddleCenter" Padding="2,2,0,0,96" Borders="Left, Top, Right">
+                  <StylePriority Ref="53" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="54" ControlType="XRTableCell" Name="tableCell2" Weight="2.3725961538461533" Text="MATERIAL ID LABEL &#xD;&#xA;KARTA WYROBU" TextAlignment="MiddleCenter" Padding="2,2,0,0,96" Borders="Left, Top, Right">
+                  <StylePriority Ref="55" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+              </Cells>
+            </Item1>
+            <Item2 Ref="56" ControlType="XRTableRow" Name="tableRow2" Weight="1.44674933475076">
+              <Cells>
+                <Item1 Ref="57" ControlType="XRTableCell" Name="tableCell3" Weight="0.62740384615384615" Text="FA PROD ID." TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="All">
+                  <StylePriority Ref="58" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="59" ControlType="XRTableCell" Name="tableCell4" Weight="2.3725961538461529" Text="tableCell46" TextAlignment="MiddleCenter" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Top, Right, Bottom">
+                  <Controls>
+                    <Item1 Ref="60" ControlType="XRBarCode" Name="barCode1" SizeF="288.771118,42.7083321" LocationFloat="0, 2.306561E-06" BackColor="Transparent" Padding="10,10,0,0,100" Borders="None">
+                      <Symbology Ref="61" Name="Code128" />
+                      <ExpressionBindings>
+                        <Item1 Ref="62" Expression="[Parameters].[AGANBANID]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                      <StylePriority Ref="63" UseBackColor="false" UseBorders="false" />
+                    </Item1>
+                  </Controls>
+                  <StylePriority Ref="64" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+              </Cells>
+            </Item2>
+            <Item3 Ref="65" ControlType="XRTableRow" Name="tableRow3" Weight="1.44674933475076" StyleName="Style1">
+              <Cells>
+                <Item1 Ref="66" ControlType="XRTableCell" Name="tableCell5" Weight="0.62740384615384615" Text="P/No" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right, Bottom">
+                  <StylePriority Ref="67" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="68" ControlType="XRTableCell" Name="tableCell6" Weight="1.095055555014701" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Bottom">
+                  <Controls>
+                    <Item1 Ref="69" ControlType="XRLabel" Name="label2" Multiline="true" Text="label1" TextAlignment="MiddleLeft" SizeF="40.8234,39.0013542" LocationFloat="92.45694, 1.04166663" Font="Arial, 12pt, style=Bold" Padding="2,2,0,0,100" Borders="None">
+                      <ExpressionBindings>
+                        <Item1 Ref="70" Expression="[Parameters].[APOSTITEMID]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                      <StylePriority Ref="71" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                    </Item1>
+                    <Item2 Ref="72" ControlType="XRLabel" Name="label1" Multiline="true" Text="label1" TextAlignment="MiddleRight" SizeF="96.15364,43.79878" LocationFloat="2.96059462E-14, 0" Font="Arial, 8.5pt" Padding="2,2,0,0,100" Borders="None">
+                      <ExpressionBindings>
+                        <Item1 Ref="73" Expression="[Parameters].[APREITEMID]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                      <StylePriority Ref="74" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                    </Item2>
+                  </Controls>
+                  <StylePriority Ref="75" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="76" ControlType="XRTableCell" Name="tableCell7" Weight="1.2775405988314534" RowSpan="3" Text="Status Assy QC" TextAlignment="TopCenter" Padding="2,2,0,0,100" Borders="Left, Right">
+                  <StylePriority Ref="77" UseBorders="false" UseTextAlignment="false" />
+                </Item3>
+              </Cells>
+            </Item3>
+            <Item4 Ref="78" ControlType="XRTableRow" Name="tableRow4" Weight="1.44674933475076">
+              <Cells>
+                <Item1 Ref="79" ControlType="XRTableCell" Name="tableCell8" Weight="0.62740384615384615" Text="TYPE" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right, Bottom">
+                  <StylePriority Ref="80" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="81" ControlType="XRTableCell" Name="tableCell9" Weight="1.095055555014701" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="82" Expression="[Parameters].[ATYPE]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="83" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="84" ControlType="XRTableCell" Name="tableCell10" Weight="1.2775405988314534" Text="tableCell9" Padding="2,2,0,0,100" />
+              </Cells>
+            </Item4>
+            <Item5 Ref="85" ControlType="XRTableRow" Name="tableRow5" Weight="1.4467494242414876">
+              <Cells>
+                <Item1 Ref="86" ControlType="XRTableCell" Name="tableCell11" Weight="0.62740384615384637" Text="Model" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right">
+                  <StylePriority Ref="87" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="88" ControlType="XRTableCell" Name="tableCell12" Weight="1.0950555550147019" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left">
+                  <ExpressionBindings>
+                    <Item1 Ref="89" Expression="[Parameters].[AMODEL]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="90" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="91" ControlType="XRTableCell" Name="tableCell13" Weight="1.277540598831453" Text="tableCell12" Padding="2,2,0,0,100" />
+              </Cells>
+            </Item5>
+            <Item6 Ref="92" ControlType="XRTableRow" Name="tableRow6" Weight="1.0127246215410717">
+              <Cells>
+                <Item1 Ref="93" ControlType="XRTableCell" Name="tableCell14" Weight="0.62740384615384637" Text="Material" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="All">
+                  <StylePriority Ref="94" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="95" ControlType="XRTableCell" Name="tableCell15" Weight="1.0950555550147012" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="96" Expression="[Parameters].[AMATERIAL]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="97" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="98" ControlType="XRTableCell" Name="tableCell16" Weight="1.277540598831453" RowSpan="2" Text="Status OQA" TextAlignment="TopCenter" Padding="2,2,0,0,100" Borders="All">
+                  <StylePriority Ref="99" UseBorders="false" UseTextAlignment="false" />
+                </Item3>
+              </Cells>
+            </Item6>
+            <Item7 Ref="100" ControlType="XRTableRow" Name="tableRow7" Weight="1.0127243576192648">
+              <Cells>
+                <Item1 Ref="101" ControlType="XRTableCell" Name="tableCell17" Weight="0.62740384615384615" Text="Kolor" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right, Bottom">
+                  <StylePriority Ref="102" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="103" ControlType="XRTableCell" Name="tableCell18" Weight="1.095055555014701" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="104" Expression="[Parameters].[ACOLOR]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="105" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="106" ControlType="XRTableCell" Name="tableCell19" Weight="1.2775405988314534" Text="tableCell18" Padding="2,2,0,0,100" />
+              </Cells>
+            </Item7>
+            <Item8 Ref="107" ControlType="XRTableRow" Name="tableRow8" Weight="1.0127245928983935">
+              <Cells>
+                <Item1 Ref="108" ControlType="XRTableCell" Name="tableCell20" Weight="0.62740384615384615" Text="Ilosc" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right">
+                  <StylePriority Ref="109" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="110" ControlType="XRTableCell" Name="tableCell21" Weight="1.0979083962062792" TextAlignment="MiddleCenter" Font="Arial, 12pt, style=Bold" Padding="2,2,0,0,100">
+                  <ExpressionBindings>
+                    <Item1 Ref="111" Expression="[Parameters].[APOPCTQTY]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="112" UseFont="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="113" ControlType="XRTableCell" Name="tableCell22" Weight="1.2746877303598598" RowSpan="3" Text="Status SQA LGEMA" TextAlignment="TopCenter" Padding="2,2,0,0,100" Borders="Left, Right, Bottom">
+                  <StylePriority Ref="114" UseBorders="false" UseTextAlignment="false" />
+                </Item3>
+              </Cells>
+            </Item8>
+            <Item9 Ref="115" ControlType="XRTableRow" Name="tableRow9" Weight="1.4467492761778986">
+              <Cells>
+                <Item1 Ref="116" ControlType="XRTableCell" Name="tableCell23" Weight="0.62740384615384615" Text="Data         produkcji" TextAlignment="MiddleCenter" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="All">
+                  <StylePriority Ref="117" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="118" ControlType="XRTableCell" Name="tableCell24" Weight="1.0979083960836205" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Top, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="119" Expression="[Parameters].[PRODDATE]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="120" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="121" ControlType="XRTableCell" Name="tableCell25" Weight="1.2746877577625335" Text="tableCell24" Padding="2,2,0,0,100" />
+              </Cells>
+            </Item9>
+            <Item10 Ref="122" ControlType="XRTableRow" Name="tableRow10" Weight="1.012724534325532">
+              <Cells>
+                <Item1 Ref="123" ControlType="XRTableCell" Name="tableCell26" Weight="0.62740384615384615" Text="Zmiana" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right, Bottom">
+                  <StylePriority Ref="124" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="125" ControlType="XRTableCell" Name="tableCell27" Weight="1.0979083960836205" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="126" Expression="[Parameters].[ASHIFT]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="127" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="128" ControlType="XRTableCell" Name="tableCell28" Weight="1.2746877577625335" Text="tableCell27" Padding="2,2,0,0,100" />
+              </Cells>
+            </Item10>
+            <Item11 Ref="129" ControlType="XRTableRow" Name="tableRow11" Weight="1.3212690059977001">
+              <Cells>
+                <Item1 Ref="130" ControlType="XRTableCell" Name="tableCell29" Weight="0.62740384615384615" Text="Nazwa    &#xD;&#xA;dostawcy" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right">
+                  <StylePriority Ref="131" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="132" ControlType="XRTableCell" Name="tableCell30" Weight="1.0180288461538463" Text="FINE ALTECH" TextAlignment="MiddleCenter" Font="Arial, 12pt" Padding="2,2,0,0,100">
+                  <StylePriority Ref="133" UseFont="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="134" ControlType="XRTableCell" Name="tableCell31" Weight="0.45237900148387045" Text="Kod    &#xD;&#xA;dostawcy" TextAlignment="MiddleCenter" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="Left, Right">
+                  <StylePriority Ref="135" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                </Item3>
+                <Item4 Ref="136" ControlType="XRTableCell" Name="tableCell32" Weight="0.90218830620843815" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Right">
+                  <ExpressionBindings>
+                    <Item1 Ref="137" Expression="[Parameters].[AB2BIVENDORCD]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="138" UseBorders="false" UseTextAlignment="false" />
+                </Item4>
+              </Cells>
+            </Item11>
+            <Item12 Ref="139" ControlType="XRTableRow" Name="tableRow12" Weight="1.1382048630785919">
+              <Cells>
+                <Item1 Ref="140" ControlType="XRTableCell" Name="tableCell33" Weight="1.6454326923076923" Text="ECO INFORMATION" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="141" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="142" ControlType="XRTableCell" Name="tableCell34" Weight="1.3545673076923077" Text="VIEW" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="All">
+                  <StylePriority Ref="143" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+              </Cells>
+            </Item12>
+            <Item13 Ref="144" ControlType="XRTableRow" Name="tableRow13" Weight="1.012724534325532">
+              <Cells>
+                <Item1 Ref="145" ControlType="XRTableCell" Name="tableCell35" Weight="0.62740384615384615" Text="MODEL" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right">
+                  <StylePriority Ref="146" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="147" ControlType="XRTableCell" Name="tableCell36" Weight="1.0180288461538463" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="None">
+                  <ExpressionBindings>
+                    <Item1 Ref="148" Expression="[Parameters].[AMODEL]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="149" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="150" ControlType="XRTableCell" Name="tableCell37" Weight="1.3545673076923077" RowSpan="3" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right, Bottom">
+                  <StylePriority Ref="151" UseBorders="false" UseTextAlignment="false" />
+                </Item3>
+              </Cells>
+            </Item13>
+            <Item14 Ref="152" ControlType="XRTableRow" Name="tableRow14" Weight="3.9292602955792262">
+              <Cells>
+                <Item1 Ref="153" ControlType="XRTableCell" Name="tableCell38" Weight="1.6454326923076923" RowSpan="2" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="154" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="155" ControlType="XRTableCell" Name="tableCell39" Weight="1.3545673076923077" Text="tableCell39" Padding="2,2,0,0,100" />
+              </Cells>
+            </Item14>
+            <Item15 Ref="156" ControlType="XRTableRow" Name="tableRow15" Weight="0.84501250909828207">
+              <Cells>
+                <Item1 Ref="157" ControlType="XRTableCell" Name="tableCell40" Weight="0.87980769230769229" Text="ECO HISTORY" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right">
+                  <StylePriority Ref="158" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="159" ControlType="XRTableCell" Name="tableCell41" Weight="2.1201923076923075" Text="REMARKS" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Right">
+                  <StylePriority Ref="160" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+              </Cells>
+            </Item15>
+            <Item16 Ref="161" ControlType="XRTableRow" Name="tableRow16" Weight="1.2882820641243364">
+              <Cells>
+                <Item1 Ref="162" ControlType="XRTableCell" Name="tableCell42" Weight="0.87980769230769229" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="All">
+                  <StylePriority Ref="163" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="164" ControlType="XRTableCell" Name="tableCell43" Weight="2.1201923076923075" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Top, Right, Bottom">
+                  <StylePriority Ref="165" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+              </Cells>
+            </Item16>
+            <Item17 Ref="166" ControlType="XRTableRow" Name="tableRow17" Weight="1.1711918049519556">
+              <Cells>
+                <Item1 Ref="167" ControlType="XRTableCell" Name="tableCell44" Weight="3" Text="Dadatkowe Informacje" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right">
+                  <StylePriority Ref="168" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+              </Cells>
+            </Item17>
+            <Item18 Ref="169" ControlType="XRTableRow" Name="tableRow18" Weight="1.2882820295865649">
+              <Cells>
+                <Item1 Ref="170" ControlType="XRTableCell" Name="tableCell45" Weight="3" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="All">
+                  <StylePriority Ref="171" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+              </Cells>
+            </Item18>
+          </Rows>
+        </Item1>
+        <Item2 Ref="172" ControlType="XRTable" Name="table4" SizeF="365.1331,748.5416" LocationFloat="746.7917, 0">
+          <Rows>
+            <Item1 Ref="173" ControlType="XRTableRow" Name="tableRow55" Weight="1.44674933475076">
+              <Cells>
+                <Item1 Ref="174" ControlType="XRTableCell" Name="tableCell136" Weight="0.62740384615384615" Text="RoHS" TextAlignment="MiddleCenter" Padding="2,2,0,0,96" Borders="Left, Top, Right">
+                  <StylePriority Ref="175" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="176" ControlType="XRTableCell" Name="tableCell137" Weight="2.3725961538461533" Text="MATERIAL ID LABEL &#xD;&#xA;KARTA WYROBU" TextAlignment="MiddleCenter" Padding="2,2,0,0,96" Borders="Left, Top, Right">
+                  <StylePriority Ref="177" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+              </Cells>
+            </Item1>
+            <Item2 Ref="178" ControlType="XRTableRow" Name="tableRow56" Weight="1.44674933475076">
+              <Cells>
+                <Item1 Ref="179" ControlType="XRTableCell" Name="tableCell138" Weight="0.62740384615384615" Text="FA PROD ID." TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="All">
+                  <StylePriority Ref="180" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="181" ControlType="XRTableCell" Name="tableCell139" Weight="2.3725961538461529" Text="tableCell46" TextAlignment="MiddleCenter" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Top, Right, Bottom">
+                  <Controls>
+                    <Item1 Ref="182" ControlType="XRBarCode" Name="barCode4" SizeF="288.771118,42.7083321" LocationFloat="0, 2.306561E-06" BackColor="Transparent" Padding="10,10,0,0,100" Borders="None">
+                      <Symbology Ref="183" Name="Code128" />
+                      <ExpressionBindings>
+                        <Item1 Ref="184" Expression="[Parameters].[CGANBANID]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                      <StylePriority Ref="185" UseBackColor="false" UseBorders="false" />
+                    </Item1>
+                  </Controls>
+                  <StylePriority Ref="186" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+              </Cells>
+            </Item2>
+            <Item3 Ref="187" ControlType="XRTableRow" Name="tableRow57" Weight="1.44674933475076" StyleName="Style1">
+              <Cells>
+                <Item1 Ref="188" ControlType="XRTableCell" Name="tableCell140" Weight="0.62740384615384615" Text="P/No" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right, Bottom">
+                  <StylePriority Ref="189" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="190" ControlType="XRTableCell" Name="tableCell141" Weight="1.095055555014701" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Bottom">
+                  <Controls>
+                    <Item1 Ref="191" ControlType="XRLabel" Name="label8" Multiline="true" Text="label1" TextAlignment="MiddleLeft" SizeF="40.8234,39.0013542" LocationFloat="92.45694, 1.04166663" Font="Arial, 12pt, style=Bold" Padding="2,2,0,0,100" Borders="None">
+                      <ExpressionBindings>
+                        <Item1 Ref="192" Expression="[Parameters].[CPOSTITEMID]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                      <StylePriority Ref="193" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                    </Item1>
+                    <Item2 Ref="194" ControlType="XRLabel" Name="label7" Multiline="true" Text="label1" TextAlignment="MiddleRight" SizeF="96.15364,43.79878" LocationFloat="2.96059462E-14, 1.04166663" Font="Arial, 8.5pt" Padding="2,2,0,0,100" Borders="None">
+                      <ExpressionBindings>
+                        <Item1 Ref="195" Expression="[Parameters].[CPREITEMID]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                      <StylePriority Ref="196" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                    </Item2>
+                  </Controls>
+                  <StylePriority Ref="197" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="198" ControlType="XRTableCell" Name="tableCell142" Weight="1.2775405988314534" RowSpan="3" Text="Status Assy QC" TextAlignment="TopCenter" Padding="2,2,0,0,100" Borders="Left, Right">
+                  <StylePriority Ref="199" UseBorders="false" UseTextAlignment="false" />
+                </Item3>
+              </Cells>
+            </Item3>
+            <Item4 Ref="200" ControlType="XRTableRow" Name="tableRow58" Weight="1.44674933475076">
+              <Cells>
+                <Item1 Ref="201" ControlType="XRTableCell" Name="tableCell143" Weight="0.62740384615384615" Text="TYPE" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right, Bottom">
+                  <StylePriority Ref="202" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="203" ControlType="XRTableCell" Name="tableCell144" Weight="1.095055555014701" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="204" Expression="[Parameters].[CTYPE]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="205" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="206" ControlType="XRTableCell" Name="tableCell145" Weight="1.2775405988314534" Text="tableCell9" Padding="2,2,0,0,100" />
+              </Cells>
+            </Item4>
+            <Item5 Ref="207" ControlType="XRTableRow" Name="tableRow59" Weight="1.4467494242414876">
+              <Cells>
+                <Item1 Ref="208" ControlType="XRTableCell" Name="tableCell146" Weight="0.62740384615384637" Text="Model" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right">
+                  <StylePriority Ref="209" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="210" ControlType="XRTableCell" Name="tableCell147" Weight="1.0950555550147019" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left">
+                  <ExpressionBindings>
+                    <Item1 Ref="211" Expression="[Parameters].[CMODEL]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="212" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="213" ControlType="XRTableCell" Name="tableCell148" Weight="1.277540598831453" Text="tableCell12" Padding="2,2,0,0,100" />
+              </Cells>
+            </Item5>
+            <Item6 Ref="214" ControlType="XRTableRow" Name="tableRow60" Weight="1.0127246215410717">
+              <Cells>
+                <Item1 Ref="215" ControlType="XRTableCell" Name="tableCell149" Weight="0.62740384615384637" Text="Material" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="All">
+                  <StylePriority Ref="216" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="217" ControlType="XRTableCell" Name="tableCell150" Weight="1.0950555550147012" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="218" Expression="[Parameters].[CMATERIAL]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="219" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="220" ControlType="XRTableCell" Name="tableCell151" Weight="1.277540598831453" RowSpan="2" Text="Status OQA" TextAlignment="TopCenter" Padding="2,2,0,0,100" Borders="All">
+                  <StylePriority Ref="221" UseBorders="false" UseTextAlignment="false" />
+                </Item3>
+              </Cells>
+            </Item6>
+            <Item7 Ref="222" ControlType="XRTableRow" Name="tableRow61" Weight="1.0127243576192648">
+              <Cells>
+                <Item1 Ref="223" ControlType="XRTableCell" Name="tableCell152" Weight="0.62740384615384615" Text="Kolor" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right, Bottom">
+                  <StylePriority Ref="224" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="225" ControlType="XRTableCell" Name="tableCell153" Weight="1.095055555014701" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="226" Expression="[Parameters].[CCOLOR]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="227" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="228" ControlType="XRTableCell" Name="tableCell154" Weight="1.2775405988314534" Text="tableCell18" Padding="2,2,0,0,100" />
+              </Cells>
+            </Item7>
+            <Item8 Ref="229" ControlType="XRTableRow" Name="tableRow62" Weight="1.0127245928983935">
+              <Cells>
+                <Item1 Ref="230" ControlType="XRTableCell" Name="tableCell155" Weight="0.62740384615384615" Text="Ilosc" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right">
+                  <StylePriority Ref="231" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="232" ControlType="XRTableCell" Name="tableCell156" Weight="1.0922027139457802" TextAlignment="MiddleCenter" Font="Arial, 12pt, style=Bold" Padding="2,2,0,0,100">
+                  <ExpressionBindings>
+                    <Item1 Ref="233" Expression="[Parameters].[CPOPCTQTY]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="234" UseFont="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="235" ControlType="XRTableCell" Name="tableCell157" Weight="1.2803934399003738" RowSpan="3" Text="Status SQA LGEMA" TextAlignment="TopCenter" Padding="2,2,0,0,100" Borders="Left, Right, Bottom">
+                  <StylePriority Ref="236" UseBorders="false" UseTextAlignment="false" />
+                </Item3>
+              </Cells>
+            </Item8>
+            <Item9 Ref="237" ControlType="XRTableRow" Name="tableRow63" Weight="1.4467492761778986">
+              <Cells>
+                <Item1 Ref="238" ControlType="XRTableCell" Name="tableCell158" Weight="0.62740384615384615" Text="Data         produkcji" TextAlignment="MiddleCenter" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="All">
+                  <StylePriority Ref="239" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="240" ControlType="XRTableCell" Name="tableCell159" Weight="1.0922027139457802" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Top, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="241" Expression="[Parameters].[PRODDATE]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="242" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="243" ControlType="XRTableCell" Name="tableCell160" Weight="1.2803934399003738" Text="tableCell24" Padding="2,2,0,0,100" />
+              </Cells>
+            </Item9>
+            <Item10 Ref="244" ControlType="XRTableRow" Name="tableRow64" Weight="1.012724534325532">
+              <Cells>
+                <Item1 Ref="245" ControlType="XRTableCell" Name="tableCell161" Weight="0.62740384615384615" Text="Zmiana" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right, Bottom">
+                  <StylePriority Ref="246" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="247" ControlType="XRTableCell" Name="tableCell162" Weight="1.0922027139457802" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="248" Expression="[Parameters].[CSHIFT]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="249" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="250" ControlType="XRTableCell" Name="tableCell163" Weight="1.2803934399003738" Text="tableCell27" Padding="2,2,0,0,100" />
+              </Cells>
+            </Item10>
+            <Item11 Ref="251" ControlType="XRTableRow" Name="tableRow65" Weight="1.3212690059977001">
+              <Cells>
+                <Item1 Ref="252" ControlType="XRTableCell" Name="tableCell164" Weight="0.62740384615384615" Text="Nazwa    &#xD;&#xA;dostawcy" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right">
+                  <StylePriority Ref="253" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="254" ControlType="XRTableCell" Name="tableCell165" Weight="1.0180288461538463" Text="FINE ALTECH" TextAlignment="MiddleCenter" Font="Arial, 12pt" Padding="2,2,0,0,100">
+                  <StylePriority Ref="255" UseFont="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="256" ControlType="XRTableCell" Name="tableCell166" Weight="0.45237900148387045" Text="Kod    &#xD;&#xA;dostawcy" TextAlignment="MiddleCenter" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="Left, Right">
+                  <StylePriority Ref="257" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                </Item3>
+                <Item4 Ref="258" ControlType="XRTableCell" Name="tableCell167" Weight="0.90218830620843815" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Right">
+                  <ExpressionBindings>
+                    <Item1 Ref="259" Expression="[Parameters].[CB2BIVENDORCD]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="260" UseBorders="false" UseTextAlignment="false" />
+                </Item4>
+              </Cells>
+            </Item11>
+            <Item12 Ref="261" ControlType="XRTableRow" Name="tableRow66" Weight="1.1382048630785919">
+              <Cells>
+                <Item1 Ref="262" ControlType="XRTableCell" Name="tableCell168" Weight="1.6454326923076923" Text="ECO INFORMATION" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="263" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="264" ControlType="XRTableCell" Name="tableCell169" Weight="1.3545673076923077" Text="VIEW" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="All">
+                  <StylePriority Ref="265" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+              </Cells>
+            </Item12>
+            <Item13 Ref="266" ControlType="XRTableRow" Name="tableRow67" Weight="1.012724534325532">
+              <Cells>
+                <Item1 Ref="267" ControlType="XRTableCell" Name="tableCell170" Weight="0.62740384615384615" Text="MODEL" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right">
+                  <StylePriority Ref="268" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="269" ControlType="XRTableCell" Name="tableCell171" Weight="1.0180288461538463" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="None">
+                  <ExpressionBindings>
+                    <Item1 Ref="270" Expression="[Parameters].[CMODEL]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="271" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="272" ControlType="XRTableCell" Name="tableCell172" Weight="1.3545673076923077" RowSpan="3" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right, Bottom">
+                  <StylePriority Ref="273" UseBorders="false" UseTextAlignment="false" />
+                </Item3>
+              </Cells>
+            </Item13>
+            <Item14 Ref="274" ControlType="XRTableRow" Name="tableRow68" Weight="3.9292602955792262">
+              <Cells>
+                <Item1 Ref="275" ControlType="XRTableCell" Name="tableCell173" Weight="1.6454326923076923" RowSpan="2" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="276" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="277" ControlType="XRTableCell" Name="tableCell174" Weight="1.3545673076923077" Text="tableCell39" Padding="2,2,0,0,100" />
+              </Cells>
+            </Item14>
+            <Item15 Ref="278" ControlType="XRTableRow" Name="tableRow69" Weight="0.84501250909828207">
+              <Cells>
+                <Item1 Ref="279" ControlType="XRTableCell" Name="tableCell175" Weight="0.87980769230769229" Text="ECO HISTORY" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right">
+                  <StylePriority Ref="280" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="281" ControlType="XRTableCell" Name="tableCell176" Weight="2.1201923076923075" Text="REMARKS" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Right">
+                  <StylePriority Ref="282" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+              </Cells>
+            </Item15>
+            <Item16 Ref="283" ControlType="XRTableRow" Name="tableRow70" Weight="1.2882820641243364">
+              <Cells>
+                <Item1 Ref="284" ControlType="XRTableCell" Name="tableCell177" Weight="0.87980769230769229" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="All">
+                  <StylePriority Ref="285" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="286" ControlType="XRTableCell" Name="tableCell178" Weight="2.1201923076923075" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Top, Right, Bottom">
+                  <StylePriority Ref="287" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+              </Cells>
+            </Item16>
+            <Item17 Ref="288" ControlType="XRTableRow" Name="tableRow71" Weight="1.1711918049519556">
+              <Cells>
+                <Item1 Ref="289" ControlType="XRTableCell" Name="tableCell179" Weight="3" Text="Dadatkowe Informacje" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right">
+                  <StylePriority Ref="290" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+              </Cells>
+            </Item17>
+            <Item18 Ref="291" ControlType="XRTableRow" Name="tableRow72" Weight="1.2882820295865649">
+              <Cells>
+                <Item1 Ref="292" ControlType="XRTableCell" Name="tableCell180" Weight="3" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="All">
+                  <StylePriority Ref="293" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+              </Cells>
+            </Item18>
+          </Rows>
+        </Item2>
+        <Item3 Ref="294" ControlType="XRTable" Name="table3" SizeF="365.1331,748.5416" LocationFloat="372.833344, 0">
+          <Rows>
+            <Item1 Ref="295" ControlType="XRTableRow" Name="tableRow37" Weight="1.44674933475076">
+              <Cells>
+                <Item1 Ref="296" ControlType="XRTableCell" Name="tableCell91" Weight="0.62740384615384615" Text="RoHS" TextAlignment="MiddleCenter" Padding="2,2,0,0,96" Borders="Left, Top, Right">
+                  <StylePriority Ref="297" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="298" ControlType="XRTableCell" Name="tableCell92" Weight="2.3725961538461533" Text="MATERIAL ID LABEL &#xD;&#xA;KARTA WYROBU" TextAlignment="MiddleCenter" Padding="2,2,0,0,96" Borders="Left, Top, Right">
+                  <StylePriority Ref="299" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+              </Cells>
+            </Item1>
+            <Item2 Ref="300" ControlType="XRTableRow" Name="tableRow38" Weight="1.44674933475076">
+              <Cells>
+                <Item1 Ref="301" ControlType="XRTableCell" Name="tableCell93" Weight="0.62740384615384615" Text="FA PROD ID." TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="All">
+                  <StylePriority Ref="302" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="303" ControlType="XRTableCell" Name="tableCell94" Weight="2.3725961538461529" Text="tableCell46" TextAlignment="MiddleCenter" BackColor="Transparent" Padding="2,2,0,0,100" Borders="Top, Right, Bottom">
+                  <Controls>
+                    <Item1 Ref="304" ControlType="XRBarCode" Name="barCode3" SizeF="288.771118,42.7083321" LocationFloat="0, 2.306561E-06" BackColor="Transparent" Padding="10,10,0,0,100" Borders="None">
+                      <Symbology Ref="305" Name="Code128" />
+                      <ExpressionBindings>
+                        <Item1 Ref="306" Expression="[Parameters].[BGANBANID]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                      <StylePriority Ref="307" UseBackColor="false" UseBorders="false" />
+                    </Item1>
+                  </Controls>
+                  <StylePriority Ref="308" UseBackColor="false" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+              </Cells>
+            </Item2>
+            <Item3 Ref="309" ControlType="XRTableRow" Name="tableRow39" Weight="1.44674933475076" StyleName="Style1">
+              <Cells>
+                <Item1 Ref="310" ControlType="XRTableCell" Name="tableCell95" Weight="0.62740384615384615" Text="P/No" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right, Bottom">
+                  <StylePriority Ref="311" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="312" ControlType="XRTableCell" Name="tableCell96" Weight="1.095055555014701" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Bottom">
+                  <Controls>
+                    <Item1 Ref="313" ControlType="XRLabel" Name="label6" Multiline="true" Text="label1" TextAlignment="MiddleLeft" SizeF="40.8234,39.0013542" LocationFloat="92.45694, 1.04166663" Font="Arial, 12pt, style=Bold" Padding="2,2,0,0,100" Borders="None">
+                      <ExpressionBindings>
+                        <Item1 Ref="314" Expression="[Parameters].[BPOSTITEMID]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                      <StylePriority Ref="315" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                    </Item1>
+                    <Item2 Ref="316" ControlType="XRLabel" Name="label5" Multiline="true" Text="label1" TextAlignment="MiddleRight" SizeF="96.15364,43.79878" LocationFloat="2.96059462E-14, 0" Font="Arial, 8.5pt" Padding="2,2,0,0,100" Borders="None">
+                      <ExpressionBindings>
+                        <Item1 Ref="317" Expression="[Parameters].[BPREITEMID]" PropertyName="Text" EventName="BeforePrint" />
+                      </ExpressionBindings>
+                      <StylePriority Ref="318" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                    </Item2>
+                  </Controls>
+                  <StylePriority Ref="319" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="320" ControlType="XRTableCell" Name="tableCell97" Weight="1.2775405988314534" RowSpan="3" Text="Status Assy QC" TextAlignment="TopCenter" Padding="2,2,0,0,100" Borders="Left, Right">
+                  <StylePriority Ref="321" UseBorders="false" UseTextAlignment="false" />
+                </Item3>
+              </Cells>
+            </Item3>
+            <Item4 Ref="322" ControlType="XRTableRow" Name="tableRow40" Weight="1.44674933475076">
+              <Cells>
+                <Item1 Ref="323" ControlType="XRTableCell" Name="tableCell98" Weight="0.62740384615384615" Text="TYPE" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right, Bottom">
+                  <StylePriority Ref="324" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="325" ControlType="XRTableCell" Name="tableCell99" Weight="1.095055555014701" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="326" Expression="[Parameters].[BTYPE]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="327" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="328" ControlType="XRTableCell" Name="tableCell100" Weight="1.2775405988314534" Text="tableCell9" Padding="2,2,0,0,100" />
+              </Cells>
+            </Item4>
+            <Item5 Ref="329" ControlType="XRTableRow" Name="tableRow41" Weight="1.4467494242414876">
+              <Cells>
+                <Item1 Ref="330" ControlType="XRTableCell" Name="tableCell101" Weight="0.62740384615384637" Text="Model" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right">
+                  <StylePriority Ref="331" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="332" ControlType="XRTableCell" Name="tableCell102" Weight="1.0950555550147019" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left">
+                  <ExpressionBindings>
+                    <Item1 Ref="333" Expression="[Parameters].[BMODEL]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="334" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="335" ControlType="XRTableCell" Name="tableCell103" Weight="1.277540598831453" Text="tableCell12" Padding="2,2,0,0,100" />
+              </Cells>
+            </Item5>
+            <Item6 Ref="336" ControlType="XRTableRow" Name="tableRow42" Weight="1.0127246215410717">
+              <Cells>
+                <Item1 Ref="337" ControlType="XRTableCell" Name="tableCell104" Weight="0.62740384615384637" Text="Material" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="All">
+                  <StylePriority Ref="338" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="339" ControlType="XRTableCell" Name="tableCell105" Weight="1.0950555550147012" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="340" Expression="[Parameters].[BMATERIAL]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="341" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="342" ControlType="XRTableCell" Name="tableCell106" Weight="1.277540598831453" RowSpan="2" Text="Status OQA" TextAlignment="TopCenter" Padding="2,2,0,0,100" Borders="All">
+                  <StylePriority Ref="343" UseBorders="false" UseTextAlignment="false" />
+                </Item3>
+              </Cells>
+            </Item6>
+            <Item7 Ref="344" ControlType="XRTableRow" Name="tableRow43" Weight="1.0127243576192648">
+              <Cells>
+                <Item1 Ref="345" ControlType="XRTableCell" Name="tableCell107" Weight="0.62740384615384615" Text="Kolor" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right, Bottom">
+                  <StylePriority Ref="346" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="347" ControlType="XRTableCell" Name="tableCell108" Weight="1.095055555014701" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="348" Expression="[Parameters].[BCOLOR]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="349" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="350" ControlType="XRTableCell" Name="tableCell109" Weight="1.2775405988314534" Text="tableCell18" Padding="2,2,0,0,100" />
+              </Cells>
+            </Item7>
+            <Item8 Ref="351" ControlType="XRTableRow" Name="tableRow44" Weight="1.0127245928983935">
+              <Cells>
+                <Item1 Ref="352" ControlType="XRTableCell" Name="tableCell110" Weight="0.62740384615384615" Text="Ilosc" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right">
+                  <StylePriority Ref="353" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="354" ControlType="XRTableCell" Name="tableCell111" Weight="1.0922027139457788" TextAlignment="MiddleCenter" Font="Arial, 12pt, style=Bold" Padding="2,2,0,0,100">
+                  <ExpressionBindings>
+                    <Item1 Ref="355" Expression="[Parameters].[BPOPCTQTY]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="356" UseFont="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="357" ControlType="XRTableCell" Name="tableCell112" Weight="1.2803934399003747" RowSpan="3" Text="Status SQA LGEMA" TextAlignment="TopCenter" Padding="2,2,0,0,100" Borders="Left, Right, Bottom">
+                  <StylePriority Ref="358" UseBorders="false" UseTextAlignment="false" />
+                </Item3>
+              </Cells>
+            </Item8>
+            <Item9 Ref="359" ControlType="XRTableRow" Name="tableRow45" Weight="1.4467492761778986">
+              <Cells>
+                <Item1 Ref="360" ControlType="XRTableCell" Name="tableCell113" Weight="0.62740384615384615" Text="Data         produkcji" TextAlignment="MiddleCenter" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="All">
+                  <StylePriority Ref="361" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="362" ControlType="XRTableCell" Name="tableCell114" Weight="1.0922027139457788" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Top, Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="363" Expression="[Parameters].[PRODDATE]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="364" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="365" ControlType="XRTableCell" Name="tableCell115" Weight="1.2803934399003747" Text="tableCell24" Padding="2,2,0,0,100" />
+              </Cells>
+            </Item9>
+            <Item10 Ref="366" ControlType="XRTableRow" Name="tableRow46" Weight="1.012724534325532">
+              <Cells>
+                <Item1 Ref="367" ControlType="XRTableCell" Name="tableCell116" Weight="0.62740384615384615" Text="Zmiana" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right, Bottom">
+                  <StylePriority Ref="368" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="369" ControlType="XRTableCell" Name="tableCell117" Weight="1.0922027139457788" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Bottom">
+                  <ExpressionBindings>
+                    <Item1 Ref="370" Expression="[Parameters].[BSHIFT]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="371" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="372" ControlType="XRTableCell" Name="tableCell118" Weight="1.2803934399003747" Text="tableCell27" Padding="2,2,0,0,100" />
+              </Cells>
+            </Item10>
+            <Item11 Ref="373" ControlType="XRTableRow" Name="tableRow47" Weight="1.3212690059977001">
+              <Cells>
+                <Item1 Ref="374" ControlType="XRTableCell" Name="tableCell119" Weight="0.62740384615384615" Text="Nazwa    &#xD;&#xA;dostawcy" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right">
+                  <StylePriority Ref="375" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="376" ControlType="XRTableCell" Name="tableCell120" Weight="1.0180288461538463" Text="FINE ALTECH" TextAlignment="MiddleCenter" Font="Arial, 12pt" Padding="2,2,0,0,100">
+                  <StylePriority Ref="377" UseFont="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="378" ControlType="XRTableCell" Name="tableCell121" Weight="0.45237900148387045" Text="Kod    &#xD;&#xA;dostawcy" TextAlignment="MiddleCenter" Font="Arial, 8pt" Padding="2,2,0,0,100" Borders="Left, Right">
+                  <StylePriority Ref="379" UseFont="false" UseBorders="false" UseTextAlignment="false" />
+                </Item3>
+                <Item4 Ref="380" ControlType="XRTableCell" Name="tableCell122" Weight="0.90218830620843815" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Right">
+                  <ExpressionBindings>
+                    <Item1 Ref="381" Expression="[Parameters].[BB2BIVENDORCD]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="382" UseBorders="false" UseTextAlignment="false" />
+                </Item4>
+              </Cells>
+            </Item11>
+            <Item12 Ref="383" ControlType="XRTableRow" Name="tableRow48" Weight="1.1382048630785919">
+              <Cells>
+                <Item1 Ref="384" ControlType="XRTableCell" Name="tableCell123" Weight="1.6454326923076923" Text="ECO INFORMATION" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="385" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="386" ControlType="XRTableCell" Name="tableCell124" Weight="1.3545673076923077" Text="VIEW" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="All">
+                  <StylePriority Ref="387" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+              </Cells>
+            </Item12>
+            <Item13 Ref="388" ControlType="XRTableRow" Name="tableRow49" Weight="1.012724534325532">
+              <Cells>
+                <Item1 Ref="389" ControlType="XRTableCell" Name="tableCell125" Weight="0.62740384615384615" Text="MODEL" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right">
+                  <StylePriority Ref="390" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="391" ControlType="XRTableCell" Name="tableCell126" Weight="1.0180288461538463" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="None">
+                  <ExpressionBindings>
+                    <Item1 Ref="392" Expression="[Parameters].[BMODEL]" PropertyName="Text" EventName="BeforePrint" />
+                  </ExpressionBindings>
+                  <StylePriority Ref="393" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+                <Item3 Ref="394" ControlType="XRTableCell" Name="tableCell127" Weight="1.3545673076923077" RowSpan="3" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right, Bottom">
+                  <StylePriority Ref="395" UseBorders="false" UseTextAlignment="false" />
+                </Item3>
+              </Cells>
+            </Item13>
+            <Item14 Ref="396" ControlType="XRTableRow" Name="tableRow50" Weight="3.9292602955792262">
+              <Cells>
+                <Item1 Ref="397" ControlType="XRTableCell" Name="tableCell128" Weight="1.6454326923076923" RowSpan="2" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Top, Bottom">
+                  <StylePriority Ref="398" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="399" ControlType="XRTableCell" Name="tableCell129" Weight="1.3545673076923077" Text="tableCell39" Padding="2,2,0,0,100" />
+              </Cells>
+            </Item14>
+            <Item15 Ref="400" ControlType="XRTableRow" Name="tableRow51" Weight="0.84501250909828207">
+              <Cells>
+                <Item1 Ref="401" ControlType="XRTableCell" Name="tableCell130" Weight="0.87980769230769229" Text="ECO HISTORY" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right">
+                  <StylePriority Ref="402" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="403" ControlType="XRTableCell" Name="tableCell131" Weight="2.1201923076923075" Text="REMARKS" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Right">
+                  <StylePriority Ref="404" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+              </Cells>
+            </Item15>
+            <Item16 Ref="405" ControlType="XRTableRow" Name="tableRow52" Weight="1.2882820641243364">
+              <Cells>
+                <Item1 Ref="406" ControlType="XRTableCell" Name="tableCell132" Weight="0.87980769230769229" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="All">
+                  <StylePriority Ref="407" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+                <Item2 Ref="408" ControlType="XRTableCell" Name="tableCell133" Weight="2.1201923076923075" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Top, Right, Bottom">
+                  <StylePriority Ref="409" UseBorders="false" UseTextAlignment="false" />
+                </Item2>
+              </Cells>
+            </Item16>
+            <Item17 Ref="410" ControlType="XRTableRow" Name="tableRow53" Weight="1.1711918049519556">
+              <Cells>
+                <Item1 Ref="411" ControlType="XRTableCell" Name="tableCell134" Weight="3" Text="Dadatkowe Informacje" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="Left, Right">
+                  <StylePriority Ref="412" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+              </Cells>
+            </Item17>
+            <Item18 Ref="413" ControlType="XRTableRow" Name="tableRow54" Weight="1.2882820295865649">
+              <Cells>
+                <Item1 Ref="414" ControlType="XRTableCell" Name="tableCell135" Weight="3" TextAlignment="MiddleCenter" Padding="2,2,0,0,100" Borders="All">
+                  <StylePriority Ref="415" UseBorders="false" UseTextAlignment="false" />
+                </Item1>
+              </Cells>
+            </Item18>
+          </Rows>
+        </Item3>
+        <Item4 Ref="416" ControlType="XRPictureBox" Name="pictureBox4" Sizing="StretchImage" ImageAlignment="MiddleCenter" SizeF="164.865784,149.613266" LocationFloat="945.05896, 460.9289">
+          <ExpressionBindings>
+            <Item1 Ref="417" Expression="[Parameters].[IMAGE2]" PropertyName="ImageUrl" EventName="BeforePrint" />
+          </ExpressionBindings>
+        </Item4>
+        <Item5 Ref="418" ControlType="XRPictureBox" Name="pictureBox6" Sizing="StretchImage" ImageAlignment="MiddleCenter" SizeF="198.2673,118.954132" LocationFloat="746.7917, 491.588043">
+          <ExpressionBindings>
+            <Item1 Ref="419" Expression="[Parameters].[IMAGE1]" PropertyName="ImageUrl" EventName="BeforePrint" />
+          </ExpressionBindings>
+        </Item5>
+        <Item6 Ref="420" ControlType="XRPictureBox" Name="pictureBox2" Sizing="StretchImage" ImageAlignment="MiddleCenter" SizeF="164.865784,148.402832" LocationFloat="571.100647, 459.8872">
+          <ExpressionBindings>
+            <Item1 Ref="421" Expression="[Parameters].[IMAGE2]" PropertyName="ImageUrl" EventName="BeforePrint" />
+          </ExpressionBindings>
+        </Item6>
+        <Item7 Ref="422" ControlType="XRPictureBox" Name="pictureBox3" Sizing="StretchImage" ImageAlignment="MiddleCenter" SizeF="198.2673,116.702026" LocationFloat="372.833344, 491.588">
+          <ExpressionBindings>
+            <Item1 Ref="423" Expression="[Parameters].[IMAGE1]" PropertyName="ImageUrl" EventName="BeforePrint" />
+          </ExpressionBindings>
+        </Item7>
+        <Item8 Ref="424" ControlType="XRPictureBox" Name="pictureBox5" Sizing="StretchImage" ImageAlignment="MiddleCenter" SizeF="164.865784,149.613266" LocationFloat="200.2673, 459.8872">
+          <ExpressionBindings>
+            <Item1 Ref="425" Expression="[Parameters].[IMAGE2]" PropertyName="ImageUrl" EventName="BeforePrint" />
+          </ExpressionBindings>
+        </Item8>
+        <Item9 Ref="426" ControlType="XRPictureBox" Name="pictureBox1" Sizing="StretchImage" ImageAlignment="MiddleCenter" SizeF="198.2673,116.702034" LocationFloat="2, 492.798462">
+          <ExpressionBindings>
+            <Item1 Ref="427" Expression="[Parameters].[IMAGE1]" PropertyName="ImageUrl" EventName="BeforePrint" />
+          </ExpressionBindings>
+        </Item9>
+      </Controls>
+    </Item2>
+    <Item3 Ref="428" ControlType="BottomMarginBand" Name="BottomMargin" HeightF="35" />
+  </Bands>
+  <StyleSheet>
+    <Item1 Ref="429" Name="Style1" BorderStyle="Inset" Font="Arial, 9.75pt" StringFormat="Near;Near;FitBlackBox, LineLimit, NoClip;None;Character;GenericTypographic" />
+  </StyleSheet>
+</XtraReportsLayoutSerializer>
